@@ -2,14 +2,19 @@ import React from 'react';
 import '../css/app.css';
 import ReactDOM from "react-dom";
 import 'bootstrap/dist/css/bootstrap.css';
+import {HashRouter, Switch, Route} from "react-router-dom";
 
 
 
 const App = () => {
     return (
-        <h1>
-        Salut
-        </h1>
+        <main className="container pt-5">
+
+            <Switch>
+                <Route path="/" component={LoginPage}/>
+            </Switch>
+
+        </main>
 )
     ;
 };
