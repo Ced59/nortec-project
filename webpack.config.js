@@ -17,8 +17,8 @@ Encore
     /*
      * ENTRY CONFIG
      *
-     * Add 1 entry for each "page" of your app
-     * (including one that's included on every page - e.g. "app")
+     * Add 1 entry for each "pages" of your app
+     * (including one that's included on every pages - e.g. "app")
      *
      * Each entry will result in one JavaScript file (e.g. app.js)
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
@@ -31,7 +31,7 @@ Encore
     .splitEntryChunks()
 
     // will require an extra script tag for runtime.js
-    // but, you probably want this, unless you're building a single-page app
+    // but, you probably want this, unless you're building a single-pages app
     .enableSingleRuntimeChunk()
 
     /*

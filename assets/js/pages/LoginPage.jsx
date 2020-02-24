@@ -1,7 +1,11 @@
-import React, {useState} from 'react';
-import Field from "../forms/Field";
-import ImgComponent from "../images/ImgComponent";
+import React, {useContext, useState} from 'react';
+import Field from "../components/forms/Field";
+import ImgComponent from "../components/images/ImgComponent";
 import {Link} from "react-router-dom";
+import LogoCompanyComponent from "../components/images/LogoCompanyComponent";
+import {toast} from "react-toastify";
+import AuthContext from "../contexts/AuthContext";
+import AuthAPI from "../services/AuthAPI";
 
 
 const LoginPage = ({history}) => {
@@ -11,6 +15,10 @@ const LoginPage = ({history}) => {
         username: "",
         password: ""
     });
+
+    const {setIsAuthenticated} = useContext(AuthContext);
+
+    const [error, setError] = useState("");
 
     // Gestion des champs
     const handleChange = e => {
@@ -24,9 +32,19 @@ const LoginPage = ({history}) => {
     const handleSubmit = event => {
         event.preventDefault();
 
-        //TODO Gérer l'authentification et les erreurs. Rendre async la fonction
+        //TODO Gérer l'authentification et les erreurs.
 
-        history.push("/projects");
+
+        if (AuthAPI.authenticate(credentials)) {
+            setError("");
+            setIsAuthenticated(true);
+            toast.success("Vous êtes connnecté en tant que " + credentials.username + "!");
+            history.replace("/projects");
+
+        } else {
+            setError("Les informations de login/mot de passe sont incorrectes");
+            toast.error("Une erreur est survenue");
+        }
     };
 
 
@@ -37,11 +55,8 @@ const LoginPage = ({history}) => {
 
 
                     <div className="card-title">
-                        <ImgComponent src="../img/logo-company/logo-nortec.png"
-                                      alt="Logo Nortec"
-                                      className="text-left img-fluid"
-                                      style={{width: "150px"}}
-                        />
+                        <LogoCompanyComponent style={{width: "150px"}}/>
+
                         <h1 className="login-style title text-center mb-3">Bienvenue sur le portail Nortec</h1>
                     </div>
 
