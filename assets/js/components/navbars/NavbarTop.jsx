@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {NavLink} from "react-router-dom";
 import AuthContext from "../../contexts/AuthContext";
 import AuthAPI from "../../services/AuthAPI";
@@ -8,12 +8,17 @@ import {toast} from "react-toastify";
 const NavbarTop = ({history}) => {
 
     const {isAuthenticated, setIsAuthenticated} = useContext(AuthContext);
+    const [search, setSearch] = useState(''); // TODO relier avec la page List Projects
 
     const handleLogout = () => {
         AuthAPI.logout();
         setIsAuthenticated(false);
         toast.info("Vous êtes déconnecté ;)");
         history.push("/");
+    };
+
+    const handleSearch = ({currentTarget}) => {
+        setSearch(currentTarget.value); //TODO relier avec la page List Projects
     };
 
 
@@ -39,7 +44,14 @@ const NavbarTop = ({history}) => {
                 </ul>
 
                 <form className="form-inline">
-                    <input className="form-control" type="text" placeholder="Rechercher un projet" aria-label="Search"/>
+                    <input
+                        className="form-control"
+                        type="text"
+                        placeholder="Rechercher un projet"
+                        aria-label="Search"
+                        onChange={handleSearch}
+                        value={search}
+                    />
                 </form>
                 <div className="nav-item">
                     <button onClick={handleLogout} className="btn btn-danger ml-3">
