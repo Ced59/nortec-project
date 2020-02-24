@@ -8,6 +8,8 @@ import "react-toastify/dist/ReactToastify.css";
 import AuthContext from "./contexts/AuthContext";
 import AuthAPI from "./services/AuthAPI"
 import {toast, ToastContainer} from "react-toastify";
+import PrivateRoute from "./components/PrivateRoute";
+import ListProjectsPage from "./pages/ListProjectsPage";
 
 
 const App = () => {
@@ -27,6 +29,7 @@ const App = () => {
                 <main className="container">
 
                     <Switch>
+                        <PrivateRoute path="/projects" component={ListProjectsPage}/>
                         <Route path="/" component={LoginPage}/>
                     </Switch>
 

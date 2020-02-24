@@ -8,7 +8,6 @@ import AuthContext from "../contexts/AuthContext";
 import AuthAPI from "../services/AuthAPI";
 
 
-
 const LoginPage = ({history}) => {
 
     // Etat initial du component
@@ -30,20 +29,19 @@ const LoginPage = ({history}) => {
     };
 
     // Gestion du Submit
-    const handleSubmit = async event => {
+    const handleSubmit = event => {
         event.preventDefault();
 
         //TODO Gérer l'authentification et les erreurs.
 
-        try {
 
-            await AuthAPI.authenticate(credentials); //TODO rajouter les credentials quand il y aura besoin
+        if (AuthAPI.authenticate(credentials)) {
             setError("");
             setIsAuthenticated(true);
-            toast.success("Vous êtes connnecté en tant que " + credentials.username  + "!");
+            toast.success("Vous êtes connnecté en tant que " + credentials.username + "!");
             history.replace("/projects");
 
-        } catch (error) {
+        } else {
             setError("Les informations de login/mot de passe sont incorrectes");
             toast.error("Une erreur est survenue");
         }
@@ -57,7 +55,7 @@ const LoginPage = ({history}) => {
 
 
                     <div className="card-title">
-                        <LogoCompanyComponent style={{width: "150px"}} />
+                        <LogoCompanyComponent style={{width: "150px"}}/>
 
                         <h1 className="login-style title text-center mb-3">Bienvenue sur le portail Nortec</h1>
                     </div>

@@ -2,8 +2,24 @@
 function authenticate(credentials) //TODO Rajouter les credentials quand besoin
 {
     //TODO requête axios vérification credentials et récupération et stockage token
-    window.localStorage.setItem("authToken", "ok"); //simulation authentification
-    return true;
+
+    if (credentials.username === "test@test.com" && credentials.password === "password") //simulation d'un compte utilisateur
+    {
+        window.localStorage.setItem("authToken", "ok"); //simulation authentification
+        return true;
+    }
+    else
+    {
+        const token = window.localStorage.getItem("authToken");
+
+        if(token)
+        {
+            window.localStorage.removeItem("authToken");
+        }
+
+        return false;
+    }
+
 }
 
 
