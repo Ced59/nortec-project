@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import Field from "../forms/Field";
-import LogoCompany from "../images/LogoCompany";
+import ImgComponent from "../images/ImgComponent";
 import {Link} from "react-router-dom";
 
 
@@ -37,10 +37,10 @@ const LoginPage = ({history}) => {
 
 
                     <div className="card-title">
-                        <LogoCompany src="../img/logo-company/logo-nortec.png"
-                                     alt="Logo Nortec"
-                                     className="text-left img-fluid"
-                                     style={{width: "150px"}}
+                        <ImgComponent src="../img/logo-company/logo-nortec.png"
+                                      alt="Logo Nortec"
+                                      className="text-left img-fluid"
+                                      style={{width: "150px"}}
                         />
                         <h1 className="login-style title text-center mb-3">Bienvenue sur le portail Nortec</h1>
                     </div>

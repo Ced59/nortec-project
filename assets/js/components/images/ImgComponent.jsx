@@ -1,6 +1,6 @@
 import React from 'react';
 
-const LogoCompany = ({src, alt, className, style}) => {
+const ImgComponent = ({src, alt, className, style}) => {
     return (
         <img className={className}
              src={src}
@@ -11,4 +11,4 @@ const LogoCompany = ({src, alt, className, style}) => {
     );
 };
 
-export default LogoCompany;
+export default ImgComponent;
