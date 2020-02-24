@@ -1,3 +1,27 @@
-.login-style {
-    background: #0d5aa7;
+/* Styles généraux*/
+
+body {
+    background-color: #005375;
+}
+
+
+/* Styles de la page de Login */
+
+.login-style.title {
+    font-size: x-large;
+    font-weight: bold;
+}
+
+
+.login-style.background {
+    background-color: #0d5aa7;
+}
+
+.login-style.form {
+    background-color: whitesmoke;
+}
+
+.login-style .btn-login {
+    background-color: #0d5aa7;
+    color: white;
 }

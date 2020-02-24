@@ -9,7 +9,7 @@ import LoginPage from "./components/page/LoginPage";
 const App = () => {
     return (
         <HashRouter>
-            <main className="container pt-5">
+            <main className="container">
 
                 <Switch>
                     <Route path="/" component={LoginPage}/>
