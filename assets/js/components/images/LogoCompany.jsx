@@ -7,7 +7,6 @@ const LogoCompany = ({src, alt, className}) => {
              alt={alt}
         />
 
-
     );
 };
 
