@@ -3,7 +3,7 @@ import '../css/app.css';
 import ReactDOM from "react-dom";
 import 'bootstrap/dist/css/bootstrap.css';
 import {HashRouter, Switch, Route} from "react-router-dom";
-import LoginPage from "./components/page/LoginPage";
+import LoginPage from "./pages/LoginPage";
 import "react-toastify/dist/ReactToastify.css";
 import AuthContext from "./contexts/AuthContext";
 import AuthAPI from "./services/AuthAPI"

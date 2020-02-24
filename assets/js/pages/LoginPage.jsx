@@ -1,11 +1,11 @@
 import React, {useContext, useState} from 'react';
-import Field from "../forms/Field";
-import ImgComponent from "../images/ImgComponent";
+import Field from "../components/forms/Field";
+import ImgComponent from "../components/images/ImgComponent";
 import {Link} from "react-router-dom";
-import LogoCompanyComponent from "../images/LogoCompanyComponent";
+import LogoCompanyComponent from "../components/images/LogoCompanyComponent";
 import {toast} from "react-toastify";
-import AuthContext from "../../contexts/AuthContext";
-import AuthAPI from "../../services/AuthAPI";
+import AuthContext from "../contexts/AuthContext";
+import AuthAPI from "../services/AuthAPI";
 
 
 
