@@ -5,13 +5,12 @@ body {
 }
 
 
-/* Styles de la page de Login */
+/* Styles de la pages de Login */
 
 .login-style.title {
     font-size: x-large;
     font-weight: bold;
 }
-
 
 .login-style.background {
     background-color: #0d5aa7;
