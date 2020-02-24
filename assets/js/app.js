@@ -2,16 +2,23 @@ import React from 'react';
 import '../css/app.css';
 import ReactDOM from "react-dom";
 import 'bootstrap/dist/css/bootstrap.css';
-
+import {HashRouter, Switch, Route} from "react-router-dom";
+import LoginPage from "./components/page/LoginPage";
 
 
 const App = () => {
     return (
-        <h1>
-        Salut
-        </h1>
-)
-    ;
+        <HashRouter>
+            <main className="container">
+
+                <Switch>
+                    <Route path="/" component={LoginPage}/>
+                </Switch>
+
+            </main>
+        </HashRouter>
+    );
+
 };
 
 const rootElement = document.querySelector('#app');
