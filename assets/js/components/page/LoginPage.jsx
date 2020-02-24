@@ -1,8 +1,12 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import Field from "../forms/Field";
 import ImgComponent from "../images/ImgComponent";
 import {Link} from "react-router-dom";
 import LogoCompanyComponent from "../images/LogoCompanyComponent";
+import {toast} from "react-toastify";
+import AuthContext from "../../contexts/AuthContext";
+import AuthAPI from "../../services/AuthAPI";
+
 
 
 const LoginPage = ({history}) => {
@@ -13,6 +17,10 @@ const LoginPage = ({history}) => {
         password: ""
     });
 
+    const {setIsAuthenticated} = useContext(AuthContext);
+
+    const [error, setError] = useState("");
+
     // Gestion des champs
     const handleChange = e => {
         const value = e.currentTarget.value;
@@ -22,12 +30,23 @@ const LoginPage = ({history}) => {
     };
 
     // Gestion du Submit
-    const handleSubmit = event => {
+    const handleSubmit = async event => {
         event.preventDefault();
 
-        //TODO Gérer l'authentification et les erreurs. Rendre async la fonction
+        //TODO Gérer l'authentification et les erreurs.
 
-        history.push("/projects");
+        try {
+
+            await AuthAPI.authenticate(credentials); //TODO rajouter les credentials quand il y aura besoin
+            setError("");
+            setIsAuthenticated(true);
+            toast.success("Vous êtes connnecté en tant que " + credentials.username  + "!");
+            history.replace("/projects");
+
+        } catch (error) {
+            setError("Les informations de login/mot de passe sont incorrectes");
+            toast.error("Une erreur est survenue");
+        }
     };
 
 

@@ -2,19 +2,39 @@
   <dictionary name="BIENVENUE">
     <words>
       <w>adresse</w>
+      <w>authentification</w>
+      <w>axios</w>
+      <w>besoin</w>
       <w>bienvenue</w>
+      <w>connnecté</w>
+      <w>erreur</w>
       <w>erreurs</w>
       <w>etat</w>
       <w>fonction</w>
       <w>gestion</w>
       <w>généraux</w>
       <w>gérer</w>
+      <w>incorrectes</w>
+      <w>informations</w>
       <w>maxwidth</w>
       <w>nortec</w>
       <w>portail</w>
+      <w>quand</w>
+      <w>rajouter</w>
       <w>remettre</w>
       <w>rendre</w>
+      <w>requête</w>
+      <w>récupération</w>
       <w>réinitialisation</w>
+      <w>sont</w>
+      <w>stockage</w>
+      <w>survenue</w>
+      <w>tant</w>
+      <w>valide</w>
+      <w>voir</w>
+      <w>vous</w>
+      <w>vérification</w>
+      <w>êtes</w>
     </words>
   </dictionary>
 </component>
