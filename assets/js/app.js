@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import '../css/app.css';
-import ReactDOM from "react-dom";
 import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.min';
+import ReactDOM from "react-dom";
 import {HashRouter, Switch, Route, withRouter} from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import "react-toastify/dist/ReactToastify.css";
