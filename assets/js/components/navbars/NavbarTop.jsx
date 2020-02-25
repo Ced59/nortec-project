@@ -4,6 +4,7 @@ import AuthContext from "../../contexts/AuthContext";
 import AuthAPI from "../../services/AuthAPI";
 import LogoCompanyComponent from "../images/LogoCompanyComponent";
 import {toast} from "react-toastify";
+import '../../../css/navbarTop.css';
 
 const NavbarTop = ({history}) => {
 
@@ -13,7 +14,7 @@ const NavbarTop = ({history}) => {
     const handleLogout = () => {
         AuthAPI.logout();
         setIsAuthenticated(false);
-        toast.info("Vous êtes déconnecté ;)");
+        toast.info("Vous êtes déconnecté ");
         history.push("/");
     };
 

@@ -3,11 +3,14 @@
     <words>
       <w>adresse</w>
       <w>authentification</w>
+      <w>avec</w>
       <w>axios</w>
       <w>besoin</w>
       <w>bienvenue</w>
       <w>compte</w>
       <w>connnecté</w>
+      <w>déconnecté</w>
+      <w>déconnexion</w>
       <w>erreur</w>
       <w>erreurs</w>
       <w>etat</w>
@@ -20,10 +23,15 @@
       <w>incorrectes</w>
       <w>informations</w>
       <w>maxwidth</w>
+      <w>navbar</w>
       <w>nortec</w>
       <w>portail</w>
+      <w>profil</w>
+      <w>projet</w>
       <w>quand</w>
       <w>rajouter</w>
+      <w>rechercher</w>
+      <w>relier</w>
       <w>remettre</w>
       <w>rendre</w>
       <w>requête</w>
@@ -36,6 +44,7 @@
       <w>utilisateur</w>
       <w>valide</w>
       <w>voir</w>
+      <w>votre</w>
       <w>vous</w>
       <w>vérification</w>
       <w>êtes</w>
