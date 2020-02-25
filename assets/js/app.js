@@ -1,8 +1,4 @@
 import React, {useState} from 'react';
-import '../css/app.css';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/js/bootstrap.min';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
 import ReactDOM from "react-dom";
 import {HashRouter, Switch, Route, withRouter} from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
@@ -14,6 +10,10 @@ import PrivateRoute from "./components/PrivateRoute";
 import ListProjectsPage from "./pages/ListProjectsPage";
 import NavbarTop from "./components/navbars/NavbarTop";
 import NavbarLeft from "./components/navbars/NavbarLeft";
+import '../css/app.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.min';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 
 const App = () => {
