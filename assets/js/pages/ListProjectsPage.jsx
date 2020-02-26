@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import ImgWithStyleComponent from "../components/images/ImgWithStyleComponent";
 import '../../css/listProjectsPage.css';
+import {Helmet} from "react-helmet";
 
 const ListProjectsPage = (props) => {
 
@@ -59,6 +60,9 @@ const ListProjectsPage = (props) => {
 
     return (
         <>
+            <Helmet>
+                <style>{'body { background-color: white; }'}</style>
+            </Helmet>
             <div className="card-group">
                 {projects.map(project =>
                     <div key={project.id}>

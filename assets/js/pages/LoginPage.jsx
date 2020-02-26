@@ -7,6 +7,7 @@ import {toast} from "react-toastify";
 import AuthContext from "../contexts/AuthContext";
 import AuthAPI from "../services/AuthAPI";
 import '../../css/loginPage.css';
+import {Helmet} from "react-helmet";
 
 
 const LoginPage = ({history}) => {
@@ -51,6 +52,11 @@ const LoginPage = ({history}) => {
 
     return (
         <>
+
+            <Helmet>
+                <style>{'body { background-color: #005375; }'}</style>
+            </Helmet>
+
             <div className="login-style mt-5 pt-5">
                 <form className="login-style form card p-3 m-5" onSubmit={handleSubmit}>
 
