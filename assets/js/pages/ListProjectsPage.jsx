@@ -3,6 +3,7 @@ import ImgWithStyleComponent from "../components/images/ImgWithStyleComponent";
 import '../../css/listProjectsPage.css';
 import {Helmet} from "react-helmet";
 import SearchContext from "../contexts/SearchContext";
+import {Link} from "react-router-dom";
 
 
 const ListProjectsPage = (props) => {
@@ -111,34 +112,45 @@ const ListProjectsPage = (props) => {
             <Helmet>
                 <style>{'body { background-color: white; }'}</style>
             </Helmet>
+            <h2>Liste des projets : </h2>
             <div className="card-group">
-                {filteredProjects.map(project =>
-                    <div key={project.id}>
 
-                        <div className="card m-4" style={{width: '20rem', height: '26rem'}}>
+                {filteredProjects.length === 0 ?
+                    <p className="mt-2 font-weight-bold font-italic">Désolé il n'y a pas de résultat pour votre
+                        recherche...</p>
 
-                            <h5 className="card-title p-2">{project.name}</h5>
+                    :
 
-                            <ImgWithStyleComponent
-                                className="card-img-top"
-                                src={project.photo}
-                                alt={project.name}
-                                style={{height: "10rem"}}
-                            />
-                            <div className="card-body">
-                                <p className="card-text text-right mb-3">{project.ville}</p>
-                                <p className="card-text mb-1">Description:</p>
-                                <p className="font-weight-light font-italic card-text">{project.description}</p>
+                    filteredProjects.map(project =>
+                        <Link style={{textDecorationLine: "none", color: "black"}} to={"/project/" + project.id}
+                              key={project.id}>
 
+                            <div className="card m-4" style={{width: '20rem', height: '26rem'}}>
+
+                                <h5 className="card-title p-2">{project.name}</h5>
+
+                                <ImgWithStyleComponent
+                                    className="card-img-top"
+                                    src={project.photo}
+                                    alt={project.name}
+                                    style={{height: "10rem"}}
+                                />
+                                <div className="card-body">
+                                    <p className="card-text text-right mb-3">{project.ville}</p>
+                                    <p className="card-text mb-1">Description:</p>
+                                    <p className="font-weight-light font-italic card-text">{project.description}</p>
+
+                                </div>
+                                <div className="card-footer pb-0 text-right">
+                                    <p><span
+                                        className={"pl-2 pr-2 pt-1 pb-1 badge badge-" + STATUS_CLASSES[project.statut]}>{STATUS_LABEL[project.statut]}</span>
+                                    </p>
+                                </div>
                             </div>
-                            <div className="card-footer pb-0 text-right">
-                                <p><span className={"pl-2 pr-2 pt-1 pb-1 badge badge-" + STATUS_CLASSES[project.statut]}>{STATUS_LABEL[project.statut]}</span></p>
-                            </div>
-                        </div>
-                    </div>
-                )}
+                        </Link>
+                    )
+                }
             </div>
-
         </>
     );
 };
