@@ -14,6 +14,7 @@ import '../css/app.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.min';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
+import DetailProjectPage from "./pages/DetailProjectPage";
 
 
 const App = () => {
@@ -41,9 +42,8 @@ const App = () => {
                 <main className="container">
 
 
-                    {isAuthenticated && <NavbarLeftWithRouter/>}
-
                     <Switch>
+                        <PrivateRoute path="/project/:id" component={DetailProjectPage}/>
                         <PrivateRoute path="/projects" component={ListProjectsPage}/>
                         {!isAuthenticated && <Route path="/" component={LoginPage}/>}
                     </Switch>
