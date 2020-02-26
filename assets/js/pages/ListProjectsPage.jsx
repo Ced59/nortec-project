@@ -103,7 +103,9 @@ const ListProjectsPage = (props) => {
 
     const filteredProjects = projects.filter(
         p =>
-            p.name.toLowerCase().includes(searchValue.toLowerCase())
+            p.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+            p.statut.toLowerCase().includes(searchValue.toLowerCase()) ||
+            p.ville.toLowerCase().includes(searchValue.toLowerCase())
     );
 
 
