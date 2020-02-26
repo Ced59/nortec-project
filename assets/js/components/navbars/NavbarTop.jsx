@@ -1,15 +1,18 @@
 import React, {useContext, useState} from 'react';
-import {NavLink} from "react-router-dom";
 import AuthContext from "../../contexts/AuthContext";
 import AuthAPI from "../../services/AuthAPI";
 import LogoCompanyComponent from "../images/LogoCompanyComponent";
 import {toast} from "react-toastify";
 import '../../../css/navbarTop.css';
+import ListProjectsPage from "../../pages/ListProjectsPage";
+import SearchContext from "../../contexts/SearchContext";
 
 const NavbarTop = ({history}) => {
 
     const {isAuthenticated, setIsAuthenticated} = useContext(AuthContext);
-    const [search, setSearch] = useState(''); // TODO relier avec la page List Projects
+    const {searchValue, setSearchValue} = useContext(SearchContext);
+
+
 
     const handleLogout = () => {
         AuthAPI.logout();
@@ -19,7 +22,7 @@ const NavbarTop = ({history}) => {
     };
 
     const handleSearch = ({currentTarget}) => {
-        setSearch(currentTarget.value); //TODO relier avec la page List Projects
+        setSearchValue(currentTarget.value);
     };
 
 
@@ -51,7 +54,7 @@ const NavbarTop = ({history}) => {
                         placeholder="Rechercher un projet"
                         aria-label="Search"
                         onChange={handleSearch}
-                        value={search}
+                        value={searchValue}
                     />
                 </form>
                 <div className="nav-item">
@@ -65,5 +68,6 @@ const NavbarTop = ({history}) => {
 
     );
 };
+
 
 export default NavbarTop;

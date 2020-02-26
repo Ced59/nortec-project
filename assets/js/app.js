@@ -15,6 +15,7 @@ import 'bootstrap/dist/js/bootstrap.min';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import '../css/app.css';
 import DetailProjectPage from "./pages/DetailProjectPage";
+import SearchContext from "./contexts/SearchContext";
 
 
 const App = () => {
@@ -23,11 +24,19 @@ const App = () => {
     const NavbarLeftWithRouter = withRouter(NavbarLeft);
 
     const [isAuthenticated, setIsAuthenticated] = useState(AuthAPI.isAuthenticated());
+    const [searchContext, setSearchContext] = useState('');
 
     const contextValue = {
         isAuthenticated: isAuthenticated,
         setIsAuthenticated: setIsAuthenticated
     };
+
+    const searchContextValue = {
+        searchValue : searchContext,
+        setSearchValue : setSearchContext
+    };
+
+
 
     return (
 
@@ -36,25 +45,32 @@ const App = () => {
 
             <HashRouter>
 
+                <SearchContext.Provider value={searchContextValue}>
                 {isAuthenticated && <NavbarTopWithRouter/>}
-
+                </SearchContext.Provider>
 
                 <main className="container">
 
 
                     <Switch>
                         <PrivateRoute path="/project/:id" component={DetailProjectPage}/>
-                        <PrivateRoute path="/projects" component={ListProjectsPage}/>
+                        <SearchContext.Provider value={searchContextValue}>
+                            <PrivateRoute path="/projects" component={ListProjectsPage}/>
+                        </SearchContext.Provider>
                         {!isAuthenticated && <Route path="/" component={LoginPage}/>}
                     </Switch>
 
                 </main>
             </HashRouter>
 
-            <ToastContainer position={toast.POSITION.BOTTOM_LEFT}/>
+            < ToastContainer
+                position={toast.POSITION.BOTTOM_LEFT}
+            />
+
         </AuthContext.Provider>
 
-    );
+    )
+        ;
 
 };
 

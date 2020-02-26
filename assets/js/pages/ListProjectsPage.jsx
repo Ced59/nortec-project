@@ -1,11 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import ImgWithStyleComponent from "../components/images/ImgWithStyleComponent";
 import '../../css/listProjectsPage.css';
 import {Helmet} from "react-helmet";
+import SearchContext from "../contexts/SearchContext";
+
 
 const ListProjectsPage = (props) => {
 
     const [projects, setProjects] = useState([]);
+    const {searchValue} = useContext(SearchContext);
 
     useEffect(() => {
         setProjects(
@@ -58,13 +61,20 @@ const ListProjectsPage = (props) => {
     });
 
 
+    const filteredProjects = projects.filter(
+        p =>
+            p.name.toLowerCase().includes(searchValue.toLowerCase())
+
+    );
+
+
     return (
         <>
             <Helmet>
                 <style>{'body { background-color: white; }'}</style>
             </Helmet>
             <div className="card-group">
-                {projects.map(project =>
+                {filteredProjects.map(project =>
                     <div key={project.id}>
 
                         <div className="card m-4" style={{width: '20rem', height: '24rem'}}>
