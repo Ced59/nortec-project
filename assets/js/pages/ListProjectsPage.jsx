@@ -1,5 +1,5 @@
 import React from 'react';
-import NavbarTop from "../components/navbars/NavbarTop";
+import '../../css/listProjectsPage.css';
 
 const ListProjectsPage = (props) => {
     return (

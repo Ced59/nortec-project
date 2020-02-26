@@ -6,6 +6,7 @@ import LogoCompanyComponent from "../components/images/LogoCompanyComponent";
 import {toast} from "react-toastify";
 import AuthContext from "../contexts/AuthContext";
 import AuthAPI from "../services/AuthAPI";
+import '../../css/loginPage.css';
 
 
 const LoginPage = ({history}) => {
