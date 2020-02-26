@@ -1,12 +1,12 @@
 import React from 'react';
-import ImgComponent from "./ImgComponent";
+import ImgWithStyleComponent from "./ImgWithStyleComponent";
 
 const LogoCompanyComponent = ({style}) => {
     return (
-        <ImgComponent src="../img/logo-company/logo-nortec.png"
-                      alt="Logo Nortec"
-                      className="text-left img-fluid"
-                      style={style}
+        <ImgWithStyleComponent src="../img/logo-company/logo-nortec.png"
+                               alt="Logo Nortec"
+                               className="text-left img-fluid"
+                               style={style}
         />
     );
 };

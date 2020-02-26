@@ -1,6 +1,6 @@
 import React, {useContext, useState} from 'react';
 import Field from "../components/forms/Field";
-import ImgComponent from "../components/images/ImgComponent";
+import ImgWithStyleComponent from "../components/images/ImgWithStyleComponent";
 import {Link} from "react-router-dom";
 import LogoCompanyComponent from "../components/images/LogoCompanyComponent";
 import {toast} from "react-toastify";
