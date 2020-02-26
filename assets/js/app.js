@@ -1,7 +1,4 @@
 import React, {useState} from 'react';
-import '../css/app.css';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/js/bootstrap.min';
 import ReactDOM from "react-dom";
 import {HashRouter, Switch, Route, withRouter} from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
@@ -12,11 +9,18 @@ import {toast, ToastContainer} from "react-toastify";
 import PrivateRoute from "./components/PrivateRoute";
 import ListProjectsPage from "./pages/ListProjectsPage";
 import NavbarTop from "./components/navbars/NavbarTop";
+import NavbarLeft from "./components/navbars/NavbarLeft";
+import '../css/app.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.min';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
+import DetailProjectPage from "./pages/DetailProjectPage";
 
 
 const App = () => {
 
     const NavbarTopWithRouter = withRouter(NavbarTop);
+    const NavbarLeftWithRouter = withRouter(NavbarLeft);
 
     const [isAuthenticated, setIsAuthenticated] = useState(AuthAPI.isAuthenticated());
 
@@ -34,9 +38,12 @@ const App = () => {
 
                 {isAuthenticated && <NavbarTopWithRouter/>}
 
+
                 <main className="container">
 
+
                     <Switch>
+                        <PrivateRoute path="/project/:id" component={DetailProjectPage}/>
                         <PrivateRoute path="/projects" component={ListProjectsPage}/>
                         {!isAuthenticated && <Route path="/" component={LoginPage}/>}
                     </Switch>
