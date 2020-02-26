@@ -32,34 +32,29 @@ const App = () => {
     };
 
     const searchContextValue = {
-        searchValue : searchContext,
-        setSearchValue : setSearchContext
+        searchValue: searchContext,
+        setSearchValue: setSearchContext
     };
-
 
 
     return (
 
         <AuthContext.Provider value={contextValue}>
 
-
             <HashRouter>
 
                 <SearchContext.Provider value={searchContextValue}>
-                {isAuthenticated && <NavbarTopWithRouter/>}
+                    {isAuthenticated && <NavbarTopWithRouter/>}
                 </SearchContext.Provider>
 
                 <main className="container">
-
-
                     <Switch>
                         <PrivateRoute path="/project/:id" component={DetailProjectPage}/>
+                        {!isAuthenticated && <Route path="/" component={LoginPage}/>}
                         <SearchContext.Provider value={searchContextValue}>
                             <PrivateRoute path="/projects" component={ListProjectsPage}/>
                         </SearchContext.Provider>
-                        {!isAuthenticated && <Route path="/" component={LoginPage}/>}
                     </Switch>
-
                 </main>
             </HashRouter>
 
@@ -69,9 +64,7 @@ const App = () => {
 
         </AuthContext.Provider>
 
-    )
-        ;
-
+    );
 };
 
 const rootElement = document.querySelector('#app');

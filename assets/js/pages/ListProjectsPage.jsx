@@ -13,48 +13,73 @@ const ListProjectsPage = (props) => {
     useEffect(() => {
         setProjects(
             // Création d'un faux tableau pour les tests
+            // TODO Implémenter les requêtes axios
             [
                 {
                     id: 1,
                     name: "Ma maison",
                     description: "On peut y faire quelques travaux??",
                     photo: "../img/projects-img/projects-general-img/1-project-img.jpg",
-                    statut: "Pas démarré"
+                    statut: "Pas démarré",
+                    adresse1 : "346 rue de Surprise",
+                    adresse2 : "",
+                    code_postal : "59000",
+                    ville : "Bonne-Tranche-Sur-Mer"
                 },
                 {
                     id: 2,
                     name: "Mon jardin",
                     description: "Un petit nettoyage serait pas de refus :-)",
                     photo: "../img/projects-img/projects-general-img/2-project-img.jpg",
-                    statut: "En cours"
+                    statut: "En cours",
+                    adresse1 : "346 rue de Surprise",
+                    adresse2 : "",
+                    code_postal : "59000",
+                    ville : "Bonne-Tranche-Sur-Mer"
                 },
                 {
                     id: 3,
                     name: "Le radôme",
                     description: "Un super musée",
                     photo: "../img/projects-img/projects-general-img/3-project-img.jpg",
-                    statut: "Fini"
+                    statut: "Fini",
+                    adresse1 : "Le Radôme",
+                    adresse2 : "Cité des Télécoms",
+                    code_postal : "22560",
+                    ville : "Pleumeur-Bodou"
                 },
                 {
                     id: 4,
                     name: "Fort-Mon-Chateau",
                     description: "A l'assault Jacqouille!!!!",
                     photo: "../img/projects-img/projects-general-img/4-project-img.jpg",
-                    statut: "En cours"
+                    statut: "En cours",
+                    adresse1 : "27 rue des Sarrazins",
+                    adresse2 : "",
+                    code_postal : "15000",
+                    ville : "Montmirail"
                 },
                 {
                     id: 5,
                     name: "Belle-Qui-Dort",
                     description: "Un jour mon prince viendra.....",
                     photo: "../img/projects-img/projects-general-img/5-project-img.jpg",
-                    statut: "Archivé"
+                    statut: "Archivé",
+                    adresse1 : "666 allée des somnifères",
+                    adresse2 : "Entrée B",
+                    code_postal : "00000",
+                    ville : "Dodo-sur-Isère"
                 },
                 {
                     id: 6,
-                    name: "Vertigo",
+                    name: "Empire State Building",
                     description: "C'est haut mon capitaine!",
                     photo: "../img/projects-img/projects-general-img/6-project-img.jpg",
-                    statut: "En cours"
+                    statut: "En cours",
+                    adresse1 : "20 W 34th Street",
+                    adresse2 : "",
+                    code_postal : "10001",
+                    ville : "New-York"
                 }
             ]
         );
