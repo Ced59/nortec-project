@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import ImgComponent from "../components/images/ImgComponent";
 import ImgWithStyleComponent from "../components/images/ImgWithStyleComponent";
+import '../../css/listProjectsPage.css';
 
 const ListProjectsPage = (props) => {
 
@@ -63,7 +63,7 @@ const ListProjectsPage = (props) => {
                 {projects.map(project =>
                     <div key={project.id}>
 
-                        <div className="card m-4" style={{width: '18rem', height: '24rem'}}>
+                        <div className="card m-4" style={{width: '20rem', height: '24rem'}}>
                             <ImgWithStyleComponent
                                 className="card-img-top p-1"
                                 src={project.photo}
