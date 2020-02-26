@@ -1,7 +1,3 @@
-body {
-    background-color: #005375;
-}
-
 .login-style.title {
     font-size: x-large;
     font-weight: bold;
@@ -16,6 +12,6 @@ body {
 }
 
 .login-style .btn-login {
-    background-color: #0d5aa7;
+    background-color: #005375;
     color: white;
 }
