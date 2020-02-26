@@ -1,4 +1,5 @@
 import React from 'react';
+import '../../css/listProjectsPage.css';
 
 const ListProjectsPage = (props) => {
     return (

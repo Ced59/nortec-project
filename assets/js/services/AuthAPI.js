@@ -23,6 +23,15 @@ function authenticate(credentials) //TODO Rajouter les credentials quand besoin
 }
 
 
+function logout()
+{
+    window.localStorage.removeItem("authToken");
+
+    // TODO A décommenter quand axios sera implémenté pour retirer le token du header autorisation
+    // delete axios.defaults.headers["Authorization"];
+}
+
+
 
 function isAuthenticated()
 {
@@ -40,5 +49,6 @@ function isAuthenticated()
 
 export default {
     authenticate,
-    isAuthenticated
+    isAuthenticated,
+    logout
 }
