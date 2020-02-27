@@ -4,11 +4,14 @@ import '../../css/listProjectsPage.css';
 import {Helmet} from "react-helmet";
 import SearchContext from "../contexts/SearchContext";
 import {Link} from "react-router-dom";
+import CheckBoxInLine from "../components/forms/CheckBoxInLine";
+import Button from "../components/forms/Button";
 
 
 const ListProjectsPage = (props) => {
 
     const [projects, setProjects] = useState([]);
+    const [archivedProjects, setArchivedProjects] = useState(false);
     const {searchValue} = useContext(SearchContext);
 
     const STATUS_CLASSES = {
@@ -101,12 +104,33 @@ const ListProjectsPage = (props) => {
     });
 
 
-    const filteredProjects = projects.filter(
+    const filteredArchivedProjects = projects.filter(
+        archivedProjects
+            ?
+            p =>
+                p.statut === 'archived' ||
+                p.statut === 'no_start' ||
+                p.statut === 'in_progress' ||
+                p.statut === 'finished'
+            :
+            p =>
+                p.statut === 'no_start' ||
+                p.statut === 'in_progress' ||
+                p.statut === 'finished'
+    );  //TODO Trouver façon de refactoriser cette condition... C'est moche...
+
+
+    const filteredProjects = filteredArchivedProjects.filter(
         p =>
             p.name.toLowerCase().includes(searchValue.toLowerCase()) ||
             p.statut.toLowerCase().includes(searchValue.toLowerCase()) ||
             p.ville.toLowerCase().includes(searchValue.toLowerCase())
     );
+
+    const onChangeArchivedShow = event => {
+        setArchivedProjects(!archivedProjects);
+        //TODO: Optimisation voir si on charge tout et on change l'affichage ou si l'on charge uniquement le nécessaire. Si chargement ou pas quand on affiche archivés...
+    };
 
 
     return (
@@ -114,15 +138,24 @@ const ListProjectsPage = (props) => {
             <Helmet>
                 <style>{'body { background-color: white; }'}</style>
             </Helmet>
-            <h2>Liste des projets : </h2>
+            <div className="row">
+                <h2 className="col-3">Liste des projets : </h2>
+                <div className="offset-6">
+                    <Button
+                        onClick={onChangeArchivedShow}
+                        text={archivedProjects ? "Cacher les projets archivés" : "Montrer les projets archivés"}
+                        className="btn btn-secondary text-right"
+                        type="button"
+                    />
+                </div>
+            </div>
+
             <div className="card-group">
 
                 {filteredProjects.length === 0 ?
                     <p className="mt-2 font-weight-bold font-italic">Désolé il n'y a pas de résultat pour votre
                         recherche...</p>
-
                     :
-
                     filteredProjects.map(project =>
                         <Link style={{textDecorationLine: "none", color: "black"}} to={"/project/" + project.id}
                               key={project.id}>
