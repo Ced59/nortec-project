@@ -151,11 +151,11 @@ const DetailProjectPage = ({history, match}) => {
     const fetchProject = id => {
         //TODO récupérer le projet avec requête axios
 
-        console.log(projects[id.id]);
+        //console.log(projects[id.id]);
 
         setProject(projects[id.id]); //TODO Attention ca ne fonctionnait pas ici à vérifier plus tard avec axios
 
-        console.log(project);
+        //console.log(project);
     };
 
     //Récupération du bon projet à chaque chargement du composant
@@ -163,13 +163,15 @@ const DetailProjectPage = ({history, match}) => {
     useEffect(() => {
         //TODO Normalement charge le projet à chaque fois que l'id change. Attention plus tard vérifier que tout fonctionne avec axios
         fetchProject(id);
-        console.log(project);
+        //console.log(project);
     }, [id]);
 
 
     const handleBackClick = () => {
         history.replace("/projects");
     };
+
+
 
     return (
         <div className="card m-4 p-2">
