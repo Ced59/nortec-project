@@ -4,8 +4,9 @@ import '../../css/listProjectsPage.css';
 import {Helmet} from "react-helmet";
 import SearchContext from "../contexts/SearchContext";
 import {Link} from "react-router-dom";
-import CheckBoxInLine from "../components/forms/CheckBoxInLine";
 import Button from "../components/forms/Button";
+import fakeData from "../components/fakeDataForDev/fakeData";
+import DateAPI from "../services/DateAPI";
 
 
 const ListProjectsPage = (props) => {
@@ -28,79 +29,11 @@ const ListProjectsPage = (props) => {
         archived: "Archivé"
     };
 
+    const fakeProjects = fakeData.fakeListProjects(); //Chargement de la fausse liste de projets
+    //TODO Requêtes axios pour les bonnes datas
+
     useEffect(() => {
-        setProjects(
-            // Création d'un faux tableau pour les tests
-            // TODO Implémenter les requêtes axios
-            [
-                {
-                    id: 1,
-                    name: "Ma maison",
-                    description: "On peut y faire quelques travaux??",
-                    photo: "../img/projects-img/projects-general-img/1-project-img.jpg",
-                    statut: "no_start",
-                    adresse1: "346 rue de Surprise",
-                    adresse2: "",
-                    code_postal: "59000",
-                    ville: "Bonne-Tranche-Sur-Mer"
-                },
-                {
-                    id: 2,
-                    name: "Mon jardin",
-                    description: "Un petit nettoyage serait pas de refus :-)",
-                    photo: "../img/projects-img/projects-general-img/2-project-img.jpg",
-                    statut: "in_progress",
-                    adresse1: "346 rue de Surprise",
-                    adresse2: "",
-                    code_postal: "59000",
-                    ville: "Bonne-Tranche-Sur-Mer"
-                },
-                {
-                    id: 3,
-                    name: "Le radôme",
-                    description: "Un super musée",
-                    photo: "../img/projects-img/projects-general-img/3-project-img.jpg",
-                    statut: "finished",
-                    adresse1: "Le Radôme",
-                    adresse2: "Cité des Télécoms",
-                    code_postal: "22560",
-                    ville: "Pleumeur-Bodou"
-                },
-                {
-                    id: 4,
-                    name: "Fort-Mon-Chateau",
-                    description: "A l'assault Jacqouille!!!!",
-                    photo: "../img/projects-img/projects-general-img/4-project-img.jpg",
-                    statut: "in_progress",
-                    adresse1: "27 rue des Sarrazins",
-                    adresse2: "",
-                    code_postal: "15000",
-                    ville: "Montmirail"
-                },
-                {
-                    id: 5,
-                    name: "Belle-Qui-Dort",
-                    description: "Un jour mon prince viendra.....",
-                    photo: "../img/projects-img/projects-general-img/5-project-img.jpg",
-                    statut: "archived",
-                    adresse1: "666 allée des somnifères",
-                    adresse2: "Entrée B",
-                    code_postal: "00000",
-                    ville: "Dodo-sur-Isère"
-                },
-                {
-                    id: 6,
-                    name: "Empire State Building",
-                    description: "C'est haut mon capitaine!",
-                    photo: "../img/projects-img/projects-general-img/6-project-img.jpg",
-                    statut: "in_progress",
-                    adresse1: "20 W 34th Street",
-                    adresse2: "",
-                    code_postal: "10001",
-                    ville: "New-York"
-                }
-            ]
-        );
+        setProjects(fakeProjects);
     });
 
 
@@ -108,15 +41,15 @@ const ListProjectsPage = (props) => {
         archivedProjects
             ?
             p =>
-                p.statut === 'archived' ||
-                p.statut === 'no_start' ||
-                p.statut === 'in_progress' ||
-                p.statut === 'finished'
+                DateAPI.determineStatus(p.date_debut, p.date_fin_reelle) === 'archived' ||
+                DateAPI.determineStatus(p.date_debut, p.date_fin_reelle) === 'no_start' ||
+                DateAPI.determineStatus(p.date_debut, p.date_fin_reelle) === 'in_progress' ||
+                DateAPI.determineStatus(p.date_debut, p.date_fin_reelle) === 'finished'
             :
             p =>
-                p.statut === 'no_start' ||
-                p.statut === 'in_progress' ||
-                p.statut === 'finished'
+                DateAPI.determineStatus(p.date_debut, p.date_fin_reelle) === 'no_start' ||
+                DateAPI.determineStatus(p.date_debut, p.date_fin_reelle) === 'in_progress' ||
+                DateAPI.determineStatus(p.date_debut, p.date_fin_reelle) === 'finished'
     );  //TODO Trouver façon de refactoriser cette condition... C'est moche...
 
 
@@ -178,7 +111,9 @@ const ListProjectsPage = (props) => {
                                 </div>
                                 <div className="card-footer pb-0 text-right">
                                     <p><span
-                                        className={"pl-2 pr-2 pt-1 pb-1 badge badge-" + STATUS_CLASSES[project.statut]}>{STATUS_LABEL[project.statut]}</span>
+                                        className={"pl-2 pr-2 pt-1 pb-1 badge badge-" +
+                                        STATUS_CLASSES[DateAPI.determineStatus(project.date_debut, project.date_fin_reelle)]}>
+                                        {STATUS_LABEL[DateAPI.determineStatus(project.date_debut, project.date_fin_reelle)]}</span>
                                     </p>
                                 </div>
                             </div>
