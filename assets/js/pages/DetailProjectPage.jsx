@@ -136,7 +136,7 @@ const DetailProjectPage = ({history, match}) => {
                 <Link
                     className='btn btn-primary'
                     type='button'
-                    to={'/project/' + project.id + '/newReport'}
+                    to={'/project/' + project.id + '/newReport/effectifs'}
                 >
                     Nouveau Rapport
                 </Link>
