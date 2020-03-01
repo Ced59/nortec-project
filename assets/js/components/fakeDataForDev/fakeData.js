@@ -9,8 +9,8 @@ function fakeData() {
             adresse2: "",
             code_postal: "75000",
             ville: "Paris",
-            date_debut: "27/02/2016",
-            date_fin_reelle: "2018-04-01",
+            date_debut: "2015-02-27",
+            date_fin_reelle: "2020-02-29",
             date_fin_prevues:
                 [
                     {
@@ -28,46 +28,37 @@ function fakeData() {
         },
         {
             id: 1,
-            name: "Ma maison",
-            description: "On peut y faire quelques travaux??",
+            name: "Planet Express",
+            description: "Et mon *** c'est du téflon???",
             photo: "../img/projects-img/projects-general-img/1-project-img.jpg",
-            adresse1: "346 rue de Surprise",
+            adresse1: "346 rue de Leila",
             adresse2: "",
             code_postal: "59000",
-            ville: "Bonne-Tranche-Sur-Mer",
-            date_debut: "2019-02-27",
-            date_fin_reelle: "2020-02-29",
+            ville: "New New York",
+            date_debut: "3000-02-27",
+            date_fin_reelle: "",
             date_fin_prevues:
-                [
-                    {
-                        id: 0,
-                        date: "2019-03-27"
-                    },
-                    {
-                        id: 1,
-                        date: "2019-04-27"
-                    }
-                ],
-            nom_MOEX: "Capitaine Haddock",
-            nom_OPC: "Tintin",
-            contact_client: "moulinsart@herge.com"
+                [],
+            nom_MOEX: "Bender Rodriguez",
+            nom_OPC: "Professeur Fansthworm",
+            contact_client: "bender@tordeur.com"
         },
         {
             id: 2,
-            name: "Mon jardin",
-            description: "Un petit nettoyage serait pas de refus :-)",
+            name: "Mmmmmmm Donuuuuuts",
+            description: "D'oh!!!!",
             photo: "../img/projects-img/projects-general-img/2-project-img.jpg",
-            adresse1: "346 rue de Surprise",
+            adresse1: "742 Evergreen Terasse",
             adresse2: "",
-            code_postal: "59000",
-            ville: "Bonne-Tranche-Sur-Mer",
+            code_postal: "54000",
+            ville: "Springfield",
             date_debut: "2020-03-27",
             date_fin_reelle: "",
             date_fin_prevues:
                 [],
-            nom_MOEX: "Capitaine Haddock",
-            nom_OPC: "Tintin",
-            contact_client: "moulinsart@herge.com"
+            nom_MOEX: "Homer Simpson",
+            nom_OPC: "Bart Simpson",
+            contact_client: "homer@simpsons.com"
         },
         {
             id: 3,
@@ -84,16 +75,16 @@ function fakeData() {
                 [
                     {
                         id: 0,
-                        date: "27/03/2020"
+                        date: "2020-03-27"
                     },
                     {
                         id: 1,
-                        date: "27/04/2020"
+                        date: "2020-04-12"
                     }
                 ],
-            nom_MOEX: "Capitaine Haddock",
-            nom_OPC: "Tintin",
-            contact_client: "moulinsart@herge.com"
+            nom_MOEX: "Grande oreille",
+            nom_OPC: "Telecom",
+            contact_client: "contact@lacitedestelecoms.com"
         },
         {
             id: 4,
@@ -121,9 +112,9 @@ function fakeData() {
                         date: "2022-10-20"
                     }
                 ],
-            nom_MOEX: "Capitaine Haddock",
-            nom_OPC: "Tintin",
-            contact_client: "moulinsart@herge.com"
+            nom_MOEX: "Godefroy",
+            nom_OPC: "Dame Ginette",
+            contact_client: "jetrepassijefaiblis@jacqouille.com"
         },
         {
             id: 5,
@@ -147,9 +138,9 @@ function fakeData() {
                         date: "2019-12-24"
                     }
                 ],
-            nom_MOEX: "Capitaine Haddock",
-            nom_OPC: "Tintin",
-            contact_client: "moulinsart@herge.com"
+            nom_MOEX: "Mickey",
+            nom_OPC: "Donald",
+            contact_client: "walt@disney.com"
         },
         {
             id: 6,
@@ -169,9 +160,9 @@ function fakeData() {
                         date: "2020-10-15"
                     }
                 ],
-            nom_MOEX: "Capitaine Haddock",
-            nom_OPC: "Tintin",
-            contact_client: "moulinsart@herge.com"
+            nom_MOEX: "Al Capone",
+            nom_OPC: "Donald Trump",
+            contact_client: "trump@orange.com"
         },
         {
             id: 7,
@@ -195,9 +186,9 @@ function fakeData() {
                         date: "2019-12-15"
                     }
                 ],
-            nom_MOEX: "Capitaine Haddock",
-            nom_OPC: "Tintin",
-            contact_client: "moulinsart@herge.com"
+            nom_MOEX: "Wolfgang Amadeus Mozart",
+            nom_OPC: "Ludwig Van Beethoven",
+            contact_client: "doremi@fasollasi.com"
         },
         {
             id: 8,
@@ -225,9 +216,9 @@ function fakeData() {
                         date: "2020-12-15"
                     }
                 ],
-            nom_MOEX: "Capitaine Haddock",
-            nom_OPC: "Tintin",
-            contact_client: "moulinsart@herge.com"
+            nom_MOEX: "Nemo",
+            nom_OPC: "La petite Sirène",
+            contact_client: "boirelatasse@glouglou.com"
         }
     ]; //TODO Enlever ces exemples de projets quand requêtes axios
 

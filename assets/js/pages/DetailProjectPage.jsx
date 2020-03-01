@@ -133,10 +133,13 @@ const DetailProjectPage = ({history, match}) => {
 
             </div>
             <div className='row ml-2 mt-4 d-flex justify-content-between mb-3'>
-                <Button text='Nouveau rapport'
-                        className='btn btn-primary'
-                        type='button'
-                />
+                <Link
+                    className='btn btn-primary'
+                    type='button'
+                    to={'/project/' + project.id + '/newReport'}
+                >
+                    Nouveau Rapport
+                </Link>
                 <Button text='Liste des rapports'
                         className='btn btn-primary'
                         type='button'
