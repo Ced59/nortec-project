@@ -22,7 +22,10 @@ function fakeData() {
                         id: 1,
                         date: "27/04/2020"
                     }
-                ]
+                ],
+            nom_MOEX: "Capitaine Haddock",
+            nom_OPC: "Tintin",
+            contact_client: "moulinsart@herge.com"
         },
         {
             id: 1,
@@ -46,7 +49,10 @@ function fakeData() {
                         id: 1,
                         date: "27/04/2020"
                     }
-                ]
+                ],
+            nom_MOEX: "Capitaine Haddock",
+            nom_OPC: "Tintin",
+            contact_client: "moulinsart@herge.com"
         },
         {
             id: 2,
@@ -70,7 +76,10 @@ function fakeData() {
                         id: 1,
                         date: "27/04/2020"
                     }
-                ]
+                ],
+            nom_MOEX: "Capitaine Haddock",
+            nom_OPC: "Tintin",
+            contact_client: "moulinsart@herge.com"
         },
         {
             id: 3,
@@ -94,7 +103,10 @@ function fakeData() {
                         id: 1,
                         date: "27/04/2020"
                     }
-                ]
+                ],
+            nom_MOEX: "Capitaine Haddock",
+            nom_OPC: "Tintin",
+            contact_client: "moulinsart@herge.com"
         },
         {
             id: 4,
@@ -118,7 +130,10 @@ function fakeData() {
                         id: 1,
                         date: "27/04/2020"
                     }
-                ]
+                ],
+            nom_MOEX: "Capitaine Haddock",
+            nom_OPC: "Tintin",
+            contact_client: "moulinsart@herge.com"
         },
         {
             id: 5,
@@ -142,7 +157,10 @@ function fakeData() {
                         id: 1,
                         date: "27/04/2020"
                     }
-                ]
+                ],
+            nom_MOEX: "Capitaine Haddock",
+            nom_OPC: "Tintin",
+            contact_client: "moulinsart@herge.com"
         },
         {
             id: 6,
@@ -166,7 +184,10 @@ function fakeData() {
                         id: 1,
                         date: "27/04/2020"
                     }
-                ]
+                ],
+            nom_MOEX: "Capitaine Haddock",
+            nom_OPC: "Tintin",
+            contact_client: "moulinsart@herge.com"
         },
         {
             id: 7,
@@ -190,7 +211,10 @@ function fakeData() {
                         id: 1,
                         date: "27/04/2020"
                     }
-                ]
+                ],
+            nom_MOEX: "Capitaine Haddock",
+            nom_OPC: "Tintin",
+            contact_client: "moulinsart@herge.com"
         },
         {
             id: 8,
@@ -214,7 +238,10 @@ function fakeData() {
                         id: 1,
                         date: "27/04/2020"
                     }
-                ]
+                ],
+            nom_MOEX: "Capitaine Haddock",
+            nom_OPC: "Tintin",
+            contact_client: "moulinsart@herge.com"
         }
     ]; //TODO Enlever ces exemples de projets quand requêtes axios
 

@@ -4,6 +4,7 @@ import '../../css/detailProjectPage.css';
 import ImgComponent from "../components/images/ImgComponent";
 import Button from "../components/forms/Button";
 import fakeData from "../components/fakeDataForDev/fakeData";
+import {Link} from "react-router-dom";
 
 const DetailProjectPage = ({history, match}) => {
 
@@ -103,6 +104,23 @@ const DetailProjectPage = ({history, match}) => {
                         <h6 className='offset-1 col-4'>Date de fin réélle :</h6>
                         <p className='col-7'>{project.date_fin_reelle}</p>
                     </div>}
+
+
+                    <div className='row ml-2 no-space'>
+                        <h6 className='offset-1 col-4'>Nom MOEX :</h6>
+                        <p className='col-7'>{project.nom_MOEX}</p>
+                    </div>
+
+                    <div className='row ml-2 no-space'>
+                        <h6 className='offset-1 col-4'>Nom OPC :</h6>
+                        <p className='col-7'>{project.nom_OPC}</p>
+                    </div>
+
+                    <div className='row ml-2 no-space'>
+                        <h6 className='offset-1 col-4'>Contact client :</h6>
+                        <a className='col-7' href={"mailto:" + project.contact_client}>{project.contact_client}</a>
+                    </div>
+
 
                     <div className='row ml-2 mt-5'>
                         <h6 className='offset-1 col-4'>Statut :</h6>
