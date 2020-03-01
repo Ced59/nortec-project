@@ -6,6 +6,7 @@ import SearchContext from "../contexts/SearchContext";
 import {Link} from "react-router-dom";
 import Button from "../components/forms/Button";
 import fakeData from "../components/fakeDataForDev/fakeData";
+import DateAPI from "../services/DateAPI";
 
 
 const ListProjectsPage = (props) => {
@@ -40,15 +41,15 @@ const ListProjectsPage = (props) => {
         archivedProjects
             ?
             p =>
-                p.statut === 'archived' ||
-                p.statut === 'no_start' ||
-                p.statut === 'in_progress' ||
-                p.statut === 'finished'
+                DateAPI.determineStatus(p.date_debut, p.date_fin_reelle) === 'archived' ||
+                DateAPI.determineStatus(p.date_debut, p.date_fin_reelle) === 'no_start' ||
+                DateAPI.determineStatus(p.date_debut, p.date_fin_reelle) === 'in_progress' ||
+                DateAPI.determineStatus(p.date_debut, p.date_fin_reelle) === 'finished'
             :
             p =>
-                p.statut === 'no_start' ||
-                p.statut === 'in_progress' ||
-                p.statut === 'finished'
+                DateAPI.determineStatus(p.date_debut, p.date_fin_reelle) === 'no_start' ||
+                DateAPI.determineStatus(p.date_debut, p.date_fin_reelle) === 'in_progress' ||
+                DateAPI.determineStatus(p.date_debut, p.date_fin_reelle) === 'finished'
     );  //TODO Trouver façon de refactoriser cette condition... C'est moche...
 
 
@@ -110,7 +111,9 @@ const ListProjectsPage = (props) => {
                                 </div>
                                 <div className="card-footer pb-0 text-right">
                                     <p><span
-                                        className={"pl-2 pr-2 pt-1 pb-1 badge badge-" + STATUS_CLASSES[project.statut]}>{STATUS_LABEL[project.statut]}</span>
+                                        className={"pl-2 pr-2 pt-1 pb-1 badge badge-" +
+                                        STATUS_CLASSES[DateAPI.determineStatus(project.date_debut, project.date_fin_reelle)]}>
+                                        {STATUS_LABEL[DateAPI.determineStatus(project.date_debut, project.date_fin_reelle)]}</span>
                                     </p>
                                 </div>
                             </div>

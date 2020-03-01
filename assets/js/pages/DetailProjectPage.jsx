@@ -5,6 +5,7 @@ import ImgComponent from "../components/images/ImgComponent";
 import Button from "../components/forms/Button";
 import fakeData from "../components/fakeDataForDev/fakeData";
 import {Link} from "react-router-dom";
+import DateAPI from "../services/DateAPI";
 
 const DetailProjectPage = ({history, match}) => {
 
@@ -89,20 +90,20 @@ const DetailProjectPage = ({history, match}) => {
                     </div>
                     <div className='row ml-2 no-space'>
                         <h6 className='offset-1 col-4'>Date de début :</h6>
-                        <p className='col-7'>{project.date_debut}</p>
+                        <p className='col-7'>{DateAPI.formatDate(project.date_debut)}</p>
                     </div>
 
                     {project.date_fin_prevues.map(date =>
 
                         <div className='row ml-2 no-space' key={date.id}>
                             <h6 className='offset-1 col-4'>Fin prévue {date.id + 1} :</h6>
-                            <p className='col-7'>{date.date}</p>
+                            <p className='col-7'>{DateAPI.formatDate(date.date)}</p>
                         </div>
                     )}
 
                     {project.date_fin_reelle && <div className='row ml-2 no-space'>
                         <h6 className='offset-1 col-4'>Date de fin réélle :</h6>
-                        <p className='col-7'>{project.date_fin_reelle}</p>
+                        <p className='col-7'>{DateAPI.formatDate(project.date_fin_reelle)}</p>
                     </div>}
 
 
@@ -124,7 +125,8 @@ const DetailProjectPage = ({history, match}) => {
 
                     <div className='row ml-2 mt-5'>
                         <h6 className='offset-1 col-4'>Statut :</h6>
-                        <p className={"col-2 badge badge-" + STATUS_CLASSES[project.statut]}>{STATUS_LABEL[project.statut]}</p>
+                        <p className={"col-2 badge badge-" + STATUS_CLASSES[DateAPI.determineStatus(project.date_debut, project.date_fin_reelle)]}>
+                            {STATUS_LABEL[DateAPI.determineStatus(project.date_debut, project.date_fin_reelle)]}</p>
                     </div>
 
                 </div>
