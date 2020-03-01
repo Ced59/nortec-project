@@ -17,12 +17,15 @@ import '../css/app.css';
 import DetailProjectPage from "./pages/DetailProjectPage";
 import SearchContext from "./contexts/SearchContext";
 import ReportEffectifsPage from "./pages/ReportEffectifsPage";
+import ReportPropretePage from "./pages/ReportPropretePage";
+import ReportSecuritePage from "./pages/ReportSecuritePage";
+import ReportInstallationsPage from "./pages/ReportInstallationsPage";
+import ReportEcheancesPage from "./pages/ReportEcheancesPage";
 
 
 const App = () => {
 
     const NavbarTopWithRouter = withRouter(NavbarTop);
-    const NavbarLeftWithRouter = withRouter(NavbarLeft);
 
     const [isAuthenticated, setIsAuthenticated] = useState(AuthAPI.isAuthenticated());
     const [searchContext, setSearchContext] = useState('');
@@ -50,7 +53,11 @@ const App = () => {
 
                 <main className="container">
                     <Switch>
-                        <PrivateRoute path="/project/:id/newReport" component={ReportEffectifsPage}/>
+                        <PrivateRoute path="/project/:id/newReport/effectifs" component={ReportEffectifsPage}/>
+                        <PrivateRoute path="/project/:id/newReport/proprete" component={ReportPropretePage}/>
+                        <PrivateRoute path="/project/:id/newReport/securite" component={ReportSecuritePage}/>
+                        <PrivateRoute path="/project/:id/newReport/installations" component={ReportInstallationsPage}/>
+                        <PrivateRoute path="/project/:id/newReport/echeances" component={ReportEcheancesPage}/>
                         <PrivateRoute path="/project/:id" component={DetailProjectPage}/>
                         {!isAuthenticated && <Route path="/" component={LoginPage}/>}
                         <SearchContext.Provider value={searchContextValue}>
