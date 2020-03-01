@@ -1,0 +1,16 @@
+.description-style {
+    font-weight: lighter;
+    font-style: italic;
+}
+
+.img-style {
+    border: black solid 1px;
+    padding: 0px;
+    margin-left: 15px;
+    margin-bottom: 25px;
+}
+
+div.row.no-space {
+    margin-bottom: -10px;
+}
+
