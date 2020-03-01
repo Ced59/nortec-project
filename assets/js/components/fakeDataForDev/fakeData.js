@@ -11,7 +11,18 @@ function fakeData() {
             code_postal: "75000",
             ville: "Paris",
             date_debut: "27/02/2020",
-            date_fin_prevu: "20/07/2020"
+            date_fin_reelle: "20/07/2020",
+            date_fin_prevues:
+                [
+                    {
+                        id: 0,
+                        date: "27/03/2020"
+                    },
+                    {
+                        id: 1,
+                        date: "27/04/2020"
+                    }
+                ]
         },
         {
             id: 1,
@@ -24,7 +35,18 @@ function fakeData() {
             code_postal: "59000",
             ville: "Bonne-Tranche-Sur-Mer",
             date_debut: "27/02/2020",
-            date_fin_prevu: "20/07/2020"
+            date_fin_reelle: "",
+            date_fin_prevues:
+                [
+                    {
+                        id: 0,
+                        date: "27/03/2020"
+                    },
+                    {
+                        id: 1,
+                        date: "27/04/2020"
+                    }
+                ]
         },
         {
             id: 2,
@@ -37,7 +59,18 @@ function fakeData() {
             code_postal: "59000",
             ville: "Bonne-Tranche-Sur-Mer",
             date_debut: "27/02/2020",
-            date_fin_prevu: "20/07/2020"
+            date_fin_reelle: "",
+            date_fin_prevues:
+                [
+                    {
+                        id: 0,
+                        date: "27/03/2020"
+                    },
+                    {
+                        id: 1,
+                        date: "27/04/2020"
+                    }
+                ]
         },
         {
             id: 3,
@@ -50,7 +83,18 @@ function fakeData() {
             code_postal: "22560",
             ville: "Pleumeur-Bodou",
             date_debut: "27/02/2020",
-            date_fin_prevu: "20/07/2020"
+            date_fin_reelle: "20/07/2020",
+            date_fin_prevues:
+                [
+                    {
+                        id: 0,
+                        date: "27/03/2020"
+                    },
+                    {
+                        id: 1,
+                        date: "27/04/2020"
+                    }
+                ]
         },
         {
             id: 4,
@@ -63,7 +107,18 @@ function fakeData() {
             code_postal: "15000",
             ville: "Montmirail",
             date_debut: "27/02/2020",
-            date_fin_prevu: "20/07/2020"
+            date_fin_reelle: "",
+            date_fin_prevues:
+                [
+                    {
+                        id: 0,
+                        date: "27/03/2020"
+                    },
+                    {
+                        id: 1,
+                        date: "27/04/2020"
+                    }
+                ]
         },
         {
             id: 5,
@@ -76,7 +131,18 @@ function fakeData() {
             code_postal: "00000",
             ville: "Dodo-sur-Isère",
             date_debut: "27/02/2020",
-            date_fin_prevu: "20/07/2020"
+            date_fin_reelle: "20/07/2020",
+            date_fin_prevues:
+                [
+                    {
+                        id: 0,
+                        date: "27/03/2020"
+                    },
+                    {
+                        id: 1,
+                        date: "27/04/2020"
+                    }
+                ]
         },
         {
             id: 6,
@@ -89,7 +155,18 @@ function fakeData() {
             code_postal: "10001",
             ville: "New-York",
             date_debut: "27/02/2020",
-            date_fin_prevu: "20/07/2020"
+            date_fin_reelle: "",
+            date_fin_prevues:
+                [
+                    {
+                        id: 0,
+                        date: "27/03/2020"
+                    },
+                    {
+                        id: 1,
+                        date: "27/04/2020"
+                    }
+                ]
         },
         {
             id: 7,
@@ -102,7 +179,18 @@ function fakeData() {
             code_postal: "98451",
             ville: "Sing Sing",
             date_debut: "27/02/2020",
-            date_fin_prevu: "20/07/2020"
+            date_fin_reelle: "20/07/2020",
+            date_fin_prevues:
+                [
+                    {
+                        id: 0,
+                        date: "27/03/2020"
+                    },
+                    {
+                        id: 1,
+                        date: "27/04/2020"
+                    }
+                ]
         },
         {
             id: 8,
@@ -115,7 +203,18 @@ function fakeData() {
             code_postal: "32321",
             ville: "Glouglou Town",
             date_debut: "27/02/2020",
-            date_fin_prevu: "20/07/2020"
+            date_fin_reelle: "",
+            date_fin_prevues:
+                [
+                    {
+                        id: 0,
+                        date: "27/03/2020"
+                    },
+                    {
+                        id: 1,
+                        date: "27/04/2020"
+                    }
+                ]
         }
     ]; //TODO Enlever ces exemples de projets quand requêtes axios
 

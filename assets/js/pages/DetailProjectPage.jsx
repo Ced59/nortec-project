@@ -54,7 +54,6 @@ const DetailProjectPage = ({history, match}) => {
     };
 
 
-
     return (
         <div className="card m-4 p-2">
             <h2 className='mb-4'>{project.name}</h2>
@@ -91,10 +90,20 @@ const DetailProjectPage = ({history, match}) => {
                         <h6 className='offset-1 col-4'>Date de début :</h6>
                         <p className='col-7'>{project.date_debut}</p>
                     </div>
-                    <div className='row ml-2 no-space'>
-                        <h6 className='offset-1 col-4'>Fin prévue :</h6>
-                        <p className='col-7'>{project.date_fin_prevu}</p>
-                    </div>
+
+                    {project.date_fin_prevues.map(date =>
+
+                        <div className='row ml-2 no-space' key={date.id}>
+                            <h6 className='offset-1 col-4'>Fin prévue {date.id + 1} :</h6>
+                            <p className='col-7'>{date.date}</p>
+                        </div>
+                    )}
+
+                    {project.date_fin_reelle && <div className='row ml-2 no-space'>
+                        <h6 className='offset-1 col-4'>Date de fin réélle :</h6>
+                        <p className='col-7'>{project.date_fin_reelle}</p>
+                    </div>}
+
                     <div className='row ml-2 mt-5'>
                         <h6 className='offset-1 col-4'>Statut :</h6>
                         <p className={"col-2 badge badge-" + STATUS_CLASSES[project.statut]}>{STATUS_LABEL[project.statut]}</p>
