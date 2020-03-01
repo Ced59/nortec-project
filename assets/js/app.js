@@ -16,6 +16,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import '../css/app.css';
 import DetailProjectPage from "./pages/DetailProjectPage";
 import SearchContext from "./contexts/SearchContext";
+import ReportEffectifsPage from "./pages/ReportEffectifsPage";
 
 
 const App = () => {
@@ -49,6 +50,7 @@ const App = () => {
 
                 <main className="container">
                     <Switch>
+                        <PrivateRoute path="/project/:id/newReport" component={ReportEffectifsPage}/>
                         <PrivateRoute path="/project/:id" component={DetailProjectPage}/>
                         {!isAuthenticated && <Route path="/" component={LoginPage}/>}
                         <SearchContext.Provider value={searchContextValue}>

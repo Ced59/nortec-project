@@ -56,7 +56,7 @@ const ListProjectsPage = (props) => {
     const filteredProjects = filteredArchivedProjects.filter(
         p =>
             p.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-            p.statut.toLowerCase().includes(searchValue.toLowerCase()) ||
+            STATUS_LABEL[DateAPI.determineStatus(p.date_debut, p.date_fin_reelle)].toLowerCase().includes(searchValue.toLowerCase()) ||
             p.ville.toLowerCase().includes(searchValue.toLowerCase())
     );
 
