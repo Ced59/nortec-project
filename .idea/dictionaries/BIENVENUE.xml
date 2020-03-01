@@ -2,22 +2,36 @@
   <dictionary name="BIENVENUE">
     <words>
       <w>adresse</w>
+      <w>affiche</w>
+      <w>archivé</w>
+      <w>archivés</w>
       <w>authentification</w>
       <w>avec</w>
       <w>axios</w>
       <w>besoin</w>
       <w>bienvenue</w>
+      <w>bonnes</w>
+      <w>cacher</w>
+      <w>cette</w>
+      <w>chargement</w>
       <w>clic</w>
       <w>compte</w>
       <w>connnecté</w>
+      <w>cours</w>
+      <w>datas</w>
       <w>données</w>
       <w>déconnecté</w>
       <w>déconnexion</w>
+      <w>démarré</w>
+      <w>désolé</w>
       <w>erreur</w>
       <w>erreurs</w>
       <w>etat</w>
       <w>existe</w>
       <w>faire</w>
+      <w>fausse</w>
+      <w>façon</w>
+      <w>fini</w>
       <w>fonction</w>
       <w>fonctionnelle</w>
       <w>gestion</w>
@@ -27,8 +41,11 @@
       <w>informations</w>
       <w>liste</w>
       <w>maxwidth</w>
+      <w>moche</w>
+      <w>montrer</w>
       <w>navbar</w>
       <w>nortec</w>
+      <w>nécessaire</w>
       <w>portail</w>
       <w>profil</w>
       <w>projet</w>
@@ -36,16 +53,22 @@
       <w>quand</w>
       <w>rajouter</w>
       <w>rechercher</w>
+      <w>refactoriser</w>
       <w>relier</w>
       <w>remettre</w>
       <w>rendre</w>
       <w>requête</w>
+      <w>requêtes</w>
       <w>récupération</w>
       <w>réinitialisation</w>
+      <w>résultat</w>
       <w>sont</w>
+      <w>statut</w>
       <w>stockage</w>
       <w>survenue</w>
       <w>tant</w>
+      <w>trouver</w>
+      <w>uniquement</w>
       <w>utilisateur</w>
       <w>valide</w>
       <w>voir</w>
