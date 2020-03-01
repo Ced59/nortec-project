@@ -14,7 +14,7 @@ const NavbarLeft = (props) => {
             <ul className="nav flex-column mb-0">
 
                 <li className="nav-item">
-                    <Link to="/projects" className="nav-link font-italic selected">
+                    <Link to={"/project/"} className="nav-link font-italic selected">
                         Super Projet 1
                     </Link>
                 </li>
