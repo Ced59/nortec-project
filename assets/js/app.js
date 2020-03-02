@@ -53,11 +53,11 @@ const App = () => {
 
                 <main className="container">
                     <Switch>
-                        <PrivateRoute path="/project/:id/newReport/effectifs" component={ReportEffectifsPage}/>
-                        <PrivateRoute path="/project/:id/newReport/proprete" component={ReportPropretePage}/>
-                        <PrivateRoute path="/project/:id/newReport/securite" component={ReportSecuritePage}/>
-                        <PrivateRoute path="/project/:id/newReport/installations" component={ReportInstallationsPage}/>
-                        <PrivateRoute path="/project/:id/newReport/echeances" component={ReportEcheancesPage}/>
+                        <PrivateRoute path="/project/:id/:idReport/effectifs" component={ReportEffectifsPage}/>
+                        <PrivateRoute path="/project/:id/:idReport/proprete" component={ReportPropretePage}/>
+                        <PrivateRoute path="/project/:id/:idReport/securite" component={ReportSecuritePage}/>
+                        <PrivateRoute path="/project/:id/:idReport/installations" component={ReportInstallationsPage}/>
+                        <PrivateRoute path="/project/:id/:idReport/echeances" component={ReportEcheancesPage}/>
                         <PrivateRoute path="/project/:id" component={DetailProjectPage}/>
                         {!isAuthenticated && <Route path="/" component={LoginPage}/>}
                         <SearchContext.Provider value={searchContextValue}>

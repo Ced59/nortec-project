@@ -1,16 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import '../../../css/navbarLeft.css';
-import {Link} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import fakeData from "../fakeDataForDev/fakeData";
 
-// TODO faire un map sur le tableau de données quand il y aura un back
+
 // TODO changer la class selected en fonction du clic
 
-const NavbarLeft = ({match}) => {
+const NavbarLeft = ({match, selected}) => {
 
     const projects = fakeData.fakeListProjects();
 
     const id = match.params;
+    const idReport = match.params;
 
     const [project, setProject] = useState(projects[id.id]); //TODO truc bizarre obligé de passer par là pour récupérer le projet. A faire attention!
 
@@ -30,7 +31,7 @@ const NavbarLeft = ({match}) => {
     useEffect(() => {
         //TODO Normalement charge le projet à chaque fois que l'id change. Attention plus tard vérifier que tout fonctionne avec axios
         fetchProject(id);
-        //console.log(project);
+        console.log(match.params);
     }, [id]);
 
 
@@ -38,34 +39,34 @@ const NavbarLeft = ({match}) => {
     return (
         <div className="vertical-nav" id="sidebar">
 
-            <p className="text-white font-weight-bold text-uppercase px-3 small pb-4 mt-5">Liste des projets</p>
+            <p className="text-white font-weight-bold text-uppercase px-3 small pb-4 mt-5">{project.name}</p>
 
             <ul className="nav flex-column mb-0">
 
                 <li className="nav-item">
-                    <Link to={"/project/" + project.id + "/newReport/effectifs"} className="nav-link font-italic selected">
+                    <NavLink to={"/project/" + project.id + "/" + idReport + "/effectifs"} className="nav-link font-italic selected">
                         Effectifs
-                    </Link>
+                    </NavLink>
                 </li>
                 <li className="nav-item">
-                    <Link to={"/project/" + project.id + "/newReport/proprete"} className="nav-link font-italic">
+                    <NavLink to={"/project/" + project.id + "/" + idReport + "/proprete"} className="nav-link font-italic">
                         Propreté des Accès
-                    </Link>
+                    </NavLink>
                 </li>
                 <li className="nav-item">
-                    <Link to={"/project/" + project.id + "/newReport/securite"} className="nav-link font-italic">
+                    <NavLink to={"/project/" + project.id + "/" + idReport + "/securite"} className="nav-link font-italic">
                         Sécurité
-                    </Link>
+                    </NavLink>
                 </li>
                 <li className="nav-item">
-                    <Link to={"/project/" + project.id + "/newReport/installations"} className="nav-link font-italic">
+                    <NavLink to={"/project/" + project.id + "/" + idReport + "/installations"} className="nav-link font-italic">
                         Installations de chantiers
-                    </Link>
+                    </NavLink>
                 </li>
                 <li className="nav-item">
-                    <Link to={"/project/" + project.id + "/newReport/echeances"} className="nav-link font-italic">
+                    <NavLink to={"/project/" + project.id + "/" + idReport + "/echeances"} className="nav-link font-italic">
                         Echéances
-                    </Link>
+                    </NavLink>
                 </li>
             </ul>
 
