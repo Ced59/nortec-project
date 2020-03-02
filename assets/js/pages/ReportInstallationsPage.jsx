@@ -16,13 +16,17 @@ const ReportInstallationsPage = () => {
         setCommentaire(currentTarget.value);
     };
 
+    const handleSubmit = event => {
+        event.preventDefault();
+    };
+
     return (
         <>
             <NavbarLeftWithRouter/>
 
             <Field placeholder="Commentaire des installations du chantier" onChange={handleChange}
                    label="Installations de chantier" name="installation" value={commentaire}/>
-            <Button className="btn btn-info float-right" type="submit" text="Envoyer"/>
+            <Button className="btn btn-info float-right" onClick={handleSubmit} type="submit" text="Envoyer"/>
         </>
     );
 };
