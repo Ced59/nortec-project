@@ -1,0 +1,54 @@
+Index: assets/js/pages/ReportInstallationsPage.jsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, {useContext, useEffect} from 'react';\r\nimport SelectedNavBarLeftContext from \"../contexts/SelectedNavBarLeftContext\";\r\nimport {withRouter} from \"react-router-dom\";\r\nimport NavbarLeft from \"../components/navbars/NavbarLeft\";\r\n\r\nconst ReportInstallationsPage = () => {\r\n\r\n    const {setSelectedValue} = useContext(SelectedNavBarLeftContext);\r\n\r\n    const NavbarLeftWithRouter = withRouter(NavbarLeft);\r\n\r\n    useEffect(() => {\r\n        setSelectedValue('installations');\r\n    });\r\n\r\n    return (\r\n        <>\r\n            <NavbarLeftWithRouter/>\r\n\r\n            <div className='page-content'>\r\n                <p>Test route</p>\r\n            </div>\r\n\r\n        </>\r\n    );\r\n};\r\n\r\nexport default ReportInstallationsPage;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- assets/js/pages/ReportInstallationsPage.jsx	(revision 59cfa789740c0f239b7fd094728a5afea23c91cf)
++++ assets/js/pages/ReportInstallationsPage.jsx	(date 1583147861165)
+@@ -1,10 +1,14 @@
+ import React, {useContext, useEffect} from 'react';
++import NavbarLeft from "../components/navbars/NavbarLeft";
++import '../../css/report.css'
++import Button from "../components/forms/Button";
++import Field from "../components/forms/Field";
+ import SelectedNavBarLeftContext from "../contexts/SelectedNavBarLeftContext";
+ import {withRouter} from "react-router-dom";
+-import NavbarLeft from "../components/navbars/NavbarLeft";
+ 
+ const ReportInstallationsPage = () => {
+ 
++
+     const {setSelectedValue} = useContext(SelectedNavBarLeftContext);
+ 
+     const NavbarLeftWithRouter = withRouter(NavbarLeft);
+@@ -13,14 +17,24 @@
+         setSelectedValue('installations');
+     });
+ 
++    const [commentaire, setCommentaire] = useState("");
++
++    //Gestion des changement d'input dans le form
++    const handleChange = ({currentTarget}) => {
++        setCommentaire(currentTarget.value);
++    };
++
++    const handleSubmit = event => {
++        event.preventDefault();
++    };
++
+     return (
+         <>
+             <NavbarLeftWithRouter/>
+ 
+-            <div className='page-content'>
+-                <p>Test route</p>
+-            </div>
+-
++            <Field placeholder="Commentaire des installations du chantier" onChange={handleChange}
++                   label="Installations de chantier" name="installation" value={commentaire}/>
++            <Button className="btn btn-info float-right" onClick={handleSubmit} type="submit" text="Envoyer"/>
+         </>
+     );
+ };
