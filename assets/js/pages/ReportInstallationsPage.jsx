@@ -18,16 +18,16 @@ const ReportInstallationsPage = () => {
         setSelectedValue('installations');
     });
 
-    const [commentaire, setCommentaire] = useState("");
+    //const [commentaire, setCommentaire] = useState("");
 
     //Gestion des changement d'input dans le form
-    const handleChange = ({currentTarget}) => {
-        setCommentaire(currentTarget.value);
-    };
+    //const handleChange = ({currentTarget}) => {
+    //    setCommentaire(currentTarget.value);
+    //};
 
-    const handleSubmit = event => {
-        event.preventDefault();
-    };
+    //const handleSubmit = event => {
+     //   event.preventDefault();
+   // };
 
 
     return (
