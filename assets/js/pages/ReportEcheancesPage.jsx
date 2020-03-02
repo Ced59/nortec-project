@@ -1,10 +1,18 @@
 import React from 'react';
+import {withRouter} from "react-router-dom";
+import NavbarLeft from "../components/navbars/NavbarLeft";
 
 const ReportEcheancesPage = () => {
-    return (
-        <div>
+    const NavbarLeftWithRouter = withRouter(NavbarLeft);
 
-        </div>
+    return (
+        <>
+            <NavbarLeftWithRouter/>
+
+            <h1>Echéances :</h1>
+
+
+        </>
     );
 };
 
