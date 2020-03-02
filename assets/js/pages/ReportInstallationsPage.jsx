@@ -1,13 +1,23 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect} from 'react';
 import NavbarLeft from "../components/navbars/NavbarLeft";
 import '../../css/report.css'
 import {withRouter} from "react-router-dom";
 import Button from "../components/forms/Button";
 import Field from "../components/forms/Field";
+import SelectedNavBarLeftContext from "../contexts/SelectedNavBarLeftContext";
+import {withRouter} from "react-router-dom";
 
 const ReportInstallationsPage = () => {
 
+    import NavbarLeft from "../components/navbars/NavbarLeft";
+
+    const {setSelectedValue} = useContext(SelectedNavBarLeftContext);
+
     const NavbarLeftWithRouter = withRouter(NavbarLeft);
+
+    useEffect(() => {
+        setSelectedValue('installations');
+    });
 
     const [commentaire, setCommentaire] = useState("");
 
