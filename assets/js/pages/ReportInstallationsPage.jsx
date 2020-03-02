@@ -5,11 +5,10 @@ import {withRouter} from "react-router-dom";
 import Button from "../components/forms/Button";
 import Field from "../components/forms/Field";
 import SelectedNavBarLeftContext from "../contexts/SelectedNavBarLeftContext";
-import {withRouter} from "react-router-dom";
+
 
 const ReportInstallationsPage = () => {
 
-    import NavbarLeft from "../components/navbars/NavbarLeft";
 
     const {setSelectedValue} = useContext(SelectedNavBarLeftContext);
 
@@ -29,6 +28,7 @@ const ReportInstallationsPage = () => {
     const handleSubmit = event => {
         event.preventDefault();
     };
+
 
     return (
         <>

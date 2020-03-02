@@ -1,5 +1,6 @@
 function fakeData() {
-    const projects = [
+     //TODO Enlever ces exemples de projets quand requêtes axios
+    return [
         {
             id: 0,
             name: "La grande fléche qui pique le cul du ciel",
@@ -220,9 +221,7 @@ function fakeData() {
             nom_OPC: "La petite Sirène",
             contact_client: "boirelatasse@glouglou.com"
         }
-    ]; //TODO Enlever ces exemples de projets quand requêtes axios
-
-    return projects;
+    ];
 }
 
 export default {
