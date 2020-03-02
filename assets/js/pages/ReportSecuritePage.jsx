@@ -5,6 +5,7 @@ import NavbarLeft from "../components/navbars/NavbarLeft";
 
 const ReportSecuritePage = () => {
 
+
     const {setSelectedValue} = useContext(SelectedNavBarLeftContext);
 
     const NavbarLeftWithRouter = withRouter(NavbarLeft);
@@ -17,9 +18,7 @@ const ReportSecuritePage = () => {
         <>
             <NavbarLeftWithRouter/>
 
-            <div className='page-content'>
-                <p>Test route</p>
-            </div>
+            <h1>Sécurité :</h1>
 
         </>
     );

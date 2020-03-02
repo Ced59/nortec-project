@@ -14,14 +14,13 @@ const ReportPropretePage = () => {
     });
 
     return (
-        <>
-            <NavbarLeftWithRouter/>
+            <>
+                <NavbarLeftWithRouter/>
 
-            <div className='page-content'>
-                <p>Test route</p>
-            </div>
+                <h1>Propretés des accès :</h1>
 
-        </>
+
+            </>
     );
 };
 

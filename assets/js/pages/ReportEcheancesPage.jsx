@@ -17,9 +17,7 @@ const ReportEcheancesPage = () => {
         <>
             <NavbarLeftWithRouter/>
 
-            <div className='page-content'>
-                <p>Test route</p>
-            </div>
+            <h1>Echéances :</h1>
 
         </>
     );
