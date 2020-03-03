@@ -3,22 +3,16 @@ import NavbarLeft from "../components/navbars/NavbarLeft";
 import '../../css/report.css'
 import {withRouter} from "react-router-dom";
 import Button from "../components/forms/Button";
-import Field from "../components/forms/Field";
-import SelectedNavBarLeftContext from "../contexts/SelectedNavBarLeftContext";
 import FieldTextArea from "../components/forms/FieldTextArea";
 
 
 const ReportInstallationsPage = () => {
 
 
-    const {setSelectedValue} = useContext(SelectedNavBarLeftContext);
     const [commentaire, setCommentaire] = useState("");
 
     const NavbarLeftWithRouter = withRouter(NavbarLeft);
 
-    useEffect(() => {
-        setSelectedValue('installations');
-    });
 
 
     //Gestion des changement d'input dans le form
@@ -33,7 +27,7 @@ const ReportInstallationsPage = () => {
 
     return (
         <>
-            <NavbarLeftWithRouter/>
+            <NavbarLeftWithRouter selected='installations'/>
             <div className='page-content'>
                 <h2>Installations de chantiers :</h2>
                 <FieldTextArea placeholder="Commentaire des installations du chantier"
