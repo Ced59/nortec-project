@@ -18,7 +18,9 @@ const ReportSecuritePage = () => {
         <>
             <NavbarLeftWithRouter/>
 
-            <h1>Sécurité :</h1>
+            <div className='page-content'>
+                <p>Sécurité</p>
+            </div>
 
         </>
     );

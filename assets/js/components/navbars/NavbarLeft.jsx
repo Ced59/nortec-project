@@ -7,7 +7,7 @@ import SelectedNavBarLeftContext from "../../contexts/SelectedNavBarLeftContext"
 
 // TODO changer la class selected en fonction du clic
 
-const NavbarLeft = ({match, selected}) => {
+const NavbarLeft = ({match}) => {
 
     const projects = fakeData.fakeListProjects();
 
