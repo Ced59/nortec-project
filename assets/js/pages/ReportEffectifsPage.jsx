@@ -19,7 +19,7 @@ const ReportEffectifsPage = (props) => {
             <NavbarLeftWithRouter/>
 
             <div className='page-content'>
-                <p>Test route</p>
+                <p>Effectifs</p>
             </div>
 
         </>

@@ -1,16 +1,18 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import NavbarLeft from "../components/navbars/NavbarLeft";
 import '../../css/report.css'
 import {withRouter} from "react-router-dom";
 import Button from "../components/forms/Button";
 import Field from "../components/forms/Field";
 import SelectedNavBarLeftContext from "../contexts/SelectedNavBarLeftContext";
+import FieldTextArea from "../components/forms/FieldTextArea";
 
 
 const ReportInstallationsPage = () => {
 
 
     const {setSelectedValue} = useContext(SelectedNavBarLeftContext);
+    const [commentaire, setCommentaire] = useState("");
 
     const NavbarLeftWithRouter = withRouter(NavbarLeft);
 
@@ -18,25 +20,31 @@ const ReportInstallationsPage = () => {
         setSelectedValue('installations');
     });
 
-    //const [commentaire, setCommentaire] = useState("");
 
     //Gestion des changement d'input dans le form
-    //const handleChange = ({currentTarget}) => {
-    //    setCommentaire(currentTarget.value);
-    //};
+    const handleChange = ({currentTarget}) => {
+        setCommentaire(currentTarget.value);
+    };
 
-    //const handleSubmit = event => {
-     //   event.preventDefault();
-   // };
+    const handleSubmit = event => {
+        event.preventDefault();
+    };
 
 
     return (
         <>
             <NavbarLeftWithRouter/>
-
-            <Field placeholder="Commentaire des installations du chantier" onChange={handleChange}
-                   label="Installations de chantier" name="installation" value={commentaire}/>
-            <Button className="btn btn-info float-right" onClick={handleSubmit} type="submit" text="Envoyer"/>
+            <div className='page-content'>
+                <h2>Installations de chantiers :</h2>
+                <FieldTextArea placeholder="Commentaire des installations du chantier"
+                               onChange={handleChange}
+                               label=""
+                               name="installation"
+                               value={commentaire}
+                               rows="20"
+                />
+                <Button className="btn btn-info float-right" onClick={handleSubmit} type="submit" text="Envoyer"/>
+            </div>
         </>
     );
 };

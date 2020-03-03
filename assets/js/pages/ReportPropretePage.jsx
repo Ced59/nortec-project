@@ -17,7 +17,9 @@ const ReportPropretePage = () => {
             <>
                 <NavbarLeftWithRouter/>
 
-                <h1>Propretés des accès :</h1>
+                <div className='page-content'>
+                    <p>Propreté des accès</p>
+                </div>
 
 
             </>
