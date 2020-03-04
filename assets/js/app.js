@@ -7,7 +7,6 @@ import AuthAPI from "./services/AuthAPI"
 import {toast, ToastContainer} from "react-toastify";
 import PrivateRoute from "./components/PrivateRoute";
 import NavbarTop from "./components/navbars/NavbarTop";
-import NavbarLeft from "./components/navbars/NavbarLeft";
 import LoginPage from "./pages/LoginPage";
 import ListProjectsPage from "./pages/ListProjectsPage";
 import 'bootstrap/dist/js/bootstrap.bundle.min';
@@ -20,7 +19,6 @@ import ReportPropretePage from "./pages/ReportPropretePage";
 import ReportSecuritePage from "./pages/ReportSecuritePage";
 import ReportInstallationsPage from "./pages/ReportInstallationsPage";
 import ReportEcheancesPage from "./pages/ReportEcheancesPage";
-import SelectedNavBarLeftContext from "./contexts/SelectedNavBarLeftContext";
 
 
 const App = () => {
@@ -59,14 +57,12 @@ const App = () => {
 
                 <main className="container">
                     <Switch>
-                        <SelectedNavBarLeftContext.Provider value={selectedContextValue}>
                             <PrivateRoute path="/project/:id/:idReport/effectifs" component={ReportEffectifsPage}/>
                             <PrivateRoute path="/project/:id/:idReport/proprete" component={ReportPropretePage}/>
                             <PrivateRoute path="/project/:id/:idReport/securite" component={ReportSecuritePage}/>
                             <PrivateRoute path="/project/:id/:idReport/installations"
                                           component={ReportInstallationsPage}/>
                             <PrivateRoute path="/project/:id/:idReport/echeances" component={ReportEcheancesPage}/>
-                        </SelectedNavBarLeftContext.Provider>
                         <PrivateRoute path="/project/:id" component={DetailProjectPage}/>
                         {!isAuthenticated && <Route path="/" component={LoginPage}/>}
                         <SearchContext.Provider value={searchContextValue}>

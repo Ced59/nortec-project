@@ -3,7 +3,6 @@ import NavbarLeft from "../components/navbars/NavbarLeft";
 import '../../css/report.css'
 import {withRouter} from "react-router-dom";
 import Button from "../components/forms/Button";
-import Field from "../components/forms/Field";
 import SelectedNavBarLeftContext from "../contexts/SelectedNavBarLeftContext";
 import FieldTextArea from "../components/forms/FieldTextArea";
 
