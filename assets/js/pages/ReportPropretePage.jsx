@@ -28,9 +28,10 @@ const ReportPropretePage = () => {
 
     };
 
+
     return (
             <>
-                <NavbarLeftWithRouter/>
+                <NavbarLeftWithRouter selected='proprete'/>
 
                 <div className='page-content'>
                     <p>Propreté des accès :</p>

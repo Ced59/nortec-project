@@ -27,7 +27,6 @@ const App = () => {
 
     const [isAuthenticated, setIsAuthenticated] = useState(AuthAPI.isAuthenticated());
     const [searchContext, setSearchContext] = useState('');
-    const [selectedValue, setSelectedValue] = useState('');
 
     const contextValue = {
         isAuthenticated: isAuthenticated,
@@ -37,11 +36,6 @@ const App = () => {
     const searchContextValue = {
         searchValue: searchContext,
         setSearchValue: setSearchContext
-    };
-
-    const selectedContextValue = {
-        selectedValue: selectedValue,
-        setSelectedValue: setSelectedValue
     };
 
 
@@ -63,6 +57,7 @@ const App = () => {
                             <PrivateRoute path="/project/:id/:idReport/installations"
                                           component={ReportInstallationsPage}/>
                             <PrivateRoute path="/project/:id/:idReport/echeances" component={ReportEcheancesPage}/>
+
                         <PrivateRoute path="/project/:id" component={DetailProjectPage}/>
                         {!isAuthenticated && <Route path="/" component={LoginPage}/>}
                         <SearchContext.Provider value={searchContextValue}>

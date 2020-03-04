@@ -30,7 +30,7 @@ const ReportSecuritePage = () => {
 
     return (
         <>
-            <NavbarLeftWithRouter/>
+            <NavbarLeftWithRouter selected='securite'/>
 
             <div className='page-content'>
                 <p>Propreté des accès :</p>
@@ -69,7 +69,6 @@ const ReportSecuritePage = () => {
             <div className='page-content'>
                 <Button onClick={handleSubmit} className="btn btn-primary" text="Valider" type="submit" />
             </div>
-
         </>
     );
 };
