@@ -140,10 +140,13 @@ const DetailProjectPage = ({history, match}) => {
                 >
                     Nouveau Rapport
                 </Link>
-                <Button text='Liste des rapports'
-                        className='btn btn-primary'
-                        type='button'
-                />
+                <Link
+                    className='btn btn-primary'
+                    type='button'
+                    to={'/project/' + project.id + '/listReports'}
+                >
+                    Liste des rapports
+                </Link>
                 <Button text='Voir les échéances'
                         className='btn btn-primary mr-4'
                         type='button'
