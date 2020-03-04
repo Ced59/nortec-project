@@ -224,6 +224,206 @@ function fakeData() {
     ];
 }
 
+function fakeListReports()
+{
+    return [
+        {
+            id: 0,
+            project: projectById(7),
+            redacteur: "Ced",
+            dateRedaction: "2020-03-03",
+            status: "in-progress",
+            proprete_conformity: true,
+            proprete_imputation: [],
+            proprete_comment: "Tout est très propre !",
+            proprete_comment_intern:
+                "Ils ont pas été contents mais je m'en fous ils ont nettoyé!!",
+            security_conformity: true,
+            security_comment: "RAS",
+            security_comment_intern:
+                "Y'a fallu leur botter les fesses pour qu'ils mettent cette fichue barrière!",
+            installations: "10 échafaudages, 5 tracto-pelles",
+            lots: [
+                {
+                    id: 0,
+                    numero_lot: "101ABC654",
+                    libelle_lot: "POSE MOQUETTE",
+                    nom_entreprise: "Le roi de la moquette"
+                },
+                {
+                    id: 1,
+                    nom_entreprise: "Béton Armé",
+                    numero_lot: "102DEF",
+                    libelle_lot: "COULAGE DE BETON"
+                },
+                {
+                    id: 2,
+                    nom_entreprise: "Durand Plomberie",
+                    numero_lot: "102121FEF",
+                    libelle_lot: "POSE ROBINETTERIE"
+                },
+                {
+                    id: 3,
+                    nom_entreprise: "Durand Plomberie",
+                    numero_lot: "10210DSS",
+                    libelle_lot: "INSTALLATION CHAUDIERE"
+                },
+                {
+                    id: 4,
+                    nom_entreprise: "Moulinsart Construction",
+                    numero_lot: "10DSS",
+                    libelle_lot: "POSE FENETRES"
+                }
+            ],
+            photos: [
+                {
+                    id: 0,
+                    link: "../img/projects-img/projects-general-img/8-project-img.jpg",
+                    type: "security"
+                },
+                {
+                    id: 1,
+                    link: "../img/projects-img/projects-general-img/8-project-img.jpg",
+                    type: "proprete"
+                }
+            ],
+            echeances: []
+        },
+        {
+            id: 1,
+            project: projectById(1),
+            redacteur: "Ced",
+            dateRedaction: "2020-03-03",
+            status: "clotured",
+            proprete_conformity: true,
+            proprete_imputation: [],
+            proprete_comment: "Tout est très propre !",
+            proprete_comment_intern:
+                "Ils ont pas été contents mais je m'en fous ils ont nettoyé!!",
+            security_conformity: true,
+            security_comment: "RAS",
+            security_comment_intern:
+                "Y'a fallu leur botter les fesses pour qu'ils mettent cette fichue barrière!",
+            installations: "10 échafaudages, 5 tracto-pelles",
+            lots: [
+                {
+                    id: 0,
+                    numero_lot: "101ABC654",
+                    libelle_lot: "POSE MOQUETTE",
+                    nom_entreprise: "Le roi de la moquette"
+                },
+                {
+                    id: 1,
+                    nom_entreprise: "Béton Armé",
+                    numero_lot: "102DEF",
+                    libelle_lot: "COULAGE DE BETON"
+                },
+                {
+                    id: 2,
+                    nom_entreprise: "Durand Plomberie",
+                    numero_lot: "102121FEF",
+                    libelle_lot: "POSE ROBINETTERIE"
+                },
+                {
+                    id: 3,
+                    nom_entreprise: "Durand Plomberie",
+                    numero_lot: "10210DSS",
+                    libelle_lot: "INSTALLATION CHAUDIERE"
+                },
+                {
+                    id: 4,
+                    nom_entreprise: "Moulinsart Construction",
+                    numero_lot: "10DSS",
+                    libelle_lot: "POSE FENETRES"
+                }
+            ],
+            photos: [
+                {
+                    id: 2,
+                    link: "../img/projects-img/projects-general-img/8-project-img.jpg",
+                    type: "security"
+                },
+                {
+                    id: 3,
+                    link: "../img/projects-img/projects-general-img/8-project-img.jpg",
+                    type: "proprete"
+                }
+            ],
+            echeances: []
+        },
+        {
+            id: 2,
+            project: projectById(1),
+            redacteur: "Ced",
+            dateRedaction: "2020-03-03",
+            status: "clotured",
+            proprete_conformity: true,
+            proprete_imputation: [],
+            proprete_comment: "Tout est très propre !",
+            proprete_comment_intern:
+                "Ils ont pas été contents mais je m'en fous ils ont nettoyé!!",
+            security_conformity: true,
+            security_comment: "RAS",
+            security_comment_intern:
+                "Y'a fallu leur botter les fesses pour qu'ils mettent cette fichue barrière!",
+            installations: "10 échafaudages, 5 tracto-pelles",
+            lots: [
+                {
+                    id: 0,
+                    numero_lot: "101ABC654",
+                    libelle_lot: "POSE MOQUETTE",
+                    nom_entreprise: "Le roi de la moquette"
+                },
+                {
+                    id: 1,
+                    nom_entreprise: "Béton Armé",
+                    numero_lot: "102DEF",
+                    libelle_lot: "COULAGE DE BETON"
+                },
+                {
+                    id: 2,
+                    nom_entreprise: "Durand Plomberie",
+                    numero_lot: "102121FEF",
+                    libelle_lot: "POSE ROBINETTERIE"
+                },
+                {
+                    id: 3,
+                    nom_entreprise: "Durand Plomberie",
+                    numero_lot: "10210DSS",
+                    libelle_lot: "INSTALLATION CHAUDIERE"
+                },
+                {
+                    id: 4,
+                    nom_entreprise: "Moulinsart Construction",
+                    numero_lot: "10DSS",
+                    libelle_lot: "POSE FENETRES"
+                }
+            ],
+            photos: [
+                {
+                    id: 4,
+                    link: "../img/projects-img/projects-general-img/8-project-img.jpg",
+                    type: "security"
+                },
+                {
+                    id: 5,
+                    link: "../img/projects-img/projects-general-img/8-project-img.jpg",
+                    type: "proprete"
+                }
+            ],
+            echeances: []
+        }
+    ];
+}
+
+function projectById(id)
+{
+    const projects = fakeData();
+    return projects[id];
+}
+
+
 export default {
-    fakeListProjects: fakeData
+    fakeListProjects: fakeData,
+    fakeListReports
 }
