@@ -21,7 +21,6 @@ import ReportInstallationsPage from "./pages/ReportInstallationsPage";
 import ReportEcheancesPage from "./pages/ReportEcheancesPage";
 
 
-
 const App = () => {
 
     const NavbarTopWithRouter = withRouter(NavbarTop);
@@ -52,7 +51,6 @@ const App = () => {
 
                 <main className="container">
                     <Switch>
-
                             <PrivateRoute path="/project/:id/:idReport/effectifs" component={ReportEffectifsPage}/>
                             <PrivateRoute path="/project/:id/:idReport/proprete" component={ReportPropretePage}/>
                             <PrivateRoute path="/project/:id/:idReport/securite" component={ReportSecuritePage}/>
