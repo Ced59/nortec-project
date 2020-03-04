@@ -19,6 +19,7 @@ import ReportPropretePage from "./pages/ReportPropretePage";
 import ReportSecuritePage from "./pages/ReportSecuritePage";
 import ReportInstallationsPage from "./pages/ReportInstallationsPage";
 import ReportEcheancesPage from "./pages/ReportEcheancesPage";
+import ListReportsByProject from "./pages/ListReportsByProject";
 
 
 const App = () => {
@@ -57,6 +58,8 @@ const App = () => {
                             <PrivateRoute path="/project/:id/:idReport/installations"
                                           component={ReportInstallationsPage}/>
                             <PrivateRoute path="/project/:id/:idReport/echeances" component={ReportEcheancesPage}/>
+
+                            <PrivateRoute path="/project/:id/listReports" component={ListReportsByProject}/>
 
                         <PrivateRoute path="/project/:id" component={DetailProjectPage}/>
                         {!isAuthenticated && <Route path="/" component={LoginPage}/>}
