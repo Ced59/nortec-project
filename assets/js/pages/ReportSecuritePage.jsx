@@ -33,7 +33,7 @@ const ReportSecuritePage = () => {
             <NavbarLeftWithRouter selected='securite'/>
 
             <div className='page-content'>
-                <p>Propreté des accès :</p>
+                <p>Sécurité :</p>
                 <Button onClick={handleCheckConforme} className="btn btn-success" text="Conforme" type="button"/>
                 <Button onClick={handleCheckNonConforme} className="btn btn-danger ml-2" text="Non Conforme" type="button"/>
             </div>
