@@ -2,20 +2,55 @@
   <dictionary name="BIENVENUE">
     <words>
       <w>accès</w>
+      <w>adresse</w>
+      <w>avec</w>
+      <w>axios</w>
       <w>changement</w>
       <w>chantier</w>
       <w>chantiers</w>
+      <w>chaque</w>
       <w>commentaire</w>
+      <w>création</w>
+      <w>créer</w>
+      <w>dernier</w>
       <w>echeances</w>
       <w>echéances</w>
+      <w>editer</w>
       <w>effectifs</w>
+      <w>enlever</w>
+      <w>entreprise</w>
       <w>envoyer</w>
+      <w>exemples</w>
+      <w>faux</w>
+      <w>fois</w>
+      <w>fonctionne</w>
       <w>gestion</w>
+      <w>libelle</w>
+      <w>liste</w>
       <w>navbar</w>
+      <w>normalement</w>
+      <w>nouveau</w>
+      <w>numero</w>
+      <w>prevues</w>
+      <w>projet</w>
+      <w>projets</w>
       <w>proprete</w>
       <w>propreté</w>
+      <w>quand</w>
+      <w>redacteur</w>
+      <w>reelle</w>
+      <w>requêtes</w>
+      <w>revenir</w>
+      <w>récupère</w>
+      <w>récupérera</w>
+      <w>rédacteur</w>
       <w>securite</w>
+      <w>statut</w>
       <w>sécurité</w>
+      <w>tard</w>
+      <w>vide</w>
+      <w>voir</w>
+      <w>vérifier</w>
     </words>
   </dictionary>
 </component>
