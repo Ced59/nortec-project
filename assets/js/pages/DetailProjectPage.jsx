@@ -55,6 +55,18 @@ const DetailProjectPage = ({history, match}) => {
         history.replace("/projects");
     };
 
+    const newReportClick = () => {
+        //On récupère la liste des faux rapports
+        //TODO Avec axios créer un nouveau rapport vide (post) dont on récupérera l'id pour le lien
+        const reports = fakeData.fakeListReports();
+
+        const idMax = reports[reports.length - 1].id; //on récupère l'id du dernier rapport
+        const idNewReport = idMax + 1; //Simulation création rapport vide
+
+        history.push("/project/"  + id.id + "/" + idNewReport + "/effectifs");
+
+    };
+
 
     return (
         <div className="card m-4 p-2">
@@ -133,17 +145,18 @@ const DetailProjectPage = ({history, match}) => {
 
             </div>
             <div className='row ml-2 mt-4 d-flex justify-content-between mb-3'>
+                <Button text='Nouveau Rapport'
+                        className='btn btn-primary mr-4'
+                        type='button'
+                        onClick={newReportClick}
+                />
                 <Link
                     className='btn btn-primary'
                     type='button'
-                    to={'/project/' + project.id + '/newReport/effectifs'}
+                    to={'/project/' + project.id + '/listReports'}
                 >
-                    Nouveau Rapport
+                    Liste des rapports
                 </Link>
-                <Button text='Liste des rapports'
-                        className='btn btn-primary'
-                        type='button'
-                />
                 <Button text='Voir les échéances'
                         className='btn btn-primary mr-4'
                         type='button'

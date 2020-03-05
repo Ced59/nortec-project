@@ -11,8 +11,9 @@ const NavbarLeft = ({match, selected}) => {
 
     const projects = fakeData.fakeListProjects();
 
+
+    const params = match.params;
     const id = match.params;
-    const idReport = match.params;
 
 
     const [project, setProject] = useState(projects[id.id]); //TODO truc bizarre obligé de passer par là pour récupérer le projet. A faire attention!
@@ -24,6 +25,7 @@ const NavbarLeft = ({match, selected}) => {
         //console.log(projects[id.id]);
 
         setProject(projects[id.id]); //TODO Attention ca ne fonctionnait pas ici à vérifier plus tard avec axios
+
 
         //console.log(project);
     };
@@ -45,27 +47,27 @@ const NavbarLeft = ({match, selected}) => {
             <ul className="nav flex-column mb-0">
 
                 <li className="nav-item">
-                    <NavLink to={"/project/" + project.id + "/" + idReport + "/effectifs"} className={"nav-link font-italic" + (selected === 'effectifs' && " selected")}>
+                    <NavLink to={"/project/" + project.id + "/" + id.idReport + "/effectifs"} className={"nav-link font-italic" + (selected === 'effectifs' && " selected")}>
                         Effectifs
                     </NavLink>
                 </li>
                 <li className="nav-item">
-                    <NavLink to={"/project/" + project.id + "/" + idReport + "/proprete"} className={"nav-link font-italic" + (selected === 'proprete' && " selected")}>
+                    <NavLink to={"/project/" + project.id + "/" + id.idReport + "/proprete"} className={"nav-link font-italic" + (selected === 'proprete' && " selected")}>
                         Propreté des Accès
                     </NavLink>
                 </li>
                 <li className="nav-item">
-                    <NavLink to={"/project/" + project.id + "/" + idReport + "/securite"} className={"nav-link font-italic" + (selected === 'securite' && " selected")}>
+                    <NavLink to={"/project/" + project.id + "/" + id.idReport + "/securite"} className={"nav-link font-italic" + (selected === 'securite' && " selected")}>
                         Sécurité
                     </NavLink>
                 </li>
                 <li className="nav-item">
-                    <NavLink to={"/project/" + project.id + "/" + idReport + "/installations"} className={"nav-link font-italic" + (selected === 'installations' && " selected")}>
+                    <NavLink to={"/project/" + project.id + "/" + id.idReport + "/installations"} className={"nav-link font-italic" + (selected === 'installations' && " selected")}>
                         Installations de chantiers
                     </NavLink>
                 </li>
                 <li className="nav-item">
-                    <NavLink to={"/project/" + project.id + "/" + idReport + "/echeances"} className={"nav-link font-italic" + (selected === 'echeances' && " selected")}>
+                    <NavLink to={"/project/" + project.id + "/" + id.idReport + "/echeances"} className={"nav-link font-italic" + (selected === 'echeances' && " selected")}>
                         Echéances
                     </NavLink>
                 </li>
