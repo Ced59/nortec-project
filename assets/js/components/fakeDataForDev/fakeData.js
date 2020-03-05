@@ -422,8 +422,15 @@ function projectById(id)
     return projects[id];
 }
 
+function reportById(id)
+{
+    const reports = fakeListReports();
+    return reports[id];
+}
+
 
 export default {
     fakeListProjects: fakeData,
-    fakeListReports
+    fakeListReports,
+    reportById
 }
