@@ -41,7 +41,7 @@ const ReportSecuritePage = () => {
                 <div className='page-content'>
                     <p>Ceci est conforme</p>
                 </div>
-            )};
+            )}
             {(conforme === false &&
                 <div className='page-content'>
                     <div className="row">
@@ -65,7 +65,7 @@ const ReportSecuritePage = () => {
                         </div>
                     </div>
                 </div>
-            )};
+            )}
             <div className='page-content'>
                 <Button onClick={handleSubmit} className="btn btn-primary" text="Valider" type="submit" />
             </div>
