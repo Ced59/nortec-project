@@ -33,7 +33,7 @@ const ReportSecuritePage = () => {
             <NavbarLeftWithRouter selected='securite'/>
 
             <div className='page-content'>
-                <p>Propreté des accès :</p>
+                <p>Sécurité :</p>
                 <Button onClick={handleCheckConforme} className="btn btn-success" text="Conforme" type="button"/>
                 <Button onClick={handleCheckNonConforme} className="btn btn-danger ml-2" text="Non Conforme" type="button"/>
             </div>
@@ -41,7 +41,7 @@ const ReportSecuritePage = () => {
                 <div className='page-content'>
                     <p>Ceci est conforme</p>
                 </div>
-            )};
+            )}
             {(conforme === false &&
                 <div className='page-content'>
                     <div className="row">
@@ -65,7 +65,7 @@ const ReportSecuritePage = () => {
                         </div>
                     </div>
                 </div>
-            )};
+            )}
             <div className='page-content'>
                 <Button onClick={handleSubmit} className="btn btn-primary" text="Valider" type="submit" />
             </div>
