@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {withRouter} from "react-router-dom";
 import NavbarLeft from "../components/navbars/NavbarLeft";
 import Select from "../components/forms/Select";
@@ -50,7 +50,7 @@ const ReportEcheancesPage = () => {
                         <td>2</td>
                         <td>Salamèche</td>
                         <td>
-                            <Button className="btn btn-primary" text="Détails" onClick={handleShow}/>
+                            <Button className="btn btn-primary" text="Détails"/>
                         </td>
                     </tr>
                     <tr>
