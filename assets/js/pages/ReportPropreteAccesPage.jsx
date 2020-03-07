@@ -7,6 +7,7 @@ import FieldTextArea from "../components/forms/FieldTextArea";
 import ImageUpload from "../components/forms/ImageUpload";
 import fakeData from "../components/fakeDataForDev/fakeData";
 import '../../css/app.css';
+import {toast} from "react-toastify";
 
 const ReportPropreteAccesPage = ({match}) => {
 
@@ -34,6 +35,11 @@ const ReportPropreteAccesPage = ({match}) => {
 
     };
 
+    const handleSubmitConform = () => {
+        //TODO enregistrement de la conformité à true
+        toast.success("Statut de la propreté des accès enregistré avec succès!")
+    };
+
 
     return (
         <main className="container">
@@ -50,7 +56,15 @@ const ReportPropreteAccesPage = ({match}) => {
 
                 {(conforme &&
 
-                    <p>Ceci est conforme</p>
+                    <div className='card mt-3'>
+                        <div className='row ml-2 d-flex justify-content-center mt-3'>
+                            <h4 className='mb-4'>Propreté des accès conforme ?</h4>
+                        </div>
+                        <div className='row ml-2 d-flex justify-content-center'>
+                            <Button onClick={handleSubmitConform} className="btn btn-info mb-4 row" text="Valider"
+                                    type="button"/>
+                        </div>
+                    </div>
 
                 )}
                 {(conforme === false &&
