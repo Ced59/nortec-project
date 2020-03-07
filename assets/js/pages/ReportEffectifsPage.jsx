@@ -20,14 +20,12 @@ const ReportEffectifsPage = ({match}) => {
 
         setReport(reportById);
 
-        console.log(report);
-
     };
 
     useEffect(() => {
         //TODO Normalement charge le projet à chaque fois que l'id change. Attention plus tard vérifier que tout fonctionne avec axios
         fetchReport();
-        console.log(report);
+
     }, []);
 
     return (
