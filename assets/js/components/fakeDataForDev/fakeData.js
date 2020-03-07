@@ -238,8 +238,8 @@ function fakeListReports() {
             proprete_comment_intern:
                 "Ils ont pas été contents mais je m'en fous ils ont nettoyé!!",
             security_conformity: true,
-            security_comment: "RAS",
-            security_comment_intern:
+            proprete_access_comment: "RAS",
+            proprete_access_comment_intern:
                 "Y'a fallu leur botter les fesses pour qu'ils mettent cette fichue barrière!",
             installations: "10 échafaudages, 5 tracto-pelles",
             lots: [
@@ -299,27 +299,27 @@ function fakeListReports() {
                 [
                     {
                         id: 0,
-                        id_company: 0,
+                        company: companyById(0),
                         pourcent: 25
                     },
                     {
                         id: 1,
-                        id_company: 1,
+                        company: companyById(1),
                         pourcent: 25
                     },
                     {
                         id: 2,
-                        id_company: 2,
+                        company: companyById(2),
                         pourcent: 25
                     },
                     {
                         id: 3,
-                        id_company: 3,
+                        company: companyById(3),
                         pourcent: 25
                     },
                     {
                         id: 4,
-                        id_company: 4,
+                        company: companyById(4),
                         pourcent: 0
                     }
 
@@ -385,8 +385,8 @@ function fakeListReports() {
             status: "clotured",
             proprete_conformity: true,
             proprete_imputation: [],
-            proprete_comment: "Tout est très propre !",
-            proprete_comment_intern:
+            proprete_access_comment: "Tout est très propre !",
+            proprete_access_comment_intern:
                 "Ils ont pas été contents mais je m'en fous ils ont nettoyé!!",
             security_conformity: true,
             security_comment: "RAS",
