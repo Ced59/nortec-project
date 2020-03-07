@@ -1,5 +1,5 @@
 function fakeData() {
-     //TODO Enlever ces exemples de projets quand requêtes axios
+    //TODO Enlever ces exemples de projets quand requêtes axios
     return [
         {
             id: 0,
@@ -224,8 +224,7 @@ function fakeData() {
     ];
 }
 
-function fakeListReports()
-{
+function fakeListReports() {
     return [
         {
             id: 0,
@@ -246,33 +245,33 @@ function fakeListReports()
             lots: [
                 {
                     id: 0,
-                    numero_lot: "101ABC654",
-                    libelle_lot: "POSE MOQUETTE",
-                    nom_entreprise: "Le roi de la moquette"
+                    numero_lot: "101ABC674",
+                    libelle_lot: "FOURNISSEUR SPECIAL",
+                    entreprise: companyById(3)
                 },
                 {
                     id: 1,
-                    nom_entreprise: "Béton Armé",
-                    numero_lot: "102DEF",
-                    libelle_lot: "COULAGE DE BETON"
+                    numero_lot: "10242342DEF",
+                    libelle_lot: "INSTALLATION TELEPHONE",
+                    entreprise: companyById(4)
                 },
                 {
                     id: 2,
-                    nom_entreprise: "Durand Plomberie",
-                    numero_lot: "102121FEF",
-                    libelle_lot: "POSE ROBINETTERIE"
+                    numero_lot: "102AZZZAA1FEF",
+                    libelle_lot: "INSTALLATION FIBRE",
+                    entreprise: companyById(4)
                 },
                 {
                     id: 3,
-                    nom_entreprise: "Durand Plomberie",
-                    numero_lot: "10210DSS",
-                    libelle_lot: "INSTALLATION CHAUDIERE"
+                    numero_lot: "102EEZDSS",
+                    libelle_lot: "MISE EN PLACE ANTENNES SPECIALES",
+                    entreprise: companyById(4)
                 },
                 {
                     id: 4,
-                    nom_entreprise: "Moulinsart Construction",
-                    numero_lot: "10DSS",
-                    libelle_lot: "POSE FENETRES"
+                    numero_lot: "10DSSQSDSSDHJH",
+                    libelle_lot: "FOURNITURE ELECTRICITE",
+                    entreprise: companyById(2)
                 }
             ],
             photos: [
@@ -307,34 +306,34 @@ function fakeListReports()
             installations: "10 échafaudages, 5 tracto-pelles",
             lots: [
                 {
-                    id: 0,
+                    id: 5,
                     numero_lot: "101ABC654",
                     libelle_lot: "POSE MOQUETTE",
-                    nom_entreprise: "Le roi de la moquette"
+                    entreprise: companyById(0)
                 },
                 {
-                    id: 1,
-                    nom_entreprise: "Béton Armé",
+                    id: 6,
                     numero_lot: "102DEF",
-                    libelle_lot: "COULAGE DE BETON"
+                    libelle_lot: "COULAGE DE BETON",
+                    entreprise: companyById(1)
                 },
                 {
-                    id: 2,
-                    nom_entreprise: "Durand Plomberie",
+                    id: 7,
                     numero_lot: "102121FEF",
-                    libelle_lot: "POSE ROBINETTERIE"
+                    libelle_lot: "POSE ROBINETTERIE",
+                    entreprise: companyById(3)
                 },
                 {
-                    id: 3,
-                    nom_entreprise: "Durand Plomberie",
+                    id: 8,
                     numero_lot: "10210DSS",
-                    libelle_lot: "INSTALLATION CHAUDIERE"
+                    libelle_lot: "INSTALLATION VIDEO SURVEILLANCE",
+                    entreprise: companyById(4)
                 },
                 {
-                    id: 4,
-                    nom_entreprise: "Moulinsart Construction",
+                    id: 9,
                     numero_lot: "10DSS",
-                    libelle_lot: "POSE FENETRES"
+                    libelle_lot: "FOURNITURE ELECTRICITE",
+                    entreprise: companyById(2)
                 }
             ],
             photos: [
@@ -369,34 +368,22 @@ function fakeListReports()
             installations: "10 échafaudages, 5 tracto-pelles",
             lots: [
                 {
-                    id: 0,
-                    numero_lot: "101ABC654",
-                    libelle_lot: "POSE MOQUETTE",
-                    nom_entreprise: "Le roi de la moquette"
+                    id: 10,
+                    numero_lot: "101ABC614154",
+                    libelle_lot: "ENQUETES CRIM",
+                    entreprise: companyById(3)
                 },
                 {
-                    id: 1,
-                    nom_entreprise: "Béton Armé",
-                    numero_lot: "102DEF",
-                    libelle_lot: "COULAGE DE BETON"
+                    id: 11,
+                    numero_lot: "10211120DEF",
+                    libelle_lot: "POSE DES JUDAS",
+                    entreprise: companyById(4)
                 },
                 {
-                    id: 2,
-                    nom_entreprise: "Durand Plomberie",
-                    numero_lot: "102121FEF",
-                    libelle_lot: "POSE ROBINETTERIE"
-                },
-                {
-                    id: 3,
-                    nom_entreprise: "Durand Plomberie",
-                    numero_lot: "10210DSS",
-                    libelle_lot: "INSTALLATION CHAUDIERE"
-                },
-                {
-                    id: 4,
-                    nom_entreprise: "Moulinsart Construction",
-                    numero_lot: "10DSS",
-                    libelle_lot: "POSE FENETRES"
+                    id: 12,
+                    numero_lot: "1021211148511FEF",
+                    libelle_lot: "POSE ROBINETTERIE",
+                    entreprise: companyById(5)
                 }
             ],
             photos: [
@@ -416,21 +403,104 @@ function fakeListReports()
     ];
 }
 
-function projectById(id)
-{
-    const projects = fakeData();
-    return projects[id];
+function fakeListCompanies() {
+    return [
+        {
+            id: 0,
+            nom: "Le roi de la moquette",
+            adresse1: "36 quai des Orfèvres",
+            adresse2: "",
+            code_postal: "75000",
+            ville: "Paris",
+            mail1: "moquetteman@raslamoquette.com",
+            mail2: "razmoket@cesttouffu.org"
+        },
+        {
+            id: 1,
+            nom: "Béton Armé",
+            adresse1: "56 rue betonnée",
+            adresse2: "Dans le béton",
+            code_postal: "56123",
+            ville: "Béton-City",
+            mail1: "ilestdurmonbeton@arme.com",
+            mail2: ""
+        },
+        {
+            id: 2,
+            nom: "Centrale nucléaire de Springfield",
+            adresse1: "777 rue de l'atome",
+            adresse2: "Derrière Chez Mr Burns",
+            code_postal: "78451",
+            ville: "Springfield",
+            mail1: "montyburns@enfoire.com",
+            mail2: "wellonsmithers@larbin.com"
+        },
+        {
+            id: 3,
+            nom: "Lux",
+            adresse1: "666 rue de l'enfer",
+            adresse2: "",
+            code_postal: "78451",
+            ville: "Los Angeles",
+            mail1: "lucifermorningstar@hell.com",
+            mail2: "lieutenantdan@ducon.com"
+        },
+        {
+            id: 4,
+            nom: "NSA",
+            adresse1: "9800 Savage Road",
+            adresse2: "Derrière toi",
+            code_postal: "74451",
+            ville: "Maryland",
+            mail1: "bigbrothervousregarde@cia.com",
+            mail2: ""
+        },
+        {
+            id: 5,
+            nom: "Bender Company",
+            adresse1: "Future Street",
+            adresse2: "Teflon Village",
+            code_postal: "74411",
+            ville: "New New York",
+            mail1: "benderrodriguez@teflon.com",
+            mail2: ""
+        }
+
+    ];
 }
 
-function reportById(id)
-{
+function companyById(id) {
+    const companies = fakeListCompanies();
+    const companyById = filterById(companies, id);
+
+    return companyById[0];
+}
+
+function projectById(id) {
+    const projects = fakeData();
+    const projectById = filterById(projects, id);
+
+    return projectById[0];
+}
+
+function reportById(id) {
     const reports = fakeListReports();
-    return reports[id];
+    const reportById = filterById(reports, id);
+
+    return reportById[0];
+}
+
+function filterById(tab, id) {
+    return tab.filter(
+        t => t.id === id
+    );
 }
 
 
 export default {
     fakeListProjects: fakeData,
     fakeListReports,
-    reportById
+    reportById,
+    fakeListCompanies,
+    companyById
 }
