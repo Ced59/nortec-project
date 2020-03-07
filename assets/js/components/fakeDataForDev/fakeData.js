@@ -294,11 +294,38 @@ function fakeListReports() {
             redacteur: "Ced",
             dateRedaction: "2020-03-03T15:21:12",
             status: "clotured",
-            proprete_conformity: true,
-            proprete_imputation: [],
-            proprete_comment: "Tout est très propre !",
-            proprete_comment_intern:
-                "Ils ont pas été contents mais je m'en fous ils ont nettoyé!!",
+            proprete_access_conformity: "noconform",
+            proprete_access_imputation:
+                [
+                    {
+                        id: 0,
+                        id_company: 0,
+                        pourcent: 25
+                    },
+                    {
+                        id: 1,
+                        id_company: 1,
+                        pourcent: 25
+                    },
+                    {
+                        id: 2,
+                        id_company: 2,
+                        pourcent: 25
+                    },
+                    {
+                        id: 3,
+                        id_company: 3,
+                        pourcent: 25
+                    },
+                    {
+                        id: 4,
+                        id_company: 4,
+                        pourcent: 0
+                    }
+
+                ],
+            proprete_access_comment: "4 entreprises sur 5 devront payer",
+            proprete_access_comment_intern: "C'etait dégueulasse !!!",
             security_conformity: true,
             security_comment: "RAS",
             security_comment_intern:
