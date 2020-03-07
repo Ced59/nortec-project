@@ -34,9 +34,9 @@ const ReportEffectifsPage = ({match}) => {
             <NavbarLeftWithRouter selected='effectifs'/>
 
             <div className='page-content'>
-                <p>Rédacteur : Cedric</p>
+                <h2>Effectifs : </h2>
+                <h4>Rédacteur : Cedric</h4>
                 <p>Date : 06/03/2020</p>
-                <p>Effectifs : </p>
                 <table className="table table-hover table-striped">
                     <thead>
                     <tr>

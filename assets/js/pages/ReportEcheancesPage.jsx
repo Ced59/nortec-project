@@ -13,7 +13,7 @@ const ReportEcheancesPage = () => {
             <NavbarLeftWithRouter selected='echeances'/>
 
             <div className="page-content">
-                <p>Echéances : </p>
+                <h2 className="mb-4">Echéances : </h2>
                 <table className="table table-hover">
                     <thead>
                     <tr>

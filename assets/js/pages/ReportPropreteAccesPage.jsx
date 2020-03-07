@@ -39,9 +39,9 @@ const ReportPropreteAccesPage = ({match}) => {
             <NavbarLeftWithRouter selected='proprete'/>
 
             <div className='page-content'>
-                <p>Propreté des accès :</p>
-                <Button onClick={handleCheckConforme} className="btn btn-success" text="Conforme" type="button"/>
-                <Button onClick={handleCheckNonConforme} className="btn btn-danger ml-2" text="Non Conforme"
+                <h2 className="mb-4">Propreté des accès :</h2>
+                <Button onClick={handleCheckConforme} className="btn btn-success mb-4" text="Conforme" type="button"/>
+                <Button onClick={handleCheckNonConforme} className="btn btn-danger ml-4 mb-4" text="Non Conforme"
                         type="button"/>
             </div>
             {(conforme &&
