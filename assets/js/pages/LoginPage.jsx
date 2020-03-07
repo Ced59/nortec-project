@@ -51,7 +51,7 @@ const LoginPage = ({history}) => {
 
 
     return (
-        <>
+        <main className="container">
 
             <Helmet>
                 <style>{'body { background-color: #005375; }'}</style>
@@ -102,7 +102,7 @@ const LoginPage = ({history}) => {
                     </div>
                 </form>
             </div>
-        </>
+        </main>
     );
 };
 
