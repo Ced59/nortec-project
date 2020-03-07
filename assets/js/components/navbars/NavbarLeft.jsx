@@ -7,6 +7,7 @@ import fakeData from "../fakeDataForDev/fakeData";
 
 // TODO changer la class selected en fonction du clic
 
+
 const NavbarLeft = ({match, selected}) => {
 
     const projects = fakeData.fakeListProjects();
@@ -22,12 +23,9 @@ const NavbarLeft = ({match, selected}) => {
     const fetchProject = id => {
         //TODO récupérer le projet avec requête axios
 
-        //console.log(projects[id.id]);
-
         setProject(projects[id.id]); //TODO Attention ca ne fonctionnait pas ici à vérifier plus tard avec axios
 
 
-        //console.log(project);
     };
 
     //Récupération du bon projet à chaque chargement du composant
@@ -52,18 +50,18 @@ const NavbarLeft = ({match, selected}) => {
                     </NavLink>
                 </li>
                 <li className="nav-item">
-                    <NavLink to={"/project/" + project.id + "/" + id.idReport + "/proprete"} className={"nav-link font-italic" + (selected === 'proprete' && " selected")}>
-                        Propreté des Accès
-                    </NavLink>
-                </li>
-                <li className="nav-item">
                     <NavLink to={"/project/" + project.id + "/" + id.idReport + "/securite"} className={"nav-link font-italic" + (selected === 'securite' && " selected")}>
                         Sécurité
                     </NavLink>
                 </li>
                 <li className="nav-item">
-                    <NavLink to={"/project/" + project.id + "/" + id.idReport + "/installations"} className={"nav-link font-italic" + (selected === 'installations' && " selected")}>
-                        Installations de chantiers
+                    <NavLink to={"/project/" + project.id + "/" + id.idReport + "/propreteacces"} className={"nav-link font-italic" + (selected === 'proprete' && " selected")}>
+                        Propreté des Accès
+                    </NavLink>
+                </li>
+                <li className="nav-item">
+                    <NavLink to={"/project/" + project.id + "/" + id.idReport + "/propretepartiescommunes"} className={"nav-link font-italic" + (selected === 'propetepartiecommune' && " selected")}>
+                        Propreté des parties communes
                     </NavLink>
                 </li>
                 <li className="nav-item">

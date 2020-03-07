@@ -63,113 +63,114 @@ const DetailProjectPage = ({history, match}) => {
         const idMax = reports[reports.length - 1].id; //on récupère l'id du dernier rapport
         const idNewReport = idMax + 1; //Simulation création rapport vide
 
-        history.push("/project/"  + id.id + "/" + idNewReport + "/effectifs");
+        history.push("/project/" + id.id + "/" + idNewReport + "/effectifs");
 
     };
 
 
     return (
-        <div className="card m-4 p-2">
-            <h2 className='mb-4'>{project.name}</h2>
-            <p className='description-style'>{project.description}</p>
-            <div className="row mt-2">
-                <ImgComponent
-                    alt={project.name}
-                    src={project.photo}
-                    className='col-5 img-fluid rounded img-style'
-                />
+        <main className="container">
+            <div className="card m-4 p-2">
+                <h2 className='mb-4'>{project.name}</h2>
+                <p className='description-style'>{project.description}</p>
+                <div className="row mt-2">
+                    <ImgComponent
+                        alt={project.name}
+                        src={project.photo}
+                        className='col-5 img-fluid rounded img-style'
+                    />
 
-                <div className='col-6'>
-                    <h5 className='mb-3'>Détails:</h5>
-                    <div className='row ml-2 no-space'>
-                        <h6 className='offset-1 col-4'>Adresse :</h6>
-                        <p className='col-7'>{project.adresse1}</p>
-                    </div>
-                    {project.adresse2 &&
-                    <div className='row ml-2 no-space'>
-                        <h6 className='offset-1 col-4'>Complément :</h6>
-                        <p className='col-7'>{project.adresse2}</p>
-                    </div>
-                    }
-
-                    <div className='row ml-2 no-space'>
-                        <h6 className='offset-1 col-4'>Code Postal :</h6>
-                        <p className='col-7'>{project.code_postal}</p>
-                    </div>
-                    <div className='row ml-2 no-space'>
-                        <h6 className='offset-1 col-4'>Ville :</h6>
-                        <p className='col-7'>{project.ville}</p>
-                    </div>
-                    <div className='row ml-2 no-space'>
-                        <h6 className='offset-1 col-4'>Date de début :</h6>
-                        <p className='col-7'>{DateAPI.formatDate(project.date_debut)}</p>
-                    </div>
-
-                    {project.date_fin_prevues.map(date =>
-
-                        <div className='row ml-2 no-space' key={date.id}>
-                            <h6 className='offset-1 col-4'>Fin prévue {date.id + 1} :</h6>
-                            <p className='col-7'>{DateAPI.formatDate(date.date)}</p>
+                    <div className='col-6'>
+                        <h5 className='mb-3'>Détails:</h5>
+                        <div className='row ml-2 no-space'>
+                            <h6 className='offset-1 col-4'>Adresse :</h6>
+                            <p className='col-7'>{project.adresse1}</p>
                         </div>
-                    )}
+                        {project.adresse2 &&
+                        <div className='row ml-2 no-space'>
+                            <h6 className='offset-1 col-4'>Complément :</h6>
+                            <p className='col-7'>{project.adresse2}</p>
+                        </div>
+                        }
 
-                    {project.date_fin_reelle && <div className='row ml-2 no-space'>
-                        <h6 className='offset-1 col-4'>Date de fin réélle :</h6>
-                        <p className='col-7'>{DateAPI.formatDate(project.date_fin_reelle)}</p>
-                    </div>}
+                        <div className='row ml-2 no-space'>
+                            <h6 className='offset-1 col-4'>Code Postal :</h6>
+                            <p className='col-7'>{project.code_postal}</p>
+                        </div>
+                        <div className='row ml-2 no-space'>
+                            <h6 className='offset-1 col-4'>Ville :</h6>
+                            <p className='col-7'>{project.ville}</p>
+                        </div>
+                        <div className='row ml-2 no-space'>
+                            <h6 className='offset-1 col-4'>Date de début :</h6>
+                            <p className='col-7'>{DateAPI.formatDate(project.date_debut)}</p>
+                        </div>
+
+                        {project.date_fin_prevues.map(date =>
+
+                            <div className='row ml-2 no-space' key={date.id}>
+                                <h6 className='offset-1 col-4'>Fin prévue {date.id + 1} :</h6>
+                                <p className='col-7'>{DateAPI.formatDate(date.date)}</p>
+                            </div>
+                        )}
+
+                        {project.date_fin_reelle && <div className='row ml-2 no-space'>
+                            <h6 className='offset-1 col-4'>Date de fin réélle :</h6>
+                            <p className='col-7'>{DateAPI.formatDate(project.date_fin_reelle)}</p>
+                        </div>}
 
 
-                    <div className='row ml-2 no-space'>
-                        <h6 className='offset-1 col-4'>Nom MOEX :</h6>
-                        <p className='col-7'>{project.nom_MOEX}</p>
-                    </div>
+                        <div className='row ml-2 no-space'>
+                            <h6 className='offset-1 col-4'>Nom MOEX :</h6>
+                            <p className='col-7'>{project.nom_MOEX}</p>
+                        </div>
 
-                    <div className='row ml-2 no-space'>
-                        <h6 className='offset-1 col-4'>Nom OPC :</h6>
-                        <p className='col-7'>{project.nom_OPC}</p>
-                    </div>
+                        <div className='row ml-2 no-space'>
+                            <h6 className='offset-1 col-4'>Nom OPC :</h6>
+                            <p className='col-7'>{project.nom_OPC}</p>
+                        </div>
 
-                    <div className='row ml-2 no-space'>
-                        <h6 className='offset-1 col-4'>Contact client :</h6>
-                        <a className='col-7' href={"mailto:" + project.contact_client}>{project.contact_client}</a>
-                    </div>
+                        <div className='row ml-2 no-space'>
+                            <h6 className='offset-1 col-4'>Contact client :</h6>
+                            <a className='col-7' href={"mailto:" + project.contact_client}>{project.contact_client}</a>
+                        </div>
 
 
-                    <div className='row ml-2 mt-5'>
-                        <h6 className='offset-1 col-4'>Statut :</h6>
-                        <p className={"col-2 badge badge-" + STATUS_CLASSES[DateAPI.determineStatus(project.date_debut, project.date_fin_reelle)]}>
-                            {STATUS_LABEL[DateAPI.determineStatus(project.date_debut, project.date_fin_reelle)]}</p>
+                        <div className='row ml-2 mt-5'>
+                            <h6 className='offset-1 col-4'>Statut :</h6>
+                            <p className={"col-2 badge badge-" + STATUS_CLASSES[DateAPI.determineStatus(project.date_debut, project.date_fin_reelle)]}>
+                                {STATUS_LABEL[DateAPI.determineStatus(project.date_debut, project.date_fin_reelle)]}</p>
+                        </div>
+
                     </div>
 
                 </div>
+                <div className='row ml-2 mt-4 d-flex justify-content-between mb-3'>
+                    <Button text='Nouveau Rapport'
+                            className='btn btn-primary mr-4'
+                            type='button'
+                            onClick={newReportClick}
+                    />
+                    <Link
+                        className='btn btn-primary'
+                        type='button'
+                        to={'/project/' + project.id + '/listReports'}
+                    >
+                        Liste des rapports
+                    </Link>
+                    <Button text='Voir les échéances'
+                            className='btn btn-primary mr-4'
+                            type='button'
+                    />
+                    <Button text='Revenir à la liste'
+                            className='btn btn-primary mr-4'
+                            type='button'
+                            onClick={handleBackClick}
+                    />
+                </div>
 
             </div>
-            <div className='row ml-2 mt-4 d-flex justify-content-between mb-3'>
-                <Button text='Nouveau Rapport'
-                        className='btn btn-primary mr-4'
-                        type='button'
-                        onClick={newReportClick}
-                />
-                <Link
-                    className='btn btn-primary'
-                    type='button'
-                    to={'/project/' + project.id + '/listReports'}
-                >
-                    Liste des rapports
-                </Link>
-                <Button text='Voir les échéances'
-                        className='btn btn-primary mr-4'
-                        type='button'
-                />
-                <Button text='Revenir à la liste'
-                        className='btn btn-primary mr-4'
-                        type='button'
-                        onClick={handleBackClick}
-                />
-            </div>
-
-
-        </div>
+        </main>
     );
 };
 

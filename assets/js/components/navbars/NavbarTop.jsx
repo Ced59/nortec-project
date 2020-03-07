@@ -28,7 +28,7 @@ const NavbarTop = ({history}) => {
 
     return (
 
-        <nav className="navbar navbar-expand-lg navbar-light bg-light lighten-5 mb-4">
+        <nav className="navbar navbar-expand-lg navbar-light bg-light lighten-5 mb-4 fixed-top">
 
             <a className="navbar-brand" href="#"><LogoCompanyComponent style={{width: "100px"}}/></a>
 
