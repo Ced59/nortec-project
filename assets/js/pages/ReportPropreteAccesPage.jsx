@@ -7,7 +7,7 @@ import FieldTextArea from "../components/forms/FieldTextArea";
 import ImageUpload from "../components/forms/ImageUpload";
 import fakeData from "../components/fakeDataForDev/fakeData";
 
-const ReportPropretePage = ({match}) => {
+const ReportPropreteAccesPage = ({match}) => {
 
     const [conforme, setConforme] = useState(null);
 
@@ -86,4 +86,4 @@ const ReportPropretePage = ({match}) => {
     );
 };
 
-export default ReportPropretePage;
+export default ReportPropreteAccesPage;

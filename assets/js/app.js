@@ -15,9 +15,9 @@ import '../css/app.css';
 import DetailProjectPage from "./pages/DetailProjectPage";
 import SearchContext from "./contexts/SearchContext";
 import ReportEffectifsPage from "./pages/ReportEffectifsPage";
-import ReportPropretePage from "./pages/ReportPropretePage";
+import ReportPropreteAccesPage from "./pages/ReportPropreteAccesPage";
 import ReportSecuritePage from "./pages/ReportSecuritePage";
-import ReportInstallationsPage from "./pages/ReportInstallationsPage";
+import ReportPropretePartiesCommunesPage from "./pages/ReportPropretePartiesCommunesPage";
 import ReportEcheancesPage from "./pages/ReportEcheancesPage";
 import ListReportsByProject from "./pages/ListReportsByProject";
 
@@ -53,10 +53,10 @@ const App = () => {
                 <main className="container">
                     <Switch>
                             <PrivateRoute path="/project/:id/:idReport/effectifs" component={ReportEffectifsPage}/>
-                            <PrivateRoute path="/project/:id/:idReport/proprete" component={ReportPropretePage}/>
+                            <PrivateRoute path="/project/:id/:idReport/propreteacces" component={ReportPropreteAccesPage}/>
                             <PrivateRoute path="/project/:id/:idReport/securite" component={ReportSecuritePage}/>
-                            <PrivateRoute path="/project/:id/:idReport/installations"
-                                          component={ReportInstallationsPage}/>
+                            <PrivateRoute path="/project/:id/:idReport/propretepartiescommunes"
+                                          component={ReportPropretePartiesCommunesPage}/>
                             <PrivateRoute path="/project/:id/:idReport/echeances" component={ReportEcheancesPage}/>
 
                             <PrivateRoute path="/project/:id/listReports" component={ListReportsByProject}/>
