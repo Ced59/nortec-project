@@ -46,7 +46,6 @@ const ReportPropretePartiesCommunesPage = ({match}) => {
                             type="button"/>
                     <Button onClick={handleCheckNonConforme} className="btn btn-danger ml-5 mb-4" text="Non Conforme"
                             type="button"/>
-                    <Button onClick={handleSubmit} className="btn btn-primary ml-5 mb-4" text="Valider" type="submit"/>
                 </div>
 
             {(conforme &&
