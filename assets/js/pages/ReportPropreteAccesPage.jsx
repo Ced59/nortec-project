@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {withRouter} from "react-router-dom";
 import NavbarLeft from "../components/navbars/NavbarLeft";
 import Button from "../components/forms/Button";
-import Field from "../components/forms/Field";
 import FieldTextArea from "../components/forms/FieldTextArea";
 import ImageUpload from "../components/forms/ImageUpload";
 import fakeData from "../components/fakeDataForDev/fakeData";
@@ -12,9 +11,9 @@ import {toast} from "react-toastify";
 const ReportPropreteAccesPage = ({match}) => {
 
     const [conforme, setConforme] = useState("");
-    const [report, setReport] = useState("");
     const [comment, setComment] = useState("");
     const [commentIntern, setCommentIntern] = useState("");
+    const [imputations, setImputations] = useState("");
 
     const NavbarLeftWithRouter = withRouter(NavbarLeft);
 
@@ -26,10 +25,10 @@ const ReportPropreteAccesPage = ({match}) => {
 
         //Vérification si édition ou nouveau rapport... Dans la version finale, le nouveau rapport existera mais avec valeurs vides donc pas de vérification à ce niveau
         if (reportById) {
-            setReport(reportById);
             setConforme(reportById.proprete_access_conformity);
             setComment(reportById.proprete_access_comment);
             setCommentIntern(reportById.proprete_access_comment_intern);
+            setImputations(reportById.proprete_access_imputation);
         }
 
     };
@@ -59,7 +58,25 @@ const ReportPropreteAccesPage = ({match}) => {
         }
     };
 
-    const handleSubmit = () => {
+
+    const handleChangeCommentIntern = ({currentTarget}) => {
+        const value = currentTarget.value;
+
+        setCommentIntern(value);
+    };
+
+    const handleChangeComment = ({currentTarget}) => {
+        const value = currentTarget.value;
+
+        setComment(value);
+
+    };
+
+    const handleChangeImputations = ({currentTarget}) => {
+        const value = currentTarget.value;
+
+
+        setImputations(value);
 
     };
 
@@ -72,8 +89,6 @@ const ReportPropreteAccesPage = ({match}) => {
         //TODO enregistrement de la conformité à prorata
         toast.success("Statut de la propreté des accès enregistré avec succès!")
     };
-
-
 
 
     return (
@@ -121,18 +136,32 @@ const ReportPropreteAccesPage = ({match}) => {
 
                     <>
                         <div className="row">
-                            <div>
-                                <form className="form-inline mb-3">
-                                    <Field value="Pourcentage" label="Entreprise A : "/>
-                                </form>
-                                <form className="form-inline mb-3">
-                                    <Field value="Pourcentage" label="Entreprise B : "/>
-                                </form>
-                                <form className="form-inline mb-3">
-                                    <Field value="Pourcentage" label="Entreprise C : "/>
-                                </form>
-                            </div>
-                            <div className="ml-auto">
+                            <form>
+
+                                <div className="col-12">
+
+                                    {imputations.map(imputation =>
+
+                                        <div className="row" key={imputation.id}>
+                                            <h5 className="col-9">{imputation.company.nom}</h5>
+
+                                            <input
+                                                value={imputation.pourcent}
+                                                className="form-control col-2 mb-1"
+                                                name={imputation.company.nom}
+                                                onChange={handleChangeImputations}
+                                            />
+                                            <h5 className="col-1 mb-1">%</h5>
+                                        </div>
+                                    )}
+
+                                    <Button onClick={handleCheckNonConforme}
+                                            className="btn btn-info offset-10 col-2 mb-4 mt-3" text="Valider"
+                                            type="button"/>
+                                </div>
+
+                            </form>
+                            <div className="col-4 ml-auto">
                                 <ImageUpload buttonText="Choisir l'image"/>
                             </div>
                         </div>
@@ -141,12 +170,16 @@ const ReportPropreteAccesPage = ({match}) => {
                                 <FieldTextArea label="Commentaire : "
                                                placeholder="Commentaire pour toute les entreprises"
                                                value={comment}
+                                               onChange={handleChangeComment}
+                                               name="proprete_access_comment"
                                 />
                             </div>
                             <div className="col-6">
                                 <FieldTextArea label="Commentaire interne : "
                                                placeholder="Commentaire pour toute les entreprises"
                                                value={commentIntern}
+                                               onChange={handleChangeCommentIntern}
+                                               name="proprete_access_comment_intern"
                                 />
                             </div>
                         </div>
