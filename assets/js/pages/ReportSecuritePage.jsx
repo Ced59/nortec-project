@@ -5,6 +5,7 @@ import Button from "../components/forms/Button";
 import FieldTextArea from "../components/forms/FieldTextArea";
 import ImageUpload from "../components/forms/ImageUpload";
 import Select from "../components/forms/Select";
+import '../../css/app.css';
 
 const ReportSecuritePage = () => {
 
@@ -29,22 +30,27 @@ const ReportSecuritePage = () => {
     };
 
     return (
-        <>
+        <main className="container">
             <NavbarLeftWithRouter selected='securite'/>
 
             <div className='page-content'>
-                <h2 className="mb-4">Sécurité :</h2>
-                <Button onClick={handleCheckConforme} className="btn btn-success mb-4" text="Conforme" type="button"/>
-                <Button onClick={handleCheckNonConforme} className="btn btn-danger ml-4 mb-4" text="Non Conforme" type="button"/>
-            </div>
-            {(conforme &&
-                <div className='page-content'>
-                    <p>Ceci est conforme</p>
+                <div className='ml-2 mr-5 mt-4 d-flex justify-content-between mb-3'>
+                    <h2>Sécurité :</h2>
+                    <Button onClick={handleCheckConforme} className="btn btn-success mb-4" text="Conforme"
+                            type="button"/>
+                    <Button onClick={handleCheckNonConforme} className="btn btn-danger ml-5 mb-4" text="Non Conforme"
+                            type="button"/>
+                    <Button onClick={handleSubmit} className="btn btn-primary mb-4" text="Valider" type="submit"/>
                 </div>
+
+            {(conforme &&
+
+                    <p className='ml-2'>Ceci est conforme</p>
+
             )}
             {(conforme === false &&
-                <div className='page-content'>
-                    <div className="row">
+                <>
+                    <div className="row ml-2 mr-3">
                         <div>
                             <Select label="Entreprise en charge" >
                                 <option>Entreprise A</option>
@@ -56,7 +62,7 @@ const ReportSecuritePage = () => {
                             <ImageUpload buttonText="Choisir l'image"/>
                         </div>
                     </div>
-                    <div className="row">
+                    <div className="row ml-1 mr-3">
                         <div className="col-6">
                             <FieldTextArea label="Commentaire : " placeholder="Commentaire pour toute les entreprises" />
                         </div>
@@ -64,12 +70,10 @@ const ReportSecuritePage = () => {
                             <FieldTextArea label="Commentaire interne : " placeholder="Commentaire pour toute les entreprises" />
                         </div>
                     </div>
-                </div>
+                </>
             )}
-            <div className='page-content'>
-                <Button onClick={handleSubmit} className="btn btn-primary" text="Valider" type="submit" />
             </div>
-        </>
+        </main>
     );
 };
 

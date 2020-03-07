@@ -50,7 +50,7 @@ const App = () => {
                     {isAuthenticated && <NavbarTopWithRouter/>}
                 </SearchContext.Provider>
 
-                <main className="container">
+
                     <Switch>
                             <PrivateRoute path="/project/:id/:idReport/effectifs" component={ReportEffectifsPage}/>
                             <PrivateRoute path="/project/:id/:idReport/propreteacces" component={ReportPropreteAccesPage}/>
@@ -67,7 +67,7 @@ const App = () => {
                             <PrivateRoute path="/projects" component={ListProjectsPage}/>
                         </SearchContext.Provider>
                     </Switch>
-                </main>
+
             </HashRouter>
 
             < ToastContainer

@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import fakeData from "../components/fakeDataForDev/fakeData";
 import moment from "moment";
+import '../../css/app.css';
 
 
 const STATUS_REPORT_LABELS = {
@@ -42,7 +43,7 @@ const ListReportsByProject = ({match, history}) => {
     };
 
     return (
-        <>
+        <main className="container">
             {listReport.length !== 0 ? <h2 className="mb-4">Liste des rapports pour le projet {listReport[0].project.name}</h2> :
                 <h2>Il n'y a pas de rapport pour ce projet</h2>}
 
@@ -100,7 +101,7 @@ const ListReportsByProject = ({match, history}) => {
             >
                 Revenir au projet
             </button>
-        </>
+        </main>
     );
 };
 

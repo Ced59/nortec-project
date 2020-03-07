@@ -3,13 +3,14 @@ import {withRouter} from "react-router-dom";
 import NavbarLeft from "../components/navbars/NavbarLeft";
 import Select from "../components/forms/Select";
 import Button from "../components/forms/Button";
+import '../../css/app.css';
 
 const ReportEcheancesPage = () => {
 
     const NavbarLeftWithRouter = withRouter(NavbarLeft);
 
     return (
-        <>
+        <main>
             <NavbarLeftWithRouter selected='echeances'/>
 
             <div className="page-content">
@@ -100,7 +101,7 @@ const ReportEcheancesPage = () => {
                     </tbody>
                 </table>
             </div>
-        </>
+        </main>
     );
 };
 

@@ -3,6 +3,7 @@ import NavbarLeft from "../components/navbars/NavbarLeft";
 import '../../css/report.css'
 import {withRouter} from "react-router-dom";
 import fakeData from "../components/fakeDataForDev/fakeData";
+import '../../css/app.css';
 
 const ReportEffectifsPage = ({match}) => {
 
@@ -30,7 +31,7 @@ const ReportEffectifsPage = ({match}) => {
     }, []);
 
     return (
-        <>
+        <main>
             <NavbarLeftWithRouter selected='effectifs'/>
 
             <div className='page-content'>
@@ -66,7 +67,7 @@ const ReportEffectifsPage = ({match}) => {
 
             </div>
 
-        </>
+        </main>
     );
 };
 

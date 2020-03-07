@@ -1,6 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import ImgWithStyleComponent from "../components/images/ImgWithStyleComponent";
 import '../../css/listProjectsPage.css';
+import '../../css/app.css';
 import {Helmet} from "react-helmet";
 import SearchContext from "../contexts/SearchContext";
 import {Link} from "react-router-dom";
@@ -67,7 +68,7 @@ const ListProjectsPage = (props) => {
 
 
     return (
-        <>
+        <main className="container">
             <Helmet>
                 <style>{'body { background-color: white; }'}</style>
             </Helmet>
@@ -121,7 +122,7 @@ const ListProjectsPage = (props) => {
                     )
                 }
             </div>
-        </>
+        </main>
     );
 };
 
