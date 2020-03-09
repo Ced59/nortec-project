@@ -28,6 +28,8 @@ const LoginPage = ({history}) => {
         const name = e.currentTarget.name;
 
         setCredentials({...credentials, [name]: value})
+
+        console.log(credentials);
     };
 
     // Gestion du Submit

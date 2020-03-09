@@ -74,9 +74,18 @@ const ReportPropreteAccesPage = ({match}) => {
 
     const handleChangeImputations = ({currentTarget}) => {
         const value = currentTarget.value;
+        const name = currentTarget.name;
+
+        console.log(currentTarget.value);
+        console.log(currentTarget.name);
+        console.log(...imputations);
+
+        const tab = imputations;
 
 
-        setImputations(value);
+        setImputations({...imputations, [name]: value});
+
+        console.log(imputations);
 
     };
 
@@ -148,7 +157,7 @@ const ReportPropreteAccesPage = ({match}) => {
                                             <input
                                                 value={imputation.pourcent}
                                                 className="form-control col-2 mb-1"
-                                                name={imputation.company.nom}
+                                                name={"name" + imputation.company.id}
                                                 onChange={handleChangeImputations}
                                             />
                                             <h5 className="col-1 mb-1">%</h5>
