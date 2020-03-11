@@ -22,6 +22,8 @@ import ReportEcheancesPage from "./pages/ReportEcheancesPage";
 import ListReportsByProject from "./pages/ListReportsByProject";
 
 
+AuthAPI.setup();
+
 const App = () => {
 
     const NavbarTopWithRouter = withRouter(NavbarTop);
