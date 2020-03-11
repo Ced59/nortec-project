@@ -247,31 +247,36 @@ function fakeListReports() {
                     id: 0,
                     numero_lot: "101ABC674",
                     libelle_lot: "FOURNISSEUR SPECIAL",
-                    entreprise: companyById(3)
+                    entreprise: companyById(3),
+                    effectif_prevu: 5
                 },
                 {
                     id: 1,
                     numero_lot: "10242342DEF",
                     libelle_lot: "INSTALLATION TELEPHONE",
-                    entreprise: companyById(4)
+                    entreprise: companyById(4),
+                    effectif_prevu: 5
                 },
                 {
                     id: 2,
                     numero_lot: "102AZZZAA1FEF",
                     libelle_lot: "INSTALLATION FIBRE",
-                    entreprise: companyById(4)
+                    entreprise: companyById(4),
+                    effectif_prevu: 5
                 },
                 {
                     id: 3,
                     numero_lot: "102EEZDSS",
                     libelle_lot: "MISE EN PLACE ANTENNES SPECIALES",
-                    entreprise: companyById(4)
+                    entreprise: companyById(4),
+                    effectif_prevu: 5
                 },
                 {
                     id: 4,
                     numero_lot: "10DSSQSDSSDHJH",
                     libelle_lot: "FOURNITURE ELECTRICITE",
-                    entreprise: companyById(2)
+                    entreprise: companyById(2),
+                    effectif_prevu: 5
                 }
             ],
             photos: [
@@ -326,7 +331,39 @@ function fakeListReports() {
                 ],
             proprete_access_comment: "4 entreprises sur 5 devront payer",
             proprete_access_comment_intern: "C'etait dégueulasse !!!",
-            security_conformity: true,
+            proprete_commune_conformity: false,
+            proprete_commune_imputation:
+                [
+                    {
+                        id: 0,
+                        company: companyById(0),
+                        commentaire: "Doit nettoyer les toilettes"
+                    },
+                    {
+                        id: 1,
+                        company: companyById(1),
+                        commentaire: "Doit sortir ses poubelles"
+                    },
+                    {
+                        id: 2,
+                        company: companyById(2),
+                        commentaire: "Ne doit plus laisser trainer ses boites de Donuts"
+                    },
+                    {
+                        id: 3,
+                        company: companyById(3),
+                        commentaire: ""
+                    },
+                    {
+                        id: 4,
+                        company: companyById(4),
+                        commentaire: ""
+                    }
+
+                ],
+            proprete_commune_comment: "Veillez a effectuez cela avant que l'on demande a une entreprise svp",
+            proprete_commune_comment_intern: "J'en ai marre de voir leur merde trainer partout, va falloir durcir",
+            security_conformity: false,
             security_comment: "RAS",
             security_comment_intern:
                 "Y'a fallu leur botter les fesses pour qu'ils mettent cette fichue barrière!",
@@ -336,31 +373,36 @@ function fakeListReports() {
                     id: 5,
                     numero_lot: "101ABC654",
                     libelle_lot: "POSE MOQUETTE",
-                    entreprise: companyById(0)
+                    entreprise: companyById(0),
+                    effectif_prevu: 5
                 },
                 {
                     id: 6,
                     numero_lot: "102DEF",
                     libelle_lot: "COULAGE DE BETON",
-                    entreprise: companyById(1)
+                    entreprise: companyById(1),
+                    effectif_prevu: 5
                 },
                 {
                     id: 7,
                     numero_lot: "102121FEF",
                     libelle_lot: "POSE ROBINETTERIE",
-                    entreprise: companyById(3)
+                    entreprise: companyById(3),
+                    effectif_prevu: 5
                 },
                 {
                     id: 8,
                     numero_lot: "10210DSS",
                     libelle_lot: "INSTALLATION VIDEO SURVEILLANCE",
-                    entreprise: companyById(4)
+                    entreprise: companyById(4),
+                    effectif_prevu: 5
                 },
                 {
                     id: 9,
                     numero_lot: "10DSS",
                     libelle_lot: "FOURNITURE ELECTRICITE",
-                    entreprise: companyById(2)
+                    entreprise: companyById(2),
+                    effectif_prevu: 5
                 }
             ],
             photos: [
