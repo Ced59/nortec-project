@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import Field from "../components/forms/Field";
 import ImgWithStyleComponent from "../components/images/ImgWithStyleComponent";
 import {Link} from "react-router-dom";
@@ -27,28 +27,26 @@ const LoginPage = ({history}) => {
         const value = e.currentTarget.value;
         const name = e.currentTarget.name;
 
-        setCredentials({...credentials, [name]: value})
-
-        console.log(credentials);
+        setCredentials({...credentials, [name]: value});
     };
 
+
+
     // Gestion du Submit
-    const handleSubmit = event => {
+    const handleSubmit = async event => {
         event.preventDefault();
 
-        //TODO Gérer l'authentification et les erreurs.
-
-
-        if (AuthAPI.authenticate(credentials)) {
+        try {
+            await AuthAPI.authenticate(credentials);
             setError("");
             setIsAuthenticated(true);
             toast.success("Vous êtes connnecté en tant que " + credentials.username + "!");
             history.replace("/projects");
-
-        } else {
-            setError("Les informations de login/mot de passe sont incorrectes");
-            toast.error("Une erreur est survenue");
+        } catch {
+            setError("Les informations de login/mot de passe sont incorrectes!");
+            toast.error("Les informations de login/mot de passe sont incorrects!");
         }
+
     };
 
 
@@ -77,7 +75,7 @@ const LoginPage = ({history}) => {
                             placeholder="Adresse mail de connexion"
                             type="email"
                             name="username"
-                            error=""
+                            error={error}
                             onChange={handleChange}
                         />
 
