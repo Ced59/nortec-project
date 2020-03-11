@@ -28,13 +28,8 @@ const LoginPage = ({history}) => {
         const name = e.currentTarget.name;
 
         setCredentials({...credentials, [name]: value});
-
-        console.log(credentials);
     };
 
-
-        //console.log(AuthAPI.isAuthenticated());
-        // AuthAPI.isAuthenticated() && history.replace("/projects");
 
 
     // Gestion du Submit
@@ -80,7 +75,7 @@ const LoginPage = ({history}) => {
                             placeholder="Adresse mail de connexion"
                             type="email"
                             name="username"
-                            error=""
+                            error={error}
                             onChange={handleChange}
                         />
 
