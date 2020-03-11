@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {withRouter} from "react-router-dom";
 import NavbarLeft from "../components/navbars/NavbarLeft";
 import Button from "../components/forms/Button";
@@ -7,12 +7,14 @@ import ImageUpload from "../components/forms/ImageUpload";
 import Select from "../components/forms/Select";
 import '../../css/app.css';
 import {toast} from "react-toastify";
+import fakeData from "../components/fakeDataForDev/fakeData";
 
-const ReportSecuritePage = () => {
+const ReportSecuritePage = ({match}) => {
 
     const NavbarLeftWithRouter = withRouter(NavbarLeft);
 
     const [conforme, setConforme] = useState(null);
+    const [entreprise, setEntreprise] = useState(null);
 
     const handleCheckConforme = () => {
         if (!conforme || conforme === false) {
@@ -30,9 +32,55 @@ const ReportSecuritePage = () => {
 
     };
 
+
+    const [comment, setComment] = useState("");
+    const [commentIntern, setCommentIntern] = useState("");
+
+    const fetchReport = () => {
+
+        setReport(reportById);
+        //Vérification si édition ou nouveau rapport... Dans la version finale, le nouveau rapport existera mais avec valeurs vides donc pas de vérification à ce niveau
+        if (reportById) {
+            setConforme(reportById.security_conformity);
+            setComment(reportById.security_comment);
+            setCommentIntern(reportById.security_comment_intern);
+        }
+
+    };
+
+    const urlParams = match.params;
+
+    const reportById = fakeData.reportById(parseInt(urlParams.idReport, 10));
+
+    const [report, setReport] = useState(reportById);
+
+    useEffect(() => {
+        //TODO Normalement charge le projet à chaque fois que l'id change. Attention plus tard vérifier que tout fonctionne avec axios
+        fetchReport();
+
+    }, []);
+
     const handleSubmitConform = () => {
         //TODO enregistrement de la conformité à true
         toast.success("Statut de sécurité enregistré avec succès!")
+    };
+
+    const handleChangeCommentIntern = ({currentTarget}) => {
+        const value = currentTarget.value;
+
+        setCommentIntern(value);
+    };
+
+    const handleChangeComment = ({currentTarget}) => {
+        const value = currentTarget.value;
+
+        setComment(value);
+
+    };
+
+    const handleChange = ({currentTarget}) => {
+        const {name, value} = currentTarget;
+        setEntreprise({...entreprise, [name]:value});
     };
 
     return (
@@ -65,10 +113,16 @@ const ReportSecuritePage = () => {
                     <>
                         <div className="row">
                             <div>
-                                <Select label="Entreprise en charge">
-                                    <option>Entreprise A</option>
-                                    <option>Entreprise B</option>
-                                    <option>Entreprise C</option>
+                                <Select name="Entreprise"
+                                        label="Entreprise en charge"
+                                        onChange={handleChange}>
+                                    {report && report.lots.map(lot =>(
+                                            <option key={lot.id}
+                                                    value={lot.entreprise}
+                                            >
+                                                {lot.entreprise.nom}
+                                            </option>
+                                        ))}
                                 </Select>
                             </div>
                             <div className="ml-auto">
@@ -77,12 +131,13 @@ const ReportSecuritePage = () => {
                         </div>
                         <div className="row">
                             <div className="col-6">
-                                <FieldTextArea label="Commentaire : "
-                                               placeholder="Commentaire pour toute les entreprises"/>
+                                <FieldTextArea label="Commentaire : " value={comment} placeholder="Commentaire pour toute les entreprises" onChange={handleChangeComment}/>
                             </div>
                             <div className="col-6">
                                 <FieldTextArea label="Commentaire interne : "
-                                               placeholder="Commentaire pour toute les entreprises"/>
+                                               value={commentIntern}
+                                               placeholder="Commentaire pour toute les entreprises"
+                                                onChange={handleChangeCommentIntern}/>
                             </div>
                         </div>
                     </>

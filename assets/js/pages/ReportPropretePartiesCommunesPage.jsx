@@ -1,8 +1,7 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {withRouter} from "react-router-dom";
 import NavbarLeft from "../components/navbars/NavbarLeft";
 import Button from "../components/forms/Button";
-import Field from "../components/forms/Field";
 import FieldTextArea from "../components/forms/FieldTextArea";
 import ImageUpload from "../components/forms/ImageUpload";
 import fakeData from "../components/fakeDataForDev/fakeData";
@@ -12,17 +11,45 @@ import {toast} from "react-toastify";
 const ReportPropretePartiesCommunesPage = ({match}) => {
 
     const [conforme, setConforme] = useState(null);
+    const [comment, setComment] = useState("");
+    const [commentIntern, setCommentIntern] = useState("");
 
-    const NavbarLeftWithRouter = withRouter(NavbarLeft);
+    const [imputations, setImputations] = useState("");
 
     const urlParams = match.params;
     const reportById = fakeData.reportById(parseInt(urlParams.idReport, 10));
 
+    const NavbarLeftWithRouter = withRouter(NavbarLeft);
+
+    const fetchReport = () => {
+
+        //Vérification si édition ou nouveau rapport... Dans la version finale, le nouveau rapport existera mais avec valeurs vides donc pas de vérification à ce niveau
+        if (reportById) {
+            setConforme(reportById.proprete_commune_conformity);
+            setComment(reportById.proprete_commune_comment);
+            setCommentIntern(reportById.proprete_commune_comment_intern);
+            setImputations(reportById.proprete_commune_imputation);
+        }
+
+    };
+
+    useEffect(() => {
+
+        fetchReport();
+
+    }, []);
 
     const handleCheckConforme = () => {
         if (!conforme || conforme === false) {
             setConforme(true);
         }
+    };
+
+    const handleChangeImputations = ({currentTarget}) => {
+        const value = currentTarget.value;
+        const name = currentTarget.name;
+
+        setImputations({...imputations, [name]: value});
     };
 
     const handleCheckNonConforme = () => {
@@ -32,6 +59,19 @@ const ReportPropretePartiesCommunesPage = ({match}) => {
     };
 
     const handleSubmit = () => {
+
+    };
+
+    const handleChangeCommentIntern = ({currentTarget}) => {
+        const value = currentTarget.value;
+
+        setCommentIntern(value);
+    };
+
+    const handleChangeComment = ({currentTarget}) => {
+        const value = currentTarget.value;
+
+        setComment(value);
 
     };
 
@@ -71,14 +111,29 @@ const ReportPropretePartiesCommunesPage = ({match}) => {
                 <>
                     <div className="row">
                         <div>
-                            <form className="form-inline mb-3">
-                                <Field value="Pourcentage" label="Entreprise A : "/>
-                            </form>
-                            <form className="form-inline mb-3">
-                                <Field value="Pourcentage" label="Entreprise B : "/>
-                            </form>
-                            <form className="form-inline mb-3">
-                                <Field value="Pourcentage" label="Entreprise C : "/>
+                            <form>
+
+                                <div className="col-12">
+
+                                    {imputations.map(imputation =>
+
+                                        <div className="row" key={imputation.id}>
+                                            <h5 className="col-7">{imputation.company.nom}</h5>
+
+                                            <input
+                                                value={imputation.commentaire}
+                                                className="form-control col-5 mb-1"
+                                                name={"name" + imputation.company.id}
+                                                onChange={handleChangeImputations}
+                                            />
+                                        </div>
+                                    )}
+
+                                    <Button onClick={handleCheckNonConforme}
+                                            className="btn btn-info offset-10 col-2 mb-4 mt-3" text="Valider"
+                                            type="button"/>
+                                </div>
+
                             </form>
                         </div>
                         <div className="ml-auto">
@@ -87,11 +142,12 @@ const ReportPropretePartiesCommunesPage = ({match}) => {
                     </div>
                     <div className="row">
                         <div className="col-6">
-                            <FieldTextArea label="Commentaire : " placeholder="Commentaire pour toute les entreprises"/>
+                            <FieldTextArea label="Commentaire : " value={comment} placeholder="Commentaire pour toute les entreprises" onChange={handleChangeComment}/>
                         </div>
                         <div className="col-6">
                             <FieldTextArea label="Commentaire interne : "
-                                           placeholder="Commentaire pour toute les entreprises"/>
+                                           value={commentIntern}
+                                           placeholder="Commentaire pour toute les entreprises" onChange={handleChangeCommentIntern}/>
                         </div>
                     </div>
                 </>
