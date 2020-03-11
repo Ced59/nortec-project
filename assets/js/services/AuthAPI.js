@@ -55,7 +55,16 @@ function setup()
         if (jwtData.exp * 1000 > new Date().getTime())
         {
             setAxiosToken(token);
+            return true;
         }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        return false;
     }
 }
 
