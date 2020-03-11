@@ -6,6 +6,7 @@ import {toast} from "react-toastify";
 import '../../../css/navbarTop.css';
 import ListProjectsPage from "../../pages/ListProjectsPage";
 import SearchContext from "../../contexts/SearchContext";
+import {NavLink} from "react-router-dom";
 
 const NavbarTop = ({history}) => {
 
@@ -30,7 +31,7 @@ const NavbarTop = ({history}) => {
 
         <nav className="navbar navbar-expand-lg navbar-light bg-light lighten-5 mb-4 fixed-top">
 
-            <a className="navbar-brand" href="#"><LogoCompanyComponent style={{width: "100px"}}/></a>
+            <NavLink className="navbar-brand" to="/projects"><LogoCompanyComponent style={{width: "100px"}}/></NavLink>
 
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
 
