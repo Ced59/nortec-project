@@ -72,21 +72,13 @@ const ReportPropreteAccesPage = ({match}) => {
 
     };
 
+
+
     const handleChangeImputations = ({currentTarget}) => {
         const value = currentTarget.value;
         const name = currentTarget.name;
 
-        console.log(currentTarget.value);
-        console.log(currentTarget.name);
-        console.log(...imputations);
-
-        const tab = imputations;
-
-
         setImputations({...imputations, [name]: value});
-
-        console.log(imputations);
-
     };
 
     const handleSubmitConform = () => {
@@ -109,8 +101,7 @@ const ReportPropreteAccesPage = ({match}) => {
                     <h2 className="mb-4">Propreté des accès :</h2>
                     <Button onClick={handleCheckConforme} className="btn btn-success mb-4" text="Conforme"
                             type="button"/>
-                    <Button onClick={handleCheckProrata} className="btn btn-warning ml-5 mb-4" text="Prorata"
-                            type="button"/>
+
                     <Button onClick={handleCheckNonConforme} className="btn btn-danger ml-5 mb-4" text="Non Conforme"
                             type="button"/>
                 </div>
@@ -144,7 +135,10 @@ const ReportPropreteAccesPage = ({match}) => {
                 {(conforme === "noconform" &&
 
                     <>
+                        <Button onClick={handleCheckProrata} className="btn btn-warning ml-5 mb-4" text="Prorata"
+                               type="button"/>
                         <div className="row">
+
                             <form>
 
                                 <div className="col-12">

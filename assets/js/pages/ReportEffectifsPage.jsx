@@ -43,6 +43,8 @@ const ReportEffectifsPage = ({match}) => {
                         <th>Entreprise</th>
                         <th>N°Lot</th>
                         <th>Nom Lot</th>
+                        <th className="text-center">Effectif Prévu</th>
+                        <th className="text-center">Effectif Constaté</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -54,6 +56,8 @@ const ReportEffectifsPage = ({match}) => {
                                 <td>{lot.entreprise.nom}</td>
                                 <td>{lot.numero_lot}</td>
                                 <td>{lot.libelle_lot}</td>
+                                <td className="text-center">{lot.effectif_prevu}</td>
+                                <td className="text-center">5</td>
                             </tr>
                         )
                         :
