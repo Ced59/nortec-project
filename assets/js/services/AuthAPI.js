@@ -3,7 +3,7 @@ import axios from "axios";
 import {LOGIN_API} from "../components/config";
 import jwtDecode from "jwt-decode";
 
-function authenticate(credentials) //TODO Rajouter les credentials quand besoin
+function authenticate(credentials)
 {
    return axios
        .post(LOGIN_API, credentials)
@@ -33,7 +33,7 @@ function logout()
 //Permet de voir si on est authentifié ou pas
 function isAuthenticated()
 {
-    const token = window.localStorage.getItem("authToken");
+    const token = getToken();
 
     // voir si token encore valide
     if (token)
@@ -45,9 +45,38 @@ function isAuthenticated()
     return false;
 }
 
+function getUserFirstname() {
+
+    if (isAuthenticated())
+    {
+        return jwtDecode(getToken()).firstName;
+    }
+}
+
+function getUserLastName() {
+
+    if (isAuthenticated())
+    {
+        return jwtDecode(getToken()).lastName;
+    }
+}
+
+function getUserId()
+{
+    if (isAuthenticated())
+    {
+        return jwtDecode(getToken()).id;
+    }
+}
+
+function getUserFirstNameLastName() {
+    return getUserFirstname() + " " + getUserLastName();
+}
+
+
 function setup()
 {
-    const token = window.localStorage.getItem("authToken");
+    const token = getToken();
 
     if (token)
     {
@@ -68,16 +97,24 @@ function setup()
     }
 }
 
-
 //Positionne token sur Axios
 function setAxiosToken(token)
 {
     axios.defaults.headers["Authorization"] = "Bearer " + token;
 }
 
+function getToken()
+{
+    return window.localStorage.getItem("authToken");
+}
+
 export default {
     authenticate,
     isAuthenticated,
     logout,
-    setup
+    setup,
+    getUserFirstname,
+    getUserLastName,
+    getUserFirstNameLastName,
+    getUserId
 }
