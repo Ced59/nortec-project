@@ -3,7 +3,7 @@ import axios from "axios";
 import {LOGIN_API} from "../components/config";
 import jwtDecode from "jwt-decode";
 
-function authenticate(credentials) //TODO Rajouter les credentials quand besoin
+function authenticate(credentials)
 {
    return axios
        .post(LOGIN_API, credentials)
