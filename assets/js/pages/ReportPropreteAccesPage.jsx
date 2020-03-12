@@ -13,7 +13,9 @@ const ReportPropreteAccesPage = ({match}) => {
     const [conforme, setConforme] = useState("");
     const [comment, setComment] = useState("");
     const [commentIntern, setCommentIntern] = useState("");
-    const [imputations, setImputations] = useState("");
+    const [imputations, setImputations] = useState(
+        []
+    );
 
     const NavbarLeftWithRouter = withRouter(NavbarLeft);
 
@@ -73,12 +75,21 @@ const ReportPropreteAccesPage = ({match}) => {
     };
 
 
-
     const handleChangeImputations = ({currentTarget}) => {
-        const value = currentTarget.value;
-        const name = currentTarget.name;
 
-        setImputations({...imputations, [name]: value});
+
+        console.log(currentTarget.id);
+
+        console.log(currentTarget.value);
+
+
+        imputations[currentTarget.id].pourcent = parseInt(currentTarget.value, 10);
+
+
+        setImputations(imputations);
+
+        console.log(imputations);
+
     };
 
     const handleSubmitConform = () => {
@@ -136,7 +147,7 @@ const ReportPropreteAccesPage = ({match}) => {
 
                     <>
                         <Button onClick={handleCheckProrata} className="btn btn-warning ml-5 mb-4" text="Prorata"
-                               type="button"/>
+                                type="button"/>
                         <div className="row">
 
                             <form>
@@ -153,6 +164,7 @@ const ReportPropreteAccesPage = ({match}) => {
                                                 className="form-control col-2 mb-1"
                                                 name={"name" + imputation.company.id}
                                                 onChange={handleChangeImputations}
+                                                id={imputation.company.id}
                                             />
                                             <h5 className="col-1 mb-1">%</h5>
                                         </div>
