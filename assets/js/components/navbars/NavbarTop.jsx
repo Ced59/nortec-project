@@ -6,11 +6,14 @@ import {toast} from "react-toastify";
 import '../../../css/navbarTop.css';
 import ListProjectsPage from "../../pages/ListProjectsPage";
 import SearchContext from "../../contexts/SearchContext";
+import {NavLink} from "react-router-dom";
 
 const NavbarTop = ({history}) => {
 
     const {isAuthenticated, setIsAuthenticated} = useContext(AuthContext);
     const {searchValue, setSearchValue} = useContext(SearchContext);
+    const [completeNameUser] = useState(AuthAPI.getUserFirstNameLastName());
+    const [userId] = useState(AuthAPI.getUserId());
 
 
 
@@ -30,7 +33,7 @@ const NavbarTop = ({history}) => {
 
         <nav className="navbar navbar-expand-lg navbar-light bg-light lighten-5 mb-4 fixed-top">
 
-            <a className="navbar-brand" href="#"><LogoCompanyComponent style={{width: "100px"}}/></a>
+            <NavLink className="navbar-brand" to="/projects"><LogoCompanyComponent style={{width: "100px"}}/></NavLink>
 
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
 
@@ -38,9 +41,9 @@ const NavbarTop = ({history}) => {
 
                     <li className="nav-item dropdown">
                         <a className="nav-link dropdown-toggle navbar-top-style navbar-top-text-style" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                           aria-haspopup="true" aria-expanded="false">Bienvenue Cedric  </a>
+                           aria-haspopup="true" aria-expanded="false">Bienvenue {completeNameUser}  </a>
                         <div className="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
-                            <a className="dropdown-item" href="#">Votre profil</a>
+                            <NavLink className="dropdown-item" to={"/profil/" + userId}>Votre profil</NavLink>
                             <a className="dropdown-item" href="#">Another action</a>
                             <a className="dropdown-item" href="#">Something else here</a>
                         </div>

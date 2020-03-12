@@ -21,6 +21,8 @@ import ReportPropretePartiesCommunesPage from "./pages/ReportPropretePartiesComm
 import ReportEcheancesPage from "./pages/ReportEcheancesPage";
 import ListReportsByProject from "./pages/ListReportsByProject";
 
+AuthAPI.setup();
+
 
 const App = () => {
 
@@ -51,22 +53,22 @@ const App = () => {
                 </SearchContext.Provider>
 
 
-                    <Switch>
-                            <PrivateRoute path="/project/:id/:idReport/effectifs" component={ReportEffectifsPage}/>
-                            <PrivateRoute path="/project/:id/:idReport/propreteacces" component={ReportPropreteAccesPage}/>
-                            <PrivateRoute path="/project/:id/:idReport/securite" component={ReportSecuritePage}/>
-                            <PrivateRoute path="/project/:id/:idReport/propretepartiescommunes"
-                                          component={ReportPropretePartiesCommunesPage}/>
-                            <PrivateRoute path="/project/:id/:idReport/echeances" component={ReportEcheancesPage}/>
+                <Switch>
+                    <PrivateRoute path="/project/:id/:idReport/effectifs" component={ReportEffectifsPage}/>
+                    <PrivateRoute path="/project/:id/:idReport/propreteacces" component={ReportPropreteAccesPage}/>
+                    <PrivateRoute path="/project/:id/:idReport/securite" component={ReportSecuritePage}/>
+                    <PrivateRoute path="/project/:id/:idReport/propretepartiescommunes"
+                                  component={ReportPropretePartiesCommunesPage}/>
+                    <PrivateRoute path="/project/:id/:idReport/echeances" component={ReportEcheancesPage}/>
 
-                            <PrivateRoute path="/project/:id/listReports" component={ListReportsByProject}/>
+                    <PrivateRoute path="/project/:id/listReports" component={ListReportsByProject}/>
 
-                        <PrivateRoute path="/project/:id" component={DetailProjectPage}/>
-                        {!isAuthenticated && <Route path="/" component={LoginPage}/>}
-                        <SearchContext.Provider value={searchContextValue}>
-                            <PrivateRoute path="/projects" component={ListProjectsPage}/>
-                        </SearchContext.Provider>
-                    </Switch>
+                    <PrivateRoute path="/project/:id" component={DetailProjectPage}/>
+                    {!isAuthenticated && <Route path="/" component={LoginPage}/>}
+                    <SearchContext.Provider value={searchContextValue}>
+                        <PrivateRoute path="/projects" component={ListProjectsPage}/>
+                    </SearchContext.Provider>
+                </Switch>
 
             </HashRouter>
 

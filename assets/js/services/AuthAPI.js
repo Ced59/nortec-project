@@ -1,24 +1,23 @@
 //Requête http authentification et stockage token
-function authenticate(credentials) //TODO Rajouter les credentials quand besoin
+import axios from "axios";
+import {LOGIN_API} from "../components/config";
+import jwtDecode from "jwt-decode";
+
+function authenticate(credentials)
 {
-    //TODO requête axios vérification credentials et récupération et stockage token
+   return axios
+       .post(LOGIN_API, credentials)
+       .then(response => response.data.token)
+       .then(token => {
 
-    if (credentials.username === "test@test.com" && credentials.password === "password") //simulation d'un compte utilisateur
-    {
-        window.localStorage.setItem("authToken", "ok"); //simulation authentification
-        return true;
-    }
-    else
-    {
-        const token = window.localStorage.getItem("authToken");
+           //on stocke le token dans le localstorage
+           window.localStorage.setItem("authToken", token);
 
-        if(token)
-        {
-            window.localStorage.removeItem("authToken");
-        }
+           //on met un header par défaut sur les future requêtes
+           setAxiosToken(token);
 
-        return false;
-    }
+           return true;
+       })
 
 }
 
@@ -26,29 +25,96 @@ function authenticate(credentials) //TODO Rajouter les credentials quand besoin
 function logout()
 {
     window.localStorage.removeItem("authToken");
-
-    // TODO A décommenter quand axios sera implémenté pour retirer le token du header autorisation
-    // delete axios.defaults.headers["Authorization"];
+    delete axios.defaults.headers["Authorization"];
 }
 
 
 
+//Permet de voir si on est authentifié ou pas
 function isAuthenticated()
 {
-    const token = window.localStorage.getItem("authToken");
+    const token = getToken();
 
-    //TODO voir si token encore valide
+    // voir si token encore valide
     if (token)
     {
-
-        return true //simulation encore valide s'il existe
+        const jwtData = jwtDecode(token);
+        return jwtData.exp * 1000 > new Date().getTime();
 
     }
     return false;
 }
 
+function getUserFirstname() {
+
+    if (isAuthenticated())
+    {
+        return jwtDecode(getToken()).firstName;
+    }
+}
+
+function getUserLastName() {
+
+    if (isAuthenticated())
+    {
+        return jwtDecode(getToken()).lastName;
+    }
+}
+
+function getUserId()
+{
+    if (isAuthenticated())
+    {
+        return jwtDecode(getToken()).id;
+    }
+}
+
+function getUserFirstNameLastName() {
+    return getUserFirstname() + " " + getUserLastName();
+}
+
+
+function setup()
+{
+    const token = getToken();
+
+    if (token)
+    {
+        const jwtData = jwtDecode(token);
+        if (jwtData.exp * 1000 > new Date().getTime())
+        {
+            setAxiosToken(token);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        return false;
+    }
+}
+
+//Positionne token sur Axios
+function setAxiosToken(token)
+{
+    axios.defaults.headers["Authorization"] = "Bearer " + token;
+}
+
+function getToken()
+{
+    return window.localStorage.getItem("authToken");
+}
+
 export default {
     authenticate,
     isAuthenticated,
-    logout
+    logout,
+    setup,
+    getUserFirstname,
+    getUserLastName,
+    getUserFirstNameLastName,
+    getUserId
 }
