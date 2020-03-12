@@ -26,8 +26,17 @@ class AppFixtures extends Fixture
         $user = new User();
         $hash = $this->encoder->encodePassword($user, "password");
         $user->setFirstName("Cedric")
-            ->setEmail("test@test.com")
+            ->setEmail("ced@test.com")
             ->setLastName("Caudron")
+            ->setPassword($hash);
+
+        $manager->persist($user);
+
+        $user = new User();
+        $hash = $this->encoder->encodePassword($user, "password");
+        $user->setFirstName("Vincent")
+            ->setEmail("vincent@test.com")
+            ->setLastName("Brocheton")
             ->setPassword($hash);
 
         $manager->persist($user);

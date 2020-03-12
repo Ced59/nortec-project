@@ -46,22 +46,26 @@ function isAuthenticated()
 }
 
 function getUserFirstname() {
-    const token = getToken();
 
-    if (token)
+    if (isAuthenticated())
     {
-        const jwtData = jwtDecode(token);
-        return jwtData.firstName;
+        return jwtDecode(getToken()).firstName;
     }
 }
 
 function getUserLastName() {
-    const token = getToken();
 
-    if (token)
+    if (isAuthenticated())
     {
-        const jwtData = jwtDecode(token);
-        return jwtData.lastName;
+        return jwtDecode(getToken()).lastName;
+    }
+}
+
+function getUserId()
+{
+    if (isAuthenticated())
+    {
+        return jwtDecode(getToken()).id;
     }
 }
 
@@ -111,5 +115,6 @@ export default {
     setup,
     getUserFirstname,
     getUserLastName,
-    getUserFirstNameLastName
+    getUserFirstNameLastName,
+    getUserId
 }
