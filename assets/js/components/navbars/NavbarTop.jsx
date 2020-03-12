@@ -12,6 +12,7 @@ const NavbarTop = ({history}) => {
 
     const {isAuthenticated, setIsAuthenticated} = useContext(AuthContext);
     const {searchValue, setSearchValue} = useContext(SearchContext);
+    const [firstNameUser] = useState(AuthAPI.getUserFirstNameLastName());
 
 
 
@@ -39,7 +40,7 @@ const NavbarTop = ({history}) => {
 
                     <li className="nav-item dropdown">
                         <a className="nav-link dropdown-toggle navbar-top-style navbar-top-text-style" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                           aria-haspopup="true" aria-expanded="false">Bienvenue Cedric  </a>
+                           aria-haspopup="true" aria-expanded="false">Bienvenue {firstNameUser}  </a>
                         <div className="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
                             <a className="dropdown-item" href="#">Votre profil</a>
                             <a className="dropdown-item" href="#">Another action</a>
