@@ -33,7 +33,7 @@ function logout()
 //Permet de voir si on est authentifié ou pas
 function isAuthenticated()
 {
-    const token = window.localStorage.getItem("authToken");
+    const token = getToken();
 
     // voir si token encore valide
     if (token)
@@ -45,9 +45,34 @@ function isAuthenticated()
     return false;
 }
 
+function getUserFirstname() {
+    const token = getToken();
+
+    if (token)
+    {
+        const jwtData = jwtDecode(token);
+        return jwtData.firstName;
+    }
+}
+
+function getUserLastName() {
+    const token = getToken();
+
+    if (token)
+    {
+        const jwtData = jwtDecode(token);
+        return jwtData.lastName;
+    }
+}
+
+function getUserFirstNameLastName() {
+    return getUserFirstname() + " " + getUserLastName();
+}
+
+
 function setup()
 {
-    const token = window.localStorage.getItem("authToken");
+    const token = getToken();
 
     if (token)
     {
@@ -68,16 +93,23 @@ function setup()
     }
 }
 
-
 //Positionne token sur Axios
 function setAxiosToken(token)
 {
     axios.defaults.headers["Authorization"] = "Bearer " + token;
 }
 
+function getToken()
+{
+    return window.localStorage.getItem("authToken");
+}
+
 export default {
     authenticate,
     isAuthenticated,
     logout,
-    setup
+    setup,
+    getUserFirstname,
+    getUserLastName,
+    getUserFirstNameLastName
 }
