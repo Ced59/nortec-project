@@ -82,6 +82,8 @@ const ReportPropreteAccesPage = ({match}) => {
 
     };
 
+
+
     const handleSubmitConform = () => {
         //TODO enregistrement de la conformité à conform
         toast.success("Statut de la propreté des accès enregistré avec succès!")

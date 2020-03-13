@@ -337,33 +337,66 @@ function fakeListReports() {
                     {
                         id: 0,
                         company: companyById(0),
-                        commentaire: "Doit nettoyer les toilettes"
+                        commentaire: "Doit nettoyer les toilettes",
+                        percent: 25
                     },
                     {
                         id: 1,
                         company: companyById(1),
-                        commentaire: "Doit sortir ses poubelles"
+                        commentaire: "Doit sortir ses poubelles",
+                        percent: 25
                     },
                     {
                         id: 2,
                         company: companyById(2),
-                        commentaire: "Ne doit plus laisser trainer ses boites de Donuts"
+                        commentaire: "Ne doit plus laisser trainer ses boites de Donuts",
+                        percent: 25
                     },
                     {
                         id: 3,
                         company: companyById(3),
-                        commentaire: ""
+                        commentaire: "Les couillère en or c'est fini!",
+                        percent: 25
                     },
                     {
                         id: 4,
                         company: companyById(4),
-                        commentaire: ""
+                        commentaire: "",
+                        percent: 0
                     }
 
                 ],
             proprete_commune_comment: "Veillez a effectuez cela avant que l'on demande a une entreprise svp",
             proprete_commune_comment_intern: "J'en ai marre de voir leur merde trainer partout, va falloir durcir",
             security_conformity: false,
+            security_comment_imputations: [
+                {
+                    id: 0,
+                    company: companyById(0),
+                    commentaire: "Reparer les barrière de sécurité"
+                },
+                {
+                    id: 1,
+                    company: companyById(1),
+                    commentaire: "Enlever les piquet non utile"
+                },
+                {
+                    id: 2,
+                    company: companyById(2),
+                    commentaire: "Arrêter la surcharge de plutonium!!!!"
+                },
+                {
+                    id: 3,
+                    company: companyById(3),
+                    commentaire: ""
+                },
+                {
+                    id: 4,
+                    company: companyById(4),
+                    commentaire: ""
+                }
+
+            ],
             security_comment: "RAS",
             security_comment_intern:
                 "Y'a fallu leur botter les fesses pour qu'ils mettent cette fichue barrière!",
