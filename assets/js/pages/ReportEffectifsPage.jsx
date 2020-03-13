@@ -57,7 +57,7 @@ const ReportEffectifsPage = ({match}) => {
                                 <td>{lot.numero_lot}</td>
                                 <td>{lot.libelle_lot}</td>
                                 <td className="text-center">{lot.effectif_prevu}</td>
-                                <td className="text-center">5</td>
+                                <td className="text-center">{lot.effectif_constate}</td>
                             </tr>
                         )
                         :

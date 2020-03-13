@@ -248,35 +248,40 @@ function fakeListReports() {
                     numero_lot: "101ABC674",
                     libelle_lot: "FOURNISSEUR SPECIAL",
                     entreprise: companyById(3),
-                    effectif_prevu: 5
+                    effectif_prevu: 5,
+                    effectif_constate: 2
                 },
                 {
                     id: 1,
                     numero_lot: "10242342DEF",
                     libelle_lot: "INSTALLATION TELEPHONE",
                     entreprise: companyById(4),
-                    effectif_prevu: 5
+                    effectif_prevu: 5,
+                    effectif_constate: 4
                 },
                 {
                     id: 2,
                     numero_lot: "102AZZZAA1FEF",
                     libelle_lot: "INSTALLATION FIBRE",
                     entreprise: companyById(4),
-                    effectif_prevu: 5
+                    effectif_prevu: 5,
+                    effectif_constate: 7
                 },
                 {
                     id: 3,
                     numero_lot: "102EEZDSS",
                     libelle_lot: "MISE EN PLACE ANTENNES SPECIALES",
                     entreprise: companyById(4),
-                    effectif_prevu: 5
+                    effectif_prevu: 5,
+                    effectif_constate: 0
                 },
                 {
                     id: 4,
                     numero_lot: "10DSSQSDSSDHJH",
                     libelle_lot: "FOURNITURE ELECTRICITE",
                     entreprise: companyById(2),
-                    effectif_prevu: 5
+                    effectif_prevu: 5,
+                    effectif_constate: 5
                 }
             ],
             photos: [
@@ -361,7 +366,7 @@ function fakeListReports() {
                     {
                         id: 4,
                         company: companyById(4),
-                        commentaire: "",
+                        commentaire: "Très bien cette semaine!",
                         percent: 0
                     }
 
@@ -407,35 +412,40 @@ function fakeListReports() {
                     numero_lot: "101ABC654",
                     libelle_lot: "POSE MOQUETTE",
                     entreprise: companyById(0),
-                    effectif_prevu: 5
+                    effectif_prevu: 5,
+                    effectif_constate: 5
                 },
                 {
                     id: 6,
                     numero_lot: "102DEF",
                     libelle_lot: "COULAGE DE BETON",
                     entreprise: companyById(1),
-                    effectif_prevu: 5
+                    effectif_prevu: 5,
+                    effectif_constate: 2
                 },
                 {
                     id: 7,
                     numero_lot: "102121FEF",
                     libelle_lot: "POSE ROBINETTERIE",
                     entreprise: companyById(3),
-                    effectif_prevu: 5
+                    effectif_prevu: 5,
+                    effectif_constate: 10
                 },
                 {
                     id: 8,
                     numero_lot: "10210DSS",
                     libelle_lot: "INSTALLATION VIDEO SURVEILLANCE",
                     entreprise: companyById(4),
-                    effectif_prevu: 5
+                    effectif_prevu: 5,
+                    effectif_constate: 5
                 },
                 {
                     id: 9,
                     numero_lot: "10DSS",
                     libelle_lot: "FOURNITURE ELECTRICITE",
                     entreprise: companyById(2),
-                    effectif_prevu: 5
+                    effectif_prevu: 5,
+                    effectif_constate: 0
                 }
             ],
             photos: [
