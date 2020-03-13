@@ -70,11 +70,11 @@ const ReportPropreteAccesPage = ({match}) => {
 
         console.log(currentTarget.value);
 
+        const imputs = imputations;
+        imputs[currentTarget.id].pourcent = parseInt(currentTarget.value, 10);
 
-        imputations[currentTarget.id].pourcent = parseInt(currentTarget.value, 10);
-
-
-        setImputations(imputations);
+        setImputations("");
+        setImputations(imputs);
 
         console.log(imputations);
 
