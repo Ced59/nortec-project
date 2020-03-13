@@ -68,10 +68,20 @@ const ReportSecuritePage = ({match}) => {
     };
 
     const handleChangeImputations = ({currentTarget}) => {
-        const value = currentTarget.value;
-        const name = currentTarget.name;
 
-        setImputations({...imputations, [name]: value});
+
+        console.log(currentTarget.id);
+
+        console.log(currentTarget.value);
+
+        const imputs = imputations;
+        imputs[currentTarget.id].pourcent = parseInt(currentTarget.value, 10);
+
+        setImputations("");
+        setImputations(imputs);
+
+        console.log(imputations);
+
     };
 
     const handleChangeCommentIntern = ({currentTarget}) => {
