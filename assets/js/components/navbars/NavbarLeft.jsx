@@ -1,8 +1,7 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import '../../../css/navbarLeft.css';
 import {NavLink} from "react-router-dom";
 import fakeData from "../fakeDataForDev/fakeData";
-
 
 
 // TODO changer la class selected en fonction du clic
@@ -36,7 +35,6 @@ const NavbarLeft = ({match, selected}) => {
     }, [id]);
 
 
-
     return (
         <div className="vertical-nav" id="sidebar">
 
@@ -45,39 +43,45 @@ const NavbarLeft = ({match, selected}) => {
             <ul className="nav flex-column mb-0">
 
                 <li className="nav-item">
-                    <NavLink to={"/project/" + project.id + "/" + id.idReport + "/effectifs"} className={"nav-link font-italic" + (selected === 'effectifs' && " selected")}>
+                    <NavLink to={"/project/" + project.id + "/" + id.idReport + "/effectifs"}
+                             className={"nav-link font-italic" + (selected === 'effectifs' && " selected")}>
                         Effectifs
                     </NavLink>
                 </li>
                 <li className="nav-item">
-                    <NavLink to={"/project/" + project.id + "/" + id.idReport + "/securite"} className={"nav-link font-italic" + (selected === 'securite' && " selected")}>
+                    <NavLink to={"/project/" + project.id + "/" + id.idReport + "/securite"}
+                             className={"nav-link font-italic" + (selected === 'securite' && " selected")}>
                         Sécurité
                     </NavLink>
                 </li>
                 <li className="nav-item">
-                    <NavLink to={"/project/" + project.id + "/" + id.idReport + "/propreteacces"} className={"nav-link font-italic" + (selected === 'proprete' && " selected")}>
+                    <NavLink to={"/project/" + project.id + "/" + id.idReport + "/propreteacces"}
+                             className={"nav-link font-italic" + (selected === 'proprete' && " selected")}>
                         Propreté des Accès
                     </NavLink>
                 </li>
                 <li className="nav-item">
-                    <NavLink to={"/project/" + project.id + "/" + id.idReport + "/propretepartiescommunes"} className={"nav-link font-italic" + (selected === 'propetepartiecommune' && " selected")}>
+                    <NavLink to={"/project/" + project.id + "/" + id.idReport + "/propretepartiescommunes"}
+                             className={"nav-link font-italic" + (selected === 'propetepartiecommune' && " selected")}>
                         Propreté des parties communes
                     </NavLink>
                 </li>
                 <li className="nav-item">
-                    <NavLink to={"/project/" + project.id + "/" + id.idReport + "/echeances"} className={"nav-link font-italic" + (selected === 'echeances' && " selected")}>
+                    <NavLink to={"/project/" + project.id + "/" + id.idReport + "/echeances"}
+                             className={"nav-link font-italic" + (selected === 'echeances' && " selected")}>
                         Echéances
                     </NavLink>
                 </li>
                 <li className="nav-item">
-                    <NavLink to={"/project/" + project.id + "/" + id.idReport + "/validate"} className={"nav-link font-italic" + (selected === 'validate' && " selected")}>
+                    <NavLink to={"/project/" + project.id + "/" + id.idReport + "/validate"}
+                             className={"nav-link font-italic" + (selected === 'validate' && " selected")}>
                         Validation et Envoi
                     </NavLink>
                 </li>
             </ul>
 
         </div>
-);
+    );
 };
 
 export default NavbarLeft;
