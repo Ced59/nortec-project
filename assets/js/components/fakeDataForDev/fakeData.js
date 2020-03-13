@@ -337,27 +337,32 @@ function fakeListReports() {
                     {
                         id: 0,
                         company: companyById(0),
-                        commentaire: "Doit nettoyer les toilettes"
+                        commentaire: "Doit nettoyer les toilettes",
+                        percent: 25
                     },
                     {
                         id: 1,
                         company: companyById(1),
-                        commentaire: "Doit sortir ses poubelles"
+                        commentaire: "Doit sortir ses poubelles",
+                        percent: 25
                     },
                     {
                         id: 2,
                         company: companyById(2),
-                        commentaire: "Ne doit plus laisser trainer ses boites de Donuts"
+                        commentaire: "Ne doit plus laisser trainer ses boites de Donuts",
+                        percent: 25
                     },
                     {
                         id: 3,
                         company: companyById(3),
-                        commentaire: ""
+                        commentaire: "Les couillère en or c'est fini!",
+                        percent: 25
                     },
                     {
                         id: 4,
                         company: companyById(4),
-                        commentaire: ""
+                        commentaire: "",
+                        percent: 0
                     }
 
                 ],

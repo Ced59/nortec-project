@@ -15,6 +15,9 @@ const ReportPropretePartiesCommunesPage = ({match}) => {
     const [commentIntern, setCommentIntern] = useState("");
 
     const [imputations, setImputations] = useState("");
+    const [percentImputations, setPercentImputations] = useState(
+        []
+    );
 
     const urlParams = match.params;
     const reportById = fakeData.reportById(parseInt(urlParams.idReport, 10));
@@ -29,6 +32,7 @@ const ReportPropretePartiesCommunesPage = ({match}) => {
             setComment(reportById.proprete_commune_comment);
             setCommentIntern(reportById.proprete_commune_comment_intern);
             setImputations(reportById.proprete_commune_imputation);
+            setPercentImputations(reportById.proprete_commune_imputation);
         }
 
     };
@@ -46,10 +50,37 @@ const ReportPropretePartiesCommunesPage = ({match}) => {
     };
 
     const handleChangeImputations = ({currentTarget}) => {
-        const value = currentTarget.value;
-        const name = currentTarget.name;
 
-        setImputations({...imputations, [name]: value});
+
+        console.log(currentTarget.id);
+
+        console.log(currentTarget.value);
+
+        const imputs = imputations;
+        imputs[currentTarget.id].pourcent = parseInt(currentTarget.value, 10);
+
+        setImputations("");
+        setImputations(imputs);
+
+        console.log(imputations);
+
+    };
+
+    const handleChangePercentImputations = ({currentTarget}) => {
+
+
+        console.log(currentTarget.id);
+
+        console.log(currentTarget.value);
+
+        const imputs = percentImputations;
+        imputs[currentTarget.id].pourcent = parseInt(currentTarget.value, 10);
+
+        setPercentImputations("");
+        setPercentImputations(imputs);
+
+        console.log(imputations);
+
     };
 
     const handleCheckNonConforme = () => {
@@ -118,14 +149,22 @@ const ReportPropretePartiesCommunesPage = ({match}) => {
                                     {imputations.map(imputation =>
 
                                         <div className="row" key={imputation.id}>
-                                            <h5 className="col-7">{imputation.company.nom}</h5>
+                                            <h5 className="col-5">{imputation.company.nom}</h5>
 
                                             <FieldTextArea
                                                 value={imputation.commentaire}
-                                                className="form-control col-6 mb-1"
+                                                className="form-control col-6 mb-1 mr-1"
                                                 name={"name" + imputation.company.id}
                                                 onChange={handleChangeImputations}
                                             />
+                                            <input
+                                                value={imputation.percent}
+                                                className="form-control col-2 mb-1 ml-1"
+                                                name={"name" + imputation.company.id}
+                                                onChange={handleChangePercentImputations}
+                                                id={imputation.company.id}
+                                            />
+                                            <h5>%</h5>
                                         </div>
                                     )}
 
