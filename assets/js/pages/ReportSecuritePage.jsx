@@ -35,6 +35,7 @@ const ReportSecuritePage = ({match}) => {
 
     const [comment, setComment] = useState("");
     const [commentIntern, setCommentIntern] = useState("");
+    const [imputations, setImputations] = useState("");
 
     const fetchReport = () => {
 
@@ -44,6 +45,7 @@ const ReportSecuritePage = ({match}) => {
             setConforme(reportById.security_conformity);
             setComment(reportById.security_comment);
             setCommentIntern(reportById.security_comment_intern);
+            setImputations(reportById.security_comment_imputations);
         }
 
     };
@@ -63,6 +65,13 @@ const ReportSecuritePage = ({match}) => {
     const handleSubmitConform = () => {
         //TODO enregistrement de la conformité à true
         toast.success("Statut de sécurité enregistré avec succès!")
+    };
+
+    const handleChangeImputations = ({currentTarget}) => {
+        const value = currentTarget.value;
+        const name = currentTarget.name;
+
+        setImputations({...imputations, [name]: value});
     };
 
     const handleChangeCommentIntern = ({currentTarget}) => {
@@ -113,33 +122,35 @@ const ReportSecuritePage = ({match}) => {
                     <>
                         <div className="row">
                             <div>
-                                <Select name="Entreprise"
-                                        label="Entreprise en charge"
-                                        onChange={handleChange}>
-                                    {report && report.lots.map(lot =>(
-                                            <option key={lot.id}
-                                                    value={lot.entreprise}
-                                            >
-                                                {lot.entreprise.nom}
-                                            </option>
-                                        ))}
-                                </Select>
+                                {imputations.map(imputation =>
+
+                                    <div className="row" key={imputation.id}>
+                                        <h5 className="col-7">{imputation.company.nom}</h5>
+
+                                        <FieldTextArea
+                                            value={imputation.commentaire}
+                                            className="form-control col-6 mb-1"
+                                            name={"name" + imputation.company.id}
+                                            onChange={handleChangeImputations}
+                                        />
+                                    </div>
+                                )}
                             </div>
                             <div className="ml-auto">
                                 <ImageUpload buttonText="Choisir l'image"/>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col-6">
-                                <FieldTextArea label="Commentaire : " value={comment} placeholder="Commentaire pour toute les entreprises" onChange={handleChangeComment}/>
+                            <div className="row">
+                                <div className="col-6">
+                                    <FieldTextArea label="Commentaire : " value={comment} placeholder="Commentaire pour toute les entreprises" onChange={handleChangeComment}/>
+                                </div>
+                                <div className="col-6">
+                                    <FieldTextArea label="Commentaire interne : "
+                                                   value={commentIntern}
+                                                   placeholder="Commentaire pour toute les entreprises"
+                                                    onChange={handleChangeCommentIntern}/>
+                                </div>
                             </div>
-                            <div className="col-6">
-                                <FieldTextArea label="Commentaire interne : "
-                                               value={commentIntern}
-                                               placeholder="Commentaire pour toute les entreprises"
-                                                onChange={handleChangeCommentIntern}/>
-                            </div>
-                        </div>
                     </>
                 )}
             </div>

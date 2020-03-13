@@ -364,6 +364,34 @@ function fakeListReports() {
             proprete_commune_comment: "Veillez a effectuez cela avant que l'on demande a une entreprise svp",
             proprete_commune_comment_intern: "J'en ai marre de voir leur merde trainer partout, va falloir durcir",
             security_conformity: false,
+            security_comment_imputations: [
+                {
+                    id: 0,
+                    company: companyById(0),
+                    commentaire: "Reparer les barrière de sécurité"
+                },
+                {
+                    id: 1,
+                    company: companyById(1),
+                    commentaire: "Enlever les piquet non utile"
+                },
+                {
+                    id: 2,
+                    company: companyById(2),
+                    commentaire: "Arrêter la surcharge de plutonium!!!!"
+                },
+                {
+                    id: 3,
+                    company: companyById(3),
+                    commentaire: ""
+                },
+                {
+                    id: 4,
+                    company: companyById(4),
+                    commentaire: ""
+                }
+
+            ],
             security_comment: "RAS",
             security_comment_intern:
                 "Y'a fallu leur botter les fesses pour qu'ils mettent cette fichue barrière!",
