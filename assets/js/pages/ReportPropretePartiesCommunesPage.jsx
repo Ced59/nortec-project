@@ -159,7 +159,7 @@ const ReportPropretePartiesCommunesPage = ({match}) => {
                                             />
                                             <input
                                                 value={imputation.percent}
-                                                className="form-control col-2 mb-1 ml-1"
+                                                className="form-control col-2 mb-1 ml-1 mt-4"
                                                 name={"name" + imputation.company.id}
                                                 onChange={handleChangePercentImputations}
                                                 id={imputation.company.id}
