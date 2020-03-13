@@ -20,6 +20,7 @@ import ReportSecuritePage from "./pages/ReportSecuritePage";
 import ReportPropretePartiesCommunesPage from "./pages/ReportPropretePartiesCommunesPage";
 import ReportEcheancesPage from "./pages/ReportEcheancesPage";
 import ListReportsByProject from "./pages/ListReportsByProject";
+import ReportValidatePage from "./pages/ReportValidatePage";
 
 AuthAPI.setup();
 
@@ -60,6 +61,7 @@ const App = () => {
                     <PrivateRoute path="/project/:id/:idReport/propretepartiescommunes"
                                   component={ReportPropretePartiesCommunesPage}/>
                     <PrivateRoute path="/project/:id/:idReport/echeances" component={ReportEcheancesPage}/>
+                    <PrivateRoute path="/project/:id/:idReport/validate" component={ReportValidatePage}/>
 
                     <PrivateRoute path="/project/:id/listReports" component={ListReportsByProject}/>
 
