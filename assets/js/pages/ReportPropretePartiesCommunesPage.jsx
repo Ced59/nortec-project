@@ -120,9 +120,9 @@ const ReportPropretePartiesCommunesPage = ({match}) => {
                                         <div className="row" key={imputation.id}>
                                             <h5 className="col-7">{imputation.company.nom}</h5>
 
-                                            <input
+                                            <FieldTextArea
                                                 value={imputation.commentaire}
-                                                className="form-control col-5 mb-1"
+                                                className="form-control col-6 mb-1"
                                                 name={"name" + imputation.company.id}
                                                 onChange={handleChangeImputations}
                                             />

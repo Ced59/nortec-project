@@ -45,7 +45,6 @@ const ReportPropreteAccesPage = ({match}) => {
 
     const handleCheckConformity = ({currentTarget}) => {
         const name = currentTarget.name;
-        console.log(currentTarget.name);
         setConforme(name);
     };
 

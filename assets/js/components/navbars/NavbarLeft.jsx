@@ -69,6 +69,11 @@ const NavbarLeft = ({match, selected}) => {
                         Echéances
                     </NavLink>
                 </li>
+                <li className="nav-item">
+                    <NavLink to={"/project/" + project.id + "/" + id.idReport + "/validate"} className={"nav-link font-italic" + (selected === 'validate' && " selected")}>
+                        Validation et Envoi
+                    </NavLink>
+                </li>
             </ul>
 
         </div>
