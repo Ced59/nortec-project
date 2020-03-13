@@ -20,10 +20,12 @@ const ReportPropreteAccesPage = ({match}) => {
     const NavbarLeftWithRouter = withRouter(NavbarLeft);
 
     const urlParams = match.params;
-    const reportById = fakeData.reportById(parseInt(urlParams.idReport, 10));
+
 
 
     const fetchReport = () => {
+
+        const reportById = fakeData.reportById(parseInt(urlParams.idReport, 10));
 
         //Vérification si édition ou nouveau rapport... Dans la version finale, le nouveau rapport existera mais avec valeurs vides donc pas de vérification à ce niveau
         if (reportById) {
