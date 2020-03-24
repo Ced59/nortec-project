@@ -34,8 +34,14 @@ function formatDate(date)
     return moment(date).format('DD/MM/YYYY');
 }
 
+function formatDateHours(date)
+{
+    return moment(date).format('DD/MM/YYYY à h:mm:ss' );
+}
+
 export default {
     determineStatus,
-    formatDate
+    formatDate,
+    formatDateHours
 }
 
