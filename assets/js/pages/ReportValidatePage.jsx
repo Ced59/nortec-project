@@ -4,6 +4,8 @@ import NavbarLeft from "../components/navbars/NavbarLeft";
 import fakeData from "../components/fakeDataForDev/fakeData";
 import DateAPI from "../services/DateAPI";
 import Button from "../components/forms/Button";
+import {PDFDownloadLink, PDFViewer} from "@react-pdf/renderer";
+import ReportPdfComponent from "../components/pdf/ReportPdfComponent";
 
 const ReportValidatePage = ({match}) => {
     const urlParams = match.params;
@@ -164,6 +166,12 @@ const ReportValidatePage = ({match}) => {
                     echeances
                 </div>
 
+                <PDFViewer className='offset-3 col-6' height='1000'>
+                    <ReportPdfComponent report={report}/>
+                </PDFViewer>
+
+
+
                 <div className='row ml-2 mt-4 d-flex justify-content-between mb-3'>
                     <Button text='Clôturer et envoyer'
                             className='btn btn-primary mr-4'
@@ -183,6 +191,8 @@ const ReportValidatePage = ({match}) => {
                 </div>
 
             </div>
+
+
         </main>
     );
 };
