@@ -21,6 +21,7 @@ import ReportPropretePartiesCommunesPage from "./pages/ReportPropretePartiesComm
 import ReportEcheancesPage from "./pages/ReportEcheancesPage";
 import ListReportsByProject from "./pages/ListReportsByProject";
 import ReportValidatePage from "./pages/ReportValidatePage";
+import ProfilPage from "./pages/ProfilPage";
 
 AuthAPI.setup();
 
@@ -55,6 +56,7 @@ const App = () => {
 
 
                 <Switch>
+                    <PrivateRoute path="/profil/:id" component={ProfilPage} />
                     <PrivateRoute path="/project/:id/:idReport/effectifs" component={ReportEffectifsPage}/>
                     <PrivateRoute path="/project/:id/:idReport/propreteacces" component={ReportPropreteAccesPage}/>
                     <PrivateRoute path="/project/:id/:idReport/securite" component={ReportSecuritePage}/>

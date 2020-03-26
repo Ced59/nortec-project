@@ -52,6 +52,13 @@ function getUserFirstname() {
         return jwtDecode(getToken()).firstName;
     }
 }
+function getUsername() {
+
+    if (isAuthenticated())
+    {
+        return jwtDecode(getToken()).username;
+    }
+}
 
 function getUserLastName() {
 
@@ -116,5 +123,6 @@ export default {
     getUserFirstname,
     getUserLastName,
     getUserFirstNameLastName,
-    getUserId
+    getUserId,
+    getUsername
 }
