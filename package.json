@@ -22,11 +22,12 @@
         "jwt-decode": "^2.2.0",
         "moment": "^2.24.0",
         "popper": "^1.0.1",
-        "react": "^16.8.6",
-        "react-dom": "^16.8.6",
+        "react": "^16.13.1",
+        "react-dom": "^16.13.1",
         "react-helmet": "^5.2.1",
         "react-images-upload": "^1.2.8",
         "react-router-dom": "^5.0.0",
-        "react-toastify": "^5.5.0"
+        "react-toastify": "^5.5.0",
+        "reactstrap": "^8.4.1"
     }
 }
