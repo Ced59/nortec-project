@@ -23,39 +23,41 @@ const AdminPage = () => {
     const projects = fakeData.fakeListProjects();
 
     return <main className="container">
-        <h2 className="mb-4">Echéances : </h2>
+        <h2 className="mb-4"> Projets : </h2>
         <table className="table table-hover">
             <thead>
             <tr>
-                <th>Numéro Projet</th>
+                <th className="text-center">Numéro Projet</th>
                 <th>Admin en Charge</th>
-                <th>Statut</th>
+                <th className="text-center">Statut</th>
                 <th>Nom Projet</th>
-                <th>Date début</th>
+                <th className="text-center">Date début</th>
                 <th>Date Fin prévue</th>
                 <th>Nouvelle date de fin</th>
-                <th>Date fin réelle</th>
+                <th className="text-center">Date fin réelle</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
             {projects.map(project =>
             <tr>
-                <td>{project.id}</td>
+                <td className="text-center">{project.id}</td>
                 <td>Florent</td>
-                <td><span className={"text-center pl-2 pr-2 pt-1 pb-1 badge badge-" +
+                <td className="text-center"><span className={"pl-2 pr-2 pt-1 pb-1 badge badge-" +
                 STATUS_CLASSES[DateAPI.determineStatus(project.date_debut, project.date_fin_reelle)]}>
                     {STATUS_LABEL[DateAPI.determineStatus(project.date_debut, project.date_fin_reelle)]}
                 </span>
                 </td>
                 <td>{project.name}</td>
-                <td>{project.date_debut}</td>
-                <td>{project.date_fin_prevues === null ?
+                <td className="text-center">{project.date_debut}</td>
+                <td className="text-center">{project.date_fin_prevues.length === 0 ?
                     <span>Aucune</span>
                     :
-                    project.date_fin_prevues.id === 0 }</td>
-                <td></td>
-                <td>{project.date_fin_reelle === "" ?
+                    project.date_fin_prevues.id === 0 &&
+                    <span> Hey </span>
+                }</td>
+                <td className="text-center"></td>
+                <td className="text-center">{project.date_fin_reelle === "" ?
                     <span>Aucune</span>
                     :
                     project.date_fin_reelle}</td>
