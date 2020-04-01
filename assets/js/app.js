@@ -22,7 +22,9 @@ import ReportEcheancesPage from "./pages/ReportEcheancesPage";
 import ListReportsByProject from "./pages/ListReportsByProject";
 import ReportValidatePage from "./pages/ReportValidatePage";
 import ProfilPage from "./pages/ProfilPage";
+import AdminProjectPage from "./pages/AdminProjectPage";
 import AdminPage from "./pages/AdminPage";
+import AdminUsersPage from "./pages/AdminUsersPage";
 
 AuthAPI.setup();
 
@@ -68,7 +70,11 @@ const App = () => {
                     <PrivateRoute path="/project/:id/:idReport/validate" component={ReportValidatePage}/>
 
                     <PrivateRoute path="/project/:id/listReports" component={ListReportsByProject}/>
+
+                    <PrivateRoute path="/admin/userslist" component={AdminUsersPage} />
+                    <PrivateRoute path="/admin/project" component={AdminProjectPage} />
                     <PrivateRoute path="/admin/:id" component={AdminPage} />
+
                     <PrivateRoute path="/project/:id" component={DetailProjectPage}/>
                     {!isAuthenticated && <Route path="/" component={LoginPage}/>}
                     <SearchContext.Provider value={searchContextValue}>
