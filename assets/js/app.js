@@ -22,6 +22,7 @@ import ReportEcheancesPage from "./pages/ReportEcheancesPage";
 import ListReportsByProject from "./pages/ListReportsByProject";
 import ReportValidatePage from "./pages/ReportValidatePage";
 import ProfilPage from "./pages/ProfilPage";
+import AdminPage from "./pages/AdminPage";
 
 AuthAPI.setup();
 
@@ -56,6 +57,7 @@ const App = () => {
 
 
                 <Switch>
+
                     <PrivateRoute path="/profil/:id" component={ProfilPage} />
                     <PrivateRoute path="/project/:id/:idReport/effectifs" component={ReportEffectifsPage}/>
                     <PrivateRoute path="/project/:id/:idReport/propreteacces" component={ReportPropreteAccesPage}/>
@@ -66,7 +68,7 @@ const App = () => {
                     <PrivateRoute path="/project/:id/:idReport/validate" component={ReportValidatePage}/>
 
                     <PrivateRoute path="/project/:id/listReports" component={ListReportsByProject}/>
-
+                    <PrivateRoute path="/admin/:id" component={AdminPage} />
                     <PrivateRoute path="/project/:id" component={DetailProjectPage}/>
                     {!isAuthenticated && <Route path="/" component={LoginPage}/>}
                     <SearchContext.Provider value={searchContextValue}>

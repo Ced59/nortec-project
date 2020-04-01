@@ -44,7 +44,7 @@ const NavbarTop = ({history}) => {
                            aria-haspopup="true" aria-expanded="false">Bienvenue {completeNameUser}  </a>
                         <div className="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
                             <NavLink className="dropdown-item" to={"/profil/" + userId}>Votre profil</NavLink>
-                            <a className="dropdown-item" href="#">Panneau Administration</a>
+                            <NavLink className="dropdown-item" to={"/admin/" + userId}>Panneau Administration</NavLink>
                             <a className="dropdown-item" href="#">Something else here</a>
                         </div>
                     </li>
