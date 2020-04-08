@@ -581,6 +581,7 @@ function fakeListCompanies() {
     ];
 }
 
+
 function companyById(id) {
     const companies = fakeListCompanies();
     const companyById = filterById(companies, id);
