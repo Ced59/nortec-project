@@ -167,9 +167,7 @@ const ReportPdfComponent = ({report}) => {
                         </View>
                     </View>
                     }
-
-
-
+                    
                 </View>
             </Page>
 
