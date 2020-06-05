@@ -26,6 +26,11 @@ class Lot
      */
     private $libelle_lot;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Report", inversedBy="lots")
+     */
+    private $report;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -51,6 +56,18 @@ class Lot
     public function setLibelleLot(string $libelle_lot): self
     {
         $this->libelle_lot = $libelle_lot;
+
+        return $this;
+    }
+
+    public function getReport(): ?Report
+    {
+        return $this->report;
+    }
+
+    public function setReport(?Report $report): self
+    {
+        $this->report = $report;
 
         return $this;
     }

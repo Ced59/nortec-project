@@ -109,12 +109,18 @@ class Report
      */
     private $photos;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Lot", mappedBy="report")
+     */
+    private $lots;
+
     public function __construct()
     {
         $this->proprete_access_imputation = new ArrayCollection();
         $this->propreteCommuneImputations = new ArrayCollection();
         $this->securityCommentImputations = new ArrayCollection();
         $this->photos = new ArrayCollection();
+        $this->lots = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -408,6 +414,37 @@ class Report
             // set the owning side to null (unless already changed)
             if ($photo->getReport() === $this) {
                 $photo->setReport(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Lot[]
+     */
+    public function getLots(): Collection
+    {
+        return $this->lots;
+    }
+
+    public function addLot(Lot $lot): self
+    {
+        if (!$this->lots->contains($lot)) {
+            $this->lots[] = $lot;
+            $lot->setReport($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLot(Lot $lot): self
+    {
+        if ($this->lots->contains($lot)) {
+            $this->lots->removeElement($lot);
+            // set the owning side to null (unless already changed)
+            if ($lot->getReport() === $this) {
+                $lot->setReport(null);
             }
         }
 
