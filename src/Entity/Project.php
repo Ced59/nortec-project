@@ -85,9 +85,16 @@ class Project
      */
     private $date_fin_prevues;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Report", mappedBy="Project", orphanRemoval=true)
+     */
+    private $reports;
+
+
     public function __construct()
     {
         $this->date_fin_prevues = new ArrayCollection();
+        $this->reports = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -269,4 +276,36 @@ class Project
 
         return $this;
     }
+
+    /**
+     * @return Collection|Report[]
+     */
+    public function getReports(): Collection
+    {
+        return $this->reports;
+    }
+
+    public function addReport(Report $report): self
+    {
+        if (!$this->reports->contains($report)) {
+            $this->reports[] = $report;
+            $report->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReport(Report $report): self
+    {
+        if ($this->reports->contains($report)) {
+            $this->reports->removeElement($report);
+            // set the owning side to null (unless already changed)
+            if ($report->getProject() === $this) {
+                $report->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
 }
