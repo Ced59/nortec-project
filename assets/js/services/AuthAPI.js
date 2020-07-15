@@ -80,7 +80,6 @@ function getUserFirstNameLastName() {
     return getUserFirstname() + " " + getUserLastName();
 }
 
-
 function setup()
 {
     const token = getToken();

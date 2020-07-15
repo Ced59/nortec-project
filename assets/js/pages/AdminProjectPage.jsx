@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import Select from "../components/forms/Select";
 import Button from "../components/forms/Button";
 import fakeData from "../components/fakeDataForDev/fakeData";
 import DateAPI from "../services/DateAPI";
+import { Link } from 'react-router-dom';
 
 const AdminProjectPage = () => {
 
@@ -23,7 +23,14 @@ const AdminProjectPage = () => {
     const projects = fakeData.fakeListProjects();
 
     return <main className="container">
+        <div className="row">
         <h2 className="mb-4"> Projets : </h2>
+        <Link
+            className='btn btn-primary m-auto'
+            type='button'
+            to={'/newProject'}
+        > Nouveau Projet </Link>
+        </div>
         <table className="table table-hover">
             <thead>
             <tr>
