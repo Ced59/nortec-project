@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import Axios from 'axios';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import userApi from '../services/userApi';
 
 const AdminUsersPage = ({history}) => {
 
     const [users, setUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
 
+// --------------------------- Récupérer tout les Utilisateurs ---------------------------
+
     useEffect(() => {
-        Axios.get("http://localhost:8000/api/users").then(response => response.data['hydra:member']).then(data => setUsers(data));
+        userApi.findAll().then(data => setUsers(data));
     }, []);
+
+//------------------------------Suppression d'un Utilisateur ------------------------------
 
     const handleDelete = async id => {
 
@@ -19,7 +23,7 @@ const AdminUsersPage = ({history}) => {
         setUsers(users.filter(user => user.id !== id));
 
         try {
-            await Axios.delete("http://localhost:8000/api/users/" + id);
+            await userApi.deleteUser(id)
             toast.success("L'utilisateur a bien été supprimé !");
         } catch (error) {
             setUsers(originalUsers);
@@ -27,6 +31,8 @@ const AdminUsersPage = ({history}) => {
         }
         
     }
+
+// ----------------------------- Mise en place de la pagination ------------------------------
 
     const handleChangePage = page => {
         setCurrentPage(page);

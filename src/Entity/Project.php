@@ -90,11 +90,17 @@ class Project
      */
     private $reports;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="project")
+     */
+    private $users;
+
 
     public function __construct()
     {
         $this->date_fin_prevues = new ArrayCollection();
         $this->reports = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -303,6 +309,34 @@ class Project
             if ($report->getProject() === $this) {
                 $report->setProject(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->addProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+            $user->removeProject($this);
         }
 
         return $this;
