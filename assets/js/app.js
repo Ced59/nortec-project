@@ -25,6 +25,7 @@ import ProfilPage from "./pages/ProfilPage";
 import AdminProjectPage from "./pages/AdminProjectPage";
 import AdminPage from "./pages/AdminPage";
 import AdminUsersPage from "./pages/AdminUsersPage";
+import UserPage from './pages/UserPage';
 
 AuthAPI.setup();
 
@@ -71,6 +72,7 @@ const App = () => {
 
                     <PrivateRoute path="/project/:id/listReports" component={ListReportsByProject}/>
 
+                    <PrivateRoute path="/admin/user/:id" component={UserPage} />
                     <PrivateRoute path="/admin/userslist" component={AdminUsersPage} />
                     <PrivateRoute path="/admin/project" component={AdminProjectPage} />
                     <PrivateRoute path="/admin/:id" component={AdminPage} />

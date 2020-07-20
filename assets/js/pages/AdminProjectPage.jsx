@@ -23,10 +23,10 @@ const AdminProjectPage = () => {
     const projects = fakeData.fakeListProjects();
 
     return <main className="container">
-        <div className="row">
-        <h2 className="mb-4"> Projets : </h2>
+        <div className="mb-4 d-flex justify-content-between align-items-center">
+        <h2> Projets : </h2>
         <Link
-            className='btn btn-primary m-auto'
+            className='btn btn-primary'
             type='button'
             to={'/newProject'}
         > Nouveau Projet </Link>
