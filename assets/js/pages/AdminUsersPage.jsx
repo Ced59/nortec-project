@@ -62,6 +62,7 @@ const AdminUsersPage = ({history}) => {
                     <th>Email</th>
                     <th>Rôle</th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -74,6 +75,9 @@ const AdminUsersPage = ({history}) => {
                     <td></td>
                     <td>
                         <button onClick={() => handleDelete(user.id)} className="btn btn-danger">Supprimer</button>
+                    </td>
+                    <td>
+                        <Link to={"/admin/user/" + user.id} className="btn btn-success">Modifier</Link>
                     </td>
                 </tr>
                     )}
