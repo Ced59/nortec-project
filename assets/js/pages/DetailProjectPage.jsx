@@ -31,7 +31,7 @@ const DetailProjectPage = ({history, match}) => {
 
     const [project, setProject] = useState(projects[id.id]); //TODO truc bizarre obligé de passer par là pour récupérer le projet. A faire attention!
 
-    //Récupération d'un projet
+//----------------------------------------Récupération d'un projet----------------------------
     const fetchProject = id => {
         //TODO récupérer le projet avec requête axios
 
@@ -43,6 +43,8 @@ const DetailProjectPage = ({history, match}) => {
     };
 
     //Récupération du bon projet à chaque chargement du composant
+
+//---------------------------------------- Chargement de projet au changement de l'id --------
 
     useEffect(() => {
         //TODO Normalement charge le projet à chaque fois que l'id change. Attention plus tard vérifier que tout fonctionne avec axios
