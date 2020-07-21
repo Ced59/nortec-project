@@ -5,6 +5,7 @@ import UserApi from '../services/UsersAPI';
 import '../../css/loading-icon.css';
 import {Button} from 'react-bootstrap';
 import Modal from "react-bootstrap/Modal";
+import UsersAPI from "../services/UsersAPI";
 
 
 const AdminUsersPage = ({history, props}) => {
@@ -21,6 +22,14 @@ const AdminUsersPage = ({history, props}) => {
         fetchUsers().then(r => "");
     }, []);
 
+
+    const STATUS_ACTIVE_USER = {
+        true: "Oui",
+        false: "Non"
+    };
+
+
+
 // --------------------------- Récupérer tout les Utilisateurs -----------------------------------------
 
     const fetchUsers = async () => {
@@ -28,6 +37,7 @@ const AdminUsersPage = ({history, props}) => {
             const data = await UserApi.findAll();
             setUsers(data);
             setLoading(false);
+            console.log(users);
         } catch (error) {
             toast.error("Erreur lors du chargement de la liste des utilisateurs");
         }
@@ -35,18 +45,20 @@ const AdminUsersPage = ({history, props}) => {
 
 //------------------------------Suppression d'un Utilisateur -------------------------------------------
 
-    const handleDelete = async id => {
+    const handleDelete = async userToRemove => {
 
         const originalUsers = [...users];
-
-        setUsers(users.filter(user => user.id !== id));
 
         handleCloseModal();
 
         try {
-            await UserApi.deleteUser(id)
+            userToRemove.active = !userToRemove.active;
+            await UserApi.deleteUser(userToRemove)
             toast.success("L'utilisateur a bien été supprimé !");
-        } catch (error) {
+        } catch ({response}) {
+            console.log(response);
+
+
             setUsers(originalUsers);
             toast.error("L'utilisateur n'a pas été correctement supprimé !");
         }
@@ -78,6 +90,9 @@ const AdminUsersPage = ({history, props}) => {
         setUserToDelete(userToDelete);
     }
 
+// ----------------------------- Determination du rôle des users ------------------------------
+
+    const determineRole = (user) => UsersAPI.determineRole(user);
 
 // ----------------------------- Template ------------------------------------------------------------------
 
@@ -99,8 +114,9 @@ const AdminUsersPage = ({history, props}) => {
                     <th>Prénom</th>
                     <th>Email</th>
                     <th>Rôle</th>
-                    <th> </th>
-                    <th> </th>
+                    <th>Actif</th>
+                    <th></th>
+                    <th></th>
                 </tr>
                 </thead>
                 {!loading &&
@@ -111,9 +127,17 @@ const AdminUsersPage = ({history, props}) => {
                         <td>{user.lastName} </td>
                         <td>{user.firstName} </td>
                         <td>{user.email} </td>
-                        <td> </td>
+                        <td>{determineRole(user)}</td>
+                        <td>{STATUS_ACTIVE_USER[user.active]}</td>
                         <td>
-                            <button onClick={() => handleShowModal(user)} className="btn btn-danger">Supprimer</button>
+                            {user.active ?
+                                <button onClick={() => handleShowModal(user)}
+                                        className="btn btn-danger">Désactiver</button>
+                                :
+                                <button onClick={() => handleShowModal(user)}
+                                        className="btn btn-danger">Activer</button>
+                            }
+
                         </td>
                         <td>
                             <Link to={"/admin/user/" + user.id} className="btn btn-success">Modifier</Link>
@@ -124,7 +148,7 @@ const AdminUsersPage = ({history, props}) => {
                 }
             </table>
             {loading &&
-            <div id="loading-icon" className="mt-5 mb-5"> </div>
+            <div id="loading-icon" className="mt-5 mb-5"></div>
             }
 
 
@@ -163,7 +187,7 @@ const AdminUsersPage = ({history, props}) => {
                 <Button variant="primary" onClick={handleCloseModal}>
                     Fermer
                 </Button>
-                <Button variant="danger" onClick={() => handleDelete(userToDelete.id)}>
+                <Button variant="danger" onClick={() => handleDelete(userToDelete)}>
                     Confirmer
                 </Button>
             </Modal.Footer>
