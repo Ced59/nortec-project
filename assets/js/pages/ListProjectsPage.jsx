@@ -2,18 +2,21 @@ import React, {useContext, useEffect, useState} from 'react';
 import ImgWithStyleComponent from "../components/images/ImgWithStyleComponent";
 import '../../css/listProjectsPage.css';
 import '../../css/app.css';
+import '../../css/loading-icon.css';
 import {Helmet} from "react-helmet";
 import SearchContext from "../contexts/SearchContext";
 import {Link} from "react-router-dom";
 import Button from "../components/forms/Button";
 import fakeData from "../components/fakeDataForDev/fakeData";
 import DateAPI from "../services/DateAPI";
+import {toast} from "react-toastify";
 
 
 const ListProjectsPage = (props) => {
 
     const [projects, setProjects] = useState([]);
     const [archivedProjects, setArchivedProjects] = useState(false);
+    const [loading, setLoading] = useState(true);
     const {searchValue} = useContext(SearchContext);
 
     const STATUS_CLASSES = {
@@ -30,13 +33,24 @@ const ListProjectsPage = (props) => {
         archived: "Archivé"
     };
 
-    const fakeProjects = fakeData.fakeListProjects(); //Chargement de la fausse liste de projets
-    //TODO Requêtes axios pour les bonnes datas
+
 
     useEffect(() => {
-        setProjects(fakeProjects);
-    });
+        fetchProjects().then(r => "");
+    }, []);
 
+// --------------------------- Récupérer tous les projets de l'utilisateur -----------------------------------------
+
+    const fetchProjects = async () => {
+        try {
+            const data = await fakeData.fakeListProjects();
+            setProjects(data);
+            setLoading(false);
+
+        } catch (error) {
+            toast.error("Erreur lors du chargement de la liste des projets");
+        }
+    }
 
     const filteredArchivedProjects = projects.filter(
         archivedProjects
@@ -86,41 +100,48 @@ const ListProjectsPage = (props) => {
 
             <div className="card-group">
 
-                {filteredProjects.length === 0 ?
-                    <p className="mt-2 font-weight-bold font-italic">Désolé il n'y a pas de résultat pour votre
-                        recherche...</p>
-                    :
-                    filteredProjects.map(project =>
-                        <Link style={{textDecorationLine: "none", color: "black"}} to={"/project/" + project.id}
-                              key={project.id}>
+                {!loading && <>
 
-                            <div className="card m-4" style={{width: '20rem', height: '26rem'}}>
+                    {filteredProjects.length === 0 ?
+                        <p className="mt-2 font-weight-bold font-italic">Désolé il n'y a pas de résultat pour votre
+                            recherche...</p>
+                        :
+                        filteredProjects.map(project =>
+                            <Link style={{textDecorationLine: "none", color: "black"}} to={"/project/" + project.id}
+                                  key={project.id}>
 
-                                <h5 className="card-title p-2">{project.name}</h5>
+                                <div className="card m-4" style={{width: '20rem', height: '26rem'}}>
 
-                                <ImgWithStyleComponent
-                                    className="card-img-top"
-                                    src={project.photo}
-                                    alt={project.name}
-                                    style={{height: "10rem"}}
-                                />
-                                <div className="card-body">
-                                    <p className="card-text text-right mb-3">{project.ville}</p>
-                                    <p className="card-text mb-1">Description:</p>
-                                    <p className="font-weight-light font-italic card-text">{project.description}</p>
+                                    <h5 className="card-title p-2">{project.name}</h5>
 
-                                </div>
-                                <div className="card-footer pb-0 text-right">
-                                    <p><span
-                                        className={"pl-2 pr-2 pt-1 pb-1 badge badge-" +
-                                        STATUS_CLASSES[DateAPI.determineStatus(project.date_debut, project.date_fin_reelle)]}>
+                                    <ImgWithStyleComponent
+                                        className="card-img-top"
+                                        src={project.photo}
+                                        alt={project.name}
+                                        style={{height: "10rem"}}
+                                    />
+                                    <div className="card-body">
+                                        <p className="card-text text-right mb-3">{project.ville}</p>
+                                        <p className="card-text mb-1">Description:</p>
+                                        <p className="font-weight-light font-italic card-text">{project.description}</p>
+
+                                    </div>
+                                    <div className="card-footer pb-0 text-right">
+                                        <p><span
+                                            className={"pl-2 pr-2 pt-1 pb-1 badge badge-" +
+                                            STATUS_CLASSES[DateAPI.determineStatus(project.date_debut, project.date_fin_reelle)]}>
                                         {STATUS_LABEL[DateAPI.determineStatus(project.date_debut, project.date_fin_reelle)]}</span>
-                                    </p>
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                        </Link>
-                    )
+                            </Link>
+                        )
+                    }
+                </>
                 }
+
+                {loading && <div id="loading-icon"> </div>}
+
             </div>
         </main>
     );
