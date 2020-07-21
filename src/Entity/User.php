@@ -68,8 +68,8 @@ class User implements UserInterface
     private $project;
 
     /**
-     * @Groups({"users_read"})
      * @ORM\Column(type="boolean")
+     * @Groups({"users_read"})
      */
     private $active;
 

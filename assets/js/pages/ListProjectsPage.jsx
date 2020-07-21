@@ -10,6 +10,7 @@ import Button from "../components/forms/Button";
 import fakeData from "../components/fakeDataForDev/fakeData";
 import DateAPI from "../services/DateAPI";
 import {toast} from "react-toastify";
+import AuthAPI from "../services/AuthAPI";
 
 
 const ListProjectsPage = (props) => {

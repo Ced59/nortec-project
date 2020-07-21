@@ -19,7 +19,21 @@ function create(user){
 
 function deleteUser(user){
     console.log(user);
+    //TODO Voir ce qui ne va pas avec la requête... Je ne comprends pas...
     return axios.put(USERS_API + "/" + id, user);
+}
+
+
+function determineRole(user) {
+
+    if (user.roles.includes('ROLE_ADMIN'))
+    {
+        return 'Administrateur';
+    }
+    else
+    {
+        return 'Utilisateur';
+    }
 }
 
 export default {
@@ -27,5 +41,6 @@ export default {
     update,
     create,
     deleteUser,
-    findAll
+    findAll,
+    determineRole
 }
