@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import UserApi from '../services/UserApi';
+import UserApi from '../services/UsersAPI';
 import '../../css/loading-icon.css';
 import {Button} from 'react-bootstrap';
 import Modal from "react-bootstrap/Modal";
