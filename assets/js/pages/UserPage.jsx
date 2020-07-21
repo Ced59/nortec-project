@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Field from './../components/forms/Field'
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import userApi from '../services/userApi';
+import userApi from '../services/UserApi';
 
 const UserPage = ({history, match}) => {
 

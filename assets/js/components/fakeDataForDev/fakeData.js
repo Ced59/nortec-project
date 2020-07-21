@@ -233,7 +233,7 @@ function fakeListReports() {
             dateRedaction: "2020-03-03T18:25:43",
             status: "in-progress",
             proprete_conformity: true,
-            proprete_imputation: [],
+            proprete_imputation: [], //pas implémenté
             proprete_comment: "Tout est très propre !",
             proprete_comment_intern:
                 "Ils ont pas été contents mais je m'en fous ils ont nettoyé!!",
