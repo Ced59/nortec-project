@@ -3,9 +3,12 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -26,6 +29,8 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Groups({"users_read"})
+     * @Assert\NotBlank(message="L'email doit être renseigner")
+     * @Assert\Email(message="L'adresse email doit avoir un format valide !")
      */
     private $email;
 
@@ -38,20 +43,33 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\NotBlank(message="Le mot de passe est obligatoire !")
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"users_read"})
+     * @Assert\NotBlank(message="Le prénom de l'utilisateur doit être renseigné !")
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"users_read"})
+     * @Assert\NotBlank(message="Le nom de famille de l'utilisateur doit être renseigné !")
      */
     private $lastName;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Project", inversedBy="users")
+     */
+    private $project;
+
+    public function __construct()
+    {
+        $this->project = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -151,6 +169,32 @@ class User implements UserInterface
     public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Project[]
+     */
+    public function getProject(): Collection
+    {
+        return $this->project;
+    }
+
+    public function addProject(Project $project): self
+    {
+        if (!$this->project->contains($project)) {
+            $this->project[] = $project;
+        }
+
+        return $this;
+    }
+
+    public function removeProject(Project $project): self
+    {
+        if ($this->project->contains($project)) {
+            $this->project->removeElement($project);
+        }
 
         return $this;
     }
