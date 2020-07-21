@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import UserApi from '../services/UserApi';
 import '../../css/loading-icon.css';
-import '../../css/pagination-centered.css'
+
 
 const AdminUsersPage = ({history}) => {
 
