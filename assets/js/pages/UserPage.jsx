@@ -41,7 +41,7 @@ const UserPage = ({history, match}) => {
     useEffect(() => {
         if(id !== "new") {
             setEdit(true);
-            fetchUser(id);
+            fetchUser(id).then(r => "");
         }
 
     }, [id]);

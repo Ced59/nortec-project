@@ -4,7 +4,6 @@ import AuthAPI from "../../services/AuthAPI";
 import LogoCompanyComponent from "../images/LogoCompanyComponent";
 import {toast} from "react-toastify";
 import '../../../css/navbarTop.css';
-import ListProjectsPage from "../../pages/ListProjectsPage";
 import SearchContext from "../../contexts/SearchContext";
 import {NavLink} from "react-router-dom";
 
@@ -14,7 +13,6 @@ const NavbarTop = ({history}) => {
     const {searchValue, setSearchValue} = useContext(SearchContext);
     const [completeNameUser] = useState(AuthAPI.getUserFirstNameLastName());
     const [userId] = useState(AuthAPI.getUserId());
-
 
 
     const handleLogout = () => {
@@ -40,11 +38,20 @@ const NavbarTop = ({history}) => {
                 <ul className="navbar-nav mr-auto">
 
                     <li className="nav-item dropdown">
-                        <a className="nav-link dropdown-toggle navbar-top-style navbar-top-text-style" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                           aria-haspopup="true" aria-expanded="false">Bienvenue {completeNameUser}  </a>
+                        <a className="nav-link dropdown-toggle navbar-top-style navbar-top-text-style"
+                           id="navbarDropdownMenuLink" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">Bienvenue {completeNameUser} <br/>
+                            <span className="text-statut">Connecté comme {AuthAPI.isAdmin() ?
+                                'Administrateur'
+                                :
+                                'Utilisateur'}
+                            </span>
+                        </a>
                         <div className="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
                             <NavLink className="dropdown-item" to={"/profil/" + userId}>Votre profil</NavLink>
+                            {AuthAPI.isAdmin() &&
                             <NavLink className="dropdown-item" to={"/admin/" + userId}>Panneau Administration</NavLink>
+                            }
                             <a className="dropdown-item" href="#">Something else here</a>
                         </div>
                     </li>
