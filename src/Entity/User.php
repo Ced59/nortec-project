@@ -63,8 +63,15 @@ class User implements UserInterface
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Project", inversedBy="users")
+     * @Groups({"users_read"})
      */
     private $project;
+
+    /**
+     * @Groups({"users_read"})
+     * @ORM\Column(type="boolean")
+     */
+    private $active;
 
     public function __construct()
     {
@@ -104,8 +111,7 @@ class User implements UserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+
 
         return array_unique($roles);
     }
@@ -195,6 +201,18 @@ class User implements UserInterface
         if ($this->project->contains($project)) {
             $this->project->removeElement($project);
         }
+
+        return $this;
+    }
+
+    public function getActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): self
+    {
+        $this->active = $active;
 
         return $this;
     }

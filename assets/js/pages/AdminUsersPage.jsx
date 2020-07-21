@@ -28,6 +28,7 @@ const AdminUsersPage = ({history, props}) => {
             const data = await UserApi.findAll();
             setUsers(data);
             setLoading(false);
+            console.log(users);
         } catch (error) {
             toast.error("Erreur lors du chargement de la liste des utilisateurs");
         }
@@ -35,16 +36,16 @@ const AdminUsersPage = ({history, props}) => {
 
 //------------------------------Suppression d'un Utilisateur -------------------------------------------
 
-    const handleDelete = async id => {
+    const handleDelete = async userToRemove => {
 
         const originalUsers = [...users];
 
-        setUsers(users.filter(user => user.id !== id));
 
         handleCloseModal();
 
         try {
-            await UserApi.deleteUser(id)
+            userToRemove.active = !userToRemove.active;
+            await UserApi.deleteUser(userToRemove)
             toast.success("L'utilisateur a bien été supprimé !");
         } catch (error) {
             setUsers(originalUsers);
@@ -99,6 +100,7 @@ const AdminUsersPage = ({history, props}) => {
                     <th>Prénom</th>
                     <th>Email</th>
                     <th>Rôle</th>
+                    <th>Actif</th>
                     <th> </th>
                     <th> </th>
                 </tr>
@@ -112,6 +114,7 @@ const AdminUsersPage = ({history, props}) => {
                         <td>{user.firstName} </td>
                         <td>{user.email} </td>
                         <td> </td>
+                        <td>{user.active}</td>
                         <td>
                             <button onClick={() => handleShowModal(user)} className="btn btn-danger">Supprimer</button>
                         </td>
@@ -163,7 +166,7 @@ const AdminUsersPage = ({history, props}) => {
                 <Button variant="primary" onClick={handleCloseModal}>
                     Fermer
                 </Button>
-                <Button variant="danger" onClick={() => handleDelete(userToDelete.id)}>
+                <Button variant="danger" onClick={() => handleDelete(userToDelete)}>
                     Confirmer
                 </Button>
             </Modal.Footer>

@@ -17,8 +17,9 @@ function create(user){
     return axios.post(USERS_API, user);
 }
 
-function deleteUser(id){
-    return axios.delete(USERS_API + "/" + id);
+function deleteUser(user){
+    console.log(user);
+    return axios.put(USERS_API + "/" + id, user);
 }
 
 export default {
