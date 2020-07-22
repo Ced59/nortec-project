@@ -33,7 +33,6 @@ const AdminUsersPage = ({history, props}) => {
             const data = await UserApi.findAll();
             setUsers(data);
             setLoading(false);
-            console.log(users);
         } catch (error) {
             toast.error("Erreur lors du chargement de la liste des utilisateurs");
         }
