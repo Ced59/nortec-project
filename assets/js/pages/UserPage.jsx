@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Field from './../components/forms/Field'
+
 import {Link} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import userApi from '../services/UsersAPI';
@@ -7,6 +8,7 @@ import UserApi from '../services/UsersAPI';
 import '../../css/fieldset.css';
 import Modal from "react-bootstrap/Modal";
 import {Button} from "react-bootstrap";
+
 
 const UserPage = ({history, match, props}) => {
 
@@ -69,12 +71,15 @@ const UserPage = ({history, match, props}) => {
 
         try {
 
+
+
             if (edit) {
                 await userApi.update(id, user);
+
                 toast.success("L'utilisateur a bien été modifié !");
                 history.replace("/admin/userslist");
             } else {
-                await userApi.create(user);
+                await UserApi.create(user);
                 toast.success("L'utilisateur a bien été créé !");
                 history.replace("/admin/userslist");
             }
@@ -91,6 +96,7 @@ const UserPage = ({history, match, props}) => {
             }
         }
     }
+
 
     //------------------------------------ Gestion du formulaire du statut actif -----------------------------------
 
