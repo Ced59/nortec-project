@@ -2,8 +2,6 @@ import React, {useEffect, useState} from 'react';
 import Field from './../components/forms/Field'
 import {Link} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import userApi from '../services/UsersAPI';
-import UserApi from '../services/UsersAPI';
 import UsersAPI from '../services/UsersAPI';
 import '../../css/fieldset.css';
 import '../../css/loading-icon.css';
@@ -47,7 +45,7 @@ const UserPage = ({history, match, props}) => {
 
     const fetchUser = async id => {
         try {
-            const result = await userApi.find(id);
+            const result = await UsersAPI.find(id);
             setUser(result);
             setLoading(false);
 
@@ -90,11 +88,11 @@ const UserPage = ({history, match, props}) => {
 
             if (edit) {
                 console.log(user);
-                await userApi.update(id, user);
+                await UsersAPI.update(id, user);
                 toast.success("L'utilisateur a bien été modifié !");
                 history.replace("/admin/userslist");
             } else {
-                await userApi.create(user);
+                await UsersAPI.create(user);
                 toast.success("L'utilisateur a bien été créé !");
                 history.replace("/admin/userslist");
             }
@@ -138,7 +136,7 @@ const UserPage = ({history, match, props}) => {
         try {
             userToModify.active = !userToModify.active;
 
-            await userApi.update(id, userToModify);
+            await UsersAPI.update(id, userToModify);
             toast.success("Le statut de l'utilisateur a bien été modifié !");
         } catch ({response}) {
             userToModify.active = !userToModify.active
@@ -167,7 +165,7 @@ const UserPage = ({history, match, props}) => {
             userModify.roles.splice(0, 1, roleChange.role)
             setUserToModifyRole(userModify);
             console.log(userToModifyRole);
-            await userApi.update(id, userToModifyRole);
+            await UsersAPI.update(id, userToModifyRole);
             toast.success("Le rôle de l'utilisateur a bien été modifié !");
         }
         catch ({response}){
