@@ -17,7 +17,7 @@ function create(user){
     return axios.post(USERS_API, user);
 }
 
-function deleteUser(user){
+function modifyStatusUser(user){
     console.log(user);
     //TODO Voir ce qui ne va pas avec la requête... Je ne comprends pas...
     return axios.put(USERS_API + "/" + id, user);
@@ -40,7 +40,7 @@ export default {
     find,
     update,
     create,
-    deleteUser,
+    modifyStatusUser,
     findAll,
     determineRole
 }
