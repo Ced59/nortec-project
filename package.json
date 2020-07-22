@@ -21,6 +21,7 @@
         "jquery": "^3.5.1",
         "jwt-decode": "^2.2.0",
         "moment": "^2.24.0",
+        "multiselect-react-dropdown": "^1.5.7",
         "popper": "^1.0.1",
         "react": "^16.13.1",
         "react-bootstrap": "^1.2.2",
