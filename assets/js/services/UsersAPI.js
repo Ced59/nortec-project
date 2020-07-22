@@ -6,7 +6,12 @@ function findAll(){
 }
 
 function find(id) {
-    return axios.get(USERS_API + "/" + id).then(response => response.data);
+
+    const response = axios.get(USERS_API + "/" + id).then(
+        response => response.data
+    );
+    console.log(response);
+    return response;
 }
 
 function update(id, user){
@@ -17,11 +22,6 @@ function create(user){
     return axios.post(USERS_API, user);
 }
 
-function modifyStatusUser(user){
-    console.log(user);
-    //TODO Voir ce qui ne va pas avec la requête... Je ne comprends pas...
-    return axios.put(USERS_API + "/" + id, user);
-}
 
 
 function determineRole(user) {
@@ -40,7 +40,6 @@ export default {
     find,
     update,
     create,
-    modifyStatusUser,
     findAll,
     determineRole
 }
