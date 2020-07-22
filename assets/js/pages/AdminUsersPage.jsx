@@ -6,6 +6,7 @@ import '../../css/loading-icon.css';
 import {Button} from 'react-bootstrap';
 import Modal from "react-bootstrap/Modal";
 import UsersAPI from "../services/UsersAPI";
+import StatusConstAPI from "../services/StatusConstAPI";
 
 
 const AdminUsersPage = ({history, props}) => {
@@ -14,8 +15,6 @@ const AdminUsersPage = ({history, props}) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(true);
 
-    const [showModal, setShowModal] = useState(false);
-    const [userToDelete, setUserToDelete] = useState("");
 
 
     useEffect(() => {
@@ -23,10 +22,7 @@ const AdminUsersPage = ({history, props}) => {
     }, []);
 
 
-    const STATUS_ACTIVE_USER = {
-        true: "Oui",
-        false: "Non"
-    };
+
 
 
 
@@ -43,27 +39,6 @@ const AdminUsersPage = ({history, props}) => {
         }
     }
 
-//------------------------------Suppression d'un Utilisateur -------------------------------------------
-
-    const handleDelete = async userToRemove => {
-
-        const originalUsers = [...users];
-
-        handleCloseModal();
-
-        try {
-            userToRemove.active = !userToRemove.active;
-            await UserApi.deleteUser(userToRemove)
-            toast.success("L'utilisateur a bien été supprimé !");
-        } catch ({response}) {
-            console.log(response);
-
-
-            setUsers(originalUsers);
-            toast.error("L'utilisateur n'a pas été correctement supprimé !");
-        }
-
-    }
 
 // ----------------------------- Mise en place de la pagination ------------------------------------------
 
@@ -82,13 +57,7 @@ const AdminUsersPage = ({history, props}) => {
     const start = currentPage * itemsPerPage - itemsPerPage;
     const paginatedUsers = users.slice(start, start + itemsPerPage)
 
-// ----------------------------- Gestion de l'affichage de la fenêtre modale ------------------------------
 
-    const handleCloseModal = () => setShowModal(false);
-    const handleShowModal = (userToDelete) => {
-        setShowModal(true);
-        setUserToDelete(userToDelete);
-    }
 
 // ----------------------------- Determination du rôle des users ------------------------------
 
@@ -115,8 +84,8 @@ const AdminUsersPage = ({history, props}) => {
                     <th>Email</th>
                     <th>Rôle</th>
                     <th>Actif</th>
-                    <th></th>
-                    <th></th>
+                    <th/>
+                    <th/>
                 </tr>
                 </thead>
                 {!loading &&
@@ -128,17 +97,8 @@ const AdminUsersPage = ({history, props}) => {
                         <td>{user.firstName} </td>
                         <td>{user.email} </td>
                         <td>{determineRole(user)}</td>
-                        <td>{STATUS_ACTIVE_USER[user.active]}</td>
-                        <td>
-                            {user.active ?
-                                <button onClick={() => handleShowModal(user)}
-                                        className="btn btn-danger">Désactiver</button>
-                                :
-                                <button onClick={() => handleShowModal(user)}
-                                        className="btn btn-danger">Activer</button>
-                            }
+                        <td>{StatusConstAPI.STATUS_ACTIVE_USER[user.active]}</td>
 
-                        </td>
                         <td>
                             <Link to={"/admin/user/" + user.id} className="btn btn-success">Modifier</Link>
                         </td>
@@ -148,7 +108,7 @@ const AdminUsersPage = ({history, props}) => {
                 }
             </table>
             {loading &&
-            <div id="loading-icon" className="mt-5 mb-5"></div>
+            <div id="loading-icon" className="mt-5 mb-5"/>
             }
 
 
@@ -170,28 +130,6 @@ const AdminUsersPage = ({history, props}) => {
             </div>
         </main>
 
-
-        <Modal {...props}
-               size="lg"
-               aria-labelledby="contained-modal-title-vcenter"
-               centered
-               show={showModal} onHide={handleCloseModal}>
-            <Modal.Header closeButton>
-                <Modal.Title>Attention!!!</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                Vous êtes sur le point de supprimer l'utilisateur {userToDelete.firstName} {userToDelete.lastName}!
-                Êtes vous sûr de vouloir continuer?
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="primary" onClick={handleCloseModal}>
-                    Fermer
-                </Button>
-                <Button variant="danger" onClick={() => handleDelete(userToDelete)}>
-                    Confirmer
-                </Button>
-            </Modal.Footer>
-        </Modal>
     </>
 
 };
