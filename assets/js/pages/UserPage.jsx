@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Field from './../components/forms/Field'
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import userApi from '../services/UsersAPI';
+import UserApi from '../services/UsersAPI';
 
 const UserPage = ({history, match}) => {
 
@@ -60,10 +60,10 @@ const UserPage = ({history, match}) => {
         try {
 
             if(edit){
-                await userApi.update(id, user);
+                await UserApi.update(id, user);
                 toast.success("L'utilisateur a bien été modifié !");
             } else {
-                await userApi.create(user);
+                await UserApi.create(user);
                 toast.success("L'utilisateur a bien été créé !");
                 history.replace("/admin/userslist");
             }
@@ -120,7 +120,7 @@ const UserPage = ({history, match}) => {
                 error={error.password}
             />
 
-            <div className="form-group">
+            <div className="form-group d-flex justify-content-between align-items-center">
                 <button type="submit" className="btn btn-success">Valider</button>
                 <Link to="/admin/userslist" className="btn btn-danger">Retour aux utilisateurs</Link>
             </div>
