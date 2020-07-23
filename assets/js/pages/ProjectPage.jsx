@@ -11,19 +11,19 @@ const ProjectPage = ({history, match}) => {
     const {id = "new"} = match.params;
 
     const [project, setProject] = useState({
-        name: "",
-        description: "",
-        photo: "",
-        adresse1: "",
-        adresse2: "",
-        code_postal: "",
-        ville : "",
-        date_debut: "",
-        date_fin_prevues: "",
-        date_fin_reelle: "",
-        nom_MOEX: "",
-        nom_OPC: "",
-        contact_client: "",
+        name: "Ici",
+        description: "Non pas la",
+        photo: "../img/projects-img/projects-general-img/0-project-img.jpg",
+        adresse1: "ici non plus",
+        adresse2: "Toujours pas",
+        code_postal: "56666",
+        date_debut: '2035-05-25',
+        date_fin_reelle: "2046-05-25",
+        nom_MOEX: "Vincent",
+        nom_OPC: "Vincent",
+        contact_client: "pasici@fake.com",
+        ville : "Hallala",
+        date_fin_prevues: "2045-05-25",
         users: []
     });
     
@@ -34,13 +34,13 @@ const ProjectPage = ({history, match}) => {
         adresse1: "",
         adresse2: "",
         code_postal: "",
-        ville : "",
         date_debut: "",
-        date_fin_prevues: "",
         date_fin_reelle: "",
         nom_MOEX: "",
         nom_OPC: "",
         contact_client: "",
+        ville : "",
+        date_fin_prevues: "",
         users: ""
     });
     
@@ -90,7 +90,8 @@ const ProjectPage = ({history, match}) => {
     const handleSubmit = async event => {
         event.preventDefault();
 
-        project.users.push(filtredAdmin.map(admin => "/api/users/" + admin.id));
+        project.users=filtredAdmin.map(admin => "/api/users/" + admin.id);
+        console.log(project.users);
 
         try {
             const response = await axios.post("http://localhost:8000/api/projects", project)
@@ -99,6 +100,7 @@ const ProjectPage = ({history, match}) => {
             console.log(error.response);
         }
     };
+
 
     
 
@@ -110,10 +112,8 @@ const ProjectPage = ({history, match}) => {
             <FieldTextArea name="description" label="Decription du projet" rows="3" placeholder="Entrez la description du projet" onChange={handleChange} value={project.description} error={error.description} />
             <Field name="adresse1" label="Adresse 1" placeholder="Entrez le numéro et la rue" onChange={handleChange} value={project.adresse1} error={error.adresse1} />
             <Field name="adresse2" label="Adresse 2" placeholder="Entrez le complément d'adresse" onChange={handleChange} value={project.adresse2} error={error.adresse2} />
-            <div className="form-group row">
-                <Field className="col-6" name="code_postal" label="Code Postal" placeholder="Entrez le Code Postal" onChange={handleChange} value={project.code_postal} error={error.code_postal} />
-                <Field className="col-6" name="ville" label="Ville" placeholder="Entrez le Code Postal" onChange={handleChange} value={project.ville} error={error.ville} />
-            </div>
+            <Field name="code_postal" label="Code Postal" placeholder="Entrez le Code Postal" onChange={handleChange} value={project.code_postal} error={error.code_postal} />
+            <Field name="ville" label="Ville" placeholder="Entrez le Code Postal" onChange={handleChange} value={project.ville} error={error.ville} />
             <Field name="date_debut" label="Date de démarrage" type="date" onChange={handleChange} value={project.date_debut} error={error.date_debut} />
             <Field name="date_fin_prevues" label="Date de fin prévue" type="date" onChange={handleChange} value={project.date_fin_prevues} error={error.date_fin_prevues} />
             <Field name="nom_MOEX" label="MOEX" onChange={handleChange} value={project.nom_MOEX} error={error.nom_MOEX} />
