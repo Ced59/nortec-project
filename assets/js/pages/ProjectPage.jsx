@@ -3,7 +3,9 @@ import {Link} from 'react-router-dom';
 import Field from './../components/forms/Field'
 import FieldTextArea from './../components/forms/FieldTextArea'
 import UsersAPI from '../services/UsersAPI';
-import axios from 'axios';
+import ProjectsAPI from "../services/ProjectsAPI";
+import DateAPI from '../services/DateAPI';
+import { toast } from 'react-toastify';
 
 const ProjectPage = ({history, match}) => {
 
@@ -59,7 +61,7 @@ const ProjectPage = ({history, match}) => {
 
     const fetchProject = async id => {
         try {
-            const data = await axios.get("http://localhost:8000/api/projects/" + id).then(response => response.data);
+            const data = await ProjectsAPI.find(id);
             setProject(data);
 
         } catch (error) {
@@ -69,6 +71,7 @@ const ProjectPage = ({history, match}) => {
 
     useEffect(() => {
         if (id !== "new") {
+            setEdit(true);
             fetchProject(id);
         }
     }, [id])
@@ -83,26 +86,42 @@ const ProjectPage = ({history, match}) => {
 //----------------------------------- gestion de changement des input-----------------------------------
     const handleChange = ({currentTarget}) => {
         const {name, value} = currentTarget;
-        setProject({...project, [name]: value})
+        setProject({...project, [name]: value});
     };
 
     const handleSubmit = async event => {
         event.preventDefault();
 
-        project.users = filtredAdmin.map(admin => "/api/users/" + admin.id);
-        console.log(project);
-
         try {
-            const response = await axios.post("http://localhost:8000/api/projects", project)
+            if(edit){
+                console.log(project);
+                await ProjectsAPI.update(id, project);
+                toast.success("Le projet a bien été modifié !");
+            } else {
+                project.users = filtredAdmin.map(admin => "/api/users/" + admin.id);
+                await ProjectsAPI.create(project);
+                toast.success("Le projet a bien été crée !");
+                history.replace("/admin/project");
+
+            };
+
+        } catch ({response}) {
+            const {violations} = response.data;
+            if (violations) {
+                const apiErrors = {};
+                violations.map(({propertyPath, message}) => {
+                    apiErrors[propertyPath] = message;
+                });
+
+                setError(apiErrors);
+            };
             console.log(response);
-        } catch (error) {
-            console.log(error.response);
-        }
+        };
     };
 
 
     return <main className="container">
-            <h1>Création d'un Projet</h1>
+            {edit && <h1>Modification du Projet</h1> || <h1>Création d'un Projet</h1>}
 
             <form onSubmit={handleSubmit}>
                 <Field name="name" label="Nom du projet" placeholder="Entrez le nom du projet" onChange={handleChange}
