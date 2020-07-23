@@ -4,24 +4,24 @@ import Field from './../components/forms/Field'
 import FieldTextArea from './../components/forms/FieldTextArea'
 import UsersAPI from '../services/UsersAPI';
 import axios from 'axios';
-import ProjectsAPI from "../services/ProjectsAPI";
 
 const ProjectPage = ({history, match}) => {
 
     const {id = "new"} = match.params;
 
     const [project, setProject] = useState({
-        name: "Planet Express",
-        description: "Et mon *** c'est du téflon???",
-        photo: "../img/projects-img/projects-general-img/1-project-img.jpg",
-        adresse1: "346 rue de Leila",
+        name: "",
+        description: "",
+        photo: "../img/projects-img/projects-general-img/3-project-img.jpg",
+        adresse1: "",
         adresse2: "",
-        codePostal: "59000",
-        dateDebut: "3000-02-27",
-        nomMOEX: "Bender Rodriguez",
-        nomOPC: "Professeur Fansthworm",
-        contactClient: "bender@tordeur.com",
-        ville: "New New York",
+        codePostal: "",
+        dateDebut: "",
+        dateFinReelle: "1900-01-01",
+        nomMOEX: "",
+        nomOPC: "",
+        contactClient: "",
+        ville: "",
         reports: [],
         users: []
     });
@@ -57,9 +57,10 @@ const ProjectPage = ({history, match}) => {
         }
     };
 
-    const fetchProject = id => {
+    const fetchProject = async id => {
         try {
-            setProject(projects[id.id]); //axios.get("http://localhost:8000/api/projects/" + id).then(response => response.data);
+            const data = await axios.get("http://localhost:8000/api/projects/" + id).then(response => response.data);
+            setProject(data);
 
         } catch (error) {
             console.log(error.response);
@@ -89,16 +90,15 @@ const ProjectPage = ({history, match}) => {
         event.preventDefault();
 
         project.users = filtredAdmin.map(admin => "/api/users/" + admin.id);
-
+        console.log(project);
 
         try {
-            const response = await ProjectsAPI.create(project);
-
+            const response = await axios.post("http://localhost:8000/api/projects", project)
+            console.log(response);
         } catch (error) {
             console.log(error.response);
         }
     };
-
 
 
     return <main className="container">
@@ -133,7 +133,6 @@ const ProjectPage = ({history, match}) => {
                     <Link to="/admin/project" className="btn btn-danger">Retour aux projets</Link>
                 </div>
             </form>
-
         </main>
 
 };
