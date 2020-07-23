@@ -16,14 +16,14 @@ const ProjectPage = ({history, match}) => {
         photo: "../img/projects-img/projects-general-img/0-project-img.jpg",
         adresse1: "ici non plus",
         adresse2: "Toujours pas",
-        code_postal: "56666",
-        date_debut: '2035-05-25',
-        date_fin_reelle: "2046-05-25",
-        nom_MOEX: "Vincent",
-        nom_OPC: "Vincent",
-        contact_client: "pasici@fake.com",
+        codePostal: "56666",
+        dateDebut: '2035-05-25',
+        dateFinReelle: "2046-05-25",
+        nomMOEX: "Vincent",
+        nomOPC: "Vincent",
+        contactClient: "pasici@fake.com",
         ville : "Hallala",
-        date_fin_prevues: "2045-05-25",
+        dateFinPrevues: "2045-05-25",
         users: []
     });
     
@@ -112,13 +112,13 @@ const ProjectPage = ({history, match}) => {
             <FieldTextArea name="description" label="Decription du projet" rows="3" placeholder="Entrez la description du projet" onChange={handleChange} value={project.description} error={error.description} />
             <Field name="adresse1" label="Adresse 1" placeholder="Entrez le numéro et la rue" onChange={handleChange} value={project.adresse1} error={error.adresse1} />
             <Field name="adresse2" label="Adresse 2" placeholder="Entrez le complément d'adresse" onChange={handleChange} value={project.adresse2} error={error.adresse2} />
-            <Field name="code_postal" label="Code Postal" placeholder="Entrez le Code Postal" onChange={handleChange} value={project.code_postal} error={error.code_postal} />
+            <Field name="codePostal" label="Code Postal" placeholder="Entrez le Code Postal" onChange={handleChange} value={project.codePostal} error={error.code_postal} />
             <Field name="ville" label="Ville" placeholder="Entrez le Code Postal" onChange={handleChange} value={project.ville} error={error.ville} />
-            <Field name="date_debut" label="Date de démarrage" type="date" onChange={handleChange} value={project.date_debut} error={error.date_debut} />
-            <Field name="date_fin_prevues" label="Date de fin prévue" type="date" onChange={handleChange} value={project.date_fin_prevues} error={error.date_fin_prevues} />
-            <Field name="nom_MOEX" label="MOEX" onChange={handleChange} value={project.nom_MOEX} error={error.nom_MOEX} />
-            <Field name="nom_OPC" label="OPC" onChange={handleChange} value={project.nom_OPC} error={error.nom_OPC} />
-            <Field name="contact_client" label="Contact du Client" type="email" onChange={handleChange} value={project.contact_client} error={error.contact_client} />
+            <Field name="dateDebut" label="Date de démarrage" type="date" onChange={handleChange} value={project.dateDebut} error={error.date_debut} />
+            <Field name="dateFinPrevues" label="Date de fin prévue" type="date" onChange={handleChange} value={project.dateFinPrevues} error={error.date_fin_prevues} />
+            <Field name="nomMOEX" label="MOEX" onChange={handleChange} value={project.nomMOEX} error={error.nom_MOEX} />
+            <Field name="nomOPC" label="OPC" onChange={handleChange} value={project.nomOPC} error={error.nom_OPC} />
+            <Field name="contactClient" label="Contact du Client" type="email" onChange={handleChange} value={project.contactClient} error={error.contact_client} />
             
             <div className="form-group d-flex justify-content-between align-items-center">
                 <button type="submit" className="btn btn-success">Valider</button>
