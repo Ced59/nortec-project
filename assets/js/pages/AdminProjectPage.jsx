@@ -39,7 +39,7 @@ const AdminProjectPage = () => {
             setProjects(data);
         } catch (error) {
             toast.error("Erreur lors du chargement de la liste des projets");
-            console.log(error);
+            console.log(error.response);
         }
     }
 
@@ -94,7 +94,7 @@ const AdminProjectPage = () => {
                 </span>
                 </td>
                 <td>{project.name}</td>
-                <td className="text-center">{project.date_debut}</td>
+                <td className="text-center">{project.dateDebut}</td>
                 {/* <td className="text-center">{project.date_fin_prevues.length === 0 ?
                     <span>Aucune</span>
                     :

@@ -2,14 +2,21 @@
 
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
+
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"={"project:output"}},
+ *     denormalizationContext={"groups"={"project:input"}}
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
  * @ApiResource(
  *     normalizationContext={"groups"={"project_read"}}
@@ -21,66 +28,79 @@ class Project
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"project:output"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"project:output"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"project:output"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"project:output"})
      */
     private $photo;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"project:output"})
      */
     private $adresse1;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"project:output"})
      */
     private $adresse2;
 
     /**
      * @ORM\Column(type="string", length=8)
+     * @Groups({"project:output"})
      */
     private $code_postal;
 
     /**
      * @ORM\Column(type="date")
+     * @Groups({"project:output"})
      */
     private $date_debut;
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @Groups({"project:output"})
      */
     private $date_fin_reelle;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"project:output"})
      */
     private $nom_MOEX;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"project:output"})
      */
     private $nom_OPC;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"project:output"})
      */
     private $contact_client;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"project:output"})
      */
     private $ville;
 
@@ -96,6 +116,7 @@ class Project
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="project")
+     * @Groups({"project:output"})
      */
     private $users;
 
