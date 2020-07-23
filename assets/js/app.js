@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import ReactDOM from "react-dom";
-import {HashRouter, Switch, Route, withRouter} from "react-router-dom";
+import {HashRouter, Route, Switch, withRouter} from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import AuthContext from "./contexts/AuthContext";
 import AuthAPI from "./services/AuthAPI"
@@ -28,6 +28,7 @@ import AdminUsersPage from "./pages/AdminUsersPage";
 import UserPage from './pages/UserPage';
 import ProjectPage from './pages/ProjectPage';
 
+
 AuthAPI.setup();
 
 
@@ -49,48 +50,51 @@ const App = () => {
     };
 
 
+
     return (
 
         <AuthContext.Provider value={contextValue}>
 
-            <HashRouter>
 
-                <SearchContext.Provider value={searchContextValue}>
-                    {isAuthenticated && <NavbarTopWithRouter/>}
-                </SearchContext.Provider>
+                <HashRouter>
 
-
-                <Switch>
-
-                    <PrivateRoute path="/profil/:id" component={ProfilPage} />
-                    <PrivateRoute path="/project/:id/:idReport/effectifs" component={ReportEffectifsPage}/>
-                    <PrivateRoute path="/project/:id/:idReport/propreteacces" component={ReportPropreteAccesPage}/>
-                    <PrivateRoute path="/project/:id/:idReport/securite" component={ReportSecuritePage}/>
-                    <PrivateRoute path="/project/:id/:idReport/propretepartiescommunes"
-                                  component={ReportPropretePartiesCommunesPage}/>
-                    <PrivateRoute path="/project/:id/:idReport/echeances" component={ReportEcheancesPage}/>
-                    <PrivateRoute path="/project/:id/:idReport/validate" component={ReportValidatePage}/>
-
-                    <PrivateRoute path="/project/:id/listReports" component={ListReportsByProject}/>
-
-                    <PrivateRoute path="/admin/user/:id" component={UserPage} />
-                    <PrivateRoute path="/admin/userslist" component={AdminUsersPage} />
-                    <PrivateRoute path="/admin/project/:id" component={ProjectPage} />
-                    <PrivateRoute path="/admin/project" component={AdminProjectPage} />
-                    <PrivateRoute path="/admin/:id" component={AdminPage} />
-
-                    <PrivateRoute path="/project/:id" component={DetailProjectPage}/>
-                    {!isAuthenticated && <Route path="/" component={LoginPage}/>}
                     <SearchContext.Provider value={searchContextValue}>
-                        <PrivateRoute path="/projects" component={ListProjectsPage}/>
+                        {isAuthenticated && <NavbarTopWithRouter/>}
                     </SearchContext.Provider>
-                </Switch>
 
-            </HashRouter>
 
-            < ToastContainer
-                position={toast.POSITION.BOTTOM_LEFT}
-            />
+                    <Switch>
+                        {!isAuthenticated && <Route path="/" component={LoginPage}/>}
+                        <PrivateRoute path="/profil/:id" component={ProfilPage}/>
+                        <PrivateRoute path="/project/:id/:idReport/effectifs" component={ReportEffectifsPage}/>
+                        <PrivateRoute path="/project/:id/:idReport/propreteacces" component={ReportPropreteAccesPage}/>
+                        <PrivateRoute path="/project/:id/:idReport/securite" component={ReportSecuritePage}/>
+                        <PrivateRoute path="/project/:id/:idReport/propretepartiescommunes"
+                                      component={ReportPropretePartiesCommunesPage}/>
+                        <PrivateRoute path="/project/:id/:idReport/echeances" component={ReportEcheancesPage}/>
+                        <PrivateRoute path="/project/:id/:idReport/validate" component={ReportValidatePage}/>
+
+                        <PrivateRoute path="/project/:id/listReports" component={ListReportsByProject}/>
+
+                        <PrivateRoute path="/admin/user/:id" component={UserPage}/>
+                        <PrivateRoute path="/admin/userslist" component={AdminUsersPage}/>
+                        <PrivateRoute path="/admin/project/:id" component={ProjectPage}/>
+                        <PrivateRoute path="/admin/project" component={AdminProjectPage}/>
+                        <PrivateRoute path="/admin/:id" component={AdminPage}/>
+
+                        <PrivateRoute path="/project/:id" component={DetailProjectPage}/>
+
+                        <SearchContext.Provider value={searchContextValue}>
+                            <PrivateRoute path="/projects" component={ListProjectsPage}/>
+                        </SearchContext.Provider>
+
+                    </Switch>
+
+                </HashRouter>
+
+                < ToastContainer
+                    position={toast.POSITION.BOTTOM_LEFT}
+                />
 
         </AuthContext.Provider>
 

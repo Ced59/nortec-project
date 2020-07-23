@@ -29,7 +29,7 @@ class AppFixtures extends Fixture
             ->setEmail("ced@admin.com")
             ->setLastName("Caudron")
             ->setPassword($hash)
-            ->setRoles(['ROLE_USER', 'ROLE_ADMIN'])
+            ->setRoles(['ROLE_ADMIN'])
             ->setActive(true);
 
         $manager->persist($user);
@@ -51,7 +51,7 @@ class AppFixtures extends Fixture
             ->setEmail("vincent@admin.com")
             ->setLastName("Brocheton")
             ->setPassword($hash)
-            ->setRoles(['ROLE_USER', 'ROLE_ADMIN'])
+            ->setRoles(['ROLE_ADMIN'])
             ->setActive(true);
 
         $manager->persist($user);
