@@ -46,6 +46,7 @@ function verifyDateExist(date) {
     }
 }
 
+
 export default {
     determineStatus,
     formatDate,
