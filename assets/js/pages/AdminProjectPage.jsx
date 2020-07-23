@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 
 const AdminProjectPage = () => {
 
+    const [currentPage, setCurrentPage] = useState(1);
+
     const STATUS_CLASSES = {
         no_start: "info",
         in_progress: "warning",
@@ -22,13 +24,30 @@ const AdminProjectPage = () => {
 
     const projects = fakeData.fakeListProjects();
 
+// ----------------------------- Mise en place de la pagination ------------------------------------------
+
+    const handleChangePage = page => {
+        setCurrentPage(page);
+    }
+
+    const itemsPerPage = 6;
+    const pagesCount = Math.ceil(projects.length / itemsPerPage);
+    const pages = [];
+
+    for (let i = 1; i <= pagesCount; i++) {
+        pages.push(i);
+    }
+
+    const start = currentPage * itemsPerPage - itemsPerPage;
+    const paginatedProjects = projects.slice(start, start + itemsPerPage)
+
     return <main className="container">
         <div className="mb-4 d-flex justify-content-between align-items-center">
         <h2> Projets : </h2>
         <Link
             className='btn btn-primary'
             type='button'
-            to={'/newProject'}
+            to={'/admin/project/new'}
         > Nouveau Projet </Link>
         </div>
         <table className="table table-hover">
@@ -46,8 +65,8 @@ const AdminProjectPage = () => {
             </tr>
             </thead>
             <tbody>
-            {projects.map(project =>
-            <tr>
+            {paginatedProjects.map(project =>
+            <tr key={project.id}>
                 <td className="text-center">{project.id}</td>
                 <td>Florent</td>
                 <td className="text-center"><span className={"pl-2 pr-2 pt-1 pb-1 badge badge-" +
@@ -70,13 +89,29 @@ const AdminProjectPage = () => {
                     project.date_fin_reelle}</td>
 
                 <td>
-                    <Button className="btn btn-primary" text="Modifier"/>
+                    <Link className="btn btn-primary" to={'/admin/project/' + project.id} > Modifier </Link>
                 </td>
             </tr>
             )
             }
             </tbody>
         </table>
+        <div className="mt-2">
+                <ul className="pagination pagination-sm justify-content-center">
+                    <li className={"page-item" + (currentPage === 1 && " disabled")}>
+                        <button className="page-link" onClick={() => handleChangePage(currentPage - 1)}>&laquo;</button>
+                    </li>
+                    {pages.map(page =>
+                        <li key={page} className={"page-item" + (currentPage === page && " active")}>
+                            <button className="page-link" onClick={() => handleChangePage(page)}>{page}</button>
+                        </li>
+                    )}
+
+                    <li className={"page-item" + (currentPage === pagesCount && " disabled")}>
+                        <button className="page-link" onClick={() => handleChangePage(currentPage + 1)}>&raquo;</button>
+                    </li>
+                </ul>
+            </div>
     </main>
 
 };

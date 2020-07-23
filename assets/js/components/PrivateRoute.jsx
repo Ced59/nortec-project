@@ -10,6 +10,7 @@ const PrivateRoute = ({path, component}) => {
 
     const {searchValue} = useContext(SearchContext);
 
+
     return isAuthenticated ? <Route path={path} component={component}/> : <Redirect to="/"/>;
 };
 

@@ -39,9 +39,22 @@ const LoginPage = ({history}) => {
         try {
             await AuthAPI.authenticate(credentials);
             setError("");
-            setIsAuthenticated(true);
-            toast.success("Vous êtes connnecté en tant que " + credentials.username + "!");
-            history.replace("/projects");
+
+
+            if (AuthAPI.getUserActiveStatus())
+            {
+                setIsAuthenticated(true);
+                toast.success("Vous êtes connnecté en tant que " + AuthAPI.getUserFirstNameLastName() + ". Vous avez le statut d'" + AuthAPI.isRole() + ".");
+                history.replace("/projects");
+            }
+            else
+            {
+                setIsAuthenticated(false);
+                toast.error("Votre compte a été désactivé. Veuillez contacter un administrateur!");
+                AuthAPI.logout();
+            }
+
+
         } catch {
             setError("Les informations de login/mot de passe sont incorrectes!");
             toast.error("Les informations de login/mot de passe sont incorrects!");
