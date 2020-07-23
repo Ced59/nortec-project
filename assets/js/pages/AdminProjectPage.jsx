@@ -1,11 +1,15 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Button from "../components/forms/Button";
 import fakeData from "../components/fakeDataForDev/fakeData";
 import DateAPI from "../services/DateAPI";
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+import ProjectsAPI from '../services/ProjectsAPI';
 
 const AdminProjectPage = () => {
 
+    const [projects, setProjects] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
 
     const STATUS_CLASSES = {
@@ -22,7 +26,22 @@ const AdminProjectPage = () => {
         archived: "Archivé"
     };
 
-    const projects = fakeData.fakeListProjects();
+    useEffect(() => {
+        fetchProjects().then(r => "");
+    }, []);
+
+    
+    // --------------------------- Récupérer tout les Utilisateurs -----------------------------------------
+    
+    const fetchProjects = async () => {
+        try {
+            const data = await ProjectsAPI.findAll();
+            setProjects(data);
+        } catch (error) {
+            toast.error("Erreur lors du chargement de la liste des projets");
+            console.log(error);
+        }
+    }
 
 // ----------------------------- Mise en place de la pagination ------------------------------------------
 
@@ -76,12 +95,13 @@ const AdminProjectPage = () => {
                 </td>
                 <td>{project.name}</td>
                 <td className="text-center">{project.date_debut}</td>
-                <td className="text-center">{project.date_fin_prevues.length === 0 ?
+                {/* <td className="text-center">{project.date_fin_prevues.length === 0 ?
                     <span>Aucune</span>
                     :
                     project.date_fin_prevues.id === 0 &&
                     <span> Hey </span>
-                }</td>
+                }</td> */}
+                <td className="text-center"></td>
                 <td className="text-center"></td>
                 <td className="text-center">{project.date_fin_reelle === "" ?
                     <span>Aucune</span>

@@ -87,7 +87,6 @@ const UserPage = ({history, match, props}) => {
         try {
 
             if (edit) {
-                console.log(user);
                 await UsersAPI.update(id, user);
                 toast.success("L'utilisateur a bien été modifié !");
                 history.replace("/admin/userslist");

@@ -3,26 +3,28 @@ import {Link} from 'react-router-dom';
 import Field from './../components/forms/Field'
 import FieldTextArea from './../components/forms/FieldTextArea'
 import UsersAPI from '../services/UsersAPI';
-import axios from 'axios';
 import ProjectsAPI from "../services/ProjectsAPI";
+import DateAPI from '../services/DateAPI';
+import { toast } from 'react-toastify';
 
 const ProjectPage = ({history, match}) => {
 
     const {id = "new"} = match.params;
 
     const [project, setProject] = useState({
-        name: "Planet Express",
-        description: "Et mon *** c'est du téflon???",
-        photo: "../img/projects-img/projects-general-img/1-project-img.jpg",
-        adresse1: "346 rue de Leila",
+        name: "",
+        description: "",
+        photo: "../img/projects-img/projects-general-img/3-project-img.jpg",
+        adresse1: "",
         adresse2: "",
-        codePostal: "59000",
-        dateDebut: "3000-02-27",
+        codePostal: "",
+        dateDebut: "",
         dateFinReelle: "1900-01-01",
-        nomMOEX: "Bender Rodriguez",
-        nomOPC: "Professeur Fansthworm",
-        contactClient: "bender@tordeur.com",
-        ville: "New New York",
+        nomMOEX: "",
+        nomOPC: "",
+        contactClient: "",
+        ville: "",
+
         reports: [],
         users: []
     });
@@ -58,9 +60,10 @@ const ProjectPage = ({history, match}) => {
         }
     };
 
-    const fetchProject = id => {
+    const fetchProject = async id => {
         try {
-            setProject(projects[id.id]); //axios.get("http://localhost:8000/api/projects/" + id).then(response => response.data);
+            const data = await ProjectsAPI.find(id);
+            setProject(data);
 
         } catch (error) {
             console.log(error.response);
@@ -69,6 +72,7 @@ const ProjectPage = ({history, match}) => {
 
     useEffect(() => {
         if (id !== "new") {
+            setEdit(true);
             fetchProject(id);
         }
     }, [id])
@@ -83,26 +87,43 @@ const ProjectPage = ({history, match}) => {
 //----------------------------------- gestion de changement des input-----------------------------------
     const handleChange = ({currentTarget}) => {
         const {name, value} = currentTarget;
-        setProject({...project, [name]: value})
+        setProject({...project, [name]: value});
     };
 
     const handleSubmit = async event => {
         event.preventDefault();
 
-        project.users = filtredAdmin.map(admin => "/api/users/" + admin.id);
-
-
         try {
-            const response = await ProjectsAPI.create(project);
+            if(edit){
+                console.log(project);
+                await ProjectsAPI.update(id, project);
+                toast.success("Le projet a bien été modifié !");
+            } else {
+                project.users = filtredAdmin.map(admin => "/api/users/" + admin.id);
+                await ProjectsAPI.create(project);
+                toast.success("Le projet a bien été crée !");
+                history.replace("/admin/project");
 
-        } catch (error) {
-            console.log(error.response);
-        }
+            };
+
+        } catch ({response}) {
+            const {violations} = response.data;
+            if (violations) {
+                const apiErrors = {};
+                violations.map(({propertyPath, message}) => {
+                    apiErrors[propertyPath] = message;
+                });
+
+                setError(apiErrors);
+            };
+            console.log(response);
+        };
     };
 
 
+
     return <main className="container">
-            <h1>Création d'un Projet</h1>
+            {edit && <h1>Modification du Projet</h1> || <h1>Création d'un Projet</h1>}
 
             <form onSubmit={handleSubmit}>
                 <Field name="name" label="Nom du projet" placeholder="Entrez le nom du projet" onChange={handleChange}
@@ -133,6 +154,7 @@ const ProjectPage = ({history, match}) => {
                     <Link to="/admin/project" className="btn btn-danger">Retour aux projets</Link>
                 </div>
             </form>
+
         </main>
 
 };
