@@ -7,6 +7,7 @@ import '../../css/fieldset.css';
 import '../../css/loading-icon.css';
 import Modal from "react-bootstrap/Modal";
 import {Button} from "react-bootstrap";
+import ProjectsAPI from "../services/ProjectsAPI";
 
 const UserPage = ({history, match, props}) => {
 
@@ -29,8 +30,11 @@ const UserPage = ({history, match, props}) => {
         password: ""
     })
 
+    const [projects, setProjects] = useState("");
+
     const [edit, setEdit] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [loadingProjects, setLoadingProjects] = useState(true);
 
     const [showModal, setShowModal] = useState(false);
     const [showModalRole, setShowModalRole] = useState(false);
@@ -56,11 +60,38 @@ const UserPage = ({history, match, props}) => {
         }
 
     }
+
+    //---------------------------------------- Récupérer les projets de l'utilisateur ------------------------------------
+
+    const fetchProjects = async () => {
+        try {
+            let result = await ProjectsAPI.findAll();
+            setProjects(result);
+            setLoadingProjects(false);
+
+        } catch (error) {
+            toast.error("Le chargement des projets a rencontré un problème !");
+            setLoadingProjects(false);
+            history.replace("/admin/user/" + id);
+        }
+
+    }
+
+    const filteredUserProjects = () => {
+        if (!loadingProjects) {
+            // console.log(projects.filter(p => p.users.id === id));
+            // return projects.filter(p => p.users.id === id);
+            console.log(projects);
+            return projects;
+        }
+    }
+
 //--------------------------- Chargement de l'utilisateur au changement d'identifiant ------------------
     useEffect(() => {
         if (id !== "new") {
             setEdit(true);
             fetchUser(id).then(r => "");
+            fetchProjects().then(r => "");
 
         } else {
             setLoading(false);
@@ -110,8 +141,6 @@ const UserPage = ({history, match, props}) => {
     }
 
 
-
-
     // ----------------------------- Gestion de l'affichage des fenêtres modales ------------------------------
 
     const handleCloseModal = () => setShowModal(false);
@@ -155,10 +184,6 @@ const UserPage = ({history, match, props}) => {
         const userModify = userToModifyRole;
 
 
-        console.log(roleCopie);
-        console.log(userToModifyRole);
-        console.log(roleChange);
-
         try {
 
             userModify.roles.splice(0, 1, roleChange.role)
@@ -166,16 +191,12 @@ const UserPage = ({history, match, props}) => {
             console.log(userToModifyRole);
             await UsersAPI.update(id, userToModifyRole);
             toast.success("Le rôle de l'utilisateur a bien été modifié !");
-        }
-        catch ({response}){
-            userModify.roles.splice(0,1,roleCopie);
+        } catch ({response}) {
+            userModify.roles.splice(0, 1, roleCopie);
             setUserToModifyRole(userModify);
             toast.error("Une erreur est survenue pendant la modification du rôle de l'utilisateur !");
         }
 
-
-        console.log(userToModifyRole);
-        console.log(roleChange);
 
     }
 
@@ -304,6 +325,34 @@ const UserPage = ({history, match, props}) => {
                         </div>
                     </div>
                 </div>
+
+
+                <>
+
+                    <div className="row col-12">
+                        <fieldset className="border-fieldset">
+                            <legend>Liste des projets affectés à {user.firstName} {user.lastName}</legend>
+                            {!loadingProjects ?
+                                <>
+                                    {edit &&
+                                    <>
+
+                                        {filteredUserProjects().map(project =>
+                                            <div>{project.name}</div>
+                                        )}
+
+                                    </>
+                                    }
+
+                                </>
+                                :
+                                <div id="loading-icon"/>
+                            }
+                        </fieldset>
+                    </div>
+
+                </>
+
                 <div className="form-group text-right mt-4 mr-5">
                     <Link to="/admin/userslist" className="btn btn-primary">Retour à la liste des utilisateurs</Link>
                 </div>
@@ -320,8 +369,10 @@ const UserPage = ({history, match, props}) => {
                 <Modal.Body>
                     Vous êtes sur le point {userToModifyActive.active ? <>de désactiver </> : <>d'activer </>}
                     l'utilisateur {userToModifyActive.firstName} {userToModifyActive.lastName}! <br/>
-                    {userToModifyActive.active ? <>Tous les projets auquel il est affecté seront supprimé et vous devrez les réattribuer plus tard si
-                        vous réactivez le compte. <br/> </> : <>Il vous faudra réassigner manuellement les projets auxquels l'utilisateur pourra avoir accès. <br/></>}
+                    {userToModifyActive.active ? <>Tous les projets auquel il est affecté seront supprimé et vous devrez
+                        les réattribuer plus tard si
+                        vous réactivez le compte. <br/> </> : <>Il vous faudra réassigner manuellement les projets
+                        auxquels l'utilisateur pourra avoir accès. <br/></>}
 
                     Êtes vous sûr de vouloir continuer?
                 </Modal.Body>
@@ -349,7 +400,6 @@ const UserPage = ({history, match, props}) => {
                         l'utilisateur {userToModifyRole.firstName} {userToModifyRole.lastName}! <br/>
                         Êtes vous sûr de vouloir continuer? <br/><br/>
                         Nouveau rôle :
-
 
 
                         <select name="role" id="role" onChange={handleChangeRoleSelect}>
