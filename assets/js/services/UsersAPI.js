@@ -7,11 +7,9 @@ function findAll(){
 
 function find(id) {
 
-    const response = axios.get(USERS_API + "/" + id).then(
+    return axios.get(USERS_API + "/" + id).then(
         response => response.data
     );
-    console.log(response);
-    return response;
 }
 
 function update(id, user){
