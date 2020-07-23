@@ -5,15 +5,6 @@ function findAll() {
 
     let projects = axios.get(PROJECTS_API).then(response => response.data['hydra:member']);
 
-    console.log(projects);
-
-    projects.map(project => {
-        if (project.dateFinReelle === "1900-01-01T00:00:00+00:00")
-        {
-            project.dateFinReelle = "";
-        }
-    })
-
     return projects;
 }
 
