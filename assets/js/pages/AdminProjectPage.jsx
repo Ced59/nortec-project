@@ -5,6 +5,7 @@ import DateAPI from "../services/DateAPI";
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import ProjectsAPI from '../services/ProjectsAPI';
 
 const AdminProjectPage = () => {
 
@@ -34,9 +35,8 @@ const AdminProjectPage = () => {
     
     const fetchProjects = async () => {
         try {
-            const data = await axios.get("http://localhost:8000/api/projects/").then(response => response.data['hydra:member']);
+            const data = await ProjectsAPI.findAll();
             setProjects(data);
-            console.log(projects);
         } catch (error) {
             toast.error("Erreur lors du chargement de la liste des projets");
             console.log(error);
