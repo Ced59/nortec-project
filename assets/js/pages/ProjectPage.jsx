@@ -4,25 +4,26 @@ import Field from './../components/forms/Field'
 import FieldTextArea from './../components/forms/FieldTextArea'
 import UsersAPI from '../services/UsersAPI';
 import axios from 'axios';
+import ProjectsAPI from "../services/ProjectsAPI";
 
 const ProjectPage = ({history, match}) => {
 
     const {id = "new"} = match.params;
 
     const [project, setProject] = useState({
-        name: "Ici",
-        description: "Non pas la",
-        photo: "../img/projects-img/projects-general-img/0-project-img.jpg",
-        adresse1: "ici non plus",
-        adresse2: "Toujours pas",
-        codePostal: "56666",
-        dateDebut: '2035-05-25',
-        dateFinReelle: "2046-05-25",
-        nomMOEX: "Vincent",
-        nomOPC: "Vincent",
-        contactClient: "pasici@fake.com",
-        ville: "Hallala",
-        dateFinPrevues: "2045-05-25",
+        name: "Planet Express",
+        description: "Et mon *** c'est du téflon???",
+        photo: "../img/projects-img/projects-general-img/1-project-img.jpg",
+        adresse1: "346 rue de Leila",
+        adresse2: "",
+        codePostal: "59000",
+        dateDebut: "3000-02-27",
+        dateFinReelle: "1900-01-01",
+        nomMOEX: "Bender Rodriguez",
+        nomOPC: "Professeur Fansthworm",
+        contactClient: "bender@tordeur.com",
+        ville: "New New York",
+        reports: [],
         users: []
     });
 
@@ -32,14 +33,14 @@ const ProjectPage = ({history, match}) => {
         photo: "",
         adresse1: "",
         adresse2: "",
-        code_postal: "",
-        date_debut: "",
-        date_fin_reelle: "",
-        nom_MOEX: "",
-        nom_OPC: "",
-        contact_client: "",
+        codePostal: "",
+        dateDebut: "",
+        dateFinReelle: "",
+        nomMOEX: "",
+        nomOPC: "",
+        contactClient: "",
         ville: "",
-        date_fin_prevues: "",
+        reports: "",
         users: ""
     });
 
@@ -89,33 +90,11 @@ const ProjectPage = ({history, match}) => {
         event.preventDefault();
 
         project.users = filtredAdmin.map(admin => "/api/users/" + admin.id);
-        console.log(project);
 
-
-        const projectTest = {
-            name: "string",
-            description: "string",
-            photo: "string",
-            adresse1: "string",
-            adresse2: "string",
-            codePostal: "string",
-            dateDebut: "2020-07-23T12:06:35.706Z",
-            dateFinReelle: "2020-07-23T12:06:35.706Z",
-            nomMOEX: "string",
-            nomOPC: "string",
-            contactClient: "string",
-            ville: "string",
-            reports: [],
-            users: [
-                "string"
-            ]
-        };
-
-        projectTest.users = project.users = filtredAdmin.map(admin => "/api/users/" + admin.id);
 
         try {
-            const response = await axios.post("http://localhost:8000/api/projects", projectTest)
-            console.log(response);
+            const response = await ProjectsAPI.create(project);
+
         } catch (error) {
             console.log(error.response);
         }
@@ -141,8 +120,8 @@ const ProjectPage = ({history, match}) => {
                        value={project.ville} error={error.ville}/>
                 <Field name="dateDebut" label="Date de démarrage" type="date" onChange={handleChange}
                        value={project.dateDebut} error={error.date_debut}/>
-                <Field name="dateFinPrevues" label="Date de fin prévue" type="date" onChange={handleChange}
-                       value={project.dateFinPrevues} error={error.date_fin_prevues}/>
+                {/* <Field name="dateFinPrevues" label="Date de fin prévue" type="date" onChange={handleChange}
+                       value={project.dateFinPrevues} error={error.date_fin_prevues}/> */}
                 <Field name="nomMOEX" label="MOEX" onChange={handleChange} value={project.nomMOEX}
                        error={error.nom_MOEX}/>
                 <Field name="nomOPC" label="OPC" onChange={handleChange} value={project.nomOPC} error={error.nom_OPC}/>
