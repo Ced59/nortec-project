@@ -24,6 +24,7 @@ const ProjectPage = ({history, match}) => {
         nomOPC: "",
         contactClient: "",
         ville: "",
+
         reports: [],
         users: []
     });
@@ -120,6 +121,7 @@ const ProjectPage = ({history, match}) => {
     };
 
 
+
     return <main className="container">
             {edit && <h1>Modification du Projet</h1> || <h1>Création d'un Projet</h1>}
 
@@ -152,6 +154,7 @@ const ProjectPage = ({history, match}) => {
                     <Link to="/admin/project" className="btn btn-danger">Retour aux projets</Link>
                 </div>
             </form>
+
         </main>
 
 };
