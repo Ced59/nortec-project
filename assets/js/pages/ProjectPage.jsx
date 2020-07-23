@@ -91,6 +91,8 @@ const ProjectPage = ({history, match}) => {
 
     const handleSubmit = async event => {
         event.preventDefault();
+        
+        project.users = filtredAdmin.map(admin => "/api/users/" + admin.id);
 
         try {
             if(edit){
@@ -98,7 +100,6 @@ const ProjectPage = ({history, match}) => {
                 await ProjectsAPI.update(id, project);
                 toast.success("Le projet a bien été modifié !");
             } else {
-                project.users = filtredAdmin.map(admin => "/api/users/" + admin.id);
                 await ProjectsAPI.create(project);
                 toast.success("Le projet a bien été crée !");
                 history.replace("/admin/project");
