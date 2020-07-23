@@ -18,7 +18,6 @@ const ProjectPage = ({history, match}) => {
         adresse2: "",
         codePostal: "59000",
         dateDebut: "3000-02-27",
-        dateFinReelle: "1900-01-01",
         nomMOEX: "Bender Rodriguez",
         nomOPC: "Professeur Fansthworm",
         contactClient: "bender@tordeur.com",
@@ -101,6 +100,7 @@ const ProjectPage = ({history, match}) => {
     };
 
 
+
     return <main className="container">
             <h1>Création d'un Projet</h1>
 
@@ -133,6 +133,7 @@ const ProjectPage = ({history, match}) => {
                     <Link to="/admin/project" className="btn btn-danger">Retour aux projets</Link>
                 </div>
             </form>
+
         </main>
 
 };

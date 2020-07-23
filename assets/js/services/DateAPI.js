@@ -39,9 +39,17 @@ function formatDateHours(date)
     return moment(date).format('DD/MM/YYYY à h:mm:ss' );
 }
 
+function verifyDateExist(date) {
+    if (moment(date).isSame('1900-01-01'))
+    {
+        return "";
+    }
+}
+
 export default {
     determineStatus,
     formatDate,
-    formatDateHours
+    formatDateHours,
+    verifyDateExist
 }
 
