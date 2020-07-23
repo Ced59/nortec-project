@@ -4,6 +4,7 @@ import Field from './../components/forms/Field'
 import FieldTextArea from './../components/forms/FieldTextArea'
 import UsersAPI from '../services/UsersAPI';
 import axios from 'axios';
+import ProjectsAPI from "../services/ProjectsAPI";
 
 const ProjectPage = ({history, match}) => {
 
@@ -90,11 +91,11 @@ const ProjectPage = ({history, match}) => {
         event.preventDefault();
 
         project.users = filtredAdmin.map(admin => "/api/users/" + admin.id);
-        console.log(project);
+
 
         try {
-            const response = await axios.post("http://localhost:8000/api/projects", project)
-            console.log(response);
+            const response = await ProjectsAPI.create(project);
+
         } catch (error) {
             console.log(error.response);
         }
