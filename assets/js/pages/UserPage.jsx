@@ -8,8 +8,23 @@ import '../../css/loading-icon.css';
 import Modal from "react-bootstrap/Modal";
 import {Button} from "react-bootstrap";
 import ProjectsAPI from "../services/ProjectsAPI";
+import DateAPI from "../services/DateAPI";
 
 const UserPage = ({history, match, props}) => {
+
+    const STATUS_CLASSES = {
+        no_start: "info",
+        in_progress: "warning",
+        finished: "success",
+        archived: "primary"
+    };
+
+    const STATUS_LABEL = {
+        no_start: "Pas démarré",
+        in_progress: "En cours",
+        finished: "Fini",
+        archived: "Archivé"
+    };
 
 //------------------------------- Récupération de l'id si il y en a un --------------------------------
     const {id = "new"} = match.params;
@@ -78,11 +93,17 @@ const UserPage = ({history, match, props}) => {
     }
 
     const filteredUserProjects = () => {
+        const filteredUserProject = [];
         if (!loadingProjects) {
-            // console.log(projects.filter(p => p.users.id === id));
-            // return projects.filter(p => p.users.id === id);
-            console.log(projects);
-            return projects;
+            projects.map(project => {
+                project.users.map(user => {
+                    if (user.id === parseInt(id, 10)) {
+                        filteredUserProject.push(project);
+                    }
+                })
+            });
+
+            return filteredUserProject;
         }
     }
 
@@ -326,21 +347,45 @@ const UserPage = ({history, match, props}) => {
                     </div>
                 </div>
 
-
+                <div className="form-group text-right mt-4 mr-5">
+                    <Link to="/admin/userslist" className="btn btn-primary">Retour à la liste des utilisateurs</Link>
+                </div>
                 <>
 
-                    <div className="row col-12">
-                        <fieldset className="border-fieldset">
+                    <div className="col-12">
+                        <fieldset className="border-fieldset mt-3">
                             <legend>Liste des projets affectés à {user.firstName} {user.lastName}</legend>
                             {!loadingProjects ?
                                 <>
                                     {edit &&
                                     <>
+                                        <table className="table table-hover table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th className="p-2">Nom</th>
+                                                <th className="p-2">Ville</th>
+                                                <th className="p-2 text-center">Date début</th>
+                                                <th className="p-2 text-center">Statut</th>
+                                                <th/>
 
-                                        {filteredUserProjects().map(project =>
-                                            <div>{project.name}</div>
-                                        )}
+                                            </tr>
+                                            </thead>
 
+                                            <tbody>
+                                            {filteredUserProjects().map(project =>
+                                                <tr key={project.id}>
+                                                    <td className="p-2">{project.name}</td>
+                                                    <td className="p-2">{project.ville}</td>
+                                                    <td className="p-2 text-center">{DateAPI.formatDate(project.date_debut)}</td>
+                                                    <td className="p-2 text-center"><span
+                                                        className={"pl-2 pr-2 pt-1 pb-1 badge badge-" +
+                                                        STATUS_CLASSES[DateAPI.determineStatus(project.date_debut, project.date_fin_reelle)]}>
+                                                        {STATUS_LABEL[DateAPI.determineStatus(project.date_debut, project.date_fin_reelle)]}</span></td>
+                                                    <td className="p-2 text-center"><button className="btn btn-danger btn-sm">Retirer le projet</button></td>
+                                                </tr>
+                                            )}
+                                            </tbody>
+                                        </table>
                                     </>
                                     }
 
