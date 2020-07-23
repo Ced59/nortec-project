@@ -5,7 +5,7 @@ function findAll() {
 
     let projects = axios.get(PROJECTS_API).then(response => response.data['hydra:member']);
 
-    return projects;
+    return projects
 }
 
 function find(id) {

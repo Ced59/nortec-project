@@ -24,6 +24,7 @@ class User implements UserInterface
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups({"users_read", "project:output"})
+
      */
     private $id;
 
@@ -37,7 +38,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="json")
-     * @Groups({"users_read"})
+     * @Groups({"users_read","project_read"})
      */
     private $roles = [];
 
@@ -70,7 +71,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"users_read"})
+     * @Groups({"users_read","project_read"})
      */
     private $active;
 
