@@ -6,21 +6,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
-
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
-
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *     normalizationContext={"groups"={"project:output"}},
- *     denormalizationContext={"groups"={"project:input"}}
+ *     normalizationContext={"groups"={"project:output"}}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
- * @ApiResource(
- *     normalizationContext={"groups"={"project_read"}}
- * )
  */
 class Project
 {
