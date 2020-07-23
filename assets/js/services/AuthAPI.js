@@ -29,10 +29,12 @@ function logout() {
 
 //Permet de voir si on est authentifié ou pas
 function isAuthenticated() {
+
     const token = getToken();
 
     // voir si token encore valide
     if (token) {
+
         const jwtData = jwtDecode(token);
         return jwtData.exp * 1000 > new Date().getTime();
 
@@ -80,6 +82,29 @@ function isAdmin() {
     }
 }
 
+function isRole() {
+    let role = "";
+    if (isAuthenticated()) {
+
+        if (isAdmin())
+        {
+            role = "Administrateur";
+        }
+        else
+        {
+            role = "Utilisateur";
+        }
+    }
+    return role;
+}
+
+function getUserActiveStatus() {
+    if (isAuthenticated())
+    {
+        return jwtDecode(getToken()).active;
+    }
+}
+
 function setup() {
     const token = getToken();
 
@@ -115,5 +140,7 @@ export default {
     getUserFirstNameLastName,
     getUserId,
     getUsername,
-    isAdmin
+    isAdmin,
+    getUserActiveStatus,
+    isRole
 }
