@@ -94,7 +94,7 @@ const AdminProjectPage = () => {
                 </span>
                 </td>
                 <td>{project.name}</td>
-                <td className="text-center">{project.dateDebut}</td>
+                <td className="text-center">{DateAPI.formatDate(project.dateDebut)}</td>
                 {/* <td className="text-center">{project.date_fin_prevues.length === 0 ?
                     <span>Aucune</span>
                     :
@@ -106,7 +106,7 @@ const AdminProjectPage = () => {
                 <td className="text-center">{project.dateFinReelle === "" ?
                     <span>Aucune</span>
                     :
-                    project.dateFinReelle}</td>
+                    DateAPI.formatDate(project.dateFinReelle)}</td>
 
                 <td>
                     <Link className="btn btn-primary" to={'/admin/project/' + project.id} > Modifier </Link>

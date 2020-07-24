@@ -148,7 +148,7 @@ const ProjectPage = ({history, match}) => {
                 <fieldset className="border-fieldset col-5">
                     <legend>Dates</legend>
                     <Field name="dateDebut" label="Date de démarrage" type="date" onChange={handleChange}
-                        value={project.dateDebut} error={error.dateDebut}/>
+                        value={DateAPI.formatDateForm(project.dateDebut)} error={error.dateDebut}/>
                     {/* <Field name="dateFinPrevues" label="Date de fin prévue" type="date" onChange={handleChange}
                         value={project.dateFinPrevues} error={error.date_fin_prevues}/> */}
                 </fieldset>
