@@ -142,24 +142,24 @@ const ProjectPage = ({history, match}) => {
                     <Field name="adresse2" label="Adresse 2" placeholder="Entrez le complément d'adresse"
                         onChange={handleChange} value={project.adresse2} error={error.adresse2}/>
                     <Field name="codePostal" label="Code Postal" placeholder="Entrez le Code Postal" onChange={handleChange}
-                        value={project.code_postal} error={error.code_postal}/>
+                        value={project.codePostal} error={error.codePostal}/>
                     <Field name="ville" label="Ville" placeholder="Entrez la ville" onChange={handleChange}
                         value={project.ville} error={error.ville}/>
                 </fieldset>
                 <fieldset className="border-fieldset col-5">
                     <legend>Dates</legend>
                     <Field name="dateDebut" label="Date de démarrage" type="date" onChange={handleChange}
-                        value={project.dateDebut} error={error.date_debut}/>
+                        value={project.dateDebut} error={error.dateDebut}/>
                     {/* <Field name="dateFinPrevues" label="Date de fin prévue" type="date" onChange={handleChange}
                         value={project.dateFinPrevues} error={error.date_fin_prevues}/> */}
                 </fieldset>
                 <fieldset className="border-fieldset col-6 center">
                     <legend>Informations Client</legend>
                 <Field name="nomMOEX" label="MOEX" onChange={handleChange} value={project.nomMOEX}
-                       error={error.nom_MOEX}/>
-                <Field name="nomOPC" label="OPC" onChange={handleChange} value={project.nomOPC} error={error.nom_OPC}/>
+                       error={error.nomMOEX}/>
+                <Field name="nomOPC" label="OPC" onChange={handleChange} value={project.nomOPC} error={error.nomOPC}/>
                 <Field name="contactClient" label="Contact du Client" type="email" onChange={handleChange}
-                       value={project.contactClient} error={error.contact_client}/>
+                       value={project.contactClient} error={error.contactClient}/>
                 </fieldset>
                 <fieldset className="border-fieldset col-5">
                     <legend>Choix des utilisateurs</legend>

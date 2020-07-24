@@ -21,12 +21,12 @@ class Effectif
     /**
      * @ORM\Column(type="integer")
      */
-    private $effectif_prevu;
+    private $effectifPrevu;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $effectif_constate;
+    private $effectifConstate;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Company")
@@ -41,24 +41,24 @@ class Effectif
 
     public function getEffectifPrevu(): ?int
     {
-        return $this->effectif_prevu;
+        return $this->effectifPrevu;
     }
 
-    public function setEffectifPrevu(int $effectif_prevu): self
+    public function setEffectifPrevu(int $effectifPrevu): self
     {
-        $this->effectif_prevu = $effectif_prevu;
+        $this->effectifPrevu = $effectifPrevu;
 
         return $this;
     }
 
     public function getEffectifConstate(): ?int
     {
-        return $this->effectif_constate;
+        return $this->effectifConstate;
     }
 
-    public function setEffectifConstate(int $effectif_constate): self
+    public function setEffectifConstate(int $effectifConstate): self
     {
-        $this->effectif_constate = $effectif_constate;
+        $this->effectifConstate = $effectifConstate;
 
         return $this;
     }

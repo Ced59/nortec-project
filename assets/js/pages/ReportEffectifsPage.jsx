@@ -54,10 +54,10 @@ const ReportEffectifsPage = ({match}) => {
                             <tr key={lot.id}>
                                 <td>{lot.id}</td>
                                 <td>{lot.entreprise.nom}</td>
-                                <td>{lot.numero_lot}</td>
-                                <td>{lot.libelle_lot}</td>
-                                <td className="text-center">{lot.effectif_prevu}</td>
-                                <td className="text-center">{lot.effectif_constate}</td>
+                                <td>{lot.numeroLot}</td>
+                                <td>{lot.libelleLot}</td>
+                                <td className="text-center">{lot.effectifPrevu}</td>
+                                <td className="text-center">{lot.effectifConstate}</td>
                             </tr>
                         )
                         :
