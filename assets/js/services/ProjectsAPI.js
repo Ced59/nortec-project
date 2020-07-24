@@ -3,16 +3,18 @@ import {PROJECTS_API} from "../components/config";
 
 function findAll() {
 
-    let projects = axios.get(PROJECTS_API).then(response => response.data['hydra:member']);
-
-    return projects;
+    return axios.get(PROJECTS_API).then(response => response.data['hydra:member'])
 }
 
 function find(id) {
 
-    return axios.get(PROJECTS_API + "/" + id).then(
+    let project = axios.get(PROJECTS_API + "/" + id).then(
         response => response.data
     );
+
+    console.log(project);
+
+    return project;
 }
 
 function update(id, project){
