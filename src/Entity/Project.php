@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
@@ -27,12 +28,14 @@ class Project
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"project:output"})
+     * @Assert\NotBlank(message="Le nom du projet est obligatoire !")
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
      * @Groups({"project:output"})
+     * @Assert\NotBlank(message="La descrpition du projet est obligatoire !")
      */
     private $description;
 
@@ -45,6 +48,7 @@ class Project
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"project:output"})
+     * @Assert\NotBlank(message="L'adresse du projet est obligatoire !")
      */
     private $adresse1;
 
@@ -57,12 +61,14 @@ class Project
     /**
      * @ORM\Column(type="string", length=8)
      * @Groups({"project:output"})
+     * @Assert\NotBlank(message="Le code postal est obligatoire !")
      */
     private $code_postal;
 
     /**
      * @ORM\Column(type="date")
      * @Groups({"project:output"})
+     * @Assert\NotBlank(message="Veuillez renseignez une date de démarrage du projet !")
      */
     private $date_debut;
 
@@ -75,24 +81,28 @@ class Project
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"project:output"})
+     * @Assert\NotBlank(message="Le nom du MOEX est obligatoire !")
      */
     private $nom_MOEX;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"project:output"})
+     * @Assert\NotBlank(message="Le nom de l'OPC est obligatoire !")
      */
     private $nom_OPC;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"project:output"})
+     * @Assert\NotBlank(message="Veuillez renseigner un moyen de contacter le client !")
      */
     private $contact_client;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"project:output"})
+     * @Assert\NotBlank(message="Le nom da la ville est obligatoire !")
      */
     private $ville;
 
