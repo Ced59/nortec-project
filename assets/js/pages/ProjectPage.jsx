@@ -24,7 +24,6 @@ const ProjectPage = ({history, match}) => {
         nomOPC: "",
         contactClient: "",
         ville: "",
-
         reports: [],
         users: []
     });
@@ -138,7 +137,7 @@ const ProjectPage = ({history, match}) => {
                        onChange={handleChange} value={project.adresse2} error={error.adresse2}/>
                 <Field name="codePostal" label="Code Postal" placeholder="Entrez le Code Postal" onChange={handleChange}
                        value={project.codePostal} error={error.code_postal}/>
-                <Field name="ville" label="Ville" placeholder="Entrez le Code Postal" onChange={handleChange}
+                <Field name="ville" label="Ville" placeholder="Entrez la ville" onChange={handleChange}
                        value={project.ville} error={error.ville}/>
                 <Field name="dateDebut" label="Date de démarrage" type="date" onChange={handleChange}
                        value={project.dateDebut} error={error.date_debut}/>
