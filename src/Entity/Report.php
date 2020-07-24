@@ -44,47 +44,47 @@ class Report
     /**
      * @ORM\Column(type="string", length=20)
      */
-    private $proprete_access_conformity;
+    private $propreteAccessConformity;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $proprete_access_comment;
+    private $propreteAccessComment;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $proprete_access_comment_intern;
+    private $propreteAccessCommentIntern;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $proprete_commune_conformity;
+    private $propreteCommuneConformity;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $proprete_commune_comment;
+    private $propreteCommuneComment;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $proprete_commune_comment_intern;
+    private $propreteCommuneCommentIntern;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $security_conformity;
+    private $securityConformity;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $security_comment;
+    private $securityConmment;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $security_comment_intern;
+    private $securityConmmentIntern;
 
     /**
      * @ORM\Column(type="text")
@@ -94,7 +94,7 @@ class Report
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\PropreteAccessImputation", mappedBy="report", orphanRemoval=true)
      */
-    private $proprete_access_imputation;
+    private $propreteIccessImputation;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\PropreteCommuneImputation", mappedBy="report")
@@ -118,7 +118,7 @@ class Report
 
     public function __construct()
     {
-        $this->proprete_access_imputation = new ArrayCollection();
+        $this->propreteIccessImputation = new ArrayCollection();
         $this->propreteCommuneImputations = new ArrayCollection();
         $this->securityCommentImputations = new ArrayCollection();
         $this->photos = new ArrayCollection();
@@ -180,108 +180,108 @@ class Report
 
     public function getPropreteAccessConformity(): ?string
     {
-        return $this->proprete_access_conformity;
+        return $this->propreteAccessConformity;
     }
 
-    public function setPropreteAccessConformity(string $proprete_access_conformity): self
+    public function setPropreteAccessConformity(string $propreteAccessConformity): self
     {
-        $this->proprete_access_conformity = $proprete_access_conformity;
+        $this->propreteAccessConformity = $propreteAccessConformity;
 
         return $this;
     }
 
     public function getPropreteAccessComment(): ?string
     {
-        return $this->proprete_access_comment;
+        return $this->propreteAccessComment;
     }
 
-    public function setPropreteAccessComment(string $proprete_access_comment): self
+    public function setPropreteAccessComment(string $propreteAccessComment): self
     {
-        $this->proprete_access_comment = $proprete_access_comment;
+        $this->propreteAccessComment = $propreteAccessComment;
 
         return $this;
     }
 
     public function getPropreteAccessCommentIntern(): ?string
     {
-        return $this->proprete_access_comment_intern;
+        return $this->propreteAccessCommentIntern;
     }
 
-    public function setPropreteAccessCommentIntern(string $proprete_access_comment_intern): self
+    public function setPropreteAccessCommentIntern(string $propreteAccessCommentIntern): self
     {
-        $this->proprete_access_comment_intern = $proprete_access_comment_intern;
+        $this->propreteAccessCommentIntern = $propreteAccessCommentIntern;
 
         return $this;
     }
 
     public function getPropreteCommuneConformity(): ?bool
     {
-        return $this->proprete_commune_conformity;
+        return $this->propreteCommuneConformity;
     }
 
-    public function setPropreteCommuneConformity(bool $proprete_commune_conformity): self
+    public function setPropreteCommuneConformity(bool $propreteCommuneConformity): self
     {
-        $this->proprete_commune_conformity = $proprete_commune_conformity;
+        $this->propreteCommuneConformity = $propreteCommuneConformity;
 
         return $this;
     }
 
     public function getPropreteCommuneComment(): ?string
     {
-        return $this->proprete_commune_comment;
+        return $this->propreteCommuneComment;
     }
 
-    public function setPropreteCommuneComment(string $proprete_commune_comment): self
+    public function setPropreteCommuneComment(string $propreteCommuneComment): self
     {
-        $this->proprete_commune_comment = $proprete_commune_comment;
+        $this->propreteCommuneComment = $propreteCommuneComment;
 
         return $this;
     }
 
     public function getPropreteCommuneCommentIntern(): ?string
     {
-        return $this->proprete_commune_comment_intern;
+        return $this->propreteCommuneCommentIntern;
     }
 
-    public function setPropreteCommuneCommentIntern(string $proprete_commune_comment_intern): self
+    public function setPropreteCommuneCommentIntern(string $propreteCommuneCommentIntern): self
     {
-        $this->proprete_commune_comment_intern = $proprete_commune_comment_intern;
+        $this->propreteCommuneCommentIntern = $propreteCommuneCommentIntern;
 
         return $this;
     }
 
     public function getSecurityConformity(): ?bool
     {
-        return $this->security_conformity;
+        return $this->securityConformity;
     }
 
-    public function setSecurityConformity(bool $security_conformity): self
+    public function setSecurityConformity(bool $securityConformity): self
     {
-        $this->security_conformity = $security_conformity;
+        $this->securityConformity = $securityConformity;
 
         return $this;
     }
 
     public function getSecurityComment(): ?string
     {
-        return $this->security_comment;
+        return $this->securityConmment;
     }
 
-    public function setSecurityComment(string $security_comment): self
+    public function setSecurityComment(string $securityConmment): self
     {
-        $this->security_comment = $security_comment;
+        $this->securityConmment = $securityConmment;
 
         return $this;
     }
 
     public function getSecurityCommentIntern(): ?string
     {
-        return $this->security_comment_intern;
+        return $this->securityConmmentIntern;
     }
 
-    public function setSecurityCommentIntern(string $security_comment_intern): self
+    public function setSecurityCommentIntern(string $securityConmmentIntern): self
     {
-        $this->security_comment_intern = $security_comment_intern;
+        $this->securityConmmentIntern = $securityConmmentIntern;
 
         return $this;
     }
@@ -303,13 +303,13 @@ class Report
      */
     public function getPropreteAccessImputation(): Collection
     {
-        return $this->proprete_access_imputation;
+        return $this->propreteIccessImputation;
     }
 
     public function addPropreteAccessImputation(PropreteAccessImputation $propreteAccessImputation): self
     {
-        if (!$this->proprete_access_imputation->contains($propreteAccessImputation)) {
-            $this->proprete_access_imputation[] = $propreteAccessImputation;
+        if (!$this->propreteIccessImputation->contains($propreteAccessImputation)) {
+            $this->propreteIccessImputation[] = $propreteAccessImputation;
             $propreteAccessImputation->setReport($this);
         }
 
@@ -318,8 +318,8 @@ class Report
 
     public function removePropreteAccessImputation(PropreteAccessImputation $propreteAccessImputation): self
     {
-        if ($this->proprete_access_imputation->contains($propreteAccessImputation)) {
-            $this->proprete_access_imputation->removeElement($propreteAccessImputation);
+        if ($this->propreteIccessImputation->contains($propreteAccessImputation)) {
+            $this->propreteIccessImputation->removeElement($propreteAccessImputation);
             // set the owning side to null (unless already changed)
             if ($propreteAccessImputation->getReport() === $this) {
                 $propreteAccessImputation->setReport(null);

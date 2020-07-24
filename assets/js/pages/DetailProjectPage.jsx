@@ -97,7 +97,7 @@ const DetailProjectPage = ({history, match}) => {
 
                         <div className='row ml-2 no-space'>
                             <h6 className='offset-1 col-4'>Code Postal :</h6>
-                            <p className='col-7'>{project.code_postal}</p>
+                            <p className='col-7'>{project.codePostal}</p>
                         </div>
                         <div className='row ml-2 no-space'>
                             <h6 className='offset-1 col-4'>Ville :</h6>
@@ -105,7 +105,7 @@ const DetailProjectPage = ({history, match}) => {
                         </div>
                         <div className='row ml-2 no-space'>
                             <h6 className='offset-1 col-4'>Date de début :</h6>
-                            <p className='col-7'>{DateAPI.formatDate(project.date_debut)}</p>
+                            <p className='col-7'>{DateAPI.formatDate(project.dateDebut)}</p>
                         </div>
 
                         {project.date_fin_prevues.map(date =>
@@ -116,32 +116,32 @@ const DetailProjectPage = ({history, match}) => {
                             </div>
                         )}
 
-                        {project.date_fin_reelle && <div className='row ml-2 no-space'>
+                        {project.dateFinReelle && <div className='row ml-2 no-space'>
                             <h6 className='offset-1 col-4'>Date de fin réélle :</h6>
-                            <p className='col-7'>{DateAPI.formatDate(project.date_fin_reelle)}</p>
+                            <p className='col-7'>{DateAPI.formatDate(project.dateFinReelle)}</p>
                         </div>}
 
 
                         <div className='row ml-2 no-space'>
                             <h6 className='offset-1 col-4'>Nom MOEX :</h6>
-                            <p className='col-7'>{project.nom_MOEX}</p>
+                            <p className='col-7'>{project.nomMOEX}</p>
                         </div>
 
                         <div className='row ml-2 no-space'>
                             <h6 className='offset-1 col-4'>Nom OPC :</h6>
-                            <p className='col-7'>{project.nom_OPC}</p>
+                            <p className='col-7'>{project.nomOPC}</p>
                         </div>
 
                         <div className='row ml-2 no-space'>
                             <h6 className='offset-1 col-4'>Contact client :</h6>
-                            <a className='col-7' href={"mailto:" + project.contact_client}>{project.contact_client}</a>
+                            <a className='col-7' href={"mailto:" + project.contactClient}>{project.contactClient}</a>
                         </div>
 
 
                         <div className='row ml-2 mt-5'>
                             <h6 className='offset-1 col-4'>Statut :</h6>
-                            <p className={"col-2 badge badge-" + STATUS_CLASSES[DateAPI.determineStatus(project.date_debut, project.date_fin_reelle)]}>
-                                {STATUS_LABEL[DateAPI.determineStatus(project.date_debut, project.date_fin_reelle)]}</p>
+                            <p className={"col-2 badge badge-" + STATUS_CLASSES[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}>
+                                {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}</p>
                         </div>
 
                     </div>

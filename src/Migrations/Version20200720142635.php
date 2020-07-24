@@ -29,10 +29,10 @@ final class Version20200720142635 extends AbstractMigration
         $this->addSql('ALTER TABLE lot ADD CONSTRAINT FK_B81291B4BD2A4C0 FOREIGN KEY (report_id) REFERENCES report (id)');
         $this->addSql('CREATE INDEX IDX_B81291B4BD2A4C0 ON lot (report_id)');
         $this->addSql('ALTER TABLE photo CHANGE report_id report_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE project CHANGE date_fin_reelle date_fin_reelle DATE DEFAULT NULL');
-        $this->addSql('ALTER TABLE proprete_access_imputation CHANGE report_id report_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE project CHANGE dateFinReelle dateFinReelle DATE DEFAULT NULL');
+        $this->addSql('ALTER TABLE propreteIccessImputation CHANGE report_id report_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE proprete_commune_imputation CHANGE report_id report_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE security_comment_imputation CHANGE report_id report_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE securityConmment_imputation CHANGE report_id report_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE user CHANGE roles roles JSON NOT NULL');
     }
 
@@ -46,10 +46,10 @@ final class Version20200720142635 extends AbstractMigration
         $this->addSql('DROP INDEX IDX_B81291B4BD2A4C0 ON lot');
         $this->addSql('ALTER TABLE lot DROP report_id');
         $this->addSql('ALTER TABLE photo CHANGE report_id report_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE project CHANGE date_fin_reelle date_fin_reelle DATE DEFAULT \'NULL\'');
-        $this->addSql('ALTER TABLE proprete_access_imputation CHANGE report_id report_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE project CHANGE dateFinReelle dateFinReelle DATE DEFAULT \'NULL\'');
+        $this->addSql('ALTER TABLE propreteIccessImputation CHANGE report_id report_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE proprete_commune_imputation CHANGE report_id report_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE security_comment_imputation CHANGE report_id report_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE securityConmment_imputation CHANGE report_id report_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE user CHANGE roles roles LONGTEXT CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_bin`');
     }
 }

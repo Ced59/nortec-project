@@ -29,10 +29,10 @@ const ReportPropreteAccesPage = ({match}) => {
 
         //Vérification si édition ou nouveau rapport... Dans la version finale, le nouveau rapport existera mais avec valeurs vides donc pas de vérification à ce niveau
         if (reportById) {
-            setConforme(reportById.proprete_access_conformity);
-            setComment(reportById.proprete_access_comment);
-            setCommentIntern(reportById.proprete_access_comment_intern);
-            setImputations(reportById.proprete_access_imputation);
+            setConforme(reportById.propreteAccessConformity);
+            setComment(reportById.propreteAccessComment);
+            setCommentIntern(reportById.propreteAccessCommentIntern);
+            setImputations(reportById.propreteIccessImputation);
         }
 
     };
@@ -183,7 +183,7 @@ const ReportPropreteAccesPage = ({match}) => {
                                                placeholder="Commentaire pour toute les entreprises"
                                                value={comment}
                                                onChange={handleChangeComment}
-                                               name="proprete_access_comment"
+                                               name="propreteAccessComment"
                                 />
                             </div>
                             <div className="col-6">
@@ -191,7 +191,7 @@ const ReportPropreteAccesPage = ({match}) => {
                                                placeholder="Commentaire pour toute les entreprises"
                                                value={commentIntern}
                                                onChange={handleChangeCommentIntern}
-                                               name="proprete_access_comment_intern"
+                                               name="propreteAccessCommentIntern"
                                 />
                             </div>
                         </div>
