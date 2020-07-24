@@ -89,12 +89,12 @@ const AdminProjectPage = () => {
                 <td className="text-center">{project.id}</td>
                 <td>Florent</td>
                 <td className="text-center"><span className={"pl-2 pr-2 pt-1 pb-1 badge badge-" +
-                STATUS_CLASSES[DateAPI.determineStatus(project.date_debut, project.date_fin_reelle)]}>
-                    {STATUS_LABEL[DateAPI.determineStatus(project.date_debut, project.date_fin_reelle)]}
+                STATUS_CLASSES[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}>
+                    {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}
                 </span>
                 </td>
                 <td>{project.name}</td>
-                <td className="text-center">{project.dateDebut}</td>
+                <td className="text-center">{DateAPI.formatDate(project.dateDebut)}</td>
                 {/* <td className="text-center">{project.date_fin_prevues.length === 0 ?
                     <span>Aucune</span>
                     :
@@ -103,10 +103,10 @@ const AdminProjectPage = () => {
                 }</td> */}
                 <td className="text-center"></td>
                 <td className="text-center"></td>
-                <td className="text-center">{project.date_fin_reelle === "" ?
+                <td className="text-center">{project.dateFinReelle === "" ?
                     <span>Aucune</span>
                     :
-                    project.date_fin_reelle}</td>
+                    DateAPI.formatDate(project.dateFinReelle)}</td>
 
                 <td>
                     <Link className="btn btn-primary" to={'/admin/project/' + project.id} > Modifier </Link>

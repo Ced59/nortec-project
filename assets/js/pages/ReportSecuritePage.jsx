@@ -42,10 +42,10 @@ const ReportSecuritePage = ({match}) => {
         setReport(reportById);
         //Vérification si édition ou nouveau rapport... Dans la version finale, le nouveau rapport existera mais avec valeurs vides donc pas de vérification à ce niveau
         if (reportById) {
-            setConforme(reportById.security_conformity);
-            setComment(reportById.security_comment);
-            setCommentIntern(reportById.security_comment_intern);
-            setImputations(reportById.security_comment_imputations);
+            setConforme(reportById.securityConformity);
+            setComment(reportById.securityConmment);
+            setCommentIntern(reportById.securityConmmentIntern);
+            setImputations(reportById.securityConmment_imputations);
         }
 
     };

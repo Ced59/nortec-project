@@ -36,7 +36,7 @@ class Company
     /**
      * @ORM\Column(type="string", length=8)
      */
-    private $code_postal;
+    private $codePostal;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -96,12 +96,12 @@ class Company
 
     public function getCodePostal(): ?string
     {
-        return $this->code_postal;
+        return $this->codePostal;
     }
 
-    public function setCodePostal(string $code_postal): self
+    public function setCodePostal(string $codePostal): self
     {
-        $this->code_postal = $code_postal;
+        $this->codePostal = $codePostal;
 
         return $this;
     }
