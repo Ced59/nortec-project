@@ -30,7 +30,7 @@ class PropreteAccessImputation
     private $company;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Report", inversedBy="proprete_access_imputation")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Report", inversedBy="propreteIccessImputation")
      * @ORM\JoinColumn(nullable=true)
      */
     private $report;

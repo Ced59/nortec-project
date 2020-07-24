@@ -57,22 +57,22 @@ const ListProjectsPage = (props) => {
         archivedProjects
             ?
             p =>
-                DateAPI.determineStatus(p.date_debut, p.date_fin_reelle) === 'archived' ||
-                DateAPI.determineStatus(p.date_debut, p.date_fin_reelle) === 'no_start' ||
-                DateAPI.determineStatus(p.date_debut, p.date_fin_reelle) === 'in_progress' ||
-                DateAPI.determineStatus(p.date_debut, p.date_fin_reelle) === 'finished'
+                DateAPI.determineStatus(p.dateDebut, p.dateFinReelle) === 'archived' ||
+                DateAPI.determineStatus(p.dateDebut, p.dateFinReelle) === 'no_start' ||
+                DateAPI.determineStatus(p.dateDebut, p.dateFinReelle) === 'in_progress' ||
+                DateAPI.determineStatus(p.dateDebut, p.dateFinReelle) === 'finished'
             :
             p =>
-                DateAPI.determineStatus(p.date_debut, p.date_fin_reelle) === 'no_start' ||
-                DateAPI.determineStatus(p.date_debut, p.date_fin_reelle) === 'in_progress' ||
-                DateAPI.determineStatus(p.date_debut, p.date_fin_reelle) === 'finished'
+                DateAPI.determineStatus(p.dateDebut, p.dateFinReelle) === 'no_start' ||
+                DateAPI.determineStatus(p.dateDebut, p.dateFinReelle) === 'in_progress' ||
+                DateAPI.determineStatus(p.dateDebut, p.dateFinReelle) === 'finished'
     );  //TODO Trouver façon de refactoriser cette condition... C'est moche...
 
 
     const filteredProjects = filteredArchivedProjects.filter(
         p =>
             p.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-            STATUS_LABEL[DateAPI.determineStatus(p.date_debut, p.date_fin_reelle)].toLowerCase().includes(searchValue.toLowerCase()) ||
+            STATUS_LABEL[DateAPI.determineStatus(p.dateDebut, p.dateFinReelle)].toLowerCase().includes(searchValue.toLowerCase()) ||
             p.ville.toLowerCase().includes(searchValue.toLowerCase())
     );
 
@@ -130,8 +130,8 @@ const ListProjectsPage = (props) => {
                                     <div className="card-footer pb-0 text-right">
                                         <p><span
                                             className={"pl-2 pr-2 pt-1 pb-1 badge badge-" +
-                                            STATUS_CLASSES[DateAPI.determineStatus(project.date_debut, project.date_fin_reelle)]}>
-                                        {STATUS_LABEL[DateAPI.determineStatus(project.date_debut, project.date_fin_reelle)]}</span>
+                                            STATUS_CLASSES[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}>
+                                        {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}</span>
                                         </p>
                                     </div>
                                 </div>
