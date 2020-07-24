@@ -63,41 +63,41 @@ class Project
      * @Groups({"project:output"})
      * @Assert\NotBlank(message="Le code postal est obligatoire !")
      */
-    private $code_postal;
+    private $codePostal;
 
     /**
      * @ORM\Column(type="date")
      * @Groups({"project:output"})
      * @Assert\NotBlank(message="Veuillez renseignez une date de démarrage du projet !")
      */
-    private $date_debut;
+    private $dateDebut;
 
     /**
      * @ORM\Column(type="date", nullable=true)
      * @Groups({"project:output"})
      */
-    private $date_fin_reelle;
+    private $dateFinReelle;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"project:output"})
      * @Assert\NotBlank(message="Le nom du MOEX est obligatoire !")
      */
-    private $nom_MOEX;
+    private $nomMOEX;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"project:output"})
      * @Assert\NotBlank(message="Le nom de l'OPC est obligatoire !")
      */
-    private $nom_OPC;
+    private $nomOPC;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"project:output"})
      * @Assert\NotBlank(message="Veuillez renseigner un moyen de contacter le client !")
      */
-    private $contact_client;
+    private $contactClient;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -109,7 +109,7 @@ class Project
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ProjectDateFinPrevue", mappedBy="Project", orphanRemoval=true)
      */
-    private $date_fin_prevues;
+    private $dateFinPrevues;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Report", mappedBy="Project", orphanRemoval=true)
@@ -125,7 +125,7 @@ class Project
 
     public function __construct()
     {
-        $this->date_fin_prevues = new ArrayCollection();
+        $this->dateFinPrevues = new ArrayCollection();
         $this->reports = new ArrayCollection();
         $this->users = new ArrayCollection();
     }
@@ -197,72 +197,72 @@ class Project
 
     public function getCodePostal(): ?string
     {
-        return $this->code_postal;
+        return $this->codePostal;
     }
 
-    public function setCodePostal(string $code_postal): self
+    public function setCodePostal(string $codePostal): self
     {
-        $this->code_postal = $code_postal;
+        $this->codePostal = $codePostal;
 
         return $this;
     }
 
     public function getDateDebut(): ?\DateTimeInterface
     {
-        return $this->date_debut;
+        return $this->dateDebut;
     }
 
-    public function setDateDebut(\DateTimeInterface $date_debut): self
+    public function setDateDebut(\DateTimeInterface $dateDebut): self
     {
-        $this->date_debut = $date_debut;
+        $this->dateDebut = $dateDebut;
 
         return $this;
     }
 
     public function getDateFinReelle(): ?\DateTimeInterface
     {
-        return $this->date_fin_reelle;
+        return $this->dateFinReelle;
     }
 
-    public function setDateFinReelle(?\DateTimeInterface $date_fin_reelle): self
+    public function setDateFinReelle(?\DateTimeInterface $dateFinReelle): self
     {
-        $this->date_fin_reelle = $date_fin_reelle;
+        $this->dateFinReelle = $dateFinReelle;
 
         return $this;
     }
 
     public function getNomMOEX(): ?string
     {
-        return $this->nom_MOEX;
+        return $this->nomMOEX;
     }
 
-    public function setNomMOEX(string $nom_MOEX): self
+    public function setNomMOEX(string $nomMOEX): self
     {
-        $this->nom_MOEX = $nom_MOEX;
+        $this->nomMOEX = $nomMOEX;
 
         return $this;
     }
 
     public function getNomOPC(): ?string
     {
-        return $this->nom_OPC;
+        return $this->nomOPC;
     }
 
-    public function setNomOPC(string $nom_OPC): self
+    public function setNomOPC(string $nomOPC): self
     {
-        $this->nom_OPC = $nom_OPC;
+        $this->nomOPC = $nomOPC;
 
         return $this;
     }
 
     public function getContactClient(): ?string
     {
-        return $this->contact_client;
+        return $this->contactClient;
     }
 
-    public function setContactClient(string $contact_client): self
+    public function setContactClient(string $contactClient): self
     {
-        $this->contact_client = $contact_client;
+        $this->contactClient = $contactClient;
 
         return $this;
     }
@@ -284,13 +284,13 @@ class Project
      */
     public function getDateFinPrevues(): Collection
     {
-        return $this->date_fin_prevues;
+        return $this->dateFinPrevues;
     }
 
     public function addDateFinPrevue(ProjectDateFinPrevue $dateFinPrevue): self
     {
-        if (!$this->date_fin_prevues->contains($dateFinPrevue)) {
-            $this->date_fin_prevues[] = $dateFinPrevue;
+        if (!$this->dateFinPrevues->contains($dateFinPrevue)) {
+            $this->dateFinPrevues[] = $dateFinPrevue;
             $dateFinPrevue->setProject($this);
         }
 
@@ -299,8 +299,8 @@ class Project
 
     public function removeDateFinPrevue(ProjectDateFinPrevue $dateFinPrevue): self
     {
-        if ($this->date_fin_prevues->contains($dateFinPrevue)) {
-            $this->date_fin_prevues->removeElement($dateFinPrevue);
+        if ($this->dateFinPrevues->contains($dateFinPrevue)) {
+            $this->dateFinPrevues->removeElement($dateFinPrevue);
             // set the owning side to null (unless already changed)
             if ($dateFinPrevue->getProject() === $this) {
                 $dateFinPrevue->setProject(null);

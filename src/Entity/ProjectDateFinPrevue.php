@@ -24,7 +24,7 @@ class ProjectDateFinPrevue
     private $date;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="date_fin_prevues")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="dateFinPrevues")
      * @ORM\JoinColumn(nullable=false)
      */
     private $Project;

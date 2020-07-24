@@ -81,6 +81,7 @@ const UserPage = ({history, match, props}) => {
     const fetchProjects = async () => {
         try {
             let result = await ProjectsAPI.findAll();
+            console.log(result);
             setProjects(result);
             setLoadingProjects(false);
 
