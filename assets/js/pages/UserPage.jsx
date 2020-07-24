@@ -377,11 +377,11 @@ const UserPage = ({history, match, props}) => {
                                                 <tr key={project.id}>
                                                     <td className="p-2">{project.name}</td>
                                                     <td className="p-2">{project.ville}</td>
-                                                    <td className="p-2 text-center">{DateAPI.formatDate(project.date_debut)}</td>
+                                                    <td className="p-2 text-center">{DateAPI.formatDate(project.dateDebut)}</td>
                                                     <td className="p-2 text-center"><span
                                                         className={"pl-2 pr-2 pt-1 pb-1 badge badge-" +
-                                                        STATUS_CLASSES[DateAPI.determineStatus(project.date_debut, project.date_fin_reelle)]}>
-                                                        {STATUS_LABEL[DateAPI.determineStatus(project.date_debut, project.date_fin_reelle)]}</span></td>
+                                                        STATUS_CLASSES[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}>
+                                                        {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}</span></td>
                                                     <td className="p-2 text-center"><button className="btn btn-danger btn-sm">Retirer le projet</button></td>
                                                 </tr>
                                             )}

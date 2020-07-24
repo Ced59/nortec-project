@@ -21,12 +21,12 @@ class Lot
     /**
      * @ORM\Column(type="string", length=500)
      */
-    private $numero_lot;
+    private $numeroLot;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $libelle_lot;
+    private $libelleLot;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Report", inversedBy="lots")
@@ -40,24 +40,24 @@ class Lot
 
     public function getNumeroLot(): ?string
     {
-        return $this->numero_lot;
+        return $this->numeroLot;
     }
 
-    public function setNumeroLot(string $numero_lot): self
+    public function setNumeroLot(string $numeroLot): self
     {
-        $this->numero_lot = $numero_lot;
+        $this->numeroLot = $numeroLot;
 
         return $this;
     }
 
     public function getLibelleLot(): ?string
     {
-        return $this->libelle_lot;
+        return $this->libelleLot;
     }
 
-    public function setLibelleLot(string $libelle_lot): self
+    public function setLibelleLot(string $libelleLot): self
     {
-        $this->libelle_lot = $libelle_lot;
+        $this->libelleLot = $libelleLot;
 
         return $this;
     }
