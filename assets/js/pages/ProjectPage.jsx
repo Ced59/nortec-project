@@ -46,6 +46,7 @@ const ProjectPage = ({history, match}) => {
     });
 
     const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const [edit, setEdit] = useState(false);
 
@@ -63,6 +64,9 @@ const ProjectPage = ({history, match}) => {
         try {
             const data = await ProjectsAPI.find(id);
             setProject(data);
+            setLoading(false);
+            console.log(data);
+
 
         } catch (error) {
             console.log(error.response);
@@ -72,13 +76,12 @@ const ProjectPage = ({history, match}) => {
     useEffect(() => {
         if (id !== "new") {
             setEdit(true);
-            fetchProject(id);
+            fetchProject(id).then(r => '');
+            fetchUsers().then(r =>'');
         }
     }, [id])
 
-    useEffect(() => {
-        fetchUsers().then(r =>'');
-    }, [])
+
 
     const filtredAdmin = users.filter(
         user => UsersAPI.determineRole(user) === "Administrateur"
@@ -104,7 +107,7 @@ const ProjectPage = ({history, match}) => {
                 toast.success("Le projet a bien été crée !");
                 history.replace("/admin/project");
 
-            };
+            }
 
         } catch ({response}) {
             const {violations} = response.data;
@@ -115,9 +118,9 @@ const ProjectPage = ({history, match}) => {
                 });
 
                 setError(apiErrors);
-            };
+            }
             console.log(response);
-        };
+        }
     };
 
 
@@ -139,7 +142,7 @@ const ProjectPage = ({history, match}) => {
                     <Field name="adresse2" label="Adresse 2" placeholder="Entrez le complément d'adresse"
                         onChange={handleChange} value={project.adresse2} error={error.adresse2}/>
                     <Field name="codePostal" label="Code Postal" placeholder="Entrez le Code Postal" onChange={handleChange}
-                        value={project.codePostal} error={error.code_postal}/>
+                        value={project.code_postal} error={error.code_postal}/>
                     <Field name="ville" label="Ville" placeholder="Entrez la ville" onChange={handleChange}
                         value={project.ville} error={error.ville}/>
                 </fieldset>
