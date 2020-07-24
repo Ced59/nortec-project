@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *     normalizationContext={"groups"={"project:output"}}
+ *     normalizationContext={"groups"={"project"}}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
  */
@@ -21,87 +21,87 @@ class Project
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"project:output"})
+     * @Groups({"project"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"project:output"})
+     * @Groups({"project"})
      * @Assert\NotBlank(message="Le nom du projet est obligatoire !")
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"project:output"})
+     * @Groups({"project"})
      * @Assert\NotBlank(message="La descrpition du projet est obligatoire !")
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"project:output"})
+     * @Groups({"project"})
      */
     private $photo;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"project:output"})
+     * @Groups({"project"})
      * @Assert\NotBlank(message="L'adresse du projet est obligatoire !")
      */
     private $adresse1;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"project:output"})
+     * @Groups({"project"})
      */
     private $adresse2;
 
     /**
      * @ORM\Column(type="string", length=8)
-     * @Groups({"project:output"})
+     * @Groups({"project"})
      * @Assert\NotBlank(message="Le code postal est obligatoire !")
      */
     private $codePostal;
 
     /**
      * @ORM\Column(type="date")
-     * @Groups({"project:output"})
+     * @Groups({"project"})
      * @Assert\NotBlank(message="Veuillez renseignez une date de démarrage du projet !")
      */
     private $dateDebut;
 
     /**
      * @ORM\Column(type="date", nullable=true)
-     * @Groups({"project:output"})
+     * @Groups({"project"})
      */
     private $dateFinReelle;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"project:output"})
+     * @Groups({"project"})
      * @Assert\NotBlank(message="Le nom du MOEX est obligatoire !")
      */
     private $nomMOEX;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"project:output"})
+     * @Groups({"project"})
      * @Assert\NotBlank(message="Le nom de l'OPC est obligatoire !")
      */
     private $nomOPC;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"project:output"})
+     * @Groups({"project"})
      * @Assert\NotBlank(message="Veuillez renseigner un moyen de contacter le client !")
      */
     private $contactClient;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"project:output"})
+     * @Groups({"project"})
      * @Assert\NotBlank(message="Le nom da la ville est obligatoire !")
      */
     private $ville;
@@ -118,7 +118,7 @@ class Project
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="project")
-     * @Groups({"project:output"})
+     * @Groups({"project"})
      */
     private $users;
 
