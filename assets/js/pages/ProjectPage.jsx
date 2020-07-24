@@ -125,30 +125,43 @@ const ProjectPage = ({history, match}) => {
             {edit && <h1>Modification du Projet</h1> || <h1>Création d'un Projet</h1>}
 
             <form onSubmit={handleSubmit}>
-                <Field name="name" label="Nom du projet" placeholder="Entrez le nom du projet" onChange={handleChange}
-                       value={project.name} error={error.name}/>
-                <FieldTextArea name="description" label="Decription du projet" rows="3"
-                               placeholder="Entrez la description du projet" onChange={handleChange}
-                               value={project.description} error={error.description}/>
-                <Field name="adresse1" label="Adresse 1" placeholder="Entrez le numéro et la rue"
-                       onChange={handleChange} value={project.adresse1} error={error.adresse1}/>
-                <Field name="adresse2" label="Adresse 2" placeholder="Entrez le complément d'adresse"
-                       onChange={handleChange} value={project.adresse2} error={error.adresse2}/>
-                <Field name="codePostal" label="Code Postal" placeholder="Entrez le Code Postal" onChange={handleChange}
-                       value={project.codePostal} error={error.code_postal}/>
-                <Field name="ville" label="Ville" placeholder="Entrez la ville" onChange={handleChange}
-                       value={project.ville} error={error.ville}/>
-                <Field name="dateDebut" label="Date de démarrage" type="date" onChange={handleChange}
-                       value={project.dateDebut} error={error.date_debut}/>
-                {/* <Field name="dateFinPrevues" label="Date de fin prévue" type="date" onChange={handleChange}
-                       value={project.dateFinPrevues} error={error.date_fin_prevues}/> */}
+            <div className="d-flex flex-wrap justify-content-between">
+                <fieldset className="border-fieldset col-6">
+                    <legend>Information de localisation</legend>
+                    <Field name="name" label="Nom du projet" placeholder="Entrez le nom du projet" onChange={handleChange}
+                        value={project.name} error={error.name}/>
+                    <FieldTextArea name="description" label="Decription du projet" rows="3"
+                                placeholder="Entrez la description du projet" onChange={handleChange}
+                                value={project.description} error={error.description}/>
+                    <Field name="adresse1" label="Adresse 1" placeholder="Entrez le numéro et la rue"
+                        onChange={handleChange} value={project.adresse1} error={error.adresse1}/>
+                    <Field name="adresse2" label="Adresse 2" placeholder="Entrez le complément d'adresse"
+                        onChange={handleChange} value={project.adresse2} error={error.adresse2}/>
+                    <Field name="codePostal" label="Code Postal" placeholder="Entrez le Code Postal" onChange={handleChange}
+                        value={project.codePostal} error={error.code_postal}/>
+                    <Field name="ville" label="Ville" placeholder="Entrez la ville" onChange={handleChange}
+                        value={project.ville} error={error.ville}/>
+                </fieldset>
+                <fieldset className="border-fieldset col-5">
+                    <legend>Dates</legend>
+                    <Field name="dateDebut" label="Date de démarrage" type="date" onChange={handleChange}
+                        value={project.dateDebut} error={error.date_debut}/>
+                    {/* <Field name="dateFinPrevues" label="Date de fin prévue" type="date" onChange={handleChange}
+                        value={project.dateFinPrevues} error={error.date_fin_prevues}/> */}
+                </fieldset>
+                <fieldset className="border-fieldset col-6 center">
+                    <legend>Informations Client</legend>
                 <Field name="nomMOEX" label="MOEX" onChange={handleChange} value={project.nomMOEX}
                        error={error.nom_MOEX}/>
                 <Field name="nomOPC" label="OPC" onChange={handleChange} value={project.nomOPC} error={error.nom_OPC}/>
                 <Field name="contactClient" label="Contact du Client" type="email" onChange={handleChange}
                        value={project.contactClient} error={error.contact_client}/>
-
-                <div className="form-group d-flex justify-content-between align-items-center">
+                </fieldset>
+                <fieldset className="border-fieldset col-5">
+                    <legend>Choix des utilisateurs</legend>
+                </fieldset>
+            </div>
+                <div className="form-group d-flex justify-content-between align-items-center mt-2">
                     <button type="submit" className="btn btn-success">Valider</button>
                     <Link to="/admin/project" className="btn btn-danger">Retour aux projets</Link>
                 </div>
