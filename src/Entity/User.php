@@ -23,14 +23,14 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"users_read", "project:output"})
+     * @Groups({"users_read", "project"})
 
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"users_read", "project:output"})
+     * @Groups({"users_read", "project"})
      * @Assert\NotBlank(message="L'email doit être renseigner")
      * @Assert\Email(message="L'adresse email doit avoir un format valide !")
      */
@@ -38,7 +38,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="json")
-     * @Groups({"users_read","project_read"})
+     * @Groups({"users_read","project"})
      */
     private $roles = [];
 
@@ -51,14 +51,14 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"users_read", "project:output"})
+     * @Groups({"users_read", "project"})
      * @Assert\NotBlank(message="Le prénom de l'utilisateur doit être renseigné !")
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"users_read", "project:output"})
+     * @Groups({"users_read", "project"})
      * @Assert\NotBlank(message="Le nom de famille de l'utilisateur doit être renseigné !")
      */
     private $lastName;

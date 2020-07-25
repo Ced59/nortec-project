@@ -351,57 +351,67 @@ const UserPage = ({history, match, props}) => {
                 <div className="form-group text-right mt-4 mr-5">
                     <Link to="/admin/userslist" className="btn btn-primary">Retour à la liste des utilisateurs</Link>
                 </div>
+
+                {edit &&
                 <>
+                    <>
 
-                    <div className="col-12">
-                        <fieldset className="border-fieldset mt-3">
-                            <legend>Liste des projets affectés à {user.firstName} {user.lastName}</legend>
-                            {!loadingProjects ?
-                                <>
-                                    {edit &&
+                        <div className="col-12">
+                            <fieldset className="border-fieldset mt-3">
+                                <legend>Liste des projets affectés à {user.firstName} {user.lastName}</legend>
+                                {!loadingProjects ?
                                     <>
-                                        <table className="table table-hover table-striped">
-                                            <thead>
-                                            <tr>
-                                                <th className="p-2">Nom</th>
-                                                <th className="p-2">Ville</th>
-                                                <th className="p-2 text-center">Date début</th>
-                                                <th className="p-2 text-center">Statut</th>
-                                                <th/>
+                                        {edit &&
+                                        <>
+                                            <table className="table table-hover table-striped">
+                                                <thead>
+                                                <tr>
+                                                    <th className="p-2">Nom</th>
+                                                    <th className="p-2">Ville</th>
+                                                    <th className="p-2 text-center">Date début</th>
+                                                    <th className="p-2 text-center">Statut</th>
+                                                    <th/>
 
-                                            </tr>
-                                            </thead>
-
-                                            <tbody>
-                                            {filteredUserProjects().map(project =>
-                                                <tr key={project.id}>
-                                                    <td className="p-2">{project.name}</td>
-                                                    <td className="p-2">{project.ville}</td>
-                                                    <td className="p-2 text-center">{DateAPI.formatDate(project.dateDebut)}</td>
-                                                    <td className="p-2 text-center"><span
-                                                        className={"pl-2 pr-2 pt-1 pb-1 badge badge-" +
-                                                        STATUS_CLASSES[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}>
-                                                        {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}</span></td>
-                                                    <td className="p-2 text-center"><button className="btn btn-danger btn-sm">Retirer le projet</button></td>
                                                 </tr>
-                                            )}
-                                            </tbody>
-                                        </table>
+                                                </thead>
+
+                                                <tbody>
+                                                {filteredUserProjects().map(project =>
+                                                    <tr key={project.id}>
+                                                        <td className="p-2">{project.name}</td>
+                                                        <td className="p-2">{project.ville}</td>
+                                                        <td className="p-2 text-center">{DateAPI.formatDate(project.dateDebut)}</td>
+                                                        <td className="p-2 text-center"><span
+                                                            className={"pl-2 pr-2 pt-1 pb-1 badge badge-" +
+                                                            STATUS_CLASSES[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}>
+                                                        {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}</span>
+                                                        </td>
+                                                        <td className="p-2 text-center">
+                                                            <button className="btn btn-danger btn-sm">Retirer le projet
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                )}
+                                                </tbody>
+                                            </table>
+                                        </>
+                                        }
+
                                     </>
-                                    }
+                                    :
+                                    <div id="loading-icon"/>
+                                }
+                            </fieldset>
+                        </div>
 
-                                </>
-                                :
-                                <div id="loading-icon"/>
-                            }
-                        </fieldset>
+                    </>
+
+                    <div className="form-group text-right mt-4 mr-5">
+                        <Link to="/admin/userslist" className="btn btn-primary">Retour à la liste des
+                            utilisateurs</Link>
                     </div>
-
                 </>
-
-                <div className="form-group text-right mt-4 mr-5">
-                    <Link to="/admin/userslist" className="btn btn-primary">Retour à la liste des utilisateurs</Link>
-                </div>
+                }
             </main>
 
             <Modal {...props}
