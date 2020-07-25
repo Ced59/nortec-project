@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import Field from './../components/forms/Field'
+import Select from './../components/forms/Select'
 import FieldTextArea from './../components/forms/FieldTextArea'
 import UsersAPI from '../services/UsersAPI';
 import ProjectsAPI from "../services/ProjectsAPI";
@@ -163,6 +164,29 @@ const ProjectPage = ({history, match}) => {
                 </fieldset>
                 <fieldset className="border-fieldset col-5">
                     <legend>Choix des utilisateurs</legend>
+                    <table className="table table-hover table-striped">
+                        <thead>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Role</th>
+                            <th></th>
+                        </thead>
+                        <tbody>
+                        {project.users.map(user => 
+                            <tr>
+                                <td>{user.firstName}</td>
+                                <td>{user.lastName}</td>
+                                <td>{UsersAPI.determineRole(user)}</td>
+                                <td><button className="btn btn-danger btn-sm">Retirer l'affectation</button></td>
+                            </tr>
+                            )}
+                        </tbody>
+                    </table>
+                    <Select name="users" label="Utilisateurs" value={project.users} error={error.users} onChange={handleChange}>
+                        {users.map(user =>(
+                            <option key={user.id} value={user.id}>{user.firstName} {user.lastName}</option>
+                        ))}
+                    </Select>
                 </fieldset>
             </div>
                 <div className="form-group d-flex justify-content-between align-items-center mt-2">

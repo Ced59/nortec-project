@@ -6,11 +6,13 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import ProjectsAPI from '../services/ProjectsAPI';
+import '../../css/loading-icon.css';
 
 const AdminProjectPage = () => {
 
     const [projects, setProjects] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [loading, setLoading] = useState(true);
 
     const STATUS_CLASSES = {
         no_start: "info",
@@ -37,6 +39,7 @@ const AdminProjectPage = () => {
         try {
             const data = await ProjectsAPI.findAll();
             setProjects(data);
+            setLoading(false);
         } catch (error) {
             toast.error("Erreur lors du chargement de la liste des projets");
             console.log(error.response);
@@ -83,39 +86,43 @@ const AdminProjectPage = () => {
                 <th></th>
             </tr>
             </thead>
+            {!loading &&
             <tbody>
             {paginatedProjects.map(project =>
-            <tr key={project.id}>
-                <td className="text-center">{project.id}</td>
-                <td>Florent</td>
-                <td className="text-center"><span className={"pl-2 pr-2 pt-1 pb-1 badge badge-" +
-                STATUS_CLASSES[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}>
-                    {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}
-                </span>
-                </td>
-                <td>{project.name}</td>
-                <td className="text-center">{DateAPI.formatDate(project.dateDebut)}</td>
-                {/* <td className="text-center">{project.date_fin_prevues.length === 0 ?
-                    <span>Aucune</span>
-                    :
-                    project.date_fin_prevues.id === 0 &&
-                    <span> Hey </span>
-                }</td> */}
-                <td className="text-center"></td>
-                <td className="text-center"></td>
-                <td className="text-center">{project.dateFinReelle === "" ?
-                    <span>Aucune</span>
-                    :
-                    DateAPI.formatDate(project.dateFinReelle)}</td>
+                <tr key={project.id}>
+                    <td className="text-center">{project.id}</td>
+                    <td>Florent</td>
+                    <td className="text-center"><span className={"pl-2 pr-2 pt-1 pb-1 badge badge-" +
+                    STATUS_CLASSES[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}>
+                        {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}
+                    </span>
+                    </td>
+                    <td>{project.name}</td>
+                    <td className="text-center">{DateAPI.formatDate(project.dateDebut)}</td>
+                    {/* <td className="text-center">{project.date_fin_prevues.length === 0 ?
+                        <span>Aucune</span>
+                        :
+                        project.date_fin_prevues.id === 0 &&
+                        <span> Hey </span>
+                    }</td> */}
+                    <td className="text-center"></td>
+                    <td className="text-center"></td>
+                    <td className="text-center">{project.dateFinReelle === "" ?
+                        <span>Aucune</span>
+                        :
+                        DateAPI.formatDate(project.dateFinReelle)}</td>
 
-                <td>
-                    <Link className="btn btn-primary" to={'/admin/project/' + project.id} > Modifier </Link>
-                </td>
-            </tr>
-            )
-            }
+                    <td>
+                        <Link className="btn btn-primary" to={'/admin/project/' + project.id} > Modifier </Link>
+                    </td>
+                </tr>)
+            }   
             </tbody>
+        }
         </table>
+        {loading &&
+            <div id="loading-icon" className="mt-5 mb-5"/>
+            }
         <div className="mt-2">
                 <ul className="pagination pagination-sm justify-content-center">
                     <li className={"page-item" + (currentPage === 1 && " disabled")}>
