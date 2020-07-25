@@ -38,7 +38,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="json")
-     * @Groups({"users_read","project_read"})
+     * @Groups({"users_read","project"})
      */
     private $roles = [];
 
