@@ -49,6 +49,7 @@ const ProjectPage = ({history, match}) => {
     const [users, setUsers] = useState([]);
     const [loadingProject, setLoadingProject] = useState(true);
     const [loadingUsers, setLoadingUsers] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
 
     const [edit, setEdit] = useState(false);
 
@@ -92,11 +93,29 @@ const ProjectPage = ({history, match}) => {
     const filtredAdmin = users.filter(
         user => UsersAPI.determineRole(user) === "Administrateur"
     );
+
+    // ----------------------------- Mise en place de la pagination ------------------------------------------
+
+    const handleChangePage = page => {
+        setCurrentPage(page);
+    }
+
+    const itemsPerPage = 7;
+    const pagesCount = Math.ceil(users.length / itemsPerPage);
+    const pages = [];
+
+    for (let i = 1; i <= pagesCount; i++) {
+        pages.push(i);
+    }
+
+    const start = currentPage * itemsPerPage - itemsPerPage;
+    const paginatedUsers = users.slice(start, start + itemsPerPage)
+
 //----------------------------------- gestion de changement des input-----------------------------------
     const handleChange = ({currentTarget}) => {
         const {name, value} = currentTarget;
         setProject({...project, [name]: value});
-    };
+    }
 
     const handleSubmit = async event => {
         event.preventDefault();
@@ -179,19 +198,35 @@ const ProjectPage = ({history, match}) => {
                         <th></th>
                         </thead>
                         <tbody>
-                        {project.users.map(user =>
-                            <tr>
+                        {paginatedUsers.map(user =>(
+                            <tr key={user.id}>
                                 <td>{user.firstName}</td>
                                 <td>{user.lastName}</td>
                                 <td>{UsersAPI.determineRole(user)}</td>
                                 <td>
-                                    <button className="btn btn-danger btn-sm">Retirer l'affectation</button>
+                                    <button className="btn btn-primary btn-sm">Changer l'affectation</button>
                                 </td>
-                            </tr>
+                            </tr>)
                         )}
                         </tbody>
                     </table>
-                    {!loadingUsers &&
+                    <div className="mt-2">
+                        <ul className="pagination pagination-sm justify-content-center">
+                            <li className={"page-item" + (currentPage === 1 && " disabled")}>
+                                <button className="page-link" onClick={() => handleChangePage(currentPage - 1)}>&laquo;</button>
+                            </li>
+                            {pages.map(page =>
+                                <li key={page} className={"page-item" + (currentPage === page && " active")}>
+                                    <button className="page-link" onClick={() => handleChangePage(page)}>{page}</button>
+                                </li>
+                            )}
+
+                            <li className={"page-item" + (currentPage === pagesCount && " disabled")}>
+                                <button className="page-link" onClick={() => handleChangePage(currentPage + 1)}>&raquo;</button>
+                            </li>
+                        </ul>
+                    </div>
+                            {!loadingUsers &&
                     <select name="users" onChange={handleChange}>
                         {users.map(user => (
                             <option key={user.id} value={user.id}>
