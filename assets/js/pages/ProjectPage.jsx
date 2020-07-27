@@ -117,6 +117,25 @@ const ProjectPage = ({history, match}) => {
         setProject({...project, [name]: value});
     }
 
+    const handleChangeUsers = async user => {
+        console.log(user.id);
+        try {
+            setProject({...project, users:(`http://localhost:8000/api/users/${user.id}`)});
+            await ProjectsAPI.update(project.id, project);
+        } catch ({response}) {
+            const {violations} = response.data;
+            if (violations) {
+                const apiErrors = {};
+                violations.map(({propertyPath, message}) => {
+                    apiErrors[propertyPath] = message;
+                });
+
+                setError(apiErrors);
+            }
+            console.log(response);
+        }
+    };
+
     const handleSubmit = async event => {
         event.preventDefault();
 
@@ -197,6 +216,7 @@ const ProjectPage = ({history, match}) => {
                         <th>Role</th>
                         <th></th>
                         </thead>
+                        {!loadingUsers &&
                         <tbody>
                         {paginatedUsers.map(user =>(
                             <tr key={user.id}>
@@ -204,11 +224,12 @@ const ProjectPage = ({history, match}) => {
                                 <td>{user.lastName}</td>
                                 <td>{UsersAPI.determineRole(user)}</td>
                                 <td>
-                                    <button className="btn btn-primary btn-sm">Changer l'affectation</button>
+                                    <button className="btn btn-primary btn-sm" onClick={() => handleChangeUsers(user)} >Changer l'affectation</button>
                                 </td>
                             </tr>)
                         )}
                         </tbody>
+}
                     </table>
                     <div className="mt-2">
                         <ul className="pagination pagination-sm justify-content-center">
@@ -226,15 +247,6 @@ const ProjectPage = ({history, match}) => {
                             </li>
                         </ul>
                     </div>
-                            {!loadingUsers &&
-                    <select name="users" onChange={handleChange}>
-                        {users.map(user => (
-                            <option key={user.id} value={user.id}>
-                                {user.firstName} {user.lastName}
-                            </option>
-                        ))}
-                    </select>
-                    }
                     {loadingUsers &&
                         <div id="loading-icon"></div>
                     }
