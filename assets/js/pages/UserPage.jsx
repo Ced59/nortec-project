@@ -46,6 +46,7 @@ const UserPage = ({history, match, props}) => {
     })
 
     const [projects, setProjects] = useState("");
+    const filteredUserProject = [];
 
     const [edit, setEdit] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -94,7 +95,6 @@ const UserPage = ({history, match, props}) => {
     }
 
     const filteredUserProjects = () => {
-        const filteredUserProject = [];
         if (!loadingProjects) {
             projects.map(project => {
                 project.users.map(user => {
@@ -130,6 +130,13 @@ const UserPage = ({history, match, props}) => {
     const handleChangeRoleSelect = ({currentTarget}) => {
         const {name, value} = currentTarget;
         setRoleChange({...roleChange, [name]: value});
+    }
+
+    const handleDeleteUserProject = ({id}) => {
+        if(edit){
+            // const newFilteredUserProject = filteredUserProject.filter(item => item.id !== id);
+            // console.log(newFilteredUserProject);
+        }
     }
 
 //------------------------------------ Gestion de soumission du form -----------------------------------
@@ -387,7 +394,7 @@ const UserPage = ({history, match, props}) => {
                                                         {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}</span>
                                                         </td>
                                                         <td className="p-2 text-center">
-                                                            <button className="btn btn-danger btn-sm">Retirer le projet
+                                                            <button className="btn btn-danger btn-sm" onClick={() => handleDeleteUserProject(project)}>Retirer le projet
                                                             </button>
                                                         </td>
                                                     </tr>
