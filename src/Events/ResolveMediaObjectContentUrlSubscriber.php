@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Vich\UploaderBundle\Storage\StorageInterface;
+use function is_a;
 
 final class ResolveMediaObjectContentUrlSubscriber implements EventSubscriberInterface
 {
@@ -37,7 +38,7 @@ final class ResolveMediaObjectContentUrlSubscriber implements EventSubscriberInt
             return;
         }
 
-        if (!($attributes = RequestAttributesExtractor::extractAttributes($request)) || !\is_a($attributes['resource_class'], MediaObject::class, true)) {
+        if (!($attributes = RequestAttributesExtractor::extractAttributes($request)) || !is_a($attributes['resource_class'], MediaObject::class, true)) {
             return;
         }
 
