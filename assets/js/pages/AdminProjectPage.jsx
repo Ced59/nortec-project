@@ -46,6 +46,7 @@ const AdminProjectPage = () => {
 // ----------------------------- Mise en place de la pagination ------------------------------------------
 
     const handleChangePage = page => {
+        console.log(projects);
         setCurrentPage(page);
     }
 
@@ -57,8 +58,14 @@ const AdminProjectPage = () => {
         pages.push(i);
     }
 
+
+
     const start = currentPage * itemsPerPage - itemsPerPage;
     const paginatedProjects = projects.slice(start, start + itemsPerPage)
+
+
+    // ----------------------------- Template  --------------------------------------------------------------
+
 
     return <main className="container">
         <div className="mb-4 d-flex justify-content-between align-items-center">
@@ -80,7 +87,7 @@ const AdminProjectPage = () => {
                 <th>Date Fin prévue</th>
                 <th>Nouvelle date de fin</th>
                 <th className="text-center">Date fin réelle</th>
-                <th></th>
+                <th/>
             </tr>
             </thead>
             <tbody>
@@ -89,8 +96,8 @@ const AdminProjectPage = () => {
                 <td className="text-center">{project.id}</td>
                 <td>Florent</td>
                 <td className="text-center"><span className={"pl-2 pr-2 pt-1 pb-1 badge badge-" +
-                STATUS_CLASSES[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}>
-                    {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}
+                STATUS_CLASSES[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}>
+                    {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}
                 </span>
                 </td>
                 <td>{project.name}</td>
@@ -101,9 +108,9 @@ const AdminProjectPage = () => {
                     project.date_fin_prevues.id === 0 &&
                     <span> Hey </span>
                 }</td> */}
-                <td className="text-center"></td>
-                <td className="text-center"></td>
-                <td className="text-center">{project.dateFinReelle === "" ?
+                <td className="text-center"/>
+                <td className="text-center"/>
+                <td className="text-center">{DateAPI.verifyDateExist(project.dateFinReelle) === "" ?
                     <span>Aucune</span>
                     :
                     DateAPI.formatDate(project.dateFinReelle)}</td>

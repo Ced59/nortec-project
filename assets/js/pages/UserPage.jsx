@@ -34,8 +34,9 @@ const UserPage = ({history, match, props}) => {
         firstName: "",
         email: "",
         password: "",
-        role: ["ROLE_USER"],
-        active: true
+        roles: [],
+        active: true,
+        projects: []
     });
 
     const [error, setError] = useState({
@@ -46,6 +47,7 @@ const UserPage = ({history, match, props}) => {
     })
 
     const [projects, setProjects] = useState("");
+    const [projectsByUser, setProjectsByUser] = useState([]);
 
     const [edit, setEdit] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -57,7 +59,7 @@ const UserPage = ({history, match, props}) => {
     const [userToModifyRole, setUserToModifyRole] = useState("");
 
     const [roleChange, setRoleChange] = useState({
-        role: ['ROLE_USER']
+        roles: ['ROLE_USER']
     });
 
 //---------------------------------------- Récupérer un Utilisateur ------------------------------------
@@ -67,6 +69,7 @@ const UserPage = ({history, match, props}) => {
             const result = await UsersAPI.find(id);
             setUser(result);
             setLoading(false);
+            console.log(user);
 
         } catch (error) {
             toast.error("Le chargement de l'utilisateur a rencontré un problème !");
@@ -113,13 +116,26 @@ const UserPage = ({history, match, props}) => {
         if (id !== "new") {
             setEdit(true);
             fetchUser(id).then(r => "");
-            fetchProjects().then(r => "");
 
         } else {
             setLoading(false);
         }
 
     }, [id]);
+
+
+    useEffect(() => {
+        if (id !== "new") {
+            setEdit(true);
+            fetchProjects().then(r => {
+                setProjectsByUser(filteredUserProjects());
+            });
+
+        } else {
+            setLoadingProjects(false);
+        }
+
+    }, []);
 
 //----------------------------------- gestion de changement des input-----------------------------------
     const handleChange = ({currentTarget}) => {
@@ -207,16 +223,43 @@ const UserPage = ({history, match, props}) => {
 
 
         try {
+            console.log(userToModifyRole);
+            console.log(roleChange.role);
+
 
             userModify.roles.splice(0, 1, roleChange.role)
             setUserToModifyRole(userModify);
             console.log(userToModifyRole);
-            await UsersAPI.update(id, userToModifyRole);
+
+            await UsersAPI.update(userToModifyRole.id, newRole);
             toast.success("Le rôle de l'utilisateur a bien été modifié !");
         } catch ({response}) {
             userModify.roles.splice(0, 1, roleCopie);
             setUserToModifyRole(userModify);
             toast.error("Une erreur est survenue pendant la modification du rôle de l'utilisateur !");
+        }
+
+    }
+
+    //---------------------------------Retirer un projet de l'utilisateur --------------------------------------------
+
+    const handleRetireProject = async (projectToRetire) => {
+        let projects = filteredUserProjects();
+
+        console.log(projects);
+        const filteredProject = projects.filter(project => project !== projectToRetire);
+        console.log(filteredProject);
+        user.projects = filteredProject;
+        const originalUser = {...user};
+        setUser(user);
+        try {
+            await UsersAPI.update(user.id, user);
+            toast.success("Le projet a bien été enlevé de l'utilisateur.");
+        }
+        catch
+        {
+            setUser(originalUser);
+            toast.error("Il y a eu un problème.");
         }
 
 
@@ -252,7 +295,7 @@ const UserPage = ({history, match, props}) => {
                                     <Field
                                         name="email"
                                         label="Email"
-                                        placeholder="email du nouvel utilisateur"
+                                        placeholder="Email du nouvel utilisateur"
                                         type="email"
                                         value={user.email}
                                         onChange={handleChange}
@@ -261,7 +304,7 @@ const UserPage = ({history, match, props}) => {
                                     <Field
                                         name="password"
                                         label="Mot de passe"
-                                        placeholder="mot de passe du nouvel utilisateur"
+                                        placeholder={!edit ? "Mot de passe du nouvel utilisateur" : "Changer le mot de passe de l'utilisateur"}
                                         type="password"
                                         value={user.password}
                                         onChange={handleChange}
@@ -352,14 +395,15 @@ const UserPage = ({history, match, props}) => {
                     <Link to="/admin/userslist" className="btn btn-primary">Retour à la liste des utilisateurs</Link>
                 </div>
                 <>
+                    {edit &&
+                    <>
 
-                    <div className="col-12">
-                        <fieldset className="border-fieldset mt-3">
-                            <legend>Liste des projets affectés à {user.firstName} {user.lastName}</legend>
-                            {!loadingProjects ?
-                                <>
-                                    {edit &&
+                        <div className="col-12">
+                            <fieldset className="border-fieldset mt-3">
+                                <legend>Liste des projets affectés à {user.firstName} {user.lastName}</legend>
+                                {!loadingProjects ?
                                     <>
+
                                         <table className="table table-hover table-striped">
                                             <thead>
                                             <tr>
@@ -380,28 +424,38 @@ const UserPage = ({history, match, props}) => {
                                                     <td className="p-2 text-center">{DateAPI.formatDate(project.dateDebut)}</td>
                                                     <td className="p-2 text-center"><span
                                                         className={"pl-2 pr-2 pt-1 pb-1 badge badge-" +
-                                                        STATUS_CLASSES[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}>
-                                                        {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}</span></td>
-                                                    <td className="p-2 text-center"><button className="btn btn-danger btn-sm">Retirer le projet</button></td>
+                                                        STATUS_CLASSES[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}>
+                                                        {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}</span>
+                                                    </td>
+                                                    <td className="p-2 text-center">
+                                                        <button
+                                                            className="btn btn-danger btn-sm"
+                                                            onClick={() => handleRetireProject(project)}
+                                                        >
+                                                            Retirer le projet
+                                                        </button>
+                                                    </td>
                                                 </tr>
                                             )}
                                             </tbody>
                                         </table>
                                     </>
-                                    }
 
-                                </>
-                                :
-                                <div id="loading-icon"/>
-                            }
-                        </fieldset>
-                    </div>
+                                    :
+                                    <div id="loading-icon"/>
+                                }
+                            </fieldset>
+                        </div>
 
+
+                        <div className="form-group text-right mt-4 mr-5">
+                            <Link to="/admin/userslist" className="btn btn-primary">Retour à la liste des
+                                utilisateurs</Link>
+                        </div>
+
+                    </>
+                    }
                 </>
-
-                <div className="form-group text-right mt-4 mr-5">
-                    <Link to="/admin/userslist" className="btn btn-primary">Retour à la liste des utilisateurs</Link>
-                </div>
             </main>
 
             <Modal {...props}
