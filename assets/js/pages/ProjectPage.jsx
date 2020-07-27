@@ -69,8 +69,6 @@ const ProjectPage = ({history, match}) => {
             const data = await ProjectsAPI.find(id);
             setProject(data);
             setLoadingProject(false);
-            console.log(data);
-
 
         } catch (error) {
             console.log(error.response);
@@ -118,34 +116,25 @@ const ProjectPage = ({history, match}) => {
     }
 
     const handleChangeUsers = async user => {
-        console.log(user.id);
-        try {
-            setProject({...project, users:(`http://localhost:8000/api/users/${user.id}`)});
-            await ProjectsAPI.update(project.id, project);
-        } catch ({response}) {
-            const {violations} = response.data;
-            if (violations) {
-                const apiErrors = {};
-                violations.map(({propertyPath, message}) => {
-                    apiErrors[propertyPath] = message;
-                });
-
-                setError(apiErrors);
-            }
-            console.log(response);
+        if(edit){
+            project.users.push(user);
+            project.users= project.users.map(userInProject => ("api/users/" + userInProject.id));
+            console.log(project.users);
         }
     };
 
     const handleSubmit = async event => {
         event.preventDefault();
 
-        project.users = filtredAdmin.map(admin => "/api/users/" + admin.id);
+        if(!edit){
+            project.users = filtredAdmin.map(admin => "/api/users/" + admin.id);
+        }
 
         try {
             if (edit) {
-                console.log(project);
                 await ProjectsAPI.update(id, project);
                 toast.success("Le projet a bien été modifié !");
+                history.replace("/admin/project");
             } else {
                 await ProjectsAPI.create(project);
                 toast.success("Le projet a bien été crée !");
@@ -209,6 +198,9 @@ const ProjectPage = ({history, match}) => {
                 </fieldset>
                 <fieldset className="border-fieldset col-5">
                     <legend>Choix des utilisateurs</legend>
+                    {project.users.map(user=>(
+                        <p key={user.id}>{user.id} {user.firstName} {user.lastName} </p>
+                    ))}
                     <table className="table table-hover table-striped">
                         <thead>
                         <th>Nom</th>
