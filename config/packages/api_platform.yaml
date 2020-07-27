@@ -8,6 +8,3 @@ api_platform:
     collection:
         pagination:
             enabled: false
-    formats:
-        form:
-            mime_types: ['multipart/form-data']
