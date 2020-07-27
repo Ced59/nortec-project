@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
@@ -40,8 +41,12 @@ class Project
     private $description;
 
     /**
+     *
+     * @var MediaObject|null
+     *
      * @ORM\Column(type="string", length=255)
      * @Groups({"project"})
+     * @ApiProperty(iri="http://schema.org/photo")
      */
     private $photo;
 
