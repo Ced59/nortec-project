@@ -83,7 +83,7 @@ const AdminProjectPage = () => {
                 <th>Date Fin prévue</th>
                 <th>Nouvelle date de fin</th>
                 <th className="text-center">Date fin réelle</th>
-                <th></th>
+                <th/>
             </tr>
             </thead>
             {!loading &&
@@ -93,8 +93,8 @@ const AdminProjectPage = () => {
                     <td className="text-center">{project.id}</td>
                     <td>Florent</td>
                     <td className="text-center"><span className={"pl-2 pr-2 pt-1 pb-1 badge badge-" +
-                    STATUS_CLASSES[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}>
-                        {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}
+                    STATUS_CLASSES[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}>
+                        {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}
                     </span>
                     </td>
                     <td>{project.name}</td>
@@ -105,8 +105,8 @@ const AdminProjectPage = () => {
                         project.date_fin_prevues.id === 0 &&
                         <span> Hey </span>
                     }</td> */}
-                    <td className="text-center"></td>
-                    <td className="text-center"></td>
+                    <td className="text-center"/>
+                    <td className="text-center"/>
                     <td className="text-center">{project.dateFinReelle === "" ?
                         <span>Aucune</span>
                         :
