@@ -1,15 +1,20 @@
 import React from 'react';
 import ImageUploader from "react-images-upload";
 
-const ImageUpload = ({withIcon=true, buttonText, onChange}) => {
+const ImageUpload = ({withIcon=true, onChange, singleImg}) => {
     return (
         <ImageUploader
             withIcon={withIcon}
-            buttonText={buttonText}
+            withPreview={true}
+            buttonText='Choisissez une image'
             onChange={onChange}
-            imgExtension={['.jpg', '.png']}
+            imgExtension={['.jpg', '.gif', '.png']}
             maxFileSize={5242880}
-            label="max :5MB, uniquement .jpg et .png"
+            fileTypeError="Le type de fichier n'est pas supporté"
+            fileSizeError="Le fichier sélectionné est trop volumineux"
+            singleImage={singleImg}
+
+            label="Maximum 5MB"
         />
     );
 };

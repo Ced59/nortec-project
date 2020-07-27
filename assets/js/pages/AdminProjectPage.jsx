@@ -1,10 +1,7 @@
-import React, {useState, useEffect} from 'react';
-import Button from "../components/forms/Button";
-import fakeData from "../components/fakeDataForDev/fakeData";
+import React, {useEffect, useState} from 'react';
 import DateAPI from "../services/DateAPI";
-import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import axios from 'axios';
+import {Link} from 'react-router-dom';
+import {toast} from 'react-toastify';
 import ProjectsAPI from '../services/ProjectsAPI';
 import '../../css/loading-icon.css';
 
@@ -32,9 +29,9 @@ const AdminProjectPage = () => {
         fetchProjects().then(r => "");
     }, []);
 
-    
+
     // --------------------------- Récupérer tout les Utilisateurs -----------------------------------------
-    
+
     const fetchProjects = async () => {
         try {
             const data = await ProjectsAPI.findAll();
@@ -65,12 +62,12 @@ const AdminProjectPage = () => {
 
     return <main className="container">
         <div className="mb-4 d-flex justify-content-between align-items-center">
-        <h2> Projets : </h2>
-        <Link
-            className='btn btn-primary'
-            type='button'
-            to={'/admin/project/new'}
-        > Nouveau Projet </Link>
+            <h2> Projets : </h2>
+            <Link
+                className='btn btn-primary'
+                type='button'
+                to={'/admin/project/new'}
+            > Nouveau Projet </Link>
         </div>
         <table className="table table-hover">
             <thead>
@@ -113,32 +110,32 @@ const AdminProjectPage = () => {
                         DateAPI.formatDate(project.dateFinReelle)}</td>
 
                     <td>
-                        <Link className="btn btn-primary" to={'/admin/project/' + project.id} > Modifier </Link>
+                        <Link className="btn btn-primary" to={'/admin/project/' + project.id}> Modifier </Link>
                     </td>
                 </tr>)
-            }   
+            }
             </tbody>
-        }
+            }
         </table>
         {loading &&
-            <div id="loading-icon" className="mt-5 mb-5"/>
-            }
+        <div id="loading-icon" className="mt-5 mb-5"/>
+        }
         <div className="mt-2">
-                <ul className="pagination pagination-sm justify-content-center">
-                    <li className={"page-item" + (currentPage === 1 && " disabled")}>
-                        <button className="page-link" onClick={() => handleChangePage(currentPage - 1)}>&laquo;</button>
+            <ul className="pagination pagination-sm justify-content-center">
+                <li className={"page-item" + (currentPage === 1 && " disabled")}>
+                    <button className="page-link" onClick={() => handleChangePage(currentPage - 1)}>&laquo;</button>
+                </li>
+                {pages.map(page =>
+                    <li key={page} className={"page-item" + (currentPage === page && " active")}>
+                        <button className="page-link" onClick={() => handleChangePage(page)}>{page}</button>
                     </li>
-                    {pages.map(page =>
-                        <li key={page} className={"page-item" + (currentPage === page && " active")}>
-                            <button className="page-link" onClick={() => handleChangePage(page)}>{page}</button>
-                        </li>
-                    )}
+                )}
 
-                    <li className={"page-item" + (currentPage === pagesCount && " disabled")}>
-                        <button className="page-link" onClick={() => handleChangePage(currentPage + 1)}>&raquo;</button>
-                    </li>
-                </ul>
-            </div>
+                <li className={"page-item" + (currentPage === pagesCount && " disabled")}>
+                    <button className="page-link" onClick={() => handleChangePage(currentPage + 1)}>&raquo;</button>
+                </li>
+            </ul>
+        </div>
     </main>
 
 };

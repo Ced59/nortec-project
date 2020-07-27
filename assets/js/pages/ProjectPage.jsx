@@ -7,6 +7,7 @@ import ProjectsAPI from "../services/ProjectsAPI";
 import DateAPI from '../services/DateAPI';
 import {toast} from 'react-toastify';
 import '../../css/loading-icon.css';
+import ImageUpload from "../components/forms/ImageUpload";
 
 const ProjectPage = ({history, match}) => {
 
@@ -53,6 +54,8 @@ const ProjectPage = ({history, match}) => {
 
     const [edit, setEdit] = useState(false);
 
+    const [picture, setPicture] = useState([]);
+
 
     const fetchUsers = async () => {
         try {
@@ -82,9 +85,7 @@ const ProjectPage = ({history, match}) => {
             setEdit(true);
             fetchProject(id).then(r => '');
             fetchUsers().then(r => '');
-        }
-        else
-        {
+        } else {
             fetchUsers().then(r => '');
         }
     }, [id])
@@ -148,6 +149,20 @@ const ProjectPage = ({history, match}) => {
         }
     };
 
+    //--------------------------------------------Gestion de l'image  ---------------------------------------------
+
+    const onDrop = picture => {
+        //picture.name = "img-project-" + project.name;
+        setPicture([...picture, picture]);
+        console.log(picture);
+    }
+
+
+
+
+
+    //--------------------------------------------Template  --------------------------------------------------------
+
 
     return <main className="container">
         {edit && <h1>Modification du Projet</h1> || <h1>Création d'un Projet</h1>}
@@ -171,6 +186,9 @@ const ProjectPage = ({history, match}) => {
                            value={project.codePostal} error={error.codePostal}/>
                     <Field name="ville" label="Ville" placeholder="Entrez la ville" onChange={handleChange}
                            value={project.ville} error={error.ville}/>
+                           <ImageUpload singleImg={true} onChange={onDrop}>
+
+                           </ImageUpload>
                 </fieldset>
                 <fieldset className="border-fieldset col-5">
                     <legend>Dates</legend>
@@ -198,7 +216,7 @@ const ProjectPage = ({history, match}) => {
                         <th></th>
                         </thead>
                         <tbody>
-                        {paginatedUsers.map(user =>(
+                        {paginatedUsers.map(user => (
                             <tr key={user.id}>
                                 <td>{user.firstName}</td>
                                 <td>{user.lastName}</td>
@@ -213,7 +231,8 @@ const ProjectPage = ({history, match}) => {
                     <div className="mt-2">
                         <ul className="pagination pagination-sm justify-content-center">
                             <li className={"page-item" + (currentPage === 1 && " disabled")}>
-                                <button className="page-link" onClick={() => handleChangePage(currentPage - 1)}>&laquo;</button>
+                                <button className="page-link"
+                                        onClick={() => handleChangePage(currentPage - 1)}>&laquo;</button>
                             </li>
                             {pages.map(page =>
                                 <li key={page} className={"page-item" + (currentPage === page && " active")}>
@@ -222,11 +241,12 @@ const ProjectPage = ({history, match}) => {
                             )}
 
                             <li className={"page-item" + (currentPage === pagesCount && " disabled")}>
-                                <button className="page-link" onClick={() => handleChangePage(currentPage + 1)}>&raquo;</button>
+                                <button className="page-link"
+                                        onClick={() => handleChangePage(currentPage + 1)}>&raquo;</button>
                             </li>
                         </ul>
                     </div>
-                            {!loadingUsers &&
+                    {!loadingUsers &&
                     <select name="users" onChange={handleChange}>
                         {users.map(user => (
                             <option key={user.id} value={user.id}>
@@ -236,7 +256,7 @@ const ProjectPage = ({history, match}) => {
                     </select>
                     }
                     {loadingUsers &&
-                        <div id="loading-icon"></div>
+                    <div id="loading-icon"/>
                     }
                 </fieldset>
             </div>
