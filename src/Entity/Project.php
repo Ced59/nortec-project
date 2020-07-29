@@ -45,6 +45,8 @@ class Project
      * @var MediaObject|null
      *
      * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToOne(targetEntity=MediaObject::class)
+     * @ORM\JoinColumn(nullable=true)
      * @Groups({"project"})
      * @ApiProperty(iri="http://schema.org/photo")
      */
