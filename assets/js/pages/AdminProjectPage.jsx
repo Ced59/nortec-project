@@ -107,7 +107,7 @@ const AdminProjectPage = () => {
                     }</td> */}
                     <td className="text-center"/>
                     <td className="text-center"/>
-                    <td className="text-center">{project.dateFinReelle === "" ?
+                    <td className="text-center">{DateAPI.verifyDateExist(project.dateFinReelle) === "" ?
                         <span>Aucune</span>
                         :
                         DateAPI.formatDate(project.dateFinReelle)}</td>
