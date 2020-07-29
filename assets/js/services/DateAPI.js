@@ -4,7 +4,7 @@ import moment from "moment";
 function determineStatus(dateDebut, dateFinReelle) {
     let status = "";
 
-    if (!dateFinReelle)
+    if (dateFinReelle === "")
     {
         if (moment().isBefore(dateDebut))
         {
@@ -45,9 +45,11 @@ function formatDateHours(date)
 }
 
 function verifyDateExist(date) {
-    if (moment(date).isSame('1900-01-01'))
+    if (moment(date).isSame("1900-01-01T00:00:00+00:00"))
     {
         return "";
+    }else{
+        return date;
     }
 }
 

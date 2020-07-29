@@ -75,14 +75,14 @@ const App = () => {
                         <PrivateRoute path="/project/:id/:idReport/validate" component={ReportValidatePage}/>
 
                         <PrivateRoute path="/project/:id/listReports" component={ListReportsByProject}/>
+                        <PrivateRoute path="/project/:id" component={DetailProjectPage}/>
 
-                        <PrivateRoute path="/admin/user/:id" component={UserPage}/>
                         <PrivateRoute path="/admin/userslist" component={AdminUsersPage}/>
+                        <PrivateRoute path="/admin/user/:id" component={UserPage}/>
                         <PrivateRoute path="/admin/project/:id" component={ProjectPage}/>
                         <PrivateRoute path="/admin/project" component={AdminProjectPage}/>
                         <PrivateRoute path="/admin/:id" component={AdminPage}/>
 
-                        <PrivateRoute path="/project/:id" component={DetailProjectPage}/>
 
                         <SearchContext.Provider value={searchContextValue}>
                             <PrivateRoute path="/projects" component={ListProjectsPage}/>

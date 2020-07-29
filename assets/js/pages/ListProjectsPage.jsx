@@ -11,6 +11,8 @@ import fakeData from "../components/fakeDataForDev/fakeData";
 import DateAPI from "../services/DateAPI";
 import {toast} from "react-toastify";
 import AuthAPI from "../services/AuthAPI";
+import ProjectsAPI from '../services/ProjectsAPI';
+
 
 
 const ListProjectsPage = (props) => {
@@ -34,45 +36,44 @@ const ListProjectsPage = (props) => {
         archived: "Archivé"
     };
 
-
+    // --------------------------- Récupérer tous les projets de l'utilisateur -----------------------------------------
+    
+    const fetchProjects = async () => {
+        try {
+            const data = await ProjectsAPI.findAll();
+            setProjects(data);
+            setLoading(false);
+            
+        } catch (error) {
+            toast.error("Erreur lors du chargement de la liste des projets");
+            console.log(error.response);
+        }
+    }
 
     useEffect(() => {
         fetchProjects().then(r => "");
     }, []);
 
-// --------------------------- Récupérer tous les projets de l'utilisateur -----------------------------------------
-
-    const fetchProjects = async () => {
-        try {
-            const data = await fakeData.fakeListProjects();
-            setProjects(data);
-            setLoading(false);
-
-        } catch (error) {
-            toast.error("Erreur lors du chargement de la liste des projets");
-        }
-    }
-
     const filteredArchivedProjects = projects.filter(
         archivedProjects
             ?
             p =>
-                DateAPI.determineStatus(p.dateDebut, p.dateFinReelle) === 'archived' ||
-                DateAPI.determineStatus(p.dateDebut, p.dateFinReelle) === 'no_start' ||
-                DateAPI.determineStatus(p.dateDebut, p.dateFinReelle) === 'in_progress' ||
-                DateAPI.determineStatus(p.dateDebut, p.dateFinReelle) === 'finished'
+                DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'archived' ||
+                DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'no_start' ||
+                DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'in_progress' ||
+                DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'finished'
             :
             p =>
-                DateAPI.determineStatus(p.dateDebut, p.dateFinReelle) === 'no_start' ||
-                DateAPI.determineStatus(p.dateDebut, p.dateFinReelle) === 'in_progress' ||
-                DateAPI.determineStatus(p.dateDebut, p.dateFinReelle) === 'finished'
+                DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'no_start' ||
+                DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'in_progress' ||
+                DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'finished'
     );  //TODO Trouver façon de refactoriser cette condition... C'est moche...
 
 
     const filteredProjects = filteredArchivedProjects.filter(
         p =>
             p.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-            STATUS_LABEL[DateAPI.determineStatus(p.dateDebut, p.dateFinReelle)].toLowerCase().includes(searchValue.toLowerCase()) ||
+            STATUS_LABEL[DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(projects.dateFinReelle))].toLowerCase().includes(searchValue.toLowerCase()) ||
             p.ville.toLowerCase().includes(searchValue.toLowerCase())
     );
 
@@ -108,8 +109,8 @@ const ListProjectsPage = (props) => {
                             recherche...</p>
                         :
                         filteredProjects.map(project =>
-                            <Link style={{textDecorationLine: "none", color: "black"}} to={"/project/" + project.id}
-                                  key={project.id}>
+                            
+                            <Link key={project.id} to={'/project/' + project.id} style={{textDecorationLine: "none", color: "black"}} >
 
                                 <div className="card m-4" style={{width: '20rem', height: '26rem'}}>
 
@@ -130,8 +131,8 @@ const ListProjectsPage = (props) => {
                                     <div className="card-footer pb-0 text-right">
                                         <p><span
                                             className={"pl-2 pr-2 pt-1 pb-1 badge badge-" +
-                                            STATUS_CLASSES[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}>
-                                        {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}</span>
+                                            STATUS_CLASSES[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}>
+                                        {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}</span>
                                         </p>
                                     </div>
                                 </div>

@@ -6,9 +6,11 @@ import Button from "../components/forms/Button";
 import fakeData from "../components/fakeDataForDev/fakeData";
 import {Link} from "react-router-dom";
 import DateAPI from "../services/DateAPI";
+import ProjectsAPI from '../services/ProjectsAPI';
 
 const DetailProjectPage = ({history, match}) => {
-
+    
+    const {id} = match.params;
 
     //TODO Refactoriser STATUS CLASSES et STATUS LABEL
     const STATUS_CLASSES = {
@@ -25,49 +27,44 @@ const DetailProjectPage = ({history, match}) => {
         archived: "Archivé"
     };
 
-    const projects = fakeData.fakeListProjects();  //chargement de la fausse liste de projets
-
-    const id = match.params;
-
-    const [project, setProject] = useState(projects[id.id]); //TODO truc bizarre obligé de passer par là pour récupérer le projet. A faire attention!
+    const [project, setProject] = useState([]); //TODO truc bizarre obligé de passer par là pour récupérer le projet. A faire attention!
 
 //----------------------------------------Récupération d'un projet----------------------------
-    const fetchProject = id => {
-        //TODO récupérer le projet avec requête axios
+    const fetchProject = async id => {
+        console.log(id)
+        try {
+            const data = await ProjectsAPI.find(id);
+            setProject(data);
+            // setLoadingProject(false);
 
-        //console.log(projects[id.id]);
+        } catch (error) {
+            console.log(error.response);
+        }
+    }
 
-        setProject(projects[id.id]); //TODO Attention ca ne fonctionnait pas ici à vérifier plus tard avec axios
-
-        //console.log(project);
-    };
-
-    //Récupération du bon projet à chaque chargement du composant
+//Récupération du bon projet à chaque chargement du composant
 
 //---------------------------------------- Chargement de projet au changement de l'id --------
-
     useEffect(() => {
-        //TODO Normalement charge le projet à chaque fois que l'id change. Attention plus tard vérifier que tout fonctionne avec axios
-        fetchProject(id);
-        //console.log(project);
-    }, [id]);
+        fetchProject(id).then(r => '');
+    }, [id])
 
 
-    const handleBackClick = () => {
-        history.replace("/projects");
-    };
+    // const handleBackClick = () => {
+    //     history.replace("/projects");
+    // };
 
-    const newReportClick = () => {
-        //On récupère la liste des faux rapports
-        //TODO Avec axios créer un nouveau rapport vide (post) dont on récupérera l'id pour le lien
-        const reports = fakeData.fakeListReports();
+    // const newReportClick = () => {
+    //     //On récupère la liste des faux rapports
+    //     //TODO Avec axios créer un nouveau rapport vide (post) dont on récupérera l'id pour le lien
+    //     const reports = fakeData.fakeListReports();
 
-        const idMax = reports[reports.length - 1].id; //on récupère l'id du dernier rapport
-        const idNewReport = idMax + 1; //Simulation création rapport vide
+    //     const idMax = reports[reports.length - 1].id; //on récupère l'id du dernier rapport
+    //     const idNewReport = idMax + 1; //Simulation création rapport vide
 
-        history.push("/project/" + id.id + "/" + idNewReport + "/effectifs");
+    //     history.push("/project/" + id.id + "/" + idNewReport + "/effectifs");
 
-    };
+    // };
 
 
     return (
@@ -108,15 +105,21 @@ const DetailProjectPage = ({history, match}) => {
                             <p className='col-7'>{DateAPI.formatDate(project.dateDebut)}</p>
                         </div>
 
-                        {project.date_fin_prevues.map(date =>
+                        {/* {project.date_fin_prevues.map(date =>
 
                             <div className='row ml-2 no-space' key={date.id}>
                                 <h6 className='offset-1 col-4'>Fin prévue {date.id + 1} :</h6>
                                 <p className='col-7'>{DateAPI.formatDate(date.date)}</p>
                             </div>
-                        )}
+                        )} */}
 
-                        {project.dateFinReelle && <div className='row ml-2 no-space'>
+                        {DateAPI.verifyDateExist(project.dateFinReelle) === "" ?
+                        <div className='row ml-2 no-space'>
+                            <h6 className='offset-1 col-4'>Date de fin réélle :</h6>
+                            <p className='col-7'>Aucune</p>
+                        </div>
+                        :
+                        <div className='row ml-2 no-space'>
                             <h6 className='offset-1 col-4'>Date de fin réélle :</h6>
                             <p className='col-7'>{DateAPI.formatDate(project.dateFinReelle)}</p>
                         </div>}
@@ -140,8 +143,8 @@ const DetailProjectPage = ({history, match}) => {
 
                         <div className='row ml-2 mt-5'>
                             <h6 className='offset-1 col-4'>Statut :</h6>
-                            <p className={"col-2 badge badge-" + STATUS_CLASSES[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}>
-                                {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}</p>
+                            <p className={"col-2 badge badge-" + STATUS_CLASSES[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}>
+                                {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}</p>
                         </div>
 
                     </div>
@@ -151,7 +154,7 @@ const DetailProjectPage = ({history, match}) => {
                     <Button text='Nouveau Rapport'
                             className='btn btn-primary mr-4'
                             type='button'
-                            onClick={newReportClick}
+                            // onClick={newReportClick}
                     />
                     <Link
                         className='btn btn-primary'
@@ -167,7 +170,7 @@ const DetailProjectPage = ({history, match}) => {
                     <Button text='Revenir à la liste'
                             className='btn btn-primary mr-4'
                             type='button'
-                            onClick={handleBackClick}
+                            // onClick={handleBackClick}
                     />
                 </div>
 
