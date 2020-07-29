@@ -119,6 +119,14 @@ const ProjectPage = ({history, match}) => {
         setProject({...project, [name]: value});
     }
 
+    const handleChangeUsers = user => {
+        if(edit){
+            project.users.push(user);
+            project.users = project.users.map(userInProject => ("/api/users/" + userInProject.id));
+            console.log(project.users);
+        }
+    }
+
 
 
     const handleSubmit = async event => {
@@ -127,8 +135,9 @@ const ProjectPage = ({history, match}) => {
         const data = new FormData();
         data.append('file', picture[0]);
 
-
-        project.users = filtredAdmin.map(admin => "/api/users/" + admin.id);
+        if(!edit){
+            project.users = filtredAdmin.map(admin => "/api/users/" + admin.id);
+        }
 
         try {
             if (edit) {
@@ -239,7 +248,7 @@ const ProjectPage = ({history, match}) => {
                                     <td>{user.lastName}</td>
                                     <td>{UsersAPI.determineRole(user)}</td>
                                     <td>
-                                        <button className="btn btn-primary btn-sm">Changer l'affectation</button>
+                                        <button className="btn btn-primary btn-sm" onClick={()=>handleChangeUsers(user)}>Changer l'affectation</button>
                                     </td>
                                 </tr>)
                             )}
