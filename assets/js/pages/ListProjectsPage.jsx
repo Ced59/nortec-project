@@ -36,25 +36,23 @@ const ListProjectsPage = (props) => {
         archived: "Archivé"
     };
 
-
-
-    useEffect(() => {
-        fetchProjects().then(r => "");
-    }, []);
-
-// --------------------------- Récupérer tous les projets de l'utilisateur -----------------------------------------
-
+    // --------------------------- Récupérer tous les projets de l'utilisateur -----------------------------------------
+    
     const fetchProjects = async () => {
         try {
             const data = await ProjectsAPI.findAll();
             setProjects(data);
             setLoading(false);
-
+            
         } catch (error) {
             toast.error("Erreur lors du chargement de la liste des projets");
             console.log(error.response);
         }
     }
+
+    useEffect(() => {
+        fetchProjects().then(r => "");
+    }, []);
 
     const filteredArchivedProjects = projects.filter(
         archivedProjects
@@ -111,8 +109,8 @@ const ListProjectsPage = (props) => {
                             recherche...</p>
                         :
                         filteredProjects.map(project =>
-                            <Link style={{textDecorationLine: "none", color: "black"}} to={"/project/" + project.id}
-                                  key={project.id}>
+                            
+                            <Link key={project.id} to={'/project/' + project.id} style={{textDecorationLine: "none", color: "black"}} >
 
                                 <div className="card m-4" style={{width: '20rem', height: '26rem'}}>
 
