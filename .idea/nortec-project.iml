@@ -8,9 +8,11 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/data-fixtures" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/doctrine-fixtures-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/fzaninotto/faker" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/jms/metadata" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/lcobucci/jwt" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/lexik/jwt-authentication-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/namshi/jose" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/vich/uploader-bundle" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
