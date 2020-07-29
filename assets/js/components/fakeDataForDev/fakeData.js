@@ -8,10 +8,10 @@ function fakeData() {
             photo: "../img/projects-img/projects-general-img/0-project-img.jpg",
             adresse1: "Champ de Mars",
             adresse2: "",
-            code_postal: "75000",
+            codePostal: "75000",
             ville: "Paris",
-            date_debut: "2015-02-27",
-            date_fin_reelle: "2020-02-29",
+            dateDebut: "2015-02-27",
+            dateFinReelle: "2020-02-29",
             date_fin_prevues:
                 [
                     {
@@ -23,9 +23,9 @@ function fakeData() {
                         date: "2017-04-27"
                     }
                 ],
-            nom_MOEX: "Capitaine Haddock",
-            nom_OPC: "Tintin",
-            contact_client: "moulinsart@herge.com"
+            nomMOEX: "Capitaine Haddock",
+            nomOPC: "Tintin",
+            contactClient: "moulinsart@herge.com"
         },
         {
             id: 1,
@@ -34,15 +34,15 @@ function fakeData() {
             photo: "../img/projects-img/projects-general-img/1-project-img.jpg",
             adresse1: "346 rue de Leila",
             adresse2: "",
-            code_postal: "59000",
+            codePostal: "59000",
             ville: "New New York",
-            date_debut: "3000-02-27",
-            date_fin_reelle: "",
+            dateDebut: "3000-02-27",
+            dateFinReelle: "",
             date_fin_prevues:
                 [],
-            nom_MOEX: "Bender Rodriguez",
-            nom_OPC: "Professeur Fansthworm",
-            contact_client: "bender@tordeur.com"
+            nomMOEX: "Bender Rodriguez",
+            nomOPC: "Professeur Fansthworm",
+            contactClient: "bender@tordeur.com"
         },
         {
             id: 2,
@@ -51,15 +51,15 @@ function fakeData() {
             photo: "../img/projects-img/projects-general-img/2-project-img.jpg",
             adresse1: "742 Evergreen Terasse",
             adresse2: "",
-            code_postal: "54000",
+            codePostal: "54000",
             ville: "Springfield",
-            date_debut: "2020-03-27",
-            date_fin_reelle: "",
+            dateDebut: "2020-03-27",
+            dateFinReelle: "",
             date_fin_prevues:
                 [],
-            nom_MOEX: "Homer Simpson",
-            nom_OPC: "Bart Simpson",
-            contact_client: "homer@simpsons.com"
+            nomMOEX: "Homer Simpson",
+            nomOPC: "Bart Simpson",
+            contactClient: "homer@simpsons.com"
         },
         {
             id: 3,
@@ -68,10 +68,10 @@ function fakeData() {
             photo: "../img/projects-img/projects-general-img/3-project-img.jpg",
             adresse1: "Le Radôme",
             adresse2: "Cité des Télécoms",
-            code_postal: "22560",
+            codePostal: "22560",
             ville: "Pleumeur-Bodou",
-            date_debut: "2020-02-19",
-            date_fin_reelle: "",
+            dateDebut: "2020-02-19",
+            dateFinReelle: "",
             date_fin_prevues:
                 [
                     {
@@ -83,9 +83,9 @@ function fakeData() {
                         date: "2020-04-12"
                     }
                 ],
-            nom_MOEX: "Grande oreille",
-            nom_OPC: "Telecom",
-            contact_client: "contact@lacitedestelecoms.com"
+            nomMOEX: "Grande oreille",
+            nomOPC: "Telecom",
+            contactClient: "contact@lacitedestelecoms.com"
         },
         {
             id: 4,
@@ -94,10 +94,10 @@ function fakeData() {
             photo: "../img/projects-img/projects-general-img/4-project-img.jpg",
             adresse1: "27 rue des Sarrazins",
             adresse2: "",
-            code_postal: "15000",
+            codePostal: "15000",
             ville: "Montmirail",
-            date_debut: "2020-02-02",
-            date_fin_reelle: "",
+            dateDebut: "2020-02-02",
+            dateFinReelle: "",
             date_fin_prevues:
                 [
                     {
@@ -113,9 +113,9 @@ function fakeData() {
                         date: "2022-10-20"
                     }
                 ],
-            nom_MOEX: "Godefroy",
-            nom_OPC: "Dame Ginette",
-            contact_client: "jetrepassijefaiblis@jacqouille.com"
+            nomMOEX: "Godefroy",
+            nomOPC: "Dame Ginette",
+            contactClient: "jetrepassijefaiblis@jacqouille.com"
         },
         {
             id: 5,
@@ -124,10 +124,10 @@ function fakeData() {
             photo: "../img/projects-img/projects-general-img/5-project-img.jpg",
             adresse1: "666 allée des somnifères",
             adresse2: "Entrée B",
-            code_postal: "00000",
+            codePostal: "00000",
             ville: "Dodo-sur-Isère",
-            date_debut: "2018-02-27",
-            date_fin_reelle: "2020-02-20",
+            dateDebut: "2018-02-27",
+            dateFinReelle: "2020-02-20",
             date_fin_prevues:
                 [
                     {
@@ -139,9 +139,9 @@ function fakeData() {
                         date: "2019-12-24"
                     }
                 ],
-            nom_MOEX: "Mickey",
-            nom_OPC: "Donald",
-            contact_client: "walt@disney.com"
+            nomMOEX: "Mickey",
+            nomOPC: "Donald",
+            contactClient: "walt@disney.com"
         },
         {
             id: 6,
@@ -150,10 +150,10 @@ function fakeData() {
             photo: "../img/projects-img/projects-general-img/6-project-img.jpg",
             adresse1: "20 W 34th Street",
             adresse2: "",
-            code_postal: "10001",
+            codePostal: "10001",
             ville: "New-York",
-            date_debut: "2020-01-10",
-            date_fin_reelle: "",
+            dateDebut: "2020-01-10",
+            dateFinReelle: "",
             date_fin_prevues:
                 [
                     {
@@ -161,9 +161,9 @@ function fakeData() {
                         date: "2020-10-15"
                     }
                 ],
-            nom_MOEX: "Al Capone",
-            nom_OPC: "Donald Trump",
-            contact_client: "trump@orange.com"
+            nomMOEX: "Al Capone",
+            nomOPC: "Donald Trump",
+            contactClient: "trump@orange.com"
         },
         {
             id: 7,
@@ -172,10 +172,10 @@ function fakeData() {
             photo: "../img/projects-img/projects-general-img/7-project-img.jpg",
             adresse1: "123 rue du Clair de la Lune",
             adresse2: "Chez Pierrot",
-            code_postal: "98451",
+            codePostal: "98451",
             ville: "Sing Sing",
-            date_debut: "2017-10-11",
-            date_fin_reelle: "2020-01-03",
+            dateDebut: "2017-10-11",
+            dateFinReelle: "2020-01-03",
             date_fin_prevues:
                 [
                     {
@@ -187,9 +187,9 @@ function fakeData() {
                         date: "2019-12-15"
                     }
                 ],
-            nom_MOEX: "Wolfgang Amadeus Mozart",
-            nom_OPC: "Ludwig Van Beethoven",
-            contact_client: "doremi@fasollasi.com"
+            nomMOEX: "Wolfgang Amadeus Mozart",
+            nomOPC: "Ludwig Van Beethoven",
+            contactClient: "doremi@fasollasi.com"
         },
         {
             id: 8,
@@ -198,10 +198,10 @@ function fakeData() {
             photo: "../img/projects-img/projects-general-img/8-project-img.jpg",
             adresse1: "56 Bikini Bottom Street",
             adresse2: "Chez Sponge Bob",
-            code_postal: "32321",
+            codePostal: "32321",
             ville: "Glouglou Town",
-            date_debut: "2015-05-12",
-            date_fin_reelle: "",
+            dateDebut: "2015-05-12",
+            dateFinReelle: "",
             date_fin_prevues:
                 [
                     {
@@ -217,9 +217,9 @@ function fakeData() {
                         date: "2020-12-15"
                     }
                 ],
-            nom_MOEX: "Nemo",
-            nom_OPC: "La petite Sirène",
-            contact_client: "boirelatasse@glouglou.com"
+            nomMOEX: "Nemo",
+            nomOPC: "La petite Sirène",
+            contactClient: "boirelatasse@glouglou.com"
         }
     ];
 }
@@ -237,51 +237,51 @@ function fakeListReports() {
             proprete_comment: "Tout est très propre !",
             proprete_comment_intern:
                 "Ils ont pas été contents mais je m'en fous ils ont nettoyé!!",
-            security_conformity: true,
-            proprete_access_comment: "RAS",
-            proprete_access_comment_intern:
+            securityConformity: true,
+            propreteAccessComment: "RAS",
+            propreteAccessCommentIntern:
                 "Y'a fallu leur botter les fesses pour qu'ils mettent cette fichue barrière!",
             installations: "10 échafaudages, 5 tracto-pelles",
             lots: [
                 {
                     id: 0,
-                    numero_lot: "101ABC674",
-                    libelle_lot: "FOURNISSEUR SPECIAL",
+                    numeroLot: "101ABC674",
+                    libelleLot: "FOURNISSEUR SPECIAL",
                     entreprise: companyById(3),
-                    effectif_prevu: 5,
-                    effectif_constate: 2
+                    effectifPrevu: 5,
+                    effectifConstate: 2
                 },
                 {
                     id: 1,
-                    numero_lot: "10242342DEF",
-                    libelle_lot: "INSTALLATION TELEPHONE",
+                    numeroLot: "10242342DEF",
+                    libelleLot: "INSTALLATION TELEPHONE",
                     entreprise: companyById(4),
-                    effectif_prevu: 5,
-                    effectif_constate: 4
+                    effectifPrevu: 5,
+                    effectifConstate: 4
                 },
                 {
                     id: 2,
-                    numero_lot: "102AZZZAA1FEF",
-                    libelle_lot: "INSTALLATION FIBRE",
+                    numeroLot: "102AZZZAA1FEF",
+                    libelleLot: "INSTALLATION FIBRE",
                     entreprise: companyById(4),
-                    effectif_prevu: 5,
-                    effectif_constate: 7
+                    effectifPrevu: 5,
+                    effectifConstate: 7
                 },
                 {
                     id: 3,
-                    numero_lot: "102EEZDSS",
-                    libelle_lot: "MISE EN PLACE ANTENNES SPECIALES",
+                    numeroLot: "102EEZDSS",
+                    libelleLot: "MISE EN PLACE ANTENNES SPECIALES",
                     entreprise: companyById(4),
-                    effectif_prevu: 5,
-                    effectif_constate: 0
+                    effectifPrevu: 5,
+                    effectifConstate: 0
                 },
                 {
                     id: 4,
-                    numero_lot: "10DSSQSDSSDHJH",
-                    libelle_lot: "FOURNITURE ELECTRICITE",
+                    numeroLot: "10DSSQSDSSDHJH",
+                    libelleLot: "FOURNITURE ELECTRICITE",
                     entreprise: companyById(2),
-                    effectif_prevu: 5,
-                    effectif_constate: 5
+                    effectifPrevu: 5,
+                    effectifConstate: 5
                 }
             ],
             photos: [
@@ -304,8 +304,8 @@ function fakeListReports() {
             redacteur: "Ced",
             dateRedaction: "2020-03-03T15:21:12",
             status: "clotured",
-            proprete_access_conformity: "noconform",
-            proprete_access_imputation:
+            propreteAccessConformity: "noconform",
+            propreteIccessImputation:
                 [
                     {
                         id: 0,
@@ -334,9 +334,9 @@ function fakeListReports() {
                     }
 
                 ],
-            proprete_access_comment: "4 entreprises sur 5 devront payer",
-            proprete_access_comment_intern: "C'etait dégueulasse !!!",
-            proprete_commune_conformity: false,
+            propreteAccessComment: "4 entreprises sur 5 devront payer",
+            propreteAccessCommentIntern: "C'etait dégueulasse !!!",
+            propreteCommuneConformity: false,
             proprete_commune_imputation:
                 [
                     {
@@ -371,10 +371,10 @@ function fakeListReports() {
                     }
 
                 ],
-            proprete_commune_comment: "Veillez a effectuez cela avant que l'on demande a une entreprise svp",
-            proprete_commune_comment_intern: "J'en ai marre de voir leur merde trainer partout, va falloir durcir",
-            security_conformity: false,
-            security_comment_imputations: [
+            propreteCommuneComment: "Veillez a effectuez cela avant que l'on demande a une entreprise svp",
+            propreteCommuneCommentIntern: "J'en ai marre de voir leur merde trainer partout, va falloir durcir",
+            securityConformity: false,
+            securityConmment_imputations: [
                 {
                     id: 0,
                     company: companyById(0),
@@ -402,50 +402,50 @@ function fakeListReports() {
                 }
 
             ],
-            security_comment: "RAS",
-            security_comment_intern:
+            securityConmment: "RAS",
+            securityConmmentIntern:
                 "Y'a fallu leur botter les fesses pour qu'ils mettent cette fichue barrière!",
             installations: "10 échafaudages, 5 tracto-pelles",
             lots: [
                 {
                     id: 5,
-                    numero_lot: "101ABC654",
-                    libelle_lot: "POSE MOQUETTE",
+                    numeroLot: "101ABC654",
+                    libelleLot: "POSE MOQUETTE",
                     entreprise: companyById(0),
-                    effectif_prevu: 5,
-                    effectif_constate: 5
+                    effectifPrevu: 5,
+                    effectifConstate: 5
                 },
                 {
                     id: 6,
-                    numero_lot: "102DEF",
-                    libelle_lot: "COULAGE DE BETON",
+                    numeroLot: "102DEF",
+                    libelleLot: "COULAGE DE BETON",
                     entreprise: companyById(1),
-                    effectif_prevu: 5,
-                    effectif_constate: 2
+                    effectifPrevu: 5,
+                    effectifConstate: 2
                 },
                 {
                     id: 7,
-                    numero_lot: "102121FEF",
-                    libelle_lot: "POSE ROBINETTERIE",
+                    numeroLot: "102121FEF",
+                    libelleLot: "POSE ROBINETTERIE",
                     entreprise: companyById(3),
-                    effectif_prevu: 5,
-                    effectif_constate: 10
+                    effectifPrevu: 5,
+                    effectifConstate: 10
                 },
                 {
                     id: 8,
-                    numero_lot: "10210DSS",
-                    libelle_lot: "INSTALLATION VIDEO SURVEILLANCE",
+                    numeroLot: "10210DSS",
+                    libelleLot: "INSTALLATION VIDEO SURVEILLANCE",
                     entreprise: companyById(4),
-                    effectif_prevu: 5,
-                    effectif_constate: 5
+                    effectifPrevu: 5,
+                    effectifConstate: 5
                 },
                 {
                     id: 9,
-                    numero_lot: "10DSS",
-                    libelle_lot: "FOURNITURE ELECTRICITE",
+                    numeroLot: "10DSS",
+                    libelleLot: "FOURNITURE ELECTRICITE",
                     entreprise: companyById(2),
-                    effectif_prevu: 5,
-                    effectif_constate: 0
+                    effectifPrevu: 5,
+                    effectifConstate: 0
                 }
             ],
             photos: [
@@ -470,31 +470,31 @@ function fakeListReports() {
             status: "clotured",
             proprete_conformity: true,
             proprete_imputation: [],
-            proprete_access_comment: "Tout est très propre !",
-            proprete_access_comment_intern:
+            propreteAccessComment: "Tout est très propre !",
+            propreteAccessCommentIntern:
                 "Ils ont pas été contents mais je m'en fous ils ont nettoyé!!",
-            security_conformity: true,
-            security_comment: "RAS",
-            security_comment_intern:
+            securityConformity: true,
+            securityConmment: "RAS",
+            securityConmmentIntern:
                 "Y'a fallu leur botter les fesses pour qu'ils mettent cette fichue barrière!",
             installations: "10 échafaudages, 5 tracto-pelles",
             lots: [
                 {
                     id: 10,
-                    numero_lot: "101ABC614154",
-                    libelle_lot: "ENQUETES CRIM",
+                    numeroLot: "101ABC614154",
+                    libelleLot: "ENQUETES CRIM",
                     entreprise: companyById(3)
                 },
                 {
                     id: 11,
-                    numero_lot: "10211120DEF",
-                    libelle_lot: "POSE DES JUDAS",
+                    numeroLot: "10211120DEF",
+                    libelleLot: "POSE DES JUDAS",
                     entreprise: companyById(4)
                 },
                 {
                     id: 12,
-                    numero_lot: "1021211148511FEF",
-                    libelle_lot: "POSE ROBINETTERIE",
+                    numeroLot: "1021211148511FEF",
+                    libelleLot: "POSE ROBINETTERIE",
                     entreprise: companyById(5)
                 }
             ],
@@ -522,7 +522,7 @@ function fakeListCompanies() {
             nom: "Le roi de la moquette",
             adresse1: "36 quai des Orfèvres",
             adresse2: "",
-            code_postal: "75000",
+            codePostal: "75000",
             ville: "Paris",
             mail1: "moquetteman@raslamoquette.com",
             mail2: "razmoket@cesttouffu.org"
@@ -532,7 +532,7 @@ function fakeListCompanies() {
             nom: "Béton Armé",
             adresse1: "56 rue betonnée",
             adresse2: "Dans le béton",
-            code_postal: "56123",
+            codePostal: "56123",
             ville: "Béton-City",
             mail1: "ilestdurmonbeton@arme.com",
             mail2: ""
@@ -542,7 +542,7 @@ function fakeListCompanies() {
             nom: "Centrale nucléaire de Springfield",
             adresse1: "777 rue de l'atome",
             adresse2: "Derrière Chez Mr Burns",
-            code_postal: "78451",
+            codePostal: "78451",
             ville: "Springfield",
             mail1: "montyburns@enfoire.com",
             mail2: "wellonsmithers@larbin.com"
@@ -552,7 +552,7 @@ function fakeListCompanies() {
             nom: "Lux",
             adresse1: "666 rue de l'enfer",
             adresse2: "",
-            code_postal: "78451",
+            codePostal: "78451",
             ville: "Los Angeles",
             mail1: "lucifermorningstar@hell.com",
             mail2: "lieutenantdan@ducon.com"
@@ -562,7 +562,7 @@ function fakeListCompanies() {
             nom: "NSA",
             adresse1: "9800 Savage Road",
             adresse2: "Derrière toi",
-            code_postal: "74451",
+            codePostal: "74451",
             ville: "Maryland",
             mail1: "bigbrothervousregarde@cia.com",
             mail2: ""
@@ -572,7 +572,7 @@ function fakeListCompanies() {
             nom: "Bender Company",
             adresse1: "Future Street",
             adresse2: "Teflon Village",
-            code_postal: "74411",
+            codePostal: "74411",
             ville: "New New York",
             mail1: "benderrodriguez@teflon.com",
             mail2: ""

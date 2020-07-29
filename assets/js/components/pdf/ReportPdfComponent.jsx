@@ -69,7 +69,7 @@ const ReportPdfComponent = ({report}) => {
                     <Text style={styles.text}>{'Description : ' + report.project.description}</Text>
                     <Text style={styles.text}>{'Adresse 1 : ' + report.project.adresse1}</Text>
                     <Text style={styles.text}>{'Adresse 2 : ' + report.project.adresse2}</Text>
-                    <Text style={styles.text}>{'Code Postal : ' + report.project.code_postal}</Text>
+                    <Text style={styles.text}>{'Code Postal : ' + report.project.codePostal}</Text>
                     <Text style={styles.text}>{'Ville : ' + report.project.ville}</Text>
                 </View>
 
@@ -88,12 +88,12 @@ const ReportPdfComponent = ({report}) => {
                         {report.lots.map(lot =>
                             <View style={styles.listEffectifs}>
                                 <Text style={styles.textEffectifsNomEntreprise}>{lot.entreprise.nom + ' :'}</Text>
-                                <Text style={styles.textEffectifsInfos}>{'N° Lot : ' + lot.numero_lot}</Text>
-                                <Text style={styles.textEffectifsInfos}>{'Intitulé Lot : ' + lot.libelle_lot}</Text>
+                                <Text style={styles.textEffectifsInfos}>{'N° Lot : ' + lot.numeroLot}</Text>
+                                <Text style={styles.textEffectifsInfos}>{'Intitulé Lot : ' + lot.libelleLot}</Text>
                                 <Text
-                                    style={styles.textEffectifsInfos}>{'Effectifs prévus : ' + lot.effectif_prevu}</Text>
+                                    style={styles.textEffectifsInfos}>{'Effectifs prévus : ' + lot.effectifPrevu}</Text>
                                 <Text
-                                    style={styles.textEffectifsInfos}>{'Effectifs constatés : ' + lot.effectif_constate}</Text>
+                                    style={styles.textEffectifsInfos}>{'Effectifs constatés : ' + lot.effectifConstate}</Text>
                             </View>
                         )}
                     </View>
@@ -108,7 +108,7 @@ const ReportPdfComponent = ({report}) => {
 
                 <View style={styles.sectionBorder}>
                     <Text style={styles.title}>Sécurité</Text>
-                    {report.security_conformity
+                    {report.securityConformity
                         ?
                         <Text style={styles.title}>Conforme</Text>
                         :
@@ -116,7 +116,7 @@ const ReportPdfComponent = ({report}) => {
                             <Text style={styles.title}>Non Conforme</Text>
                             <View style={styles.listEffectifs}>
                                 <Text>Imputations : </Text>
-                                {report.security_comment_imputations.map(security =>
+                                {report.securityConmment_imputations.map(security =>
                                     <View style={styles.listEffectifs}>
                                         {security.commentaire !== "" &&
                                         <View>
@@ -144,21 +144,21 @@ const ReportPdfComponent = ({report}) => {
 
                 <View style={styles.sectionBorder}>
                     <Text style={styles.title}>Propreté des accès</Text>
-                    {report.proprete_access_conformity === 'conform' &&
+                    {report.propreteAccessConformity === 'conform' &&
 
                     <Text style={styles.title}>Conforme</Text>
                     }
-                    {report.proprete_access_conformity === 'prorata' &&
+                    {report.propreteAccessConformity === 'prorata' &&
 
                     <Text style={styles.title}>Imputations au Prorata</Text>
                     }
-                    {report.proprete_access_conformity === 'noconform' &&
+                    {report.propreteAccessConformity === 'noconform' &&
 
                     <View>
                         <Text style={styles.title}>Non Conforme</Text>
                         <View style={styles.listEffectifs}>
                             <Text>Imputations : </Text>
-                            {report.proprete_access_imputation.map(proprete =>
+                            {report.propreteIccessImputation.map(proprete =>
                                 <View style={styles.listEffectifs}>
                                     <Text
                                         style={styles.textEffectifsNomEntreprise}>{proprete.company.nom + ' :' + proprete.pourcent + ' %'}</Text>
@@ -178,7 +178,7 @@ const ReportPdfComponent = ({report}) => {
 
                 <View style={styles.sectionBorder}>
                     <Text style={styles.title}>Propreté des parties communes</Text>
-                    {report.proprete_commune_conformity
+                    {report.propreteCommuneConformity
                         ?
                         <Text style={styles.title}>Conforme</Text>
                         :

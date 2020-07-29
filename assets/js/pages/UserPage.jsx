@@ -7,8 +7,24 @@ import '../../css/fieldset.css';
 import '../../css/loading-icon.css';
 import Modal from "react-bootstrap/Modal";
 import {Button} from "react-bootstrap";
+import ProjectsAPI from "../services/ProjectsAPI";
+import DateAPI from "../services/DateAPI";
 
 const UserPage = ({history, match, props}) => {
+
+    const STATUS_CLASSES = {
+        no_start: "info",
+        in_progress: "warning",
+        finished: "success",
+        archived: "primary"
+    };
+
+    const STATUS_LABEL = {
+        no_start: "Pas démarré",
+        in_progress: "En cours",
+        finished: "Fini",
+        archived: "Archivé"
+    };
 
 //------------------------------- Récupération de l'id si il y en a un --------------------------------
     const {id = "new"} = match.params;
@@ -29,8 +45,11 @@ const UserPage = ({history, match, props}) => {
         password: ""
     })
 
+    const [projects, setProjects] = useState("");
+
     const [edit, setEdit] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [loadingProjects, setLoadingProjects] = useState(true);
 
     const [showModal, setShowModal] = useState(false);
     const [showModalRole, setShowModalRole] = useState(false);
@@ -56,11 +75,45 @@ const UserPage = ({history, match, props}) => {
         }
 
     }
+
+    //---------------------------------------- Récupérer les projets de l'utilisateur ------------------------------------
+
+    const fetchProjects = async () => {
+        try {
+            let result = await ProjectsAPI.findAll();
+            console.log(result);
+            setProjects(result);
+            setLoadingProjects(false);
+
+        } catch (error) {
+            toast.error("Le chargement des projets a rencontré un problème !");
+            setLoadingProjects(false);
+            history.replace("/admin/user/" + id);
+        }
+
+    }
+
+    const filteredUserProjects = () => {
+        const filteredUserProject = [];
+        if (!loadingProjects) {
+            projects.map(project => {
+                project.users.map(user => {
+                    if (user.id === parseInt(id, 10)) {
+                        filteredUserProject.push(project);
+                    }
+                })
+            });
+
+            return filteredUserProject;
+        }
+    }
+
 //--------------------------- Chargement de l'utilisateur au changement d'identifiant ------------------
     useEffect(() => {
         if (id !== "new") {
             setEdit(true);
             fetchUser(id).then(r => "");
+            fetchProjects().then(r => "");
 
         } else {
             setLoading(false);
@@ -87,7 +140,6 @@ const UserPage = ({history, match, props}) => {
         try {
 
             if (edit) {
-                console.log(user);
                 await UsersAPI.update(id, user);
                 toast.success("L'utilisateur a bien été modifié !");
                 history.replace("/admin/userslist");
@@ -109,8 +161,6 @@ const UserPage = ({history, match, props}) => {
             }
         }
     }
-
-
 
 
     // ----------------------------- Gestion de l'affichage des fenêtres modales ------------------------------
@@ -156,10 +206,6 @@ const UserPage = ({history, match, props}) => {
         const userModify = userToModifyRole;
 
 
-        console.log(roleCopie);
-        console.log(userToModifyRole);
-        console.log(roleChange);
-
         try {
 
             userModify.roles.splice(0, 1, roleChange.role)
@@ -167,16 +213,12 @@ const UserPage = ({history, match, props}) => {
             console.log(userToModifyRole);
             await UsersAPI.update(id, userToModifyRole);
             toast.success("Le rôle de l'utilisateur a bien été modifié !");
-        }
-        catch ({response}){
-            userModify.roles.splice(0,1,roleCopie);
+        } catch ({response}) {
+            userModify.roles.splice(0, 1, roleCopie);
             setUserToModifyRole(userModify);
             toast.error("Une erreur est survenue pendant la modification du rôle de l'utilisateur !");
         }
 
-
-        console.log(userToModifyRole);
-        console.log(roleChange);
 
     }
 
@@ -305,9 +347,71 @@ const UserPage = ({history, match, props}) => {
                         </div>
                     </div>
                 </div>
+
                 <div className="form-group text-right mt-4 mr-5">
                     <Link to="/admin/userslist" className="btn btn-primary">Retour à la liste des utilisateurs</Link>
                 </div>
+
+                {edit &&
+                <>
+                    <>
+
+                        <div className="col-12">
+                            <fieldset className="border-fieldset mt-3">
+                                <legend>Liste des projets affectés à {user.firstName} {user.lastName}</legend>
+                                {!loadingProjects ?
+                                    <>
+                                        {edit &&
+                                        <>
+                                            <table className="table table-hover table-striped">
+                                                <thead>
+                                                <tr>
+                                                    <th className="p-2">Nom</th>
+                                                    <th className="p-2">Ville</th>
+                                                    <th className="p-2 text-center">Date début</th>
+                                                    <th className="p-2 text-center">Statut</th>
+                                                    <th/>
+
+                                                </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                {filteredUserProjects().map(project =>
+                                                    <tr key={project.id}>
+                                                        <td className="p-2">{project.name}</td>
+                                                        <td className="p-2">{project.ville}</td>
+                                                        <td className="p-2 text-center">{DateAPI.formatDate(project.dateDebut)}</td>
+                                                        <td className="p-2 text-center"><span
+                                                            className={"pl-2 pr-2 pt-1 pb-1 badge badge-" +
+                                                            STATUS_CLASSES[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}>
+                                                        {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}</span>
+                                                        </td>
+                                                        <td className="p-2 text-center">
+                                                            <button className="btn btn-danger btn-sm">Retirer le projet
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                )}
+                                                </tbody>
+                                            </table>
+                                        </>
+                                        }
+
+                                    </>
+                                    :
+                                    <div id="loading-icon"/>
+                                }
+                            </fieldset>
+                        </div>
+
+                    </>
+
+                    <div className="form-group text-right mt-4 mr-5">
+                        <Link to="/admin/userslist" className="btn btn-primary">Retour à la liste des
+                            utilisateurs</Link>
+                    </div>
+                </>
+                }
             </main>
 
             <Modal {...props}
@@ -321,8 +425,10 @@ const UserPage = ({history, match, props}) => {
                 <Modal.Body>
                     Vous êtes sur le point {userToModifyActive.active ? <>de désactiver </> : <>d'activer </>}
                     l'utilisateur {userToModifyActive.firstName} {userToModifyActive.lastName}! <br/>
-                    {userToModifyActive.active ? <>Tous les projets auquel il est affecté seront supprimé et vous devrez les réattribuer plus tard si
-                        vous réactivez le compte. <br/> </> : <>Il vous faudra réassigner manuellement les projets auxquels l'utilisateur pourra avoir accès. <br/></>}
+                    {userToModifyActive.active ? <>Tous les projets auquel il est affecté seront supprimé et vous devrez
+                        les réattribuer plus tard si
+                        vous réactivez le compte. <br/> </> : <>Il vous faudra réassigner manuellement les projets
+                        auxquels l'utilisateur pourra avoir accès. <br/></>}
 
                     Êtes vous sûr de vouloir continuer?
                 </Modal.Body>
@@ -350,7 +456,6 @@ const UserPage = ({history, match, props}) => {
                         l'utilisateur {userToModifyRole.firstName} {userToModifyRole.lastName}! <br/>
                         Êtes vous sûr de vouloir continuer? <br/><br/>
                         Nouveau rôle :
-
 
 
                         <select name="role" id="role" onChange={handleChangeRoleSelect}>

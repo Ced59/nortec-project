@@ -47,7 +47,7 @@ const ReportValidatePage = ({match}) => {
                     <p><span style={{fontWeight: 'bold'}}>Adresse 1 : </span> {report.project.adresse1}</p>
                     {report.project.adresse2 &&
                     <p><span style={{fontWeight: 'bold'}}>Adresse 2 : </span> {report.project.adresse2}</p>}
-                    <p><span style={{fontWeight: 'bold'}}>Code Postal : </span> {report.project.code_postal}</p>
+                    <p><span style={{fontWeight: 'bold'}}>Code Postal : </span> {report.project.codePostal}</p>
                     <p><span style={{fontWeight: 'bold'}}>Ville : </span> {report.project.ville}</p>
                 </div>
 
@@ -68,10 +68,10 @@ const ReportValidatePage = ({match}) => {
                         {report.lots.map(lot =>
                             <tr key={lot.id}>
                                 <td style={{fontWeight: 'bold'}}>{lot.entreprise.nom}</td>
-                                <td>{lot.numero_lot}</td>
-                                <td>{lot.libelle_lot}</td>
-                                <td className="text-center">{lot.effectif_prevu}</td>
-                                <td className="text-center">{lot.effectif_constate}</td>
+                                <td>{lot.numeroLot}</td>
+                                <td>{lot.libelleLot}</td>
+                                <td className="text-center">{lot.effectifPrevu}</td>
+                                <td className="text-center">{lot.effectifConstate}</td>
                             </tr>
                         )}
                         </tbody>
@@ -80,14 +80,14 @@ const ReportValidatePage = ({match}) => {
                 </div>
 
                 <div className="card m-4 p-2">
-                    {report.security_conformity
+                    {report.securityConformity
                         ?
                         <h5>Sécurité conforme</h5>
                         :
                         <>
                             <h4 className="mb-3">Sécurité non conforme</h4>
                             <ul>
-                                {report.security_comment_imputations.map(imputation =>
+                                {report.securityConmment_imputations.map(imputation =>
                                     <div key={imputation.id}>
                                         {imputation.commentaire &&
                                         <li>
@@ -104,17 +104,17 @@ const ReportValidatePage = ({match}) => {
                 </div>
                 <div className="card m-4 p-2">
 
-                    {report.proprete_access_conformity === "conform" &&
+                    {report.propreteAccessConformity === "conform" &&
                     <h4>Propreté des accès conforme</h4>
                     }
-                    {report.proprete_access_conformity === "prorata" &&
+                    {report.propreteAccessConformity === "prorata" &&
                     <h4>Propreté des accès au prorata</h4>
                     }
-                    {report.proprete_access_conformity === "noconform" &&
+                    {report.propreteAccessConformity === "noconform" &&
                     <>
                         <h4 className="mb-3">Propreté des accès non conforme</h4>
                         <ul>
-                            {report.proprete_access_imputation.map(imputation =>
+                            {report.propreteIccessImputation.map(imputation =>
                                 <div key={imputation.id}>
                                     {imputation.pourcent !== 0 &&
                                     <li>
@@ -127,18 +127,18 @@ const ReportValidatePage = ({match}) => {
                             )}
                         </ul>
                         <h6>Commentaire : </h6>
-                        <p className="ml-3">{report.proprete_access_comment}</p>
+                        <p className="ml-3">{report.propreteAccessComment}</p>
                         <h6>Commentaire interne (non visible sur le rapport final): </h6>
-                        <p className="ml-3">{report.proprete_access_comment_intern}</p>
+                        <p className="ml-3">{report.propreteAccessCommentIntern}</p>
                     </>
                     }
                 </div>
                 <div className="card m-4 p-2">
-                    {report.proprete_commune_conformity &&
+                    {report.propreteCommuneConformity &&
                     <h4>Propreté des parties communes conforme</h4>
                     }
 
-                    {!report.proprete_commune_conformity &&
+                    {!report.propreteCommuneConformity &&
                     <>
                         <h4 className="mb-3">Propreté des parties communes non conforme</h4>
                         <ul>
@@ -156,9 +156,9 @@ const ReportValidatePage = ({match}) => {
                             )}
                         </ul>
                         <h6>Commentaire : </h6>
-                        <p className="ml-3">{report.proprete_access_comment}</p>
+                        <p className="ml-3">{report.propreteAccessComment}</p>
                         <h6>Commentaire interne (non visible sur le rapport final): </h6>
-                        <p className="ml-3">{report.proprete_access_comment_intern}</p>
+                        <p className="ml-3">{report.propreteAccessCommentIntern}</p>
                     </>
                     }
                 </div>

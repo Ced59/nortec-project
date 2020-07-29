@@ -28,9 +28,9 @@ const ReportPropretePartiesCommunesPage = ({match}) => {
 
         //Vérification si édition ou nouveau rapport... Dans la version finale, le nouveau rapport existera mais avec valeurs vides donc pas de vérification à ce niveau
         if (reportById) {
-            setConforme(reportById.proprete_commune_conformity);
-            setComment(reportById.proprete_commune_comment);
-            setCommentIntern(reportById.proprete_commune_comment_intern);
+            setConforme(reportById.propreteCommuneConformity);
+            setComment(reportById.propreteCommuneComment);
+            setCommentIntern(reportById.propreteCommuneCommentIntern);
             setImputations(reportById.proprete_commune_imputation);
             setPercentImputations(reportById.proprete_commune_imputation);
         }
