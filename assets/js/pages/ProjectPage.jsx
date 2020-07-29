@@ -20,7 +20,7 @@ const ProjectPage = ({history, match}) => {
         adresse2: "",
         codePostal: "",
         dateDebut: "",
-        dateFinReelle: "1900-01-01",
+        dateFinReelle: "",
         nomMOEX: "",
         nomOPC: "",
         contactClient: "",
