@@ -234,6 +234,10 @@ const ProjectPage = ({history, match}) => {
                     </fieldset>
                     <fieldset className="border-fieldset col-5">
                         <legend>Choix des utilisateurs</legend>
+                        {/* Visuel des users A ENLEVER POUR LA PROD */}
+                        {project.users.map(user =>
+                            <div key={user.id}> {user.id} {user.lastName} {user.firstName} </div>
+                            )}
                         <table className="table table-hover table-striped">
                             <thead>
                             <th>Nom</th>
