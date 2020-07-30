@@ -12,6 +12,10 @@ import DateAPI from "../services/DateAPI";
 import {toast} from "react-toastify";
 import AuthAPI from "../services/AuthAPI";
 import ProjectsAPI from '../services/ProjectsAPI';
+import Pagination from "@material-ui/lab/Pagination";
+import pagination_configs, {
+    LIST_PROJECTS_PAGE_PAGINATION_ITEMS_PER_PAGE
+} from "../components/configs/pagination_configs";
 
 
 
@@ -21,6 +25,8 @@ const ListProjectsPage = (props) => {
     const [archivedProjects, setArchivedProjects] = useState(false);
     const [loading, setLoading] = useState(true);
     const {searchValue} = useContext(SearchContext);
+
+    const [currentPage, setCurrentPage] = useState(1);
 
     const STATUS_CLASSES = {
         no_start: "info",
@@ -83,6 +89,19 @@ const ListProjectsPage = (props) => {
     };
 
 
+    // ----------------------------- Mise en place de la pagination ------------------------------------------
+
+    const handleChangePage = (event, page) => {
+        setCurrentPage(page);
+    }
+
+    const paginationConfig = pagination_configs.determinePaginationConfig(filteredProjects, LIST_PROJECTS_PAGE_PAGINATION_ITEMS_PER_PAGE, currentPage);
+
+
+    // ----------------------------- Template ------------------------------------------
+
+
+
     return (
         <main className="container">
             <Helmet>
@@ -104,11 +123,11 @@ const ListProjectsPage = (props) => {
 
                 {!loading && <>
 
-                    {filteredProjects.length === 0 ?
+                    {paginationConfig.paginatedItems.length === 0 ?
                         <p className="mt-2 font-weight-bold font-italic">Désolé il n'y a pas de résultat pour votre
                             recherche...</p>
                         :
-                        filteredProjects.map(project =>
+                        paginationConfig.paginatedItems.map(project =>
                             
                             <Link key={project.id} to={'/project/' + project.id} style={{textDecorationLine: "none", color: "black"}} >
 
@@ -138,12 +157,23 @@ const ListProjectsPage = (props) => {
                                 </div>
                             </Link>
                         )
+
+
                     }
                 </>
                 }
 
+
+
                 {loading && <div id="loading-icon"> </div>}
 
+            </div>
+            <div className="row mt-2 mb-4">
+                <Pagination count={paginationConfig.pagesCount}
+                            color="primary"
+                            page={currentPage}
+                            onChange={handleChangePage}
+                />
             </div>
         </main>
     );

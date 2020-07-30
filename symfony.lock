@@ -601,7 +601,7 @@
             "./config/packages/test/webpack_encore.yaml",
             "./config/packages/webpack_encore.yaml",
             "./package.json",
-            "./webpack.config.js"
+            "./webpack.api_links_config.js"
         ]
     },
     "symfony/yaml": {

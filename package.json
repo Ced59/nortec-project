@@ -15,9 +15,13 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "@material-ui/core": "^4.11.0",
+        "@material-ui/icons": "^4.9.1",
+        "@material-ui/lab": "^4.0.0-alpha.56",
         "@react-pdf/renderer": "^1.6.9",
         "axios": "^0.18.1",
         "bootstrap": "^4.4.1",
+        "fontsource-roboto": "^2.2.6",
         "jquery": "^3.5.1",
         "jwt-decode": "^2.2.0",
         "moment": "^2.24.0",
