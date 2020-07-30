@@ -263,19 +263,6 @@ const AdminProjectPage = ({history, match}) => {
                                         onChange={handleChangePage}
                             />
                         </div>
-
-                        {!loadingUsers &&
-                        <select name="users" onChange={handleChange}>
-                            {users.map(user => (
-                                <option key={user.id} value={user.id}>
-                                    {user.firstName} {user.lastName}
-                                </option>
-                            ))}
-                        </select>
-                        }
-                        {loadingUsers &&
-                        <div id="loading-icon"/>
-                        }
                     </fieldset>
                 </div>
                 <div className="form-group d-flex justify-content-between align-items-center mt-2">
