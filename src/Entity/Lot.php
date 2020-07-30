@@ -33,6 +33,21 @@ class Lot
      */
     private $report;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="lots")
+     */
+    private $project;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $DateDebutEcheance;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $dateFinEcheance;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -70,6 +85,42 @@ class Lot
     public function setReport(?Report $report): self
     {
         $this->report = $report;
+
+        return $this;
+    }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): self
+    {
+        $this->project = $project;
+
+        return $this;
+    }
+
+    public function getDateDebutEcheance(): ?\DateTimeInterface
+    {
+        return $this->DateDebutEcheance;
+    }
+
+    public function setDateDebutEcheance(\DateTimeInterface $DateDebutEcheance): self
+    {
+        $this->DateDebutEcheance = $DateDebutEcheance;
+
+        return $this;
+    }
+
+    public function getDateFinEcheance(): ?\DateTimeInterface
+    {
+        return $this->dateFinEcheance;
+    }
+
+    public function setDateFinEcheance(\DateTimeInterface $dateFinEcheance): self
+    {
+        $this->dateFinEcheance = $dateFinEcheance;
 
         return $this;
     }
