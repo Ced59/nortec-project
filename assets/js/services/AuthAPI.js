@@ -1,6 +1,6 @@
 //Requête http authentification et stockage token
 import axios from "axios";
-import {LOGIN_API} from "../components/config";
+import {LOGIN_API} from "../components/configs/api_links_config";
 import jwtDecode from "jwt-decode";
 
 function authenticate(credentials) {

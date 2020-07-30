@@ -22,11 +22,12 @@ import ReportEcheancesPage from "./pages/ReportEcheancesPage";
 import ListReportsByProject from "./pages/ListReportsByProject";
 import ReportValidatePage from "./pages/ReportValidatePage";
 import ProfilPage from "./pages/ProfilPage";
-import AdminProjectPage from "./pages/AdminProjectPage";
+import AdminProjectsPage from "./pages/AdminProjectsPage";
 import AdminPage from "./pages/AdminPage";
 import AdminUsersPage from "./pages/AdminUsersPage";
-import UserPage from './pages/UserPage';
-import ProjectPage from './pages/ProjectPage';
+import AdminUserPage from './pages/AdminUserPage';
+import AdminProjectPage from './pages/AdminProjectPage';
+import 'fontsource-roboto';
 
 
 AuthAPI.setup();
@@ -78,9 +79,9 @@ const App = () => {
                         <PrivateRoute path="/project/:id" component={DetailProjectPage}/>
 
                         <PrivateRoute path="/admin/userslist" component={AdminUsersPage}/>
-                        <PrivateRoute path="/admin/user/:id" component={UserPage}/>
-                        <PrivateRoute path="/admin/project/:id" component={ProjectPage}/>
-                        <PrivateRoute path="/admin/project" component={AdminProjectPage}/>
+                        <PrivateRoute path="/admin/user/:id" component={AdminUserPage}/>
+                        <PrivateRoute path="/admin/project/:id" component={AdminProjectPage}/>
+                        <PrivateRoute path="/admin/project" component={AdminProjectsPage}/>
                         <PrivateRoute path="/admin/:id" component={AdminPage}/>
 
 

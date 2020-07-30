@@ -1,5 +1,5 @@
 import axios from "axios";
-import {PROJECTS_API} from "../components/config";
+import {PROJECTS_API} from "../components/configs/api_links_config";
 
 function findAll() {
 

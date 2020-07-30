@@ -129,12 +129,24 @@ class Project
      */
     private $users;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Lot", mappedBy="project")
+     */
+    private $lots;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Company", inversedBy="projects")
+     */
+    private $companies;
+
 
     public function __construct()
     {
         $this->dateFinPrevues = new ArrayCollection();
         $this->reports = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->lots = new ArrayCollection();
+        $this->companies = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -371,6 +383,63 @@ class Project
         if ($this->users->contains($user)) {
             $this->users->removeElement($user);
             $user->removeProject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Lot[]
+     */
+    public function getLots(): Collection
+    {
+        return $this->lots;
+    }
+
+    public function addLot(Lot $lot): self
+    {
+        if (!$this->lots->contains($lot)) {
+            $this->lots[] = $lot;
+            $lot->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLot(Lot $lot): self
+    {
+        if ($this->lots->contains($lot)) {
+            $this->lots->removeElement($lot);
+            // set the owning side to null (unless already changed)
+            if ($lot->getProject() === $this) {
+                $lot->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Company[]
+     */
+    public function getCompanies(): Collection
+    {
+        return $this->companies;
+    }
+
+    public function addCompany(Company $company): self
+    {
+        if (!$this->companies->contains($company)) {
+            $this->companies[] = $company;
+        }
+
+        return $this;
+    }
+
+    public function removeCompany(Company $company): self
+    {
+        if ($this->companies->contains($company)) {
+            $this->companies->removeElement($company);
         }
 
         return $this;
