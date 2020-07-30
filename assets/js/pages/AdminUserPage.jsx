@@ -429,7 +429,7 @@ const AdminUserPage = ({history, match, props}) => {
                                                 </tbody>
                                             </table>
 
-                                            <div className="mt-2">
+                                            <div className="mt-2 d-flex justify-content-center">
                                                 <Pagination count={paginationConfig.pagesCount}
                                                             color="primary"
                                                             page={currentPage}
