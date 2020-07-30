@@ -98,7 +98,7 @@ const AdminUsersPage = ({history, props}) => {
             <div id="loading-icon" className="mt-5 mb-5"/>
             }
 
-            <div className="mt-2">
+            <div className="mt-2 d-flex justify-content-center">
                 <Pagination count={paginationConfig.pagesCount}
                             color="primary"
                             page={currentPage}

@@ -168,7 +168,7 @@ const ListProjectsPage = (props) => {
                 {loading && <div id="loading-icon"> </div>}
 
             </div>
-            <div className="row mt-2 mb-4">
+            <div className="row mt-2 mb-4 d-flex justify-content-center">
                 <Pagination count={paginationConfig.pagesCount}
                             color="primary"
                             page={currentPage}
