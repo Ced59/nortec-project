@@ -266,8 +266,8 @@ const AdminProjectPage = ({history, match}) => {
                     </fieldset>
                 </div>
                 <div className="form-group d-flex justify-content-between align-items-center mt-2">
-                    <button type="submit" className="btn btn-success">Valider</button>
                     <Link to="/admin/project" className="btn btn-danger">Retour aux projets</Link>
+                    <button type="submit" className="btn btn-success">Valider</button>
                 </div>
             </form>
         </main>
