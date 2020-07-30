@@ -9,8 +9,10 @@ import Modal from "react-bootstrap/Modal";
 import {Button} from "react-bootstrap";
 import ProjectsAPI from "../services/ProjectsAPI";
 import DateAPI from "../services/DateAPI";
+import Pagination from "@material-ui/lab/Pagination";
+import pagination_configs, {ADMIN_USER_PAGE_PAGINATION_ITEMS_PER_PAGE} from "../components/configs/pagination_configs";
 
-const UserPage = ({history, match, props}) => {
+const AdminUserPage = ({history, match, props}) => {
 
     const STATUS_CLASSES = {
         no_start: "info",
@@ -47,6 +49,8 @@ const UserPage = ({history, match, props}) => {
 
     const [projects, setProjects] = useState("");
     const filteredUserProject = [];
+
+    const [currentPage, setCurrentPage] = useState(1);
 
     const [edit, setEdit] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -133,7 +137,7 @@ const UserPage = ({history, match, props}) => {
     }
 
     const handleDeleteUserProject = ({id}) => {
-        if(edit){
+        if (edit) {
             // const newFilteredUserProject = filteredUserProject.filter(item => item.id !== id);
             // console.log(newFilteredUserProject);
         }
@@ -228,6 +232,27 @@ const UserPage = ({history, match, props}) => {
 
 
     }
+
+    // ----------------------------- Mise en place de la pagination ------------------------------------------
+
+    const handleChangePage = (event, page) => {
+        setCurrentPage(page);
+    }
+
+    const paginationConfigCalc = () => {
+        if (!loadingProjects) {
+            return pagination_configs.determinePaginationConfig(filteredUserProjects(), ADMIN_USER_PAGE_PAGINATION_ITEMS_PER_PAGE, currentPage);
+        }
+        else
+        {
+            return [];
+        }
+    };
+
+    const paginationConfig = paginationConfigCalc();
+
+
+    // ----------------------------- Template -----------------------------------------------------------------
 
     return (
         <>
@@ -383,7 +408,7 @@ const UserPage = ({history, match, props}) => {
                                                 </thead>
 
                                                 <tbody>
-                                                {filteredUserProjects().map(project =>
+                                                {paginationConfig.paginatedItems.map(project =>
                                                     <tr key={project.id}>
                                                         <td className="p-2">{project.name}</td>
                                                         <td className="p-2">{project.ville}</td>
@@ -394,13 +419,23 @@ const UserPage = ({history, match, props}) => {
                                                         {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, project.dateFinReelle)]}</span>
                                                         </td>
                                                         <td className="p-2 text-center">
-                                                            <button className="btn btn-danger btn-sm" onClick={() => handleDeleteUserProject(project)}>Retirer le projet
+                                                            <button className="btn btn-danger btn-sm"
+                                                                    onClick={() => handleDeleteUserProject(project)}>Retirer
+                                                                le projet
                                                             </button>
                                                         </td>
                                                     </tr>
                                                 )}
                                                 </tbody>
                                             </table>
+
+                                            <div className="mt-2">
+                                                <Pagination count={paginationConfig.pagesCount}
+                                                            color="primary"
+                                                            page={currentPage}
+                                                            onChange={handleChangePage}
+                                                />
+                                            </div>
                                         </>
                                         }
 
@@ -484,4 +519,4 @@ const UserPage = ({history, match, props}) => {
     );
 }
 
-export default UserPage;
+export default AdminUserPage;

@@ -1,5 +1,5 @@
 import axios from "axios";
-import {USERS_API} from "../components/config";
+import {USERS_API} from "../components/configs/api_links_config";
 
 function findAll(){
     return axios.get(USERS_API).then(response => response.data['hydra:member']);

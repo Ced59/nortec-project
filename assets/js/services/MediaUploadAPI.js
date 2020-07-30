@@ -1,4 +1,4 @@
-import {UPLOAD_API} from "../components/config";
+import {UPLOAD_API} from "../components/configs/api_links_config";
 import axios from "axios";
 
 function upload(data) {

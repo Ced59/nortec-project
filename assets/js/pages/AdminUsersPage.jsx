@@ -2,11 +2,13 @@ import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import UserApi from '../services/UsersAPI';
+import UsersAPI from '../services/UsersAPI';
 import '../../css/loading-icon.css';
-import {Button} from 'react-bootstrap';
-import Modal from "react-bootstrap/Modal";
-import UsersAPI from "../services/UsersAPI";
 import StatusConstAPI from "../services/StatusConstAPI";
+import Pagination from '@material-ui/lab/Pagination';
+import pagination_configs, {
+    ADMIN_USERS_PAGE_PAGINATION_ITEMS_PER_PAGE
+} from "../components/configs/pagination_configs";
 
 
 const AdminUsersPage = ({history, props}) => {
@@ -16,14 +18,9 @@ const AdminUsersPage = ({history, props}) => {
     const [loading, setLoading] = useState(true);
 
 
-
     useEffect(() => {
         fetchUsers().then(r => "");
     }, []);
-
-
-
-
 
 
 // --------------------------- Récupérer tout les Utilisateurs -----------------------------------------
@@ -41,20 +38,11 @@ const AdminUsersPage = ({history, props}) => {
 
 // ----------------------------- Mise en place de la pagination ------------------------------------------
 
-    const handleChangePage = page => {
+    const handleChangePage = (event, page) => {
         setCurrentPage(page);
     }
 
-    const itemsPerPage = 8;
-    const pagesCount = Math.ceil(users.length / itemsPerPage);
-    const pages = [];
-
-    for (let i = 1; i <= pagesCount; i++) {
-        pages.push(i);
-    }
-
-    const start = currentPage * itemsPerPage - itemsPerPage;
-    const paginatedUsers = users.slice(start, start + itemsPerPage)
+    const paginationConfig = pagination_configs.determinePaginationConfig(users, ADMIN_USERS_PAGE_PAGINATION_ITEMS_PER_PAGE, currentPage);
 
 
 
@@ -89,7 +77,7 @@ const AdminUsersPage = ({history, props}) => {
                 </thead>
                 {!loading &&
                 <tbody>
-                {paginatedUsers.map(user =>
+                {paginationConfig.paginatedItems.map(user =>
                     <tr key={user.id}>
                         <td>{user.id}</td>
                         <td>{user.lastName} </td>
@@ -110,23 +98,14 @@ const AdminUsersPage = ({history, props}) => {
             <div id="loading-icon" className="mt-5 mb-5"/>
             }
 
-
             <div className="mt-2">
-                <ul className="pagination pagination-sm justify-content-center">
-                    <li className={"page-item" + (currentPage === 1 && " disabled")}>
-                        <button className="page-link" onClick={() => handleChangePage(currentPage - 1)}>&laquo;</button>
-                    </li>
-                    {pages.map(page =>
-                        <li key={page} className={"page-item" + (currentPage === page && " active")}>
-                            <button className="page-link" onClick={() => handleChangePage(page)}>{page}</button>
-                        </li>
-                    )}
-
-                    <li className={"page-item" + (currentPage === pagesCount && " disabled")}>
-                        <button className="page-link" onClick={() => handleChangePage(currentPage + 1)}>&raquo;</button>
-                    </li>
-                </ul>
+                <Pagination count={paginationConfig.pagesCount}
+                            color="primary"
+                            page={currentPage}
+                            onChange={handleChangePage}
+                />
             </div>
+
         </main>
 
     </>
