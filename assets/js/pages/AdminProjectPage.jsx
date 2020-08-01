@@ -13,8 +13,10 @@ import pagination_configs, {
     ADMIN_PROJECT_PAGE_PAGINATION_ITEMS_PER_PAGE
 } from "../components/configs/pagination_configs";
 import Pagination from "@material-ui/lab/Pagination";
+import Modal from "react-bootstrap/Modal";
+import { Button } from '@material-ui/core';
 
-const AdminProjectPage = ({history, match}) => {
+const AdminProjectPage = ({history, match, props}) => {
 
     const {id = "new"} = match.params;
 
@@ -32,7 +34,9 @@ const AdminProjectPage = ({history, match}) => {
         contactClient: "",
         ville: "",
         reports: [],
-        users: []
+        users: [],
+        lots: [],
+        companies: []
     });
 
     const [error, setError] = useState({
@@ -49,13 +53,17 @@ const AdminProjectPage = ({history, match}) => {
         contactClient: "",
         ville: "",
         reports: "",
-        users: ""
+        users: "",
+        lots: "",
+        companies: ""
     });
 
     const [users, setUsers] = useState([]);
     const [loadingProject, setLoadingProject] = useState(true);
     const [loadingUsers, setLoadingUsers] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
+    const [showModal, setShowModal] = useState(false);
+    const [addLot, setAddLot] = useState (false);
 
     const [edit, setEdit] = useState(false);
 
@@ -100,6 +108,10 @@ const AdminProjectPage = ({history, match}) => {
         user => UsersAPI.determineRole(user) === "Administrateur"
     );
 
+    const handleAddLot = () => {
+        setAddLot(true);
+    }
+
     // ----------------------------- Mise en place de la pagination ------------------------------------------
 
     const handleChangePage = (event,page) => {
@@ -122,6 +134,19 @@ const AdminProjectPage = ({history, match}) => {
             project.users = project.users.map(userInProject => ("/api/users/" + userInProject.id));
             console.log(project.users);
         }
+    }
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setAddLot(false);
+    }
+
+    const handleShowModal = () => {
+        setShowModal(true);
+    }
+
+    const handleCloseAddLot = () => {
+        setAddLot(false);
     }
 
 
@@ -231,6 +256,10 @@ const AdminProjectPage = ({history, match}) => {
                                error={error.nomOPC}/>
                         <Field name="contactClient" label="Contact du Client" type="email" onChange={handleChange}
                                value={project.contactClient} error={error.contactClient}/>
+
+                               {edit &&
+                               <button type="button" onClick={() => handleShowModal()} className="btn btn-primary btn-sm">Voir les lots</button>
+                               }
                     </fieldset>
                     <fieldset className="border-fieldset col-5">
                         <legend>Choix des utilisateurs</legend>
@@ -274,6 +303,87 @@ const AdminProjectPage = ({history, match}) => {
                 </div>
             </form>
         </main>
+
+        <Modal {...props}
+                   size="lg"
+                   aria-labelledby="contained-modal-title-vcenter"
+                   centered
+                   show={showModal} onHide={handleCloseModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Liste des lots</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {!addLot &&
+                        <button type="button" className="btn btn-primary" onClick={() => handleAddLot()}>Ajouter un lot</button>
+                    }
+                <table className="table table-hover table-striped">
+                            <thead>
+                            <th>Numéro de lot</th>
+                            <th>Intitulé du lot</th>
+                            <th>Entreprise</th>
+                            <th>Date de début</th>
+                            <th>Date de fin</th>
+                            <th/>
+                            </thead>
+                            <tbody>
+                            {/* {project.lots.map(lot => (
+                                <tr key={lot.numeroLot}>
+                                    <td>{lot.nomLot}</td>
+                                    <td>{lot.company}</td>
+                                    <td>{lot.dateDebut}</td>
+                                    <td>{lot.dateFin}</td>
+                                    <td>
+                                        <button className="btn btn-primary btn-sm" onClick={()=>handleChangeUsers(user)}>Changer l'affectation</button>
+                                    </td>
+                                </tr>)
+                            )} */}
+                            </tbody>
+                        </table>
+                        {addLot &&
+                        <form>
+                            <div className="d-flex justify-content-between">
+                                <div className="col-5">
+                                    <Field className="m-auto" name="numeroLot" label="Numéro de Lot" onChange={handleChange}/>
+                                </div>
+                                <div className="col-5">
+                                    <Field name="nomLot" label="Nom du Lot" onChange={handleChange}/>
+                                </div>
+                            </div>
+                            <div className="d-flex justify-content-between">
+                                <div className="col-5">
+                                    <Field name="dateDebutLot" type="date" label="Date de démarrage du Lot" onChange={handleChange}/>
+                                </div>
+                                <div className="col-5">
+                                    <Field name="dateFinLot" type="date" label="Date de fin du Lot" onChange={handleChange}/>
+                                </div>
+                            </div>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="inputGroupSelect01">Entreprises</label>
+                                </div>
+                                <select class="custom-select" id="inputGroupSelect01">
+                                    <option selected>Choose...</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                                </div>
+                                <div className="d-flex justify-content-between">
+                                    <button type="button" onClick={() => handleCloseAddLot()} className="btn btn-danger">Annuler</button>
+                                    <button type="button" className="btn btn-success">Valider</button>
+                                </div>
+                        </form>
+                        }
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={handleCloseModal}>
+                        Fermer
+                    </Button>
+                    <Button variant="danger">
+                        Confirmer
+                    </Button>
+                </Modal.Footer>
+            </Modal>
     </>
 };
 

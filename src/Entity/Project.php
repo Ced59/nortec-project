@@ -131,11 +131,13 @@ class Project
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Lot", mappedBy="project")
+     * @Groups({"project"})
      */
     private $lots;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Company", inversedBy="projects")
+     * @Groups({"project"})
      */
     private $companies;
 
