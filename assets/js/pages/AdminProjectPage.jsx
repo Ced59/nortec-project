@@ -204,11 +204,14 @@ const AdminProjectPage = ({history, match}) => {
                                onChange={handleChange} value={project.adresse1} error={error.adresse1}/>
                         <Field name="adresse2" label="Adresse 2" placeholder="Entrez le complément d'adresse"
                                onChange={handleChange} value={project.adresse2} error={error.adresse2}/>
+                        <div className="d-flex justify-content-between">
                         <Field name="codePostal" label="Code Postal" placeholder="Entrez le Code Postal"
                                onChange={handleChange}
                                value={project.codePostal} error={error.codePostal}/>
                         <Field name="ville" label="Ville" placeholder="Entrez la ville" onChange={handleChange}
                                value={project.ville} error={error.ville}/>
+
+                        </div>
                         <ImageUpload singleImg={true} onChange={onDrop}>
 
                         </ImageUpload>
@@ -231,10 +234,7 @@ const AdminProjectPage = ({history, match}) => {
                     </fieldset>
                     <fieldset className="border-fieldset col-5">
                         <legend>Choix des utilisateurs</legend>
-                        {/* Visuel des users A ENLEVER POUR LA PROD */}
-                        {project.users.map(user =>
-                            <div key={user.id}> {user.id} {user.lastName} {user.firstName} </div>
-                            )}
+                        {edit &&
                         <table className="table table-hover table-striped">
                             <thead>
                             <th>Nom</th>
@@ -255,14 +255,17 @@ const AdminProjectPage = ({history, match}) => {
                             )}
                             </tbody>
                         </table>
-
+                            || <div>Veuillez créer votre projet avant de faire la modification des utilisateurs</div>
+                            }
+                        {edit && 
                         <div className="mt-2 d-flex justify-content-center">
                             <Pagination count={paginationConfig.pagesCount}
                                         color="primary"
                                         page={currentPage}
                                         onChange={handleChangePage}
-                            />
+                                        />
                         </div>
+}
                     </fieldset>
                 </div>
                 <div className="form-group d-flex justify-content-between align-items-center mt-2">
