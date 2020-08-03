@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -15,11 +16,13 @@ class ProjectDateFinPrevue
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"project"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="date")
+     * @Groups({"project"})
      */
     private $date;
 

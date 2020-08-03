@@ -357,11 +357,11 @@ const AdminProjectPage = ({history, match, props}) => {
                                     <Field name="dateFinLot" type="date" label="Date de fin du Lot" onChange={handleChange}/>
                                 </div>
                             </div>
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <label class="input-group-text" for="inputGroupSelect01">Entreprises</label>
+                            <div className="input-group mb-3">
+                                <div className="input-group-prepend">
+                                    <label className="input-group-text" form="inputGroupSelect01">Entreprises</label>
                                 </div>
-                                <select class="custom-select" id="inputGroupSelect01">
+                                <select className="custom-select" id="inputGroupSelect01">
                                     <option selected>Choose...</option>
                                     <option value="1">One</option>
                                     <option value="2">Two</option>

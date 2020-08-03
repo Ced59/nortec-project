@@ -115,6 +115,7 @@ class Project
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ProjectDateFinPrevue", mappedBy="Project", orphanRemoval=true)
+     * @Groups({"project"})
      */
     private $dateFinPrevues;
 

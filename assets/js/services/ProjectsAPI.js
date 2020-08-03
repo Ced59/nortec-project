@@ -1,5 +1,5 @@
 import axios from "axios";
-import {PROJECTS_API} from "../components/configs/api_links_config";
+import {DATE_FIN_PREVUE_API, PROJECTS_API} from "../components/configs/api_links_config";
 
 function findAll() {
 
@@ -28,9 +28,15 @@ function create(project){
     return axios.post(PROJECTS_API, project);
 }
 
+function addFinPrevueProject(dateToCreate) {
+
+    return axios.post(DATE_FIN_PREVUE_API, dateToCreate);
+}
+
 export default {
     find,
     update,
     create,
-    findAll
+    findAll,
+    addFinPrevueProject
 }
