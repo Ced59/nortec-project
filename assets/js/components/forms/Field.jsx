@@ -1,11 +1,13 @@
 import React from 'react';
 
-const Field = ({ name, label, value = "", onChange = "", placeholder, className = "", type = "text", error = ""}) => {
+const Field = ({name, label, value = "", onChange = "", placeholder, className = "", type = "text", error = "", noLabel = false}) => {
     return (
         <div className="form-group">
+            {!noLabel &&
             <label htmlFor={name}>
                 {label}
             </label>
+            }
             <input
                 value={value}
                 onChange={onChange}

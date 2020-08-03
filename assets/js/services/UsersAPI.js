@@ -34,6 +34,7 @@ function determineRole(user) {
     }
 }
 
+
 export default {
     find,
     update,
