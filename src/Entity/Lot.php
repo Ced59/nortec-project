@@ -2,11 +2,14 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ *@ApiResource(
+ *     normalizationContext={"groups"={"lot"}}
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\LotRepository")
  */
 class Lot
@@ -15,16 +18,19 @@ class Lot
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"lot"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=500)
+     * @Groups({"lot"})
      */
     private $numeroLot;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"lot"})
      */
     private $libelleLot;
 
@@ -40,13 +46,22 @@ class Lot
 
     /**
      * @ORM\Column(type="date")
+     * @Groups({"lot"})
      */
     private $DateDebutEcheance;
 
     /**
      * @ORM\Column(type="date")
+     * @Groups({"lot"})
      */
     private $dateFinEcheance;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="lots")
+     * @ORM\JoinColumn(nullable=false)
+     * @Groups({"lot"})
+     */
+    private $company;
 
     public function getId(): ?int
     {
@@ -121,6 +136,18 @@ class Lot
     public function setDateFinEcheance(\DateTimeInterface $dateFinEcheance): self
     {
         $this->dateFinEcheance = $dateFinEcheance;
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): self
+    {
+        $this->company = $company;
 
         return $this;
     }
