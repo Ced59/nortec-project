@@ -151,7 +151,6 @@ const AdminProjectPage = ({history, match, props}) => {
     const handleChangeLot = ({currentTarget}) => {
         const {name, value} = currentTarget;
         setLots({...lots, [name]: value});
-        console.log(lots);
     }
 
     const handleChangeUsers = user => {
@@ -178,14 +177,29 @@ const AdminProjectPage = ({history, match, props}) => {
     const handleSubmitLot = async event => {
         event.preventDefault();
 
-        lots.project = "/api/projects/" + project.id;
         
-        console.log(lots.company);
         try {
+            lots.project = "/api/projects/" + project.id;
+            lots.company = "/api/companies/" + lots.company;
+
+            console.log(lots.company);
             console.log(lots);
+
+            await ProjectsAPI.addLotProject(lots);
+
+            toast.success("Le lot est bien ajouté !");
             
         } catch (error) {
-            
+            // const {violations} = response.data;
+            // if (violations) {
+            //     const apiErrors = {};
+            //     violations.map(({propertyPath, message}) => {
+            //         apiErrors[propertyPath] = message;
+            //     });
+
+            //     setError(apiErrors);
+            // }
+            console.log(error.response);
         }
     }
 
@@ -354,7 +368,7 @@ const AdminProjectPage = ({history, match, props}) => {
                 </Modal.Header>
                 <Modal.Body>
                     {!addLot &&
-                        <button type="button" className="btn btn-primary" onClick={() => handleAddLot()}>Ajouter un lots</button>
+                        <button type="button" className="btn btn-primary" onClick={() => handleAddLot()}>Ajouter un lot</button>
                     }
                 <table className="table table-hover table-striped">
                             <thead>
