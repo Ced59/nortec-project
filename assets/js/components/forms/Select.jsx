@@ -1,6 +1,6 @@
 import React from "react";
 
-const Select = ({name, value, error = "", label, onChange ,children, multiple=false }) => {
+const Select = ({name, value, error = "", label, onChange ,children}) => {
     return (
         <div className="form-group">
             <label htmlFor={name}>{label}</label>
@@ -10,7 +10,6 @@ const Select = ({name, value, error = "", label, onChange ,children, multiple=fa
                 id={name}
                 value={value}
                 className={"form-control" + (error && " is-invalid")}
-                multiple={multiple}
             >
                 {children}
             </select>

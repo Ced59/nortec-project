@@ -84,7 +84,7 @@ const DetailProjectPage = ({history, match}) => {
     };
 
     const handleEditClick = () => {
-        setEdit(!edit);
+        setEdit(true);
     }
 
     // const newReportClick = () => {
@@ -131,6 +131,7 @@ const DetailProjectPage = ({history, match}) => {
                     );
 
                 toast.success("La date a bien été ajoutée.");
+                setEdit(false);
             } catch {
                 console.log(error);
                 toast.error("Une erreur est survenue pendant l'ajout de la date.");
@@ -157,7 +158,7 @@ const DetailProjectPage = ({history, match}) => {
         e.preventDefault();
 
         try {
-            await ProjectsAPI.update(project.id, project);
+            await ProjectsAPI.update(id, project);
             toast.success("Le projet a bien été mis à jour !");
             setEdit(false);
         }

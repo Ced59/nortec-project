@@ -14,7 +14,8 @@ import pagination_configs, {
 } from "../components/configs/pagination_configs";
 import Pagination from "@material-ui/lab/Pagination";
 import Modal from "react-bootstrap/Modal";
-import { Button } from '@material-ui/core';
+import { Button} from '@material-ui/core';
+import Select from "../components/forms/Select"
 
 const AdminProjectPage = ({history, match, props}) => {
 
@@ -58,9 +59,21 @@ const AdminProjectPage = ({history, match, props}) => {
         companies: ""
     });
 
+    const [lots, setLots] = useState({
+        numeroLot: "",
+        libelleLot: "",
+        dateDebutEcheance: "",
+        dateFinEcheance: "",
+        company: "",
+        project: ""
+    })
+
+    const [companies, setCompanies] = useState([]);
     const [users, setUsers] = useState([]);
+
     const [loadingProject, setLoadingProject] = useState(true);
     const [loadingUsers, setLoadingUsers] = useState(true);
+
     const [currentPage, setCurrentPage] = useState(1);
     const [showModal, setShowModal] = useState(false);
     const [addLot, setAddLot] = useState (false);
@@ -86,9 +99,16 @@ const AdminProjectPage = ({history, match, props}) => {
             setProject(data);
             setLoadingProject(false);
             console.log(data);
-
-
         } catch (error) {
+            console.log(error.response);
+        }
+    }
+
+    const fetchCompany = async () => {
+        try{
+            const data = await ProjectsAPI.findAllCompany();
+            setCompanies(data);
+        } catch (error){
             console.log(error.response);
         }
     }
@@ -128,11 +148,16 @@ const AdminProjectPage = ({history, match, props}) => {
         setProject({...project, [name]: value});
     }
 
+    const handleChangeLot = ({currentTarget}) => {
+        const {name, value} = currentTarget;
+        setLots({...lots, [name]: value});
+        console.log(lots);
+    }
+
     const handleChangeUsers = user => {
         if(edit){
             project.users.push(user);
             project.users = project.users.map(userInProject => ("/api/users/" + userInProject.id));
-            console.log(project.users);
         }
     }
 
@@ -143,10 +168,25 @@ const AdminProjectPage = ({history, match, props}) => {
 
     const handleShowModal = () => {
         setShowModal(true);
+        fetchCompany().then(r => '');
     }
 
     const handleCloseAddLot = () => {
         setAddLot(false);
+    }
+
+    const handleSubmitLot = async event => {
+        event.preventDefault();
+
+        lots.project = "/api/projects/" + project.id;
+        
+        console.log(lots.company);
+        try {
+            console.log(lots);
+            
+        } catch (error) {
+            
+        }
     }
 
 
@@ -314,7 +354,7 @@ const AdminProjectPage = ({history, match, props}) => {
                 </Modal.Header>
                 <Modal.Body>
                     {!addLot &&
-                        <button type="button" className="btn btn-primary" onClick={() => handleAddLot()}>Ajouter un lot</button>
+                        <button type="button" className="btn btn-primary" onClick={() => handleAddLot()}>Ajouter un lots</button>
                     }
                 <table className="table table-hover table-striped">
                             <thead>
@@ -326,60 +366,58 @@ const AdminProjectPage = ({history, match, props}) => {
                             <th/>
                             </thead>
                             <tbody>
-                            {/* {project.lots.map(lot => (
-                                <tr key={lot.numeroLot}>
-                                    <td>{lot.nomLot}</td>
-                                    <td>{lot.company}</td>
-                                    <td>{lot.dateDebut}</td>
-                                    <td>{lot.dateFin}</td>
+                            {/* {project.lots.map(lots => (
+                                <tr key={lots.numeroLot}>
+                                    <td>{lots.libelleLot}</td>
+                                    <td>{lots.company}</td>
+                                    <td>{lots.dateDebutEcheance}</td>
+                                    <td>{lots.dateFinEcheance}</td>
                                     <td>
-                                        <button className="btn btn-primary btn-sm" onClick={()=>handleChangeUsers(user)}>Changer l'affectation</button>
+                                        
                                     </td>
                                 </tr>)
                             )} */}
                             </tbody>
                         </table>
                         {addLot &&
-                        <form>
+                        <form onSubmit={handleSubmitLot}>
                             <div className="d-flex justify-content-between">
                                 <div className="col-5">
-                                    <Field className="m-auto" name="numeroLot" label="Numéro de Lot" onChange={handleChange}/>
+                                    <Field className="m-auto" name="numeroLot" label="Numéro de Lot" onChange={handleChangeLot} value={lots.numeroLot}/>
                                 </div>
                                 <div className="col-5">
-                                    <Field name="nomLot" label="Nom du Lot" onChange={handleChange}/>
+                                    <Field name="libelleLot" label="Nom du Lot" onChange={handleChangeLot} value={lots.libelleLot}/>
                                 </div>
                             </div>
                             <div className="d-flex justify-content-between">
                                 <div className="col-5">
-                                    <Field name="dateDebutLot" type="date" label="Date de démarrage du Lot" onChange={handleChange}/>
+                                    <Field name="dateDebutEcheance" type="date" label="Date de démarrage du Lot" onChange={handleChangeLot} 
+                                    value={DateAPI.formatDateForm(lots.dateDebutEcheance)}/>
                                 </div>
                                 <div className="col-5">
-                                    <Field name="dateFinLot" type="date" label="Date de fin du Lot" onChange={handleChange}/>
+                                    <Field name="dateFinEcheance" type="date" label="Date de fin du Lot" onChange={handleChangeLot} 
+                                    value={DateAPI.formatDateForm(lots.dateFinEcheance)}/>
                                 </div>
                             </div>
-                            <div className="input-group mb-3">
-                                <div className="input-group-prepend">
-                                    <label className="input-group-text" form="inputGroupSelect01">Entreprises</label>
-                                </div>
-                                <select className="custom-select" id="inputGroupSelect01">
-                                    <option selected>Choose...</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </select>
-                                </div>
+                                <Select name="company" label="Entreprise" onChange={handleChangeLot} value={lots.company} error="">
+                                    {companies.map(company => ( 
+                                        <option key={company.id} value={company.id}>
+                                            {company.nom}
+                                        </option>
+                                    ))}
+                                </Select>
                                 <div className="d-flex justify-content-between">
                                     <button type="button" onClick={() => handleCloseAddLot()} className="btn btn-danger">Annuler</button>
-                                    <button type="button" className="btn btn-success">Valider</button>
+                                    <button className="btn btn-success">Valider</button>
                                 </div>
                         </form>
                         }
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={handleCloseModal}>
+                    <Button variant="danger" onClick={handleCloseModal}>
                         Fermer
                     </Button>
-                    <Button variant="danger">
+                    <Button variant="primary">
                         Confirmer
                     </Button>
                 </Modal.Footer>
