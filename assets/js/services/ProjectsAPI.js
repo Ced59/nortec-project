@@ -1,5 +1,5 @@
 import axios from "axios";
-import {DATE_FIN_PREVUE_API, PROJECTS_API, COMPANY_API} from "../components/configs/api_links_config";
+import {DATE_FIN_PREVUE_API, PROJECTS_API, COMPANY_API, LOT_API} from "../components/configs/api_links_config";
 
 function findAll() {
 

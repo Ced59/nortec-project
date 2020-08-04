@@ -18,19 +18,19 @@ class Lot
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"lot"})
+     * @Groups({"lot", "project"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=500)
-     * @Groups({"lot"})
+     * @Groups({"lot", "project"})
      */
     private $numeroLot;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"lot"})
+     * @Groups({"lot", "project"})
      */
     private $libelleLot;
 
@@ -46,20 +46,20 @@ class Lot
 
     /**
      * @ORM\Column(type="date")
-     * @Groups({"lot"})
+     * @Groups({"lot", "project"})
      */
     private $DateDebutEcheance;
 
     /**
      * @ORM\Column(type="date")
-     * @Groups({"lot"})
+     * @Groups({"lot", "project"})
      */
     private $dateFinEcheance;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="lots")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"lot"})
+     * @Groups({"lot", "project"})
      */
     private $company;
 

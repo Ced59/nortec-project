@@ -62,7 +62,7 @@ const AdminProjectPage = ({history, match, props}) => {
     const [lots, setLots] = useState({
         numeroLot: "",
         libelleLot: "",
-        dateDebutEcheance: "",
+        DateDebutEcheance: "",
         dateFinEcheance: "",
         company: "",
         project: ""
@@ -189,17 +189,17 @@ const AdminProjectPage = ({history, match, props}) => {
 
             toast.success("Le lot est bien ajouté !");
             
-        } catch (error) {
-            // const {violations} = response.data;
-            // if (violations) {
-            //     const apiErrors = {};
-            //     violations.map(({propertyPath, message}) => {
-            //         apiErrors[propertyPath] = message;
-            //     });
+        } catch ({response}) {
+            const {violations} = response.data;
+            if (violations) {
+                const apiErrors = {};
+                violations.map(({propertyPath, message}) => {
+                    apiErrors[propertyPath] = message;
+                });
 
-            //     setError(apiErrors);
-            // }
-            console.log(error.response);
+                setError(apiErrors);
+            }
+            console.log(response);
         }
     }
 
@@ -380,17 +380,18 @@ const AdminProjectPage = ({history, match, props}) => {
                             <th/>
                             </thead>
                             <tbody>
-                            {/* {project.lots.map(lots => (
-                                <tr key={lots.numeroLot}>
-                                    <td>{lots.libelleLot}</td>
-                                    <td>{lots.company}</td>
-                                    <td>{lots.dateDebutEcheance}</td>
-                                    <td>{lots.dateFinEcheance}</td>
+                            {project.lots.map(lot => (
+                                <tr key={lot.id}>
+                                    <td>{lot.numeroLot}</td>
+                                    <td>{lot.libelleLot}</td>
+                                    <td>{lot.company.nom}</td>
+                                    <td>{DateAPI.formatDate(lot.DateDebutEcheance)}</td>
+                                    <td>{DateAPI.formatDate(lot.dateFinEcheance)}</td>
                                     <td>
                                         
                                     </td>
                                 </tr>)
-                            )} */}
+                            )}
                             </tbody>
                         </table>
                         {addLot &&
@@ -405,8 +406,8 @@ const AdminProjectPage = ({history, match, props}) => {
                             </div>
                             <div className="d-flex justify-content-between">
                                 <div className="col-5">
-                                    <Field name="dateDebutEcheance" type="date" label="Date de démarrage du Lot" onChange={handleChangeLot} 
-                                    value={DateAPI.formatDateForm(lots.dateDebutEcheance)}/>
+                                    <Field name="DateDebutEcheance" type="date" label="Date de démarrage du Lot" onChange={handleChangeLot} 
+                                    value={DateAPI.formatDateForm(lots.DateDebutEcheance)}/>
                                 </div>
                                 <div className="col-5">
                                     <Field name="dateFinEcheance" type="date" label="Date de fin du Lot" onChange={handleChangeLot} 

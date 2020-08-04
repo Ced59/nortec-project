@@ -24,7 +24,7 @@ class Company
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"lot"})
+     * @Groups({"lot", "project"})
      */
     private $nom;
 
