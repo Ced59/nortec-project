@@ -326,7 +326,7 @@ const AdminProjectPage = ({history, match, props}) => {
                             <th/>
                             </thead>
                             <tbody>
-                            {paginationConfig.paginatedItems.map(user => (
+                            {paginationConfig.paginatedItems.map(user =>  (
                                 <tr key={user.id}>
                                     <td>{user.firstName}</td>
                                     <td>{user.lastName}</td>
