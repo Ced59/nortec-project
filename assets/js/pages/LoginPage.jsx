@@ -1,6 +1,5 @@
 import React, {useContext, useState, useEffect} from 'react';
 import Field from "../components/forms/Field";
-import ImgWithStyleComponent from "../components/images/ImgWithStyleComponent";
 import {Link} from "react-router-dom";
 import LogoCompanyComponent from "../components/images/LogoCompanyComponent";
 import {toast} from "react-toastify";
@@ -70,7 +69,7 @@ const LoginPage = ({history}) => {
                 <style>{'body { background-color: #005375; }'}</style>
             </Helmet>
 
-            <div className="login-style mt-5 pt-5">
+            <div className="login-style mt-auto pt-auto">
                 <form className="login-style form card p-3 m-5" onSubmit={handleSubmit}>
 
 
@@ -100,7 +99,7 @@ const LoginPage = ({history}) => {
                             onChange={handleChange}
                         />
 
-                        <div className="mt-3">
+                        <div className="mt-auto">
                             <Link to="/reinitialisation">Réinitialisation du mot de passe</Link>
                         </div>
 

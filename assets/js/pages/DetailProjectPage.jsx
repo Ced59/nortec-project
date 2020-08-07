@@ -189,7 +189,7 @@ const DetailProjectPage = ({history, match}) => {
                                         className='col-5 img-fluid rounded img-style'
                                     />
 
-                                    <div className='col-6'>
+                                    <div className='col-6 md-col-7'>
                                         <h5 className='mb-3'>Détails:</h5>
                                         <div className='row ml-2 no-space'>
                                             <h6 className='offset-1 col-4'>Adresse :</h6>
@@ -472,9 +472,9 @@ const DetailProjectPage = ({history, match}) => {
 
                             </>
                         }
-                        <div className='row ml-2 mt-4 d-flex justify-content-between mb-3'>
+                        <div className='ml-2 mt-4 d-flex justify-content-between flex-wrap mb-3'>
                             <Button text='Nouveau Rapport'
-                                    className='btn btn-primary mr-4'
+                                    className='btn btn-primary'
                                     type='button'
                                 // onClick={newReportClick}
                             />
@@ -486,7 +486,7 @@ const DetailProjectPage = ({history, match}) => {
                                 Liste des rapports
                             </Link>
                             <Button text='Voir les échéances'
-                                    className='btn btn-primary mr-4'
+                                    className='btn btn-primary'
                                     type='button'
                             />
 
@@ -495,14 +495,14 @@ const DetailProjectPage = ({history, match}) => {
                                 {!edit ?
                                     <Button
                                         text='Modifier le projet'
-                                        className='btn btn-primary mr-4'
+                                        className='btn btn-primary'
                                         type='button'
                                         onClick={handleEditClick}
                                     />
                                     :
                                     <Button
                                         text='Revenir aux détails du projet'
-                                        className='btn btn-info mr-4'
+                                        className='btn btn-info'
                                         type='button'
                                         onClick={handleEditClick}
                                     />
@@ -511,7 +511,7 @@ const DetailProjectPage = ({history, match}) => {
                             }
 
                             <Button text='Revenir à la liste'
-                                    className='btn btn-primary mr-4'
+                                    className='btn btn-danger md-mt-2'
                                     type='button'
                                     onClick={handleBackClick}
                             />
