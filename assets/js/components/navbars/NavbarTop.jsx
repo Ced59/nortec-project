@@ -33,13 +33,18 @@ const NavbarTop = ({history}) => {
 
             <NavLink className="navbar-brand" to="/projects"><LogoCompanyComponent style={{width: "100px"}}/></NavLink>
 
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
+            aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
 
                 <ul className="navbar-nav mr-auto">
 
                     <li className="nav-item dropdown">
                         <a className="nav-link dropdown-toggle navbar-top-style navbar-top-text-style"
-                           id="navbarDropdownMenuLink" data-toggle="dropdown"
+                           id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">Bienvenue {completeNameUser} <br/>
                             <span className="text-statut">Connecté comme {AuthAPI.isAdmin() ?
                                 'Administrateur'
@@ -52,7 +57,6 @@ const NavbarTop = ({history}) => {
                             {AuthAPI.isAdmin() &&
                             <NavLink className="dropdown-item" to={"/admin/" + userId}>Panneau Administration</NavLink>
                             }
-                            <a className="dropdown-item" href="#">Something else here</a>
                         </div>
                     </li>
                 </ul>
