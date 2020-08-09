@@ -84,7 +84,7 @@ const DetailProjectPage = ({history, match}) => {
     };
 
     const handleEditClick = () => {
-        setEdit(true);
+        setEdit(!edit);
     }
 
     // const newReportClick = () => {
@@ -132,7 +132,7 @@ const DetailProjectPage = ({history, match}) => {
 
                 toast.success("La date a bien été ajoutée.");
                 setEdit(false);
-            } catch {
+            } catch (error) {
                 console.log(error);
                 toast.error("Une erreur est survenue pendant l'ajout de la date.");
             }

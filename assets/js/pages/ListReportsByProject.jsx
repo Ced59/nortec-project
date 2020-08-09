@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import fakeData from "../components/fakeDataForDev/fakeData";
 import moment from "moment";
 import '../../css/app.css';
+import DateAPI from '../services/DateAPI';
 
 
 const STATUS_REPORT_LABELS = {
@@ -35,7 +36,8 @@ const ListReportsByProject = ({match, history}) => {
     };
 
     const handleEdit = (idReport) => {
-        history.push("/project/" + id.id + "/" + idReport + "/effectifs"); //TODO Envoi sur même route que création des rapports prévoir mode edition
+        history.push("/project/" + id.id + "/" + idReport + "/effectifs"); 
+        //TODO Envoi sur même route que création des rapports prévoir mode edition
     };
 
     const handleReturn = () => {
@@ -60,15 +62,13 @@ const ListReportsByProject = ({match, history}) => {
                 </tr>
                 </thead>
                 <tbody>
-
-
                 {listReport.map(report =>
                     <tr key={report.id}>
                         <td>{report.id}</td>
                         <td>
                             {report.redacteur}
                         </td>
-                        <td>{formatDate(report.dateRedaction)}</td>
+                        <td>{DateAPI.formatDate(report.dateRedaction)}</td>
                         <td>{STATUS_REPORT_LABELS[report.status]}</td>
 
                         <td>

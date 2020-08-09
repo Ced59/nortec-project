@@ -217,7 +217,8 @@ const AdminProjectPage = ({history, match, props}) => {
 
         try {
             if (edit) {
-                console.log(project);
+                project.dateFinPrevues = project.dateFinPrevues.map(dateInProject => ("/api/project_date_fin_prevues/" + dateInProject.id));
+                console.log(project.dateFinPrevues);
                 await ProjectsAPI.update(id, project);
                 toast.success("Le projet a bien été modifié !");
             } else {
@@ -254,7 +255,6 @@ const AdminProjectPage = ({history, match, props}) => {
     //--------------------------------------------Gestion de l'image  ---------------------------------------------
 
     const onDrop = picture => {
-        //picture.name = "img-project-" + project.name;
         setPicture([...picture, picture]);
         console.log(picture);
     }
@@ -299,8 +299,6 @@ const AdminProjectPage = ({history, match, props}) => {
                         <legend>Dates</legend>
                         <Field name="dateDebut" label="Date de démarrage" type="date" onChange={handleChange}
                                value={DateAPI.formatDateForm(project.dateDebut)} error={error.dateDebut}/>
-                        {/* <Field name="dateFinPrevues" label="Date de fin prévue" type="date" onChange={handleChange}
-                        value={project.dateFinPrevues} error={error.date_fin_prevues}/> */}
                     </fieldset>
                     <fieldset className="border-fieldset col-6 center">
                         <legend>Informations Client</legend>

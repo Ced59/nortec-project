@@ -16,13 +16,15 @@ const NavbarLeft = ({match, selected}) => {
     const id = match.params;
 
 
-    const [project, setProject] = useState(projects[id.id]); //TODO truc bizarre obligé de passer par là pour récupérer le projet. A faire attention!
+    const [project, setProject] = useState(projects[id.id]); 
+    //TODO truc bizarre obligé de passer par là pour récupérer le projet. A faire attention!
 
     //Récupération d'un projet
     const fetchProject = id => {
         //TODO récupérer le projet avec requête axios
 
-        setProject(projects[id.id]); //TODO Attention ca ne fonctionnait pas ici à vérifier plus tard avec axios
+        setProject(projects[id.id]); 
+        //TODO Attention ca ne fonctionnait pas ici à vérifier plus tard avec axios
 
 
     };

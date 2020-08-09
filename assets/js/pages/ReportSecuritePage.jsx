@@ -4,7 +4,6 @@ import NavbarLeft from "../components/navbars/NavbarLeft";
 import Button from "../components/forms/Button";
 import FieldTextArea from "../components/forms/FieldTextArea";
 import ImageUpload from "../components/forms/ImageUpload";
-import Select from "../components/forms/Select";
 import '../../css/app.css';
 import {toast} from "react-toastify";
 import fakeData from "../components/fakeDataForDev/fakeData";
@@ -17,15 +16,11 @@ const ReportSecuritePage = ({match}) => {
     const [entreprise, setEntreprise] = useState(null);
 
     const handleCheckConforme = () => {
-        if (!conforme || conforme === false) {
             setConforme(true);
-        }
     };
 
     const handleCheckNonConforme = () => {
-        if (conforme || conforme === null) {
             setConforme(false);
-        }
     };
 
     const handleSubmit = () => {

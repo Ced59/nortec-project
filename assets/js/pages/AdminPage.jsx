@@ -21,7 +21,7 @@ const AdminPage = ({history}) => {
         <Card className="col-5 mt-5 item-flex-grow-4" body inverse color="info">
             <CardTitle>Entreprise</CardTitle>
             <CardImg></CardImg>
-            <NavLink className="btn btn-light" to="/admin/company"> Utilisateur </NavLink>
+            <NavLink className="btn btn-light" to="/admin/company"> Entreprise </NavLink>
         </Card>
         </div>
 

@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: 'bold',
         marginBottom: 5,
-        fontSize: '25pt'
+        fontSize: '20pt'
     },
     sectionBorder: {
         border: '1pt solid #005274',
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: '5',
         borderBottomRightRadius: '5',
         borderBottomLeftRadius: '5',
-        fontSize: '15pt'
+        fontSize: '14pt'
     },
     text: {
         margin: '5pt',
