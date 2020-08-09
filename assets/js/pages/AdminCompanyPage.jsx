@@ -83,6 +83,7 @@ const AdminCompanyPage = ({history, match}) => {
     };
 
     return <main className="container">
+        {!edit && <h1>Ajouter une entreprise</h1>  || <h1>Modifier l'entreprise</h1>}
         <form onSubmit={handleSubmit}>
         <Field name="nom" label="Nom de l'entreprise" placeholder="Entrez le nom de l'entreprise"
                                onChange={handleChange}

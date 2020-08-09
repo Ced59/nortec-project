@@ -17,8 +17,6 @@ function find(id) {
         response => response.data
     );
 
-    console.log(project);
-
     return project;
 }
 
