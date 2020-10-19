@@ -164,6 +164,9 @@ const DetailProjectPage = ({history, match}) => {
         }
         catch {
             toast.error("Un problème est survenu pendant la mise à jour du projet.");
+            console.log(id);
+            console.log(project);
+            console.log(error);
         }
 
     }
@@ -182,36 +185,36 @@ const DetailProjectPage = ({history, match}) => {
 
                                 <h2 className='mb-4'>{project.name}</h2>
                                 <p className='description-style'>{project.description}</p>
-                                <div className="row mt-2">
+                                <div className="d-flex flex-lg-row flex-column mt-2">
                                     <ImgComponent
                                         alt={project.name}
                                         src={project.photo}
-                                        className='col-5 img-fluid rounded img-style'
+                                        className='col-12 col-lg-6 mx-auto img-fluid rounded img-style'
                                     />
 
-                                    <div className='col-6 md-col-7'>
-                                        <h5 className='mb-3'>Détails:</h5>
-                                        <div className='row ml-2 no-space'>
-                                            <h6 className='offset-1 col-4'>Adresse :</h6>
+                                    <div className='col-12 col-lg-6'>
+                                        <h5 className='text-center text-sm-left mb-3'>Détails:</h5>
+                                        <div className='row no-space'>
+                                            <h6 className='offset-sm-1 col-4'>Adresse :</h6>
                                             <p className='col-7'>{project.adresse1}</p>
                                         </div>
                                         {project.adresse2 &&
-                                        <div className='row ml-2 no-space'>
-                                            <h6 className='offset-1 col-4'>Complément :</h6>
+                                        <div className='row no-space'>
+                                            <h6 className='offset-sm-1 col-4'>Complément :</h6>
                                             <p className='col-7'>{project.adresse2}</p>
                                         </div>
                                         }
 
-                                        <div className='row ml-2 no-space'>
-                                            <h6 className='offset-1 col-4'>Code Postal :</h6>
+                                        <div className='row no-space'>
+                                            <h6 className='offset-sm-1 col-4'>Code Postal :</h6>
                                             <p className='col-7'>{project.codePostal}</p>
                                         </div>
-                                        <div className='row ml-2 no-space'>
-                                            <h6 className='offset-1 col-4'>Ville :</h6>
+                                        <div className='row no-space'>
+                                            <h6 className='offset-sm-1 col-4'>Ville :</h6>
                                             <p className='col-7'>{project.ville}</p>
                                         </div>
-                                        <div className='row ml-2 no-space'>
-                                            <h6 className='offset-1 col-4'>Date de début :</h6>
+                                        <div className='row no-space'>
+                                            <h6 className='offset-sm-1 col-4'>Date de début :</h6>
                                             <p className='col-7'>{DateAPI.formatDate(project.dateDebut)}</p>
                                         </div>
 
@@ -220,8 +223,8 @@ const DetailProjectPage = ({history, match}) => {
                                             {
                                                 project.dateFinPrevues.map(date =>
 
-                                                    <div className='row ml-2 no-space' key={date.id}>
-                                                        <h6 className='offset-1 col-4'>Fin
+                                                    <div className='row no-space' key={date.id}>
+                                                        <h6 className='offset-sm-1 col-4'>Fin
                                                             prévue {project.dateFinPrevues.indexOf(date) + 1} :</h6>
                                                         <p className='col-7'>{DateAPI.formatDate(date.date)}</p>
                                                     </div>
@@ -231,36 +234,36 @@ const DetailProjectPage = ({history, match}) => {
                                         }
 
                                         {DateAPI.verifyDateExist(project.dateFinReelle) === "" ?
-                                            <div className='row ml-2 no-space'>
-                                                <h6 className='offset-1 col-4'>Date de fin réélle :</h6>
+                                            <div className='row no-space'>
+                                                <h6 className='offset-sm-1 col-4'>Date de fin réélle :</h6>
                                                 <p className='col-7'>Aucune</p>
                                             </div>
                                             :
-                                            <div className='row ml-2 no-space'>
-                                                <h6 className='offset-1 col-4'>Date de fin réélle :</h6>
+                                            <div className='row no-space'>
+                                                <h6 className='offset-sm-1 col-4'>Date de fin réélle :</h6>
                                                 <p className='col-7'>{DateAPI.formatDate(project.dateFinReelle)}</p>
                                             </div>}
 
 
-                                        <div className='row ml-2 no-space'>
-                                            <h6 className='offset-1 col-4'>Nom MOEX :</h6>
+                                        <div className='row no-space'>
+                                            <h6 className='offset-sm-1 col-4'>Nom MOEX :</h6>
                                             <p className='col-7'>{project.nomMOEX}</p>
                                         </div>
 
-                                        <div className='row ml-2 no-space'>
-                                            <h6 className='offset-1 col-4'>Nom OPC :</h6>
+                                        <div className='row no-space'>
+                                            <h6 className='offset-sm-1 col-4'>Nom OPC :</h6>
                                             <p className='col-7'>{project.nomOPC}</p>
                                         </div>
 
-                                        <div className='row ml-2 no-space'>
-                                            <h6 className='offset-1 col-4'>Contact client :</h6>
+                                        <div className='row no-space'>
+                                            <h6 className='offset-sm-1 col-4'>Contact client :</h6>
                                             <a className='col-7'
                                                href={"mailto:" + project.contactClient}>{project.contactClient}</a>
                                         </div>
 
 
-                                        <div className='row ml-2 mt-5'>
-                                            <h6 className='offset-1 col-4'>Statut :</h6>
+                                        <div className='row mt-5'>
+                                            <h6 className='offset-sm-1 col-4'>Statut :</h6>
                                             <p className={"col-2 badge badge-" + STATUS_CLASSES[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}>
                                                 {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}</p>
                                         </div>
@@ -287,17 +290,17 @@ const DetailProjectPage = ({history, match}) => {
                                                    value={project.description}
                                                    error={error.description}/>
 
-                                    <div className="row mt-2">
+                                    <div className="d-flex flex-lg-row flex-column mt-2">
                                         <ImgComponent
                                             alt={project.name}
                                             src={project.photo}
-                                            className='col-5 img-fluid rounded img-style'
+                                            className='col-12 col-lg-6 mx-auto img-fluid rounded img-style'
                                         />
 
-                                        <div className='col-6'>
+                                        <div className='col-12 col-lg-6'>
                                             <h5 className='mb-3'>Détails:</h5>
-                                            <div className='row ml-2 no-space'>
-                                                <h6 className='offset-1 col-4'>Adresse :</h6>
+                                            <div className='row no-space'>
+                                                <h6 className='offset-sm-1 col-4'>Adresse :</h6>
                                                 <Field
                                                     className="col-7"
                                                     name="adresse1"
@@ -308,8 +311,8 @@ const DetailProjectPage = ({history, match}) => {
                                                     noLabel={true}
                                                 />
                                             </div>
-                                            <div className='row ml-2 no-space'>
-                                                <h6 className='offset-1 col-4'>Complément :</h6>
+                                            <div className='row no-space'>
+                                                <h6 className='offset-sm-1 col-4'>Complément :</h6>
                                                 <Field
                                                     className="col-7"
                                                     name="adresse2"
@@ -321,8 +324,8 @@ const DetailProjectPage = ({history, match}) => {
                                                 />
                                             </div>
 
-                                            <div className='row ml-2 no-space'>
-                                                <h6 className='offset-1 col-4'>Code Postal :</h6>
+                                            <div className='row no-space'>
+                                                <h6 className='offset-sm-1 col-4'>Code Postal :</h6>
                                                 <Field
                                                     className="col-7"
                                                     name="codePostal"
@@ -333,8 +336,8 @@ const DetailProjectPage = ({history, match}) => {
                                                     noLabel={true}
                                                 />
                                             </div>
-                                            <div className='row ml-2 no-space'>
-                                                <h6 className='offset-1 col-4'>Ville :</h6>
+                                            <div className='row no-space'>
+                                                <h6 className='offset-sm-1 col-4'>Ville :</h6>
                                                 <Field
                                                     className="col-7"
                                                     name="ville"
@@ -345,8 +348,8 @@ const DetailProjectPage = ({history, match}) => {
                                                     noLabel={true}
                                                 />
                                             </div>
-                                            <div className='row ml-2 no-space'>
-                                                <h6 className='offset-1 col-4'>Date de début :</h6>
+                                            <div className='row no-space'>
+                                                <h6 className='offset-sm-1 col-4'>Date de début :</h6>
                                                 <Field name="dateDebut"
                                                        type="date"
                                                        onChange={handleChange}
@@ -361,8 +364,8 @@ const DetailProjectPage = ({history, match}) => {
                                                 {
                                                     project.dateFinPrevues.map(date =>
 
-                                                        <div className='row ml-2 no-space' key={date.id}>
-                                                            <h6 className='offset-1 col-4'>Fin
+                                                        <div className='row no-space' key={date.id}>
+                                                            <h6 className='offset-sm-1 col-4'>Fin
                                                                 prévue {project.dateFinPrevues.indexOf(date) + 1} :</h6>
                                                             <p className='col-7'>{DateAPI.formatDate(date.date)}</p>
                                                         </div>
@@ -370,8 +373,8 @@ const DetailProjectPage = ({history, match}) => {
                                                 }
                                             </>
                                             }
-                                            <div className='row ml-2 no-space'>
-                                                <h6 className='offset-1 col-4'>Ajouter une date de fin prévue :</h6>
+                                            <div className='row no-space'>
+                                                <h6 className='offset-sm-1 col-4'>Ajouter une date de fin prévue :</h6>
                                                 <Field name="dateFinPrevue"
                                                        type="date"
                                                        onChange={handleChangeDateFinPrevue}
@@ -386,12 +389,12 @@ const DetailProjectPage = ({history, match}) => {
 
                                             {DateAPI.verifyDateExist(project.dateFinReelle) === "" ?
                                                 <>
-                                                    <div className='row ml-2 no-space'>
-                                                        <h6 className='offset-1 col-4'>Date de fin réélle :</h6>
+                                                    <div className='row no-space'>
+                                                        <h6 className='offset-sm-1 col-4'>Date de fin réélle :</h6>
                                                         <p className='col-7'>Aucune</p>
                                                     </div>
-                                                    <div className='row ml-2 no-space'>
-                                                        <h6 className='offset-1 col-4'>Ajouter la date de fin réélle
+                                                    <div className='row no-space'>
+                                                        <h6 className='offset-sm-1 col-4'>Ajouter la date de fin réélle
                                                             :</h6>
                                                         <Field name="dateFinReelle"
                                                                type="date"
@@ -404,12 +407,12 @@ const DetailProjectPage = ({history, match}) => {
                                                 </>
                                                 :
                                                 <>
-                                                    <div className='row ml-2 no-space'>
-                                                        <h6 className='offset-1 col-4'>Date de fin réélle :</h6>
+                                                    <div className='row no-space'>
+                                                        <h6 className='offset-sm-1 col-4'>Date de fin réélle :</h6>
                                                         <p className='col-7'>{DateAPI.formatDate(project.dateFinReelle)}</p>
                                                     </div>
-                                                    <div className='row ml-2 no-space'>
-                                                        <h6 className='offset-1 col-4'>Modifier la date de fin réélle
+                                                    <div className='row no-space'>
+                                                        <h6 className='offset-sm-1 col-4'>Modifier la date de fin réélle
                                                             :
                                                         </h6>
 
@@ -426,8 +429,8 @@ const DetailProjectPage = ({history, match}) => {
                                             }
 
 
-                                            <div className='row ml-2 no-space'>
-                                                <h6 className='offset-1 col-4'>Nom MOEX :</h6>
+                                            <div className='row no-space'>
+                                                <h6 className='offset-sm-1 col-4'>Nom MOEX :</h6>
                                                 <Field name="nomMOEX"
                                                        onChange={handleChange}
                                                        value={project.nomMOEX}
@@ -435,8 +438,8 @@ const DetailProjectPage = ({history, match}) => {
                                                 />
                                             </div>
 
-                                            <div className='row ml-2 no-space'>
-                                                <h6 className='offset-1 col-4'>Nom OPC :</h6>
+                                            <div className='row no-space'>
+                                                <h6 className='offset-sm-1 col-4'>Nom OPC :</h6>
                                                 <Field name="nomOPC"
                                                        onChange={handleChange}
                                                        value={project.nomOPC}
@@ -444,8 +447,8 @@ const DetailProjectPage = ({history, match}) => {
                                                 />
                                             </div>
 
-                                            <div className='row ml-2 no-space'>
-                                                <h6 className='offset-1 col-4'>Contact client :</h6>
+                                            <div className='row no-space'>
+                                                <h6 className='offset-sm-1 col-4'>Contact client :</h6>
                                                 <Field name="contactClient"
                                                        onChange={handleChange}
                                                        value={project.contactClient}
@@ -454,12 +457,12 @@ const DetailProjectPage = ({history, match}) => {
                                             </div>
 
 
-                                            <div className='row ml-2 mt-5'>
-                                                <h6 className='offset-1 col-4'>Statut :</h6>
+                                            <div className='row mt-5'>
+                                                <h6 className='offset-sm-1 col-4'>Statut :</h6>
                                                 <p className={"col-2 badge badge-" + STATUS_CLASSES[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}>
                                                     {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}</p>
                                             </div>
-                                            <div className='row ml-2 mt-4 d-flex justify-content-end mb-3'>
+                                            <div className='row mt-4 d-flex justify-content-end mb-3'>
                                                 <button onSubmit={handleSubmit} className="btn btn-danger">Valider les
                                                     changements
                                                 </button>
@@ -472,21 +475,21 @@ const DetailProjectPage = ({history, match}) => {
 
                             </>
                         }
-                        <div className='ml-2 mt-4 d-flex justify-content-between flex-wrap mb-3'>
+                        <div className='mt-4 d-flex justify-content-center justify-content-lg-between flex-wrap mb-3'>
                             <Button text='Nouveau Rapport'
-                                    className='btn btn-primary'
+                                    className='btn btn-primary mx-2 mb-3'
                                     type='button'
                                 // onClick={newReportClick}
                             />
                             <Link
-                                className='btn btn-primary'
+                                className='btn btn-primary mx-2 mb-3'
                                 type='button'
                                 to={'/project/' + project.id + '/listReports'}
                             >
                                 Liste des rapports
                             </Link>
                             <Button text='Voir les échéances'
-                                    className='btn btn-primary'
+                                    className='btn btn-primary mx-2 mb-3'
                                     type='button'
                             />
 
@@ -495,14 +498,14 @@ const DetailProjectPage = ({history, match}) => {
                                 {!edit ?
                                     <Button
                                         text='Modifier le projet'
-                                        className='btn btn-primary'
+                                        className='btn btn-primary mx-2 mb-3'
                                         type='button'
                                         onClick={handleEditClick}
                                     />
                                     :
                                     <Button
                                         text='Revenir aux détails du projet'
-                                        className='btn btn-info'
+                                        className='btn btn-info mx-2 mb-3'
                                         type='button'
                                         onClick={handleEditClick}
                                     />
@@ -511,7 +514,7 @@ const DetailProjectPage = ({history, match}) => {
                             }
 
                             <Button text='Revenir à la liste'
-                                    className='btn btn-danger md-mt-2'
+                                    className='btn btn-danger md-mt-2 mx-2 mb-3'
                                     type='button'
                                     onClick={handleBackClick}
                             />

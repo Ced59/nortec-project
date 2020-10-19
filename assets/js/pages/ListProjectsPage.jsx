@@ -129,9 +129,9 @@ const ListProjectsPage = (props) => {
                         :
                         paginationConfig.paginatedItems.map(project =>
                             
-                            <Link key={project.id} to={'/project/' + project.id} style={{textDecorationLine: "none", color: "black"}} >
+                            <div>
 
-                                <div className="card m-4" style={{width: '20rem', height: '26rem'}}>
+                                <Link className="card m-4" key={project.id} to={'/project/' + project.id} style={{textDecorationLine: "none", color: "black", width: '20rem', height: '26rem'}} >
 
                                     <h5 className="card-title p-2">{project.name}</h5>
 
@@ -154,8 +154,10 @@ const ListProjectsPage = (props) => {
                                         {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}</span>
                                         </p>
                                     </div>
-                                </div>
-                            </Link>
+
+                                </Link>
+
+                            </div>
                         )
 
 
@@ -169,11 +171,13 @@ const ListProjectsPage = (props) => {
 
             </div>
             <div className="row mt-2 mb-4 d-flex justify-content-center">
+                {LIST_PROJECTS_PAGE_PAGINATION_ITEMS_PER_PAGE < filteredProjects.length &&
                 <Pagination count={paginationConfig.pagesCount}
                             color="primary"
                             page={currentPage}
                             onChange={handleChangePage}
                 />
+                }
             </div>
         </main>
     );

@@ -271,7 +271,7 @@ const AdminProjectPage = ({history, match, props}) => {
 
             <form onSubmit={handleSubmit} encType="multipart/form-data">
                 <div className="d-flex flex-wrap justify-content-between">
-                    <fieldset className="border-fieldset col-6">
+                    <fieldset className="border-fieldset col-xl-6 col-12">
                         <legend>Information de localisation</legend>
                         <Field name="name" label="Nom du projet" placeholder="Entrez le nom du projet"
                                onChange={handleChange}
@@ -295,12 +295,12 @@ const AdminProjectPage = ({history, match, props}) => {
 
                         </ImageUpload>
                     </fieldset>
-                    <fieldset className="border-fieldset col-5">
+                    <fieldset className="border-fieldset col-xl-5 col-125">
                         <legend>Dates</legend>
                         <Field name="dateDebut" label="Date de démarrage" type="date" onChange={handleChange}
                                value={DateAPI.formatDateForm(project.dateDebut)} error={error.dateDebut}/>
                     </fieldset>
-                    <fieldset className="border-fieldset col-6 center">
+                    <fieldset className="border-fieldset col-xl-6 col-12 center">
                         <legend>Informations Client</legend>
                         <Field name="nomMOEX" label="MOEX" onChange={handleChange} value={project.nomMOEX}
                                error={error.nomMOEX}/>
@@ -313,29 +313,56 @@ const AdminProjectPage = ({history, match, props}) => {
                                <button type="button" onClick={() => handleShowModal()} className="btn btn-primary btn-sm">Voir les lots</button>
                                }
                     </fieldset>
-                    <fieldset className="border-fieldset col-5">
+                    <fieldset className="border-fieldset col-xl-5 col-12">
                         <legend>Choix des utilisateurs</legend>
                         {edit &&
-                        <table className="table table-hover table-striped">
-                            <thead>
-                            <th>Nom</th>
-                            <th>Prénom</th>
-                            <th>Role</th>
-                            <th/>
-                            </thead>
-                            <tbody>
-                            {paginationConfig.paginatedItems.map(user =>  (
-                                <tr key={user.id}>
-                                    <td>{user.firstName}</td>
-                                    <td>{user.lastName}</td>
-                                    <td>{UsersAPI.determineRole(user)}</td>
-                                    <td>
-                                        <button className="btn btn-primary btn-sm" onClick={()=>handleChangeUsers(user)}>Changer l'affectation</button>
-                                    </td>
-                                </tr>)
-                            )}
-                            </tbody>
-                        </table>
+                        <div>
+                            {paginationConfig.paginatedItems.filter(User => UsersAPI.determineRole(User)=="Administrateur").length !== 0 &&
+                                <table className="table table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th colSpan="3" className="text-center">Administrateurs</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Prénom</th>
+                                            <th>Nom</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {paginationConfig.paginatedItems.filter(User => UsersAPI.determineRole(User)=="Administrateur").map(user =>  (
+                                        <tr key={user.id}>
+                                            <td className="w-35">{user.firstName}</td>
+                                            <td className="w-35">{user.lastName}</td>
+                                            <td className="text-center">
+                                                <button className="btn btn-primary btn-sm" onClick={()=>handleChangeUsers(user)}>Changer l'affectation</button>
+                                            </td>
+                                        </tr>)
+                                    )}
+                                    </tbody>
+                                </table>}
+                            <table className="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                    <   th colSpan="3" className="text-center">Utilisateurs</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Prénom</th>
+                                        <th>Nom</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {paginationConfig.paginatedItems.filter(User => UsersAPI.determineRole(User)=="Utilisateur").map(user =>  (
+                                    <tr key={user.id}>
+                                        <td className="w-35">{user.firstName}</td>
+                                        <td className="w-35">{user.lastName}</td>
+                                        <td className="text-center">
+                                            <button className="btn btn-primary btn-sm" onClick={()=>handleChangeUsers(user)}>Changer l'affectation</button>
+                                        </td>
+                                    </tr>)
+                                )}
+                                </tbody>
+                            </table>
+                        </div>
                             || <div>Veuillez créer votre projet avant de faire la modification des utilisateurs</div>
                             }
                         {edit && 
