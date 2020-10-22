@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import DateAPI from "../services/DateAPI";
+import AuthAPI from "../services/AuthAPI";
 import {Link} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import ProjectsAPI from '../services/ProjectsAPI';
@@ -15,6 +16,7 @@ const AdminProjectsPage = () => {
     const [projects, setProjects] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(true);
+    const [userId] = useState(AuthAPI.getUserId());
 
     const STATUS_CLASSES = {
         no_start: "info",
@@ -61,13 +63,20 @@ const AdminProjectsPage = () => {
     // ----------------------------- Template ----------------------------------------------------------------
 
     return <main className="container">
+        
         <div className="mb-4 d-flex justify-content-between align-items-center">
+            <Link
+                className='btn btn-danger'
+                type='button'
+                to={'/admin/' + userId}
+            > Retour </Link>
             <h2> Projets : </h2>
+            
             <Link
                 className='btn btn-primary'
                 type='button'
                 to={'/admin/project/new'}
-            > Nouveau Projet </Link>
+            > Nouveau Projet  </Link>
         </div>
         <table className="table table-hover">
             <thead>

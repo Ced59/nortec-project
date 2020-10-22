@@ -22,7 +22,7 @@ class Project
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"project"})
+     * @Groups({"project","report"})
      */
     private $id;
 

@@ -66,7 +66,28 @@ class AppFixtures extends Fixture
             ->setActive(true);
 
         $manager->persist($user);
+        
+        $user = new User();
+        $hash = $this->encoder->encodePassword($user, "password");
+        $user->setFirstName("Charles")
+            ->setEmail("charles@admin.com")
+            ->setLastName("Choquet")
+            ->setPassword($hash)
+            ->setRoles(['ROLE_ADMIN'])
+            ->setActive(true);
 
+        $manager->persist($user);
+
+        $user = new User();
+        $hash = $this->encoder->encodePassword($user, "password");
+        $user->setFirstName("Charles")
+            ->setEmail("charles@user.com")
+            ->setLastName("Choquet")
+            ->setPassword($hash)
+            ->setRoles(['ROLE_USER'])
+            ->setActive(true);
+
+        $manager->persist($user);
 
         for ($u = 0; $u < 100; $u++) {
             $user = new User();

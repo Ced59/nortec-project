@@ -228,7 +228,7 @@ function fakeListReports() {
     return [
         {
             id: 0,
-            project: projectById(7),
+            project: projectById(1),
             redacteur: "Ced",
             dateRedaction: "2020-03-03T18:25:43",
             status: "in-progress",
@@ -300,7 +300,7 @@ function fakeListReports() {
         },
         {
             id: 1,
-            project: projectById(1),
+            project: projectById(2),
             redacteur: "Ced",
             dateRedaction: "2020-03-03T15:21:12",
             status: "clotured",

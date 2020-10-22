@@ -1,6 +1,6 @@
 import React from 'react';
 
-const FieldTextArea = ({ name, label, value, onChange, rows, placeholder = "", error = ""}) => {
+const FieldTextArea = ({ name, label, value, onChange, rows, placeholder = "", error = "", readOnly = false}) => {
     return (
         <div className="form-group">
             <label htmlFor={name}>
@@ -8,6 +8,7 @@ const FieldTextArea = ({ name, label, value, onChange, rows, placeholder = "", e
             </label>
             <textarea
                 value={value}
+                readOnly= {readOnly}
                 onChange={onChange}
                 placeholder={placeholder || label}
                 name={name}
