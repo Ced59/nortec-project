@@ -64,7 +64,7 @@ const DetailProjectPage = ({ history, match }) => {
     status: "in_progress",
     propreteAccessConformity: "",
     propreteAccessComment: "",
-    propreteAccessCommentIntern:"",
+    propreteAccessCommentIntern: "",
     propreteCommuneConformity: true,
     propreteCommuneComment: "",
     propreteCommuneCommentIntern: "",
@@ -72,7 +72,7 @@ const DetailProjectPage = ({ history, match }) => {
     securityComment: "",
     securityCommentIntern: "",
     installations: "",
-    lots:[]
+    lots: [],
   });
 
   //----------------------------------------Récupération d'un projet----------------------------
@@ -128,10 +128,10 @@ const DetailProjectPage = ({ history, match }) => {
     try {
       await ReportsAPI.create(report);
       history.replace("/project/" + id + "/" + idNewReport + "/effectifs");
+      toast.success("Le raport numéro " + idNewReport + " à été créer ");
     } catch (error) {
       console.log(error.response);
     }
-
   };
 
   const handleChange = ({ currentTarget }) => {

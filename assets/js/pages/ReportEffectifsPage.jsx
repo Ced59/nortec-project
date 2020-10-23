@@ -35,6 +35,7 @@ const ReportEffectifsPage = ({ match }) => {
       <NavbarLeftWithRouter selected="effectifs" />
 
       {!loading && (
+        <>
         <div className="page-content">
           <h2>Effectifs : </h2>
           <h4>Rédacteur : {report.redacteur}</h4>
@@ -69,6 +70,7 @@ const ReportEffectifsPage = ({ match }) => {
             <p>Il n'y a pas d'effectif défini pour ce rapport</p>
           )}
         </div>
+        </>
       )}
       {loading && <div id="loading-icon"> </div>}
     </main>
