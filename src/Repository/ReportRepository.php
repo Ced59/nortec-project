@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Project;
 use App\Entity\Report;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -18,6 +19,13 @@ class ReportRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Report::class);
     }
+
+    // public function findLastChrono(Project $project){
+    //     return $this->createQueryBuilder("i")
+    //                 ->select("chrono")
+    //                 ->join("i.project", "p")
+    //                 ->where("p.")
+    // }
 
     // /**
     //  * @return Report[] Returns an array of Report objects

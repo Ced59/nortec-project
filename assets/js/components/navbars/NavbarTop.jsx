@@ -4,13 +4,11 @@ import AuthAPI from "../../services/AuthAPI";
 import LogoCompanyComponent from "../images/LogoCompanyComponent";
 import {toast} from "react-toastify";
 import '../../../css/navbarTop.css';
-import SearchContext from "../../contexts/SearchContext";
 import {NavLink} from "react-router-dom";
 
 const NavbarTop = ({history}) => {
 
     const {isAuthenticated, setIsAuthenticated} = useContext(AuthContext);
-    const {searchValue, setSearchValue} = useContext(SearchContext);
     const [completeNameUser] = useState(AuthAPI.getUserFirstNameLastName());
     const [userId] = useState(AuthAPI.getUserId());
 
@@ -22,9 +20,6 @@ const NavbarTop = ({history}) => {
         history.push("/");
     };
 
-    const handleSearch = ({currentTarget}) => {
-        setSearchValue(currentTarget.value);
-    };
 
 
     return (
@@ -57,16 +52,6 @@ const NavbarTop = ({history}) => {
                     </li>
                 </ul>
 
-                <form className="form-inline">
-                    <input
-                        className="form-control"
-                        type="text"
-                        placeholder="Rechercher un projet"
-                        aria-label="Search"
-                        onChange={handleSearch}
-                        value={searchValue}
-                    />
-                </form>
                 <div className="nav-item">
                     <button onClick={handleLogout} className="btn btn-danger ml-3">
                         Déconnexion
