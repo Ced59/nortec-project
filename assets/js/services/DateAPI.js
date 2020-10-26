@@ -17,7 +17,6 @@ function determineStatus(dateDebut, dateFinReelle) {
             status = "finished";
         }
     }
-  }
   return status;
 }
 
