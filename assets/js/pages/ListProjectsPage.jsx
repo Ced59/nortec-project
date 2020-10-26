@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from "react";
 import ImgWithStyleComponent from "../components/images/ImgWithStyleComponent";
 import '../../css/listProjectsPage.css';
 import '../../css/app.css';
@@ -11,13 +11,11 @@ import DateAPI from "../services/DateAPI";
 import {STATUS_CLASSES, STATUS_LABEL} from "../components/ProjectStatus";
 import {toast} from "react-toastify";
 import AuthAPI from "../services/AuthAPI";
-import ProjectsAPI from '../services/ProjectsAPI';
+import ProjectsAPI from "../services/ProjectsAPI";
 import Pagination from "@material-ui/lab/Pagination";
 import pagination_configs, {
-    LIST_PROJECTS_PAGE_PAGINATION_ITEMS_PER_PAGE
+  LIST_PROJECTS_PAGE_PAGINATION_ITEMS_PER_PAGE,
 } from "../components/configs/pagination_configs";
-
-
 
 const ListProjectsPage = (props) => {
 
@@ -116,6 +114,7 @@ const ListProjectsPage = (props) => {
                         text={archivedProjects ? "Cacher les projets archivés" : "Montrer les projets archivés"}
                         className="btn btn-secondary text-right"
                         type="button"
+                        page= {currentPage - 1}
                     />
                 </div>
             </div>

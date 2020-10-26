@@ -413,7 +413,8 @@ function fakeListReports() {
                     libelleLot: "POSE MOQUETTE",
                     entreprise: companyById(0),
                     effectifPrevu: 5,
-                    effectifConstate: 5
+                    effectifConstate: 5,
+                    echeances:[echeanceById(0),echeanceById(1)]
                 },
                 {
                     id: 6,
@@ -421,7 +422,8 @@ function fakeListReports() {
                     libelleLot: "COULAGE DE BETON",
                     entreprise: companyById(1),
                     effectifPrevu: 5,
-                    effectifConstate: 2
+                    effectifConstate: 2,
+                    echeances:[echeanceById(2)]
                 },
                 {
                     id: 7,
@@ -429,7 +431,8 @@ function fakeListReports() {
                     libelleLot: "POSE ROBINETTERIE",
                     entreprise: companyById(3),
                     effectifPrevu: 5,
-                    effectifConstate: 10
+                    effectifConstate: 10,
+                    echeances:[]
                 },
                 {
                     id: 8,
@@ -437,7 +440,8 @@ function fakeListReports() {
                     libelleLot: "INSTALLATION VIDEO SURVEILLANCE",
                     entreprise: companyById(4),
                     effectifPrevu: 5,
-                    effectifConstate: 5
+                    effectifConstate: 5,
+                    echeances:[]
                 },
                 {
                     id: 9,
@@ -445,7 +449,8 @@ function fakeListReports() {
                     libelleLot: "FOURNITURE ELECTRICITE",
                     entreprise: companyById(2),
                     effectifPrevu: 5,
-                    effectifConstate: 0
+                    effectifConstate: 0,
+                    echeances:[]
                 }
             ],
             photos: [
@@ -459,8 +464,8 @@ function fakeListReports() {
                     link: "../img/projects-img/projects-general-img/8-project-img.jpg",
                     type: "proprete"
                 }
-            ],
-            echeances: []
+            ]
+
         },
         {
             id: 3,
@@ -581,6 +586,70 @@ function fakeListCompanies() {
     ];
 }
 
+function fakeListEcheances() {
+    return [
+        {
+            id: 0,
+            redacteur: "Charles",
+            status: "finished",
+            category: "MOQUETTE",
+            subject: "Pose moquette rdc",
+            dateDebut: "01/12/2020",
+            dateFin: "01/12/2020",
+            dateCloture: "02/12/2020",
+            lotId: {
+                id: 5,
+                numero: "6587-3",
+                entreprise: {
+                    nom: "Le roi de la moquette"
+                }
+            },
+            effectifPrevu: 5,
+            effectifConstate: 2
+
+        },
+        {
+            id: 1,
+            redacteur: "Jean",
+            status: "late",
+            category: "PEINTURE",
+            subject: "Peinture des portes",
+            dateDebut: "10/20/2020",
+            dateFin: "10/22/2020",
+            dateCloture: "",
+            lotId:  {
+                id: 5,
+                numero: "475-4",
+                entreprise: {
+                    nom: "Le roi de la moquette"
+                }
+            },
+            effectifPrevu: 5,
+            effectifConstate: 2
+        },
+        {
+            id: 2,
+            redacteur: "Charles",
+            status: "no_start",
+            category: "FENETRE",
+            subject: "Fenêtre du 1er ",
+            dateDebut: "11/15/2020",
+            dateFin: "11/16/2020",
+            dateCloture: "",
+            lotId: {
+                id: 7,
+                numero:"142-32",
+                entreprise: {
+                    nom: "Béton Armé"
+                }
+            },
+            effectifPrevu: 5,
+            effectifConstate:""
+        }
+    ];
+}
+
+
 
 function companyById(id) {
     const companies = fakeListCompanies();
@@ -609,11 +678,33 @@ function filterById(tab, id) {
     );
 }
 
+function filterByLotId(tab, lotId) {
+    return tab.filter(
+        t => t.lotId === lotId
+    );
+}
+
+function echeanceById(id) {
+    const echeances = fakeListEcheances();
+    const echeanceById = filterById(echeances, id);
+
+    return echeanceById[0];
+}
+
+function echeanceByLotId(lotId) {
+    const echeances = fakeListEcheances();
+    const echeanceByLotId = filterByLotId(echeances, lotId);
+    return echeanceByLotId;
+}
+
 
 export default {
     fakeListProjects: fakeData,
     fakeListReports,
     reportById,
     fakeListCompanies,
-    companyById
+    companyById,
+    fakeListEcheances,
+    echeanceById,
+    echeanceByLotId
 }

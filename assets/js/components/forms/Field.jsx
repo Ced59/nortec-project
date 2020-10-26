@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Field = ({name, label, value = "", onChange = "", placeholder, className = "", type = "text", error = "", noLabel = false}) => {
+const Field = ({name, label, value = "", onChange, placeholder, className = "", type = "text", error = "", noLabel = false, readOnly = false}) => {
     return (
         <div className="form-group">
             {!noLabel &&
@@ -9,6 +9,7 @@ const Field = ({name, label, value = "", onChange = "", placeholder, className =
             </label>
             }
             <input
+            readOnly={readOnly}
                 value={value}
                 onChange={onChange}
                 type={type}

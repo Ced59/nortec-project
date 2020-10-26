@@ -1,19 +1,20 @@
-import React, {useEffect, useState} from 'react';
-import {Link} from 'react-router-dom';
-import Field from './../components/forms/Field'
-import FieldTextArea from './../components/forms/FieldTextArea'
-import UsersAPI from '../services/UsersAPI';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import Field from "./../components/forms/Field";
+import FieldTextArea from "./../components/forms/FieldTextArea";
+import UsersAPI from "../services/UsersAPI";
 import ProjectsAPI from "../services/ProjectsAPI";
-import DateAPI from '../services/DateAPI';
-import {toast} from 'react-toastify';
-import '../../css/loading-icon.css';
+import DateAPI from "../services/DateAPI";
+import { toast } from "react-toastify";
+import "../../css/loading-icon.css";
 import ImageUpload from "../components/forms/ImageUpload";
 import MediaUploadAPI from "../services/MediaUploadAPI";
 import pagination_configs, {
-    ADMIN_PROJECT_PAGE_PAGINATION_ITEMS_PER_PAGE
+  ADMIN_PROJECT_PAGE_PAGINATION_ITEMS_PER_PAGE,
 } from "../components/configs/pagination_configs";
 import Pagination from "@material-ui/lab/Pagination";
 import Modal from "react-bootstrap/Modal";
+
 import { Button} from '@material-ui/core';
 import Select from "../components/forms/Select"
 import AuthAPI from "../services/AuthAPI";
@@ -155,30 +156,102 @@ const AdminProjectPage = ({history, match, props}) => {
     const handleChange = ({currentTarget}) => {
         const {name, value} = currentTarget;
         setProject({...project, [name]: value});
+
+    }
+  };
+
+  useEffect(() => {
+    if (id !== "new") {
+      setEdit(true);
+      fetchProject(id).then((r) => "");
+      fetchUsers().then((r) => "");
+    } else {
+      fetchUsers().then((r) => "");
     }
 
-    const handleChangeLot = ({currentTarget}) => {
-        const {name, value} = currentTarget;
-        setLots({...lots, [name]: value});
-    }
+  }, [id]);
 
-    const handleAddUser = user => {
-        const updatedUsers = [...project.users];
-        updatedUsers.push(user);
-        setProject({...project, users: updatedUsers });
-    }
+  const filtredAdmin = users.filter(
+    (user) => UsersAPI.determineRole(user) === "Administrateur"
+  );
 
-    const handleRemUser = id => {
-        const updatedUsers = [...project.users];
-        const index = updatedUsers.findIndex((user) => user.id === id);
-        updatedUsers.splice(index, 1);
-        setProject({...project, users: updatedUsers });
-    }
+  const handleAddLot = () => {
+    setAddLot(true);
+  };
 
-    const handleCloseLotModal = () => {
-        setShowLotModal(false);
-        setAddLot(false);
+  // ----------------------------- Mise en place de la pagination ------------------------------------------
+
+  const handleChangePage = (event, page) => {
+    setCurrentPage(page);
+  };
+
+  const paginationConfig = pagination_configs.determinePaginationConfig(
+    users,
+    ADMIN_PROJECT_PAGE_PAGINATION_ITEMS_PER_PAGE,
+    currentPage
+  );
+
+  //----------------------------------- gestion de changement des input-----------------------------------
+  const handleChange = ({ currentTarget }) => {
+    const { name, value } = currentTarget;
+    setProject({ ...project, [name]: value });
+  };
+
+  const handleChangeLot = ({ currentTarget }) => {
+    const { name, value } = currentTarget;
+    setLots({ ...lots, [name]: value });
+  };
+
+  const handleChangeUsers = (user) => {
+    if (edit) {
+      project.users.push(user);
+      project.users = project.users.map(
+        (userInProject) => "/api/users/" + userInProject.id
+      );
     }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setAddLot(false);
+  };
+
+  const handleShowModal = () => {
+    setShowModal(true);
+    fetchCompany().then((r) => "");
+  };
+
+  const handleCloseAddLot = () => {
+    setAddLot(false);
+  };
+
+  const handleSubmitLot = async (event) => {
+    event.preventDefault();
+
+    try {
+      lots.project = "/api/projects/" + project.id;
+      lots.company = "/api/companies/" + lots.company;
+
+      console.log(lots.company);
+      console.log(lots);
+
+      await ProjectsAPI.addLotProject(lots);
+
+      toast.success("Le lot est bien ajouté !");
+    } catch ({ response }) {
+      const { violations } = response.data;
+      if (violations) {
+        const apiErrors = {};
+        violations.map(({ propertyPath, message }) => {
+          apiErrors[propertyPath] = message;
+        });
+
+        setError(apiErrors);
+      }
+      console.log(response);
+
+    }
+  };
 
     const handleShowLotModal = () => {
         setShowLotModal(true);
@@ -413,12 +486,63 @@ const AdminProjectPage = ({history, match, props}) => {
                         </div>
 }
                     </fieldset>
+
                 </div>
-                <div className="form-group d-flex justify-content-between align-items-center mt-2">
-                    <Link to="/admin/project" className="btn btn-danger">Retour aux projets</Link>
-                    <button type="submit" className="btn btn-success">Valider</button>
+                <div className="col-5">
+                  <Field
+                    name="libelleLot"
+                    label="Nom du Lot"
+                    onChange={handleChangeLot}
+                    value={lots.libelleLot}
+                  />
                 </div>
+              </div>
+              <div className="d-flex justify-content-between">
+                <div className="col-5">
+                  <Field
+                    name="DateDebutEcheance"
+                    type="date"
+                    label="Date de démarrage du Lot"
+                    onChange={handleChangeLot}
+                    value={DateAPI.formatDateForm(lots.DateDebutEcheance)}
+                  />
+                </div>
+                <div className="col-5">
+                  <Field
+                    name="dateFinEcheance"
+                    type="date"
+                    label="Date de fin du Lot"
+                    onChange={handleChangeLot}
+                    value={DateAPI.formatDateForm(lots.dateFinEcheance)}
+                  />
+                </div>
+              </div>
+              <Select
+                name="company"
+                label="Entreprise"
+                onChange={handleChangeLot}
+                value={lots.company}
+                error=""
+              >
+                  <option value="">Selectionner une Entreprise</option>
+                {companies.map((company) => (
+                  <option key={company.id} value={company.id}>
+                    {company.nom}
+                  </option>
+                ))}
+              </Select>
+              <div className="d-flex justify-content-between">
+                <button
+                  type="button"
+                  onClick={() => handleCloseAddLot()}
+                  className="btn btn-danger"
+                >
+                  Annuler
+                </button>
+                <button className="btn btn-success">Valider</button>
+              </div>
             </form>
+
         </main>
 
         {/* -------------------------------------------MODAL LOTS----------------------------------------------- */}
@@ -584,6 +708,7 @@ const AdminProjectPage = ({history, match, props}) => {
                 </Modal.Body>
             </Modal>
     </>
+  );
 };
 
 export default AdminProjectPage;

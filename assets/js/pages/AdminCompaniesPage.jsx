@@ -29,9 +29,11 @@ const AdminCompaniesPage = (props) => {
     return <main className="container">
         <div className="mb-4 d-flex justify-content-between align-items-center">
             <Link
-                className='btn btn-primary'
+
+                className='btn btn-danger'
                 type='button'
-                to={"/admin/" + userId}
+                to={'/admin/' + userId}
+
             > Retour </Link>
             <h2> Entreprises : </h2>
             <Link

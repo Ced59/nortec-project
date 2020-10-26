@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
 
-
 function determineStatus(dateDebut, dateFinReelle) {
-    let status = "";
+  let status = "";
+
 
     if (dateFinReelle === "") {
         if (dayjs().isBefore(dateDebut)) {
@@ -17,11 +17,14 @@ function determineStatus(dateDebut, dateFinReelle) {
             status = "finished";
         }
     }
-    return status;
+  }
+  return status;
 }
 
 function formatDate(date) {
+  if(date!==""){
     return dayjs(date).format('DD/MM/YYYY');
+  }
 }
 
 function formatDateForm(date) {
@@ -45,11 +48,11 @@ function verifyDateExist(date) {
 }
 
 function dateIsAfter(dateToCompare, dateDebut, dateFinPrevues) {
-    if (!dateIsAfterDebut(dateToCompare, dateDebut)) {
-        return false;
-    }
+  if (!dateIsAfterDebut(dateToCompare, dateDebut)) {
+    return false;
+  }
 
-    let higherDate = "1900-01-01T00:00:00+00:00";
+  let higherDate = "1900-01-01T00:00:00+00:00";
 
     dateFinPrevues.map(
         date => {
@@ -69,6 +72,14 @@ function dateIsAfter(dateToCompare, dateDebut, dateFinPrevues) {
 function dateIsAfterDebut(dateToCompare, dateDebut) {
     return dayjs(dateToCompare).isAfter(dateDebut);
 }
+//Remettre la fonction retard en dayjs
+function retard(dateFin, dateDebut) {
+  if (dateFin !== "") {
+    return moment(dateFin).diff(moment(dateDebut), "days");
+  } else if (now().diff(moment(dateDebut), "days") > 0) {
+    return now().diff(moment(dateDebut), "days");
+  }
+}
 
 
 export default {
@@ -79,5 +90,6 @@ export default {
     formatDateForm,
     dateIsAfter,
     dateIsAfterDebut,
-    now
+    now,
+  retard,
 }

@@ -9,6 +9,7 @@
     "license": "UNLICENSED",
     "private": true,
     "scripts": {
+        "encore": "encore",
         "dev-server": "encore dev-server --port 8080",
         "dev": "encore dev",
         "watch": "encore dev --watch",
@@ -21,7 +22,8 @@
         "@react-pdf/renderer": "^1.6.9",
         "axios": "^0.18.1",
         "bootstrap": "^4.4.1",
-        "dayjs": "^1.9.1",
+        "dayjs": "^1.9.3",
+
         "fontsource-roboto": "^2.2.6",
         "jquery": "^3.5.1",
         "jwt-decode": "^2.2.0",

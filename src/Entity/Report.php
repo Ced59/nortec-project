@@ -5,10 +5,13 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ * normalizationContext={"groups"={"report"}}
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\ReportRepository")
  */
 class Report
@@ -17,102 +20,122 @@ class Report
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"report"})
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="reports")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"report"})
      */
     private $Project;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"report"})
      */
     private $redacteur;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"report"})
      */
     private $dateRedaction;
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Groups({"report"})
      */
     private $status;
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Groups({"report"})
      */
     private $propreteAccessConformity;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"report"})
      */
     private $propreteAccessComment;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"report"})
      */
     private $propreteAccessCommentIntern;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"report"})
      */
     private $propreteCommuneConformity;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"report"})
      */
     private $propreteCommuneComment;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"report"})
      */
     private $propreteCommuneCommentIntern;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"report"})
      */
     private $securityConformity;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"report"})
      */
     private $securityConmment;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"report"})
      */
     private $securityConmmentIntern;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"report"})
      */
     private $installations;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\PropreteAccessImputation", mappedBy="report", orphanRemoval=true)
+     * @Groups({"report"})
      */
     private $propreteIccessImputation;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\PropreteCommuneImputation", mappedBy="report")
+     * @Groups({"report"})
      */
     private $propreteCommuneImputations;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\SecurityCommentImputation", mappedBy="report")
+     * @Groups({"report"})
      */
     private $securityCommentImputations;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Photo", mappedBy="Report")
+     * @Groups({"report"})
      */
     private $photos;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Lot", mappedBy="report")
+     * @Groups({"lot","report"})
      */
     private $lots;
 

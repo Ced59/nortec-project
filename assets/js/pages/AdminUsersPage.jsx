@@ -57,11 +57,13 @@ const AdminUsersPage = ({history, props}) => {
     return <>
         <main className="container">
             <div className="mb-4 d-flex justify-content-between align-items-center">
-            <Link
-                className='btn btn-primary'
-                type='button'
-                to={"/admin/" + userId}
-            > Retour </Link>
+
+                <Link
+                    className='btn btn-danger'
+                    type='button'
+                    to={'/admin/' + userId}
+                > Retour </Link>
+
                 <h2> Utilisateurs : </h2>
                 <Link
                     className='btn btn-primary'
