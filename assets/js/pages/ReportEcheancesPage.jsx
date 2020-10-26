@@ -65,6 +65,7 @@ const ReportEcheancesPage = ({ match }) => {
   const handleCloseModalEcheance = () => {
     setShowModalEcheance(false);
   };
+
   const handleCloseModalDetail = () => {
     setShowModalDetail(false);
     setEdit(false);
@@ -85,6 +86,7 @@ const ReportEcheancesPage = ({ match }) => {
       },
     });
   };
+
   const handleChangeEcheance = ({ currentTarget }) => {
     const { name, value } = currentTarget;
     setEcheance({ ...echeance, [name]: value });
@@ -155,7 +157,7 @@ const ReportEcheancesPage = ({ match }) => {
                       <td>{DateAPI.formatDate(echeance.dateFin)}</td>
                       <td>{DateAPI.formatDate(echeance.dateCloture)}</td>
                       <td>
-                        {DateAPI.retard(echeance.dateCloture, echeance.dateFin)}
+                        {/* {DateAPI.retard(echeance.dateCloture, echeance.dateFin)} */}
                       </td>
                       <td>{lot.entreprise.nom}</td>
                       <td>
@@ -178,6 +180,9 @@ const ReportEcheancesPage = ({ match }) => {
           />
         </div>
       </main>
+
+      {/*-------------------- Fenêttre modal pour l'ajout d'une échéance ------------------------------*/}
+
       <Modal
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
@@ -227,11 +232,14 @@ const ReportEcheancesPage = ({ match }) => {
               <option value="Sony">Lot N° 3154 Plomberie</option>
             </Select>
             <Modal.Footer>
-              <Button className="btn btn-primary" text="Ajouter"></Button>
+              <Button className="btn btn-primary" text="Ajouter" onClick={(e) =>{e.preventDefault()}}></Button>
             </Modal.Footer>
           </form>
         </Modal.Body>
       </Modal>
+
+      {/*-------------------- Fenêttre modal pour le detail des échéances ----------------------------*/}
+
       <Modal
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
@@ -282,12 +290,12 @@ const ReportEcheancesPage = ({ match }) => {
                 ) : (
                   <p>Fini le: {echeance.dateCloture} </p>
                 )}
-                {DateAPI.retard(echeance.dateCloture, echeance.dateFin) > 0 && (
+                {/* {DateAPI.retard(echeance.dateCloture, echeance.dateFin) > 0 && (
                   <p>
                     Retard:{" "}
                     {DateAPI.retard(echeance.dateCloture, echeance.dateFin)}
                   </p>
-                )}
+                )} */}
               </div>
               <div className="col-12 border-detail mt-3">
                 <p className="mt-3">

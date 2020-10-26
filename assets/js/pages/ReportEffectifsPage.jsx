@@ -25,7 +25,7 @@ const ReportEffectifsPage = ({ match }) => {
     }
   };
 
-  // Chargement du customer si besoin au cahrgement du composant ou au changement de l'identifiant
+  // Chargement du raport si besoin au cahrgement du composant ou au changement de l'identifiant
   useEffect(() => {
     fetchReport(urlParams.idReport);
   }, [urlParams.idReport]);
