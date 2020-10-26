@@ -13,7 +13,6 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../css/app.css';
 import DetailProjectPage from "./pages/DetailProjectPage";
-import SearchContext from "./contexts/SearchContext";
 import ReportEffectifsPage from "./pages/ReportEffectifsPage";
 import ReportPropreteAccesPage from "./pages/ReportPropreteAccesPage";
 import ReportSecuritePage from "./pages/ReportSecuritePage";
@@ -40,30 +39,15 @@ const App = () => {
     const NavbarTopWithRouter = withRouter(NavbarTop);
 
     const [isAuthenticated, setIsAuthenticated] = useState(AuthAPI.isAuthenticated());
-    const [searchContext, setSearchContext] = useState('');
-
-    const contextValue = {
-        isAuthenticated: isAuthenticated,
-        setIsAuthenticated: setIsAuthenticated
-    };
-
-    const searchContextValue = {
-        searchValue: searchContext,
-        setSearchValue: setSearchContext
-    };
-
-
 
     return (
 
-        <AuthContext.Provider value={contextValue}>
+        <AuthContext.Provider value={{isAuthenticated, setIsAuthenticated}}>
 
 
                 <HashRouter>
 
-                    <SearchContext.Provider value={searchContextValue}>
                         {isAuthenticated && <NavbarTopWithRouter/>}
-                    </SearchContext.Provider>
 
 
                     <Switch>
@@ -87,11 +71,7 @@ const App = () => {
                         <PrivateRoute path="/admin/company/:id" component={AdminCompanyPage}/>
                         <PrivateRoute path="/admin/company" component={AdminCompaniesPage}/>
                         <PrivateRoute path="/admin/:id" component={AdminPage}/>
-
-
-                        <SearchContext.Provider value={searchContextValue}>
-                            <PrivateRoute path="/projects" component={ListProjectsPage}/>
-                        </SearchContext.Provider>
+                        <PrivateRoute path="/projects" component={ListProjectsPage}/>
 
                     </Switch>
 

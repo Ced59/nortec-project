@@ -6,6 +6,7 @@ import ProjectsAPI from "../../services/ProjectsAPI";
 
 // TODO changer la class selected en fonction du clic
 
+
 const NavbarLeft = ({ match, selected }) => {
   const id = match.params;
 
@@ -90,6 +91,7 @@ const NavbarLeft = ({ match, selected }) => {
       </ul>
     </div>
   );
+
 };
 
 export default NavbarLeft;

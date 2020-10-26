@@ -84,6 +84,7 @@ const DetailProjectPage = ({ history, match }) => {
       setLoadingProject(false);
     } catch (error) {
       console.log(error.response);
+
     }
   };
 
@@ -91,9 +92,11 @@ const DetailProjectPage = ({ history, match }) => {
     try {
       const data = await ReportsAPI.findAll();
 
+
       setReports(data);
     } catch (error) {
       console.log(error.response);
+
     }
   };
 
@@ -175,35 +178,107 @@ const DetailProjectPage = ({ history, match }) => {
     } else {
       setErrorDate("La nouvelle date doit être postérieure aux autres");
     }
-  };
 
-  const handleChangeFinReelle = ({ currentTarget }) => {
-    const { name, value } = currentTarget;
-    setProject({ ...project, [name]: value });
 
-    DateAPI.dateIsAfterDebut(project.dateFinReelle, project.dateDebut)
-      ? setErrorDateFinRelle("")
-      : setErrorDateFinRelle(
-          "La date de fin réélle doit être postérieure à la date de début!"
-        );
-  };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+        try {
+            project.users = project.users.map(userInProject => ("/api/users/" + userInProject.id));
+            project.dateFinPrevues = project.dateFinPrevues.map(dateInProject => ("/api/project_date_fin_prevues/" + dateInProject.id));
+            project.lots = project.lots.map(lot => ("/api/lots/" + lot.id));
+            await ProjectsAPI.update(id, project);
+            toast.success("Le projet a bien été mis à jour !");
+            fetchProject(id);
+            fetchUsers();
+            setEdit(false);
+        }
+        catch ({response}) {
+            toast.error("Un problème est survenu pendant la mise à jour du projet.");
+            console.log(id);
+            console.log(project);
+            console.log(error);
+            console.log(response);
+        }
 
-    try {
-      await ProjectsAPI.update(id, project);
-      toast.success("Le projet a bien été mis à jour !");
-      setEdit(false);
-    } catch {
-      toast.error("Un problème est survenu pendant la mise à jour du projet.");
     }
-  };
 
-  // console.log(project);
-  // console.log(project.dateFinPrevues);
+    // console.log(project);
+    // console.log(project.dateFinPrevues);
 
-  return (
+    //--------------------------------------------GESTION DES LOTS--------------------------------------------------------
+
+    const handleCloseLotModal = () => {
+        setShowLotModal(false);
+        setAddLot(false);
+    }
+
+    const handleShowLotModal = () => {
+        setShowLotModal(true);
+        fetchCompany().then(r => '');
+    }
+
+    const handleAddLot = () => {
+        setAddLot(true);
+    }
+
+    const handleCloseAddLot = () => {
+        setAddLot(false);
+    }
+
+    const handleChangeLot = ({currentTarget}) => {
+        const {name, value} = currentTarget;
+        setLots({...lots, [name]: value});
+    }
+
+    const handleSubmitLot = async event => {
+        event.preventDefault();
+
+        console.log(lots.company);
+        console.log(company);
+
+        setAddLot(false);
+
+        
+        try {
+            lots.project = "/api/projects/" + project.id;
+            lots.company = "/api/companies/" + lots.company;
+
+            console.log(lots.company);
+            console.log(lots);
+
+            await ProjectsAPI.addLotProject(lots);
+
+            toast.success("Le lot est bien ajouté !");
+            
+        } catch ({response}) {
+            const {violations} = response.data;
+            if (violations) {
+                const apiErrors = {};
+                violations.map(({propertyPath, message}) => {
+                    apiErrors[propertyPath] = message;
+                });
+
+                setError(apiErrors);
+            }
+            console.log(response);
+        }
+    }
+
+    //-----------------------------------------COMPANY FOR LOT------------------------------------------------------
+
+    const fetchCompany = async () => {
+        try{
+            const data = await ProjectsAPI.findAllCompany();
+            setCompanies(data);
+        } catch (error){
+            console.log(error.response);
+        }
+    }
+
+    //--------------------------------------------Template  --------------------------------------------------------
+
+   return (
     <main className="container">
       <div className="card m-4 p-2">
         {!loadingProject ? (
@@ -488,6 +563,127 @@ const DetailProjectPage = ({ history, match }) => {
                               )}
                               noLabel={true}
                               error={errorDateFinReelle}
+                                                        />
+                                                    </div>
+                                                </>
+                                                :
+                                                <>
+                                                    <div className='row no-space'>
+                                                        <h6 className='offset-sm-1 col-4'>Date de fin réélle :</h6>
+                                                        <p className='col-7'>{DateAPI.formatDate(project.dateFinReelle)}</p>
+                                                    </div>
+                                                    <div className='row no-space'>
+                                                        <h6 className='offset-sm-1 col-4'>Modifier la date de fin réélle
+                                                            :
+                                                        </h6>
+
+                                                        <Field name="dateFinReelle"
+                                                               type="date"
+                                                               onChange={handleChangeFinReelle}
+                                                               value={DateAPI.formatDateForm(project.dateFinReelle)}
+                                                               noLabel={true}
+                                                               error={errorDateFinReelle}
+                                                        />
+                                                    </div>
+                                                </>
+
+                                            }
+
+
+                                            <div className='row no-space'>
+                                                <h6 className='offset-sm-1 col-4'>Nom MOEX :</h6>
+                                                <Field name="nomMOEX"
+                                                       onChange={handleChange}
+                                                       value={project.nomMOEX}
+                                                       noLabel={true}
+                                                />
+                                            </div>
+
+                                            <div className='row no-space'>
+                                                <h6 className='offset-sm-1 col-4'>Nom OPC :</h6>
+                                                <Field name="nomOPC"
+                                                       onChange={handleChange}
+                                                       value={project.nomOPC}
+                                                       noLabel={true}
+                                                />
+                                            </div>
+
+                                            <div className='row no-space'>
+                                                <h6 className='offset-sm-1 col-4'>Contact client :</h6>
+                                                <Field name="contactClient"
+                                                       onChange={handleChange}
+                                                       value={project.contactClient}
+                                                       noLabel={true}
+                                                />
+                                            </div>
+
+
+                                            <div className='row mt-5'>
+                                                <h6 className='offset-sm-1 col-4'>Statut :</h6>
+                                                <p className={"col-2 badge badge-" + STATUS_CLASSES[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}>
+                                                    {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}</p>
+                                            </div>
+                                            <div className='row mt-4 d-flex justify-content-end mb-3'>
+                                                <button onSubmit={handleSubmit} className="btn btn-danger">Valider les
+                                                    changements
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </form>
+
+                            </>
+                        }
+                        <div className='mt-4 d-flex justify-content-center justify-content-lg-between flex-wrap mb-3'>
+                            <Button text='Nouveau Rapport'
+                                    className='btn btn-primary mx-2 mb-3'
+                                    type='button'
+                                // onClick={newReportClick}
+                            />
+                            <Link
+                                className='btn btn-primary mx-2 mb-3'
+                                type='button'
+                                to={'/project/' + project.id + '/listReports'}
+                            >
+                                Liste des rapports
+                            </Link>
+                            <Button
+                                text='Gérer les lots'
+                                className='btn btn-primary mx-2 mb-3'
+                                type='button'
+                                onClick={handleShowLotModal}
+                            />
+                            <Button text='Voir les échéances'
+                                    className='btn btn-primary mx-2 mb-3'
+                                    type='button'
+                            />
+
+                            {AuthAPI.isAdmin() &&
+                            <>
+                                {!edit ?
+                                    <Button
+                                        text='Modifier le projet'
+                                        className='btn btn-primary mx-2 mb-3'
+                                        type='button'
+                                        onClick={handleEditClick}
+                                    />
+                                    :
+                                    <Button
+                                        text='Revenir aux détails du projet'
+                                        className='btn btn-info mx-2 mb-3'
+                                        type='button'
+                                        onClick={handleEditClick}
+                                    />
+                                }
+                            </>
+                            }
+
+                            <Button text='Revenir à la liste'
+                                    className='btn btn-danger md-mt-2 mx-2 mb-3'
+                                    type='button'
+                                    onClick={handleBackClick}
                             />
                           </div>
                         </>
@@ -609,7 +805,96 @@ const DetailProjectPage = ({ history, match }) => {
                 onClick={handleBackClick}
               />
             </div>
-          </>
+
+    {/* -------------------------------------------MODAL LOTS----------------------------------------------- */}
+
+            <Modal {...props}
+                   size="lg"
+                   aria-labelledby="contained-modal-title-vcenter"
+                   centered
+                   show={showLotModal} onHide={handleCloseLotModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Liste des lots</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                {AuthAPI.isAdmin() && !addLot &&
+                    <button type="button" className="btn btn-primary" onClick={() => handleAddLot()}>Ajouter un lot</button>
+                }
+                {!addLot &&
+                    <table className="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>Numéro de lot</th>
+                                <th>Intitulé du lot</th>
+                                <th>Entreprise</th>
+                                <th>Date de début</th>
+                                <th>Date de fin</th>
+                                <th/>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {project.lots.map(lot => (
+                            <tr key={lot.id}>
+                                <td>{lot.numeroLot}</td>
+                                <td>{lot.libelleLot}</td>
+                                <td>{lot.company.nom}</td>
+                                <td>{DateAPI.formatDate(lot.DateDebutEcheance)}</td>
+                                <td>{DateAPI.formatDate(lot.dateFinEcheance)}</td>
+                                <td>
+                                    
+                                </td>
+                            </tr>)
+                        )}
+                        </tbody>
+                    </table>
+                }
+                {addLot &&
+                    <form onSubmit={handleSubmitLot}>
+                        <div className="d-flex justify-content-between">
+                            <div className="col-5">
+                                <Field className="m-auto" name="numeroLot" label="Numéro de Lot" onChange={handleChangeLot} value={lots.numeroLot}/>
+                            </div>
+                            <div className="col-5">
+                                <Field name="libelleLot" label="Nom du Lot" onChange={handleChangeLot} value={lots.libelleLot}/>
+                            </div>
+                        </div>
+                        <div className="d-flex justify-content-between">
+                            <div className="col-5">
+                                <Field name="DateDebutEcheance" type="date" label="Date de démarrage du Lot" onChange={handleChangeLot} 
+                                value={DateAPI.formatDateForm(lots.DateDebutEcheance)}/>
+                            </div>
+                            <div className="col-5">
+                                <Field name="dateFinEcheance" type="date" label="Date de fin du Lot" onChange={handleChangeLot} 
+                                value={DateAPI.formatDateForm(lots.dateFinEcheance)}/>
+                            </div>
+                        </div>
+                            <Select name="company" label="Entreprise" onChange={handleChangeLot} value={lots.company} error="">
+                                    <option value="notSet">
+                                        Selectionner une entreprise
+                                    </option>
+                                {companies.map(company => ( 
+                                    <option key={company.id} value={company.id}>
+                                        {company.nom}
+                                    </option>
+                                ))}
+                            </Select>
+                            <div className="d-flex justify-content-between">
+                                <button type="button" onClick={() => handleCloseAddLot()} className="btn btn-danger">Annuler</button>
+                                <button className="btn btn-success">Valider</button>
+                            </div>
+                    </form>
+                }
+                </Modal.Body>
+                <Modal.Footer>
+                    <button className="btn btn-danger" onClick={handleCloseLotModal}>
+                        Fermer
+                    </button>
+                    <button className="btn btn-primary">
+                        Confirmer
+                    </button>
+                </Modal.Footer>
+            </Modal>
+                  </>
         ) : (
           <div id="loading-icon" />
         )}

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import fakeData from "../components/fakeDataForDev/fakeData";
-import moment from "moment";
-import "../../css/app.css";
-import DateAPI from "../services/DateAPI";
 import ReportsAPI from "../services/ReportsAPI";
+import '../../css/app.css';
+import DateAPI from '../services/DateAPI';
 
 const STATUS_REPORT_LABELS = {
   clotured: "Clôturé non envoyé",
