@@ -40,10 +40,16 @@ const NavbarLeft = ({match, selected}) => {
     return (
         <div className="vertical-nav" id="sidebar">
 
-            <p className="text-white font-weight-bold text-uppercase px-3 small pb-4 mt-5">{project.name}</p>
+            <p className="text-white font-weight-bold text-uppercase px-3 small pb-2 mt-5">{project.name}</p>
 
             <ul className="nav flex-column mb-0">
 
+                <li className="nav-item mb-3">
+                    <NavLink to={"/project/" + project.id + "/listReports"}
+                             className={"nav-link font-italic"} >
+                        &larr; Retour à la liste des rapports
+                    </NavLink>
+                </li>
                 <li className="nav-item">
                     <NavLink to={"/project/" + project.id + "/" + id.idReport + "/effectifs"}
                              className={"nav-link font-italic" + (selected === 'effectifs' && " selected")}>

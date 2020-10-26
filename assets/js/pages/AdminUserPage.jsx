@@ -8,25 +8,12 @@ import '../../css/loading-icon.css';
 import Modal from "react-bootstrap/Modal";
 import {Button} from "react-bootstrap";
 import ProjectsAPI from "../services/ProjectsAPI";
+import {STATUS_CLASSES, STATUS_LABEL} from "../components/ProjectStatus";
 import DateAPI from "../services/DateAPI";
 import Pagination from "@material-ui/lab/Pagination";
 import pagination_configs, {ADMIN_USER_PAGE_PAGINATION_ITEMS_PER_PAGE} from "../components/configs/pagination_configs";
 
 const AdminUserPage = ({history, match, props}) => {
-
-    const STATUS_CLASSES = {
-        no_start: "info",
-        in_progress: "warning",
-        finished: "success",
-        archived: "primary"
-    };
-
-    const STATUS_LABEL = {
-        no_start: "Pas démarré",
-        in_progress: "En cours",
-        finished: "Fini",
-        archived: "Archivé"
-    };
 
 //------------------------------- Récupération de l'id si il y en a un --------------------------------
     const {id = "new"} = match.params;
@@ -86,7 +73,7 @@ const AdminUserPage = ({history, match, props}) => {
     const fetchProjects = async () => {
         try {
             let result = await ProjectsAPI.findAll();
-            console.log(result);
+            // console.log(result);
             setProjects(result);
             setLoadingProjects(false);
 
@@ -140,6 +127,12 @@ const AdminUserPage = ({history, match, props}) => {
         if (edit) {
             // const newFilteredUserProject = filteredUserProject.filter(item => item.id !== id);
             // console.log(newFilteredUserProject);
+
+            console.log(user);
+            // const updatedProjects = [...user.project];
+            // const index = updatedProjects.findIndex((project) => project.id === "/api/projects/" + id);
+            // updatedProjects.splice(index, 1);
+            // setProject({...project, users: updatedProjects });
         }
     }
 
@@ -378,10 +371,6 @@ const AdminUserPage = ({history, match, props}) => {
                             </fieldset>
                         </div>
                     </div>
-                </div>
-
-                <div className="form-group text-right mt-4 mr-5">
-                    <Link to="/admin/userslist" className="btn btn-primary">Retour à la liste des utilisateurs</Link>
                 </div>
 
                 {edit &&

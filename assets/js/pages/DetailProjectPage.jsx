@@ -10,26 +10,14 @@ import AuthAPI from "../services/AuthAPI";
 import Field from "../components/forms/Field";
 import FieldTextArea from "../components/forms/FieldTextArea";
 import {toast} from "react-toastify";
+import {STATUS_CLASSES, STATUS_LABEL} from "../components/ProjectStatus";
+import Modal from "react-bootstrap/Modal";
+import Select from "../components/forms/Select"
 
 
-const DetailProjectPage = ({history, match}) => {
+const DetailProjectPage = ({history, match, props}) => {
 
     const {id} = match.params;
-
-    //TODO Refactoriser STATUS CLASSES et STATUS LABEL
-    const STATUS_CLASSES = {
-        no_start: "info",
-        in_progress: "warning",
-        finished: "success",
-        archived: "primary"
-    };
-
-    const STATUS_LABEL = {
-        no_start: "Pas démarré",
-        in_progress: "En cours",
-        finished: "Fini",
-        archived: "Archivé"
-    };
 
     const [error, setError] = useState({
         name: "",
@@ -51,16 +39,46 @@ const DetailProjectPage = ({history, match}) => {
         companies: ""
     });
 
-    const [project, setProject] = useState([]);
+    const [project, setProject] = useState({
+        name: "",
+        description: "",
+        photo: "../img/projects-img/projects-general-img/no-photo-project-img.jpg",
+        adresse1: "",
+        adresse2: "",
+        codePostal: "",
+        dateDebut: "",
+        dateFinReelle: "1900-01-01",
+        nomMOEX: "",
+        nomOPC: "",
+        contactClient: "",
+        ville: "",
+        reports: [],
+        users: [],
+        lots: [],
+        companies: []
+    });
+
+    const [lots, setLots] = useState({
+        numeroLot: "",
+        libelleLot: "",
+        DateDebutEcheance: "",
+        dateFinEcheance: "",
+        company: "",
+        project: ""
+    })
+    
     const [dateFinPrevue, setDateFinPrevue] = useState("");
     const [edit, setEdit] = useState(false);
     const [loadingProject, setLoadingProject] = useState(true);
     const [errorDate, setErrorDate] = useState("");
     const [errorDateFinReelle, setErrorDateFinRelle] = useState("");
+    const [showLotModal, setShowLotModal] = useState(false);
+    const [addLot, setAddLot] = useState (false);
+    const [companies, setCompanies] = useState([]);
 
 //----------------------------------------Récupération d'un projet----------------------------
     const fetchProject = async id => {
-        console.log(id)
+        // console.log(id)
         try {
             const data = await ProjectsAPI.find(id);
             setProject(data);
@@ -77,6 +95,7 @@ const DetailProjectPage = ({history, match}) => {
     useEffect(() => {
         fetchProject(id).then(r => '');
     }, [id])
+    console.log(project);
 
 
     const handleBackClick = () => {
@@ -158,18 +177,99 @@ const DetailProjectPage = ({history, match}) => {
         e.preventDefault();
 
         try {
+            project.users = project.users.map(userInProject => ("/api/users/" + userInProject.id));
+            project.dateFinPrevues = project.dateFinPrevues.map(dateInProject => ("/api/project_date_fin_prevues/" + dateInProject.id));
+            project.lots = project.lots.map(lot => ("/api/lots/" + lot.id));
             await ProjectsAPI.update(id, project);
             toast.success("Le projet a bien été mis à jour !");
+            fetchProject(id);
+            fetchUsers();
             setEdit(false);
         }
-        catch {
+        catch ({response}) {
             toast.error("Un problème est survenu pendant la mise à jour du projet.");
+            console.log(id);
+            console.log(project);
+            console.log(error);
+            console.log(response);
         }
 
     }
 
-    console.log(project);
-    console.log(project.dateFinPrevues);
+    // console.log(project);
+    // console.log(project.dateFinPrevues);
+
+    //--------------------------------------------GESTION DES LOTS--------------------------------------------------------
+
+    const handleCloseLotModal = () => {
+        setShowLotModal(false);
+        setAddLot(false);
+    }
+
+    const handleShowLotModal = () => {
+        setShowLotModal(true);
+        fetchCompany().then(r => '');
+    }
+
+    const handleAddLot = () => {
+        setAddLot(true);
+    }
+
+    const handleCloseAddLot = () => {
+        setAddLot(false);
+    }
+
+    const handleChangeLot = ({currentTarget}) => {
+        const {name, value} = currentTarget;
+        setLots({...lots, [name]: value});
+    }
+
+    const handleSubmitLot = async event => {
+        event.preventDefault();
+
+        console.log(lots.company);
+        console.log(company);
+
+        setAddLot(false);
+
+        
+        try {
+            lots.project = "/api/projects/" + project.id;
+            lots.company = "/api/companies/" + lots.company;
+
+            console.log(lots.company);
+            console.log(lots);
+
+            await ProjectsAPI.addLotProject(lots);
+
+            toast.success("Le lot est bien ajouté !");
+            
+        } catch ({response}) {
+            const {violations} = response.data;
+            if (violations) {
+                const apiErrors = {};
+                violations.map(({propertyPath, message}) => {
+                    apiErrors[propertyPath] = message;
+                });
+
+                setError(apiErrors);
+            }
+            console.log(response);
+        }
+    }
+
+    //-----------------------------------------COMPANY FOR LOT------------------------------------------------------
+
+    const fetchCompany = async () => {
+        try{
+            const data = await ProjectsAPI.findAllCompany();
+            setCompanies(data);
+        } catch (error){
+            console.log(error.response);
+        }
+    }
+
+    //--------------------------------------------Template  --------------------------------------------------------
 
     return (
         <main className="container">
@@ -182,36 +282,36 @@ const DetailProjectPage = ({history, match}) => {
 
                                 <h2 className='mb-4'>{project.name}</h2>
                                 <p className='description-style'>{project.description}</p>
-                                <div className="row mt-2">
+                                <div className="d-flex flex-lg-row flex-column mt-2">
                                     <ImgComponent
                                         alt={project.name}
                                         src={project.photo}
-                                        className='col-5 img-fluid rounded img-style'
+                                        className='col-12 col-lg-6 mx-auto img-fluid rounded img-style'
                                     />
 
-                                    <div className='col-6 md-col-7'>
-                                        <h5 className='mb-3'>Détails:</h5>
-                                        <div className='row ml-2 no-space'>
-                                            <h6 className='offset-1 col-4'>Adresse :</h6>
+                                    <div className='col-12 col-lg-6'>
+                                        <h5 className='text-center text-sm-left mb-3'>Détails:</h5>
+                                        <div className='row no-space'>
+                                            <h6 className='offset-sm-1 col-4'>Adresse :</h6>
                                             <p className='col-7'>{project.adresse1}</p>
                                         </div>
                                         {project.adresse2 &&
-                                        <div className='row ml-2 no-space'>
-                                            <h6 className='offset-1 col-4'>Complément :</h6>
+                                        <div className='row no-space'>
+                                            <h6 className='offset-sm-1 col-4'>Complément :</h6>
                                             <p className='col-7'>{project.adresse2}</p>
                                         </div>
                                         }
 
-                                        <div className='row ml-2 no-space'>
-                                            <h6 className='offset-1 col-4'>Code Postal :</h6>
+                                        <div className='row no-space'>
+                                            <h6 className='offset-sm-1 col-4'>Code Postal :</h6>
                                             <p className='col-7'>{project.codePostal}</p>
                                         </div>
-                                        <div className='row ml-2 no-space'>
-                                            <h6 className='offset-1 col-4'>Ville :</h6>
+                                        <div className='row no-space'>
+                                            <h6 className='offset-sm-1 col-4'>Ville :</h6>
                                             <p className='col-7'>{project.ville}</p>
                                         </div>
-                                        <div className='row ml-2 no-space'>
-                                            <h6 className='offset-1 col-4'>Date de début :</h6>
+                                        <div className='row no-space'>
+                                            <h6 className='offset-sm-1 col-4'>Date de début :</h6>
                                             <p className='col-7'>{DateAPI.formatDate(project.dateDebut)}</p>
                                         </div>
 
@@ -220,8 +320,8 @@ const DetailProjectPage = ({history, match}) => {
                                             {
                                                 project.dateFinPrevues.map(date =>
 
-                                                    <div className='row ml-2 no-space' key={date.id}>
-                                                        <h6 className='offset-1 col-4'>Fin
+                                                    <div className='row no-space' key={date.id}>
+                                                        <h6 className='offset-sm-1 col-4'>Fin
                                                             prévue {project.dateFinPrevues.indexOf(date) + 1} :</h6>
                                                         <p className='col-7'>{DateAPI.formatDate(date.date)}</p>
                                                     </div>
@@ -231,36 +331,36 @@ const DetailProjectPage = ({history, match}) => {
                                         }
 
                                         {DateAPI.verifyDateExist(project.dateFinReelle) === "" ?
-                                            <div className='row ml-2 no-space'>
-                                                <h6 className='offset-1 col-4'>Date de fin réélle :</h6>
+                                            <div className='row no-space'>
+                                                <h6 className='offset-sm-1 col-4'>Date de fin réélle :</h6>
                                                 <p className='col-7'>Aucune</p>
                                             </div>
                                             :
-                                            <div className='row ml-2 no-space'>
-                                                <h6 className='offset-1 col-4'>Date de fin réélle :</h6>
+                                            <div className='row no-space'>
+                                                <h6 className='offset-sm-1 col-4'>Date de fin réélle :</h6>
                                                 <p className='col-7'>{DateAPI.formatDate(project.dateFinReelle)}</p>
                                             </div>}
 
 
-                                        <div className='row ml-2 no-space'>
-                                            <h6 className='offset-1 col-4'>Nom MOEX :</h6>
+                                        <div className='row no-space'>
+                                            <h6 className='offset-sm-1 col-4'>Nom MOEX :</h6>
                                             <p className='col-7'>{project.nomMOEX}</p>
                                         </div>
 
-                                        <div className='row ml-2 no-space'>
-                                            <h6 className='offset-1 col-4'>Nom OPC :</h6>
+                                        <div className='row no-space'>
+                                            <h6 className='offset-sm-1 col-4'>Nom OPC :</h6>
                                             <p className='col-7'>{project.nomOPC}</p>
                                         </div>
 
-                                        <div className='row ml-2 no-space'>
-                                            <h6 className='offset-1 col-4'>Contact client :</h6>
+                                        <div className='row no-space'>
+                                            <h6 className='offset-sm-1 col-4'>Contact client :</h6>
                                             <a className='col-7'
                                                href={"mailto:" + project.contactClient}>{project.contactClient}</a>
                                         </div>
 
 
-                                        <div className='row ml-2 mt-5'>
-                                            <h6 className='offset-1 col-4'>Statut :</h6>
+                                        <div className='row mt-5'>
+                                            <h6 className='offset-sm-1 col-4'>Statut :</h6>
                                             <p className={"col-2 badge badge-" + STATUS_CLASSES[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}>
                                                 {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}</p>
                                         </div>
@@ -287,17 +387,17 @@ const DetailProjectPage = ({history, match}) => {
                                                    value={project.description}
                                                    error={error.description}/>
 
-                                    <div className="row mt-2">
+                                    <div className="d-flex flex-lg-row flex-column mt-2">
                                         <ImgComponent
                                             alt={project.name}
                                             src={project.photo}
-                                            className='col-5 img-fluid rounded img-style'
+                                            className='col-12 col-lg-6 mx-auto img-fluid rounded img-style'
                                         />
 
-                                        <div className='col-6'>
+                                        <div className='col-12 col-lg-6'>
                                             <h5 className='mb-3'>Détails:</h5>
-                                            <div className='row ml-2 no-space'>
-                                                <h6 className='offset-1 col-4'>Adresse :</h6>
+                                            <div className='row no-space'>
+                                                <h6 className='offset-sm-1 col-4'>Adresse :</h6>
                                                 <Field
                                                     className="col-7"
                                                     name="adresse1"
@@ -308,8 +408,8 @@ const DetailProjectPage = ({history, match}) => {
                                                     noLabel={true}
                                                 />
                                             </div>
-                                            <div className='row ml-2 no-space'>
-                                                <h6 className='offset-1 col-4'>Complément :</h6>
+                                            <div className='row no-space'>
+                                                <h6 className='offset-sm-1 col-4'>Complément :</h6>
                                                 <Field
                                                     className="col-7"
                                                     name="adresse2"
@@ -321,8 +421,8 @@ const DetailProjectPage = ({history, match}) => {
                                                 />
                                             </div>
 
-                                            <div className='row ml-2 no-space'>
-                                                <h6 className='offset-1 col-4'>Code Postal :</h6>
+                                            <div className='row no-space'>
+                                                <h6 className='offset-sm-1 col-4'>Code Postal :</h6>
                                                 <Field
                                                     className="col-7"
                                                     name="codePostal"
@@ -333,8 +433,8 @@ const DetailProjectPage = ({history, match}) => {
                                                     noLabel={true}
                                                 />
                                             </div>
-                                            <div className='row ml-2 no-space'>
-                                                <h6 className='offset-1 col-4'>Ville :</h6>
+                                            <div className='row no-space'>
+                                                <h6 className='offset-sm-1 col-4'>Ville :</h6>
                                                 <Field
                                                     className="col-7"
                                                     name="ville"
@@ -345,8 +445,8 @@ const DetailProjectPage = ({history, match}) => {
                                                     noLabel={true}
                                                 />
                                             </div>
-                                            <div className='row ml-2 no-space'>
-                                                <h6 className='offset-1 col-4'>Date de début :</h6>
+                                            <div className='row no-space'>
+                                                <h6 className='offset-sm-1 col-4'>Date de début :</h6>
                                                 <Field name="dateDebut"
                                                        type="date"
                                                        onChange={handleChange}
@@ -361,8 +461,8 @@ const DetailProjectPage = ({history, match}) => {
                                                 {
                                                     project.dateFinPrevues.map(date =>
 
-                                                        <div className='row ml-2 no-space' key={date.id}>
-                                                            <h6 className='offset-1 col-4'>Fin
+                                                        <div className='row no-space' key={date.id}>
+                                                            <h6 className='offset-sm-1 col-4'>Fin
                                                                 prévue {project.dateFinPrevues.indexOf(date) + 1} :</h6>
                                                             <p className='col-7'>{DateAPI.formatDate(date.date)}</p>
                                                         </div>
@@ -370,8 +470,8 @@ const DetailProjectPage = ({history, match}) => {
                                                 }
                                             </>
                                             }
-                                            <div className='row ml-2 no-space'>
-                                                <h6 className='offset-1 col-4'>Ajouter une date de fin prévue :</h6>
+                                            <div className='row no-space'>
+                                                <h6 className='offset-sm-1 col-4'>Ajouter une date de fin prévue :</h6>
                                                 <Field name="dateFinPrevue"
                                                        type="date"
                                                        onChange={handleChangeDateFinPrevue}
@@ -386,12 +486,12 @@ const DetailProjectPage = ({history, match}) => {
 
                                             {DateAPI.verifyDateExist(project.dateFinReelle) === "" ?
                                                 <>
-                                                    <div className='row ml-2 no-space'>
-                                                        <h6 className='offset-1 col-4'>Date de fin réélle :</h6>
+                                                    <div className='row no-space'>
+                                                        <h6 className='offset-sm-1 col-4'>Date de fin réélle :</h6>
                                                         <p className='col-7'>Aucune</p>
                                                     </div>
-                                                    <div className='row ml-2 no-space'>
-                                                        <h6 className='offset-1 col-4'>Ajouter la date de fin réélle
+                                                    <div className='row no-space'>
+                                                        <h6 className='offset-sm-1 col-4'>Ajouter la date de fin réélle
                                                             :</h6>
                                                         <Field name="dateFinReelle"
                                                                type="date"
@@ -404,12 +504,12 @@ const DetailProjectPage = ({history, match}) => {
                                                 </>
                                                 :
                                                 <>
-                                                    <div className='row ml-2 no-space'>
-                                                        <h6 className='offset-1 col-4'>Date de fin réélle :</h6>
+                                                    <div className='row no-space'>
+                                                        <h6 className='offset-sm-1 col-4'>Date de fin réélle :</h6>
                                                         <p className='col-7'>{DateAPI.formatDate(project.dateFinReelle)}</p>
                                                     </div>
-                                                    <div className='row ml-2 no-space'>
-                                                        <h6 className='offset-1 col-4'>Modifier la date de fin réélle
+                                                    <div className='row no-space'>
+                                                        <h6 className='offset-sm-1 col-4'>Modifier la date de fin réélle
                                                             :
                                                         </h6>
 
@@ -426,8 +526,8 @@ const DetailProjectPage = ({history, match}) => {
                                             }
 
 
-                                            <div className='row ml-2 no-space'>
-                                                <h6 className='offset-1 col-4'>Nom MOEX :</h6>
+                                            <div className='row no-space'>
+                                                <h6 className='offset-sm-1 col-4'>Nom MOEX :</h6>
                                                 <Field name="nomMOEX"
                                                        onChange={handleChange}
                                                        value={project.nomMOEX}
@@ -435,8 +535,8 @@ const DetailProjectPage = ({history, match}) => {
                                                 />
                                             </div>
 
-                                            <div className='row ml-2 no-space'>
-                                                <h6 className='offset-1 col-4'>Nom OPC :</h6>
+                                            <div className='row no-space'>
+                                                <h6 className='offset-sm-1 col-4'>Nom OPC :</h6>
                                                 <Field name="nomOPC"
                                                        onChange={handleChange}
                                                        value={project.nomOPC}
@@ -444,8 +544,8 @@ const DetailProjectPage = ({history, match}) => {
                                                 />
                                             </div>
 
-                                            <div className='row ml-2 no-space'>
-                                                <h6 className='offset-1 col-4'>Contact client :</h6>
+                                            <div className='row no-space'>
+                                                <h6 className='offset-sm-1 col-4'>Contact client :</h6>
                                                 <Field name="contactClient"
                                                        onChange={handleChange}
                                                        value={project.contactClient}
@@ -454,12 +554,12 @@ const DetailProjectPage = ({history, match}) => {
                                             </div>
 
 
-                                            <div className='row ml-2 mt-5'>
-                                                <h6 className='offset-1 col-4'>Statut :</h6>
+                                            <div className='row mt-5'>
+                                                <h6 className='offset-sm-1 col-4'>Statut :</h6>
                                                 <p className={"col-2 badge badge-" + STATUS_CLASSES[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}>
                                                     {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}</p>
                                             </div>
-                                            <div className='row ml-2 mt-4 d-flex justify-content-end mb-3'>
+                                            <div className='row mt-4 d-flex justify-content-end mb-3'>
                                                 <button onSubmit={handleSubmit} className="btn btn-danger">Valider les
                                                     changements
                                                 </button>
@@ -472,21 +572,27 @@ const DetailProjectPage = ({history, match}) => {
 
                             </>
                         }
-                        <div className='ml-2 mt-4 d-flex justify-content-between flex-wrap mb-3'>
+                        <div className='mt-4 d-flex justify-content-center justify-content-lg-between flex-wrap mb-3'>
                             <Button text='Nouveau Rapport'
-                                    className='btn btn-primary'
+                                    className='btn btn-primary mx-2 mb-3'
                                     type='button'
                                 // onClick={newReportClick}
                             />
                             <Link
-                                className='btn btn-primary'
+                                className='btn btn-primary mx-2 mb-3'
                                 type='button'
                                 to={'/project/' + project.id + '/listReports'}
                             >
                                 Liste des rapports
                             </Link>
+                            <Button
+                                text='Gérer les lots'
+                                className='btn btn-primary mx-2 mb-3'
+                                type='button'
+                                onClick={handleShowLotModal}
+                            />
                             <Button text='Voir les échéances'
-                                    className='btn btn-primary'
+                                    className='btn btn-primary mx-2 mb-3'
                                     type='button'
                             />
 
@@ -495,14 +601,14 @@ const DetailProjectPage = ({history, match}) => {
                                 {!edit ?
                                     <Button
                                         text='Modifier le projet'
-                                        className='btn btn-primary'
+                                        className='btn btn-primary mx-2 mb-3'
                                         type='button'
                                         onClick={handleEditClick}
                                     />
                                     :
                                     <Button
                                         text='Revenir aux détails du projet'
-                                        className='btn btn-info'
+                                        className='btn btn-info mx-2 mb-3'
                                         type='button'
                                         onClick={handleEditClick}
                                     />
@@ -511,7 +617,7 @@ const DetailProjectPage = ({history, match}) => {
                             }
 
                             <Button text='Revenir à la liste'
-                                    className='btn btn-danger md-mt-2'
+                                    className='btn btn-danger md-mt-2 mx-2 mb-3'
                                     type='button'
                                     onClick={handleBackClick}
                             />
@@ -521,6 +627,95 @@ const DetailProjectPage = ({history, match}) => {
                     <div id="loading-icon"/>
                 }
             </div>
+
+    {/* -------------------------------------------MODAL LOTS----------------------------------------------- */}
+
+            <Modal {...props}
+                   size="lg"
+                   aria-labelledby="contained-modal-title-vcenter"
+                   centered
+                   show={showLotModal} onHide={handleCloseLotModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Liste des lots</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                {AuthAPI.isAdmin() && !addLot &&
+                    <button type="button" className="btn btn-primary" onClick={() => handleAddLot()}>Ajouter un lot</button>
+                }
+                {!addLot &&
+                    <table className="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>Numéro de lot</th>
+                                <th>Intitulé du lot</th>
+                                <th>Entreprise</th>
+                                <th>Date de début</th>
+                                <th>Date de fin</th>
+                                <th/>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {project.lots.map(lot => (
+                            <tr key={lot.id}>
+                                <td>{lot.numeroLot}</td>
+                                <td>{lot.libelleLot}</td>
+                                <td>{lot.company.nom}</td>
+                                <td>{DateAPI.formatDate(lot.DateDebutEcheance)}</td>
+                                <td>{DateAPI.formatDate(lot.dateFinEcheance)}</td>
+                                <td>
+                                    
+                                </td>
+                            </tr>)
+                        )}
+                        </tbody>
+                    </table>
+                }
+                {addLot &&
+                    <form onSubmit={handleSubmitLot}>
+                        <div className="d-flex justify-content-between">
+                            <div className="col-5">
+                                <Field className="m-auto" name="numeroLot" label="Numéro de Lot" onChange={handleChangeLot} value={lots.numeroLot}/>
+                            </div>
+                            <div className="col-5">
+                                <Field name="libelleLot" label="Nom du Lot" onChange={handleChangeLot} value={lots.libelleLot}/>
+                            </div>
+                        </div>
+                        <div className="d-flex justify-content-between">
+                            <div className="col-5">
+                                <Field name="DateDebutEcheance" type="date" label="Date de démarrage du Lot" onChange={handleChangeLot} 
+                                value={DateAPI.formatDateForm(lots.DateDebutEcheance)}/>
+                            </div>
+                            <div className="col-5">
+                                <Field name="dateFinEcheance" type="date" label="Date de fin du Lot" onChange={handleChangeLot} 
+                                value={DateAPI.formatDateForm(lots.dateFinEcheance)}/>
+                            </div>
+                        </div>
+                            <Select name="company" label="Entreprise" onChange={handleChangeLot} value={lots.company} error="">
+                                    <option value="notSet">
+                                        Selectionner une entreprise
+                                    </option>
+                                {companies.map(company => ( 
+                                    <option key={company.id} value={company.id}>
+                                        {company.nom}
+                                    </option>
+                                ))}
+                            </Select>
+                            <div className="d-flex justify-content-between">
+                                <button type="button" onClick={() => handleCloseAddLot()} className="btn btn-danger">Annuler</button>
+                                <button className="btn btn-success">Valider</button>
+                            </div>
+                    </form>
+                }
+                </Modal.Body>
+                <Modal.Footer>
+                    <button className="btn btn-danger" onClick={handleCloseLotModal}>
+                        Fermer
+                    </button>
+                    <button className="btn btn-primary">
+                        Confirmer
+                    </button>
+                </Modal.Footer>
+            </Modal>
         </main>
     );
 };

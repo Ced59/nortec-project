@@ -1,17 +1,17 @@
-import dayjs from "dayjs";
+import moment from "moment";
 
 
 function determineStatus(dateDebut, dateFinReelle) {
     let status = "";
 
     if (dateFinReelle === "") {
-        if (dayjs().isBefore(dateDebut)) {
+        if (moment().isBefore(dateDebut)) {
             status = "no_start";
         } else {
             status = "in_progress";
         }
     } else {
-        if (dayjs().diff(dateFinReelle, 'day') > 7) {
+        if (moment().diff(dateFinReelle, 'days') > 7) {
             status = "archived";
         } else {
             status = "finished";
@@ -21,23 +21,23 @@ function determineStatus(dateDebut, dateFinReelle) {
 }
 
 function formatDate(date) {
-    return dayjs(date).format('DD/MM/YYYY');
+    return moment(date).format('DD/MM/YYYY');
 }
 
 function formatDateForm(date) {
-    return dayjs(date).format('YYYY-MM-DD');
+    return moment(date).format('YYYY-MM-DD');
 }
 
 function formatDateHours(date) {
-    return dayjs(date).format('DD/MM/YYYY à HH:mm:ss');
+    return moment(date).format('DD/MM/YYYY à h:mm:ss');
 }
 
 function now() {
-    return dayjs();
+    return moment();
 }
 
 function verifyDateExist(date) {
-    if (dayjs(date).isSame("1900-01-01T00:00:00+00:00")) {
+    if (moment(date).isSame("1900-01-01T00:00:00+00:00")) {
         return "";
     } else {
         return date;
@@ -53,7 +53,7 @@ function dateIsAfter(dateToCompare, dateDebut, dateFinPrevues) {
 
     dateFinPrevues.map(
         date => {
-            if (!dayjs(higherDate).isAfter(date.date)) {
+            if (moment(higherDate).isSameOrBefore(date.date)) {
                 higherDate = date.date;
                 console.log(higherDate);
                 console.log(date.date);
@@ -62,12 +62,12 @@ function dateIsAfter(dateToCompare, dateDebut, dateFinPrevues) {
     )
     console.log(higherDate);
 
-    return dayjs(dateToCompare).isAfter(higherDate);
+    return !moment(dateToCompare).isSameOrBefore(higherDate);
 }
 
 
 function dateIsAfterDebut(dateToCompare, dateDebut) {
-    return dayjs(dateToCompare).isAfter(dateDebut);
+    return !moment(dateToCompare).isSameOrBefore(dateDebut);
 }
 
 

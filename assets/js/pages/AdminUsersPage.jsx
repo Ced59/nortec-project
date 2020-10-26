@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import UserApi from '../services/UsersAPI';
 import UsersAPI from '../services/UsersAPI';
+import AuthAPI from "../services/AuthAPI";
 import '../../css/loading-icon.css';
 import StatusConstAPI from "../services/StatusConstAPI";
 import Pagination from '@material-ui/lab/Pagination';
@@ -16,6 +17,7 @@ const AdminUsersPage = ({history, props}) => {
     const [users, setUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(true);
+    const [userId] = useState(AuthAPI.getUserId());
 
 
     useEffect(() => {
@@ -55,6 +57,11 @@ const AdminUsersPage = ({history, props}) => {
     return <>
         <main className="container">
             <div className="mb-4 d-flex justify-content-between align-items-center">
+            <Link
+                className='btn btn-primary'
+                type='button'
+                to={"/admin/" + userId}
+            > Retour </Link>
                 <h2> Utilisateurs : </h2>
                 <Link
                     className='btn btn-primary'

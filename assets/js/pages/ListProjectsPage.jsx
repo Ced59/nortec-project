@@ -4,11 +4,11 @@ import '../../css/listProjectsPage.css';
 import '../../css/app.css';
 import '../../css/loading-icon.css';
 import {Helmet} from "react-helmet";
-import SearchContext from "../contexts/SearchContext";
 import {Link} from "react-router-dom";
 import Button from "../components/forms/Button";
 import fakeData from "../components/fakeDataForDev/fakeData";
 import DateAPI from "../services/DateAPI";
+import {STATUS_CLASSES, STATUS_LABEL} from "../components/ProjectStatus";
 import {toast} from "react-toastify";
 import AuthAPI from "../services/AuthAPI";
 import ProjectsAPI from '../services/ProjectsAPI';
@@ -24,22 +24,13 @@ const ListProjectsPage = (props) => {
     const [projects, setProjects] = useState([]);
     const [archivedProjects, setArchivedProjects] = useState(false);
     const [loading, setLoading] = useState(true);
-    const {searchValue} = useContext(SearchContext);
+    const [searchValue, setSearchValue] = useState('');
 
     const [currentPage, setCurrentPage] = useState(1);
 
-    const STATUS_CLASSES = {
-        no_start: "info",
-        in_progress: "warning",
-        finished: "success",
-        archived: "primary"
-    };
 
-    const STATUS_LABEL = {
-        no_start: "Pas démarré",
-        in_progress: "En cours",
-        finished: "Fini",
-        archived: "Archivé"
+    const handleSearch = ({currentTarget}) => {
+        setSearchValue(currentTarget.value);
     };
 
     // --------------------------- Récupérer tous les projets de l'utilisateur -----------------------------------------
@@ -107,9 +98,19 @@ const ListProjectsPage = (props) => {
             <Helmet>
                 <style>{'body { background-color: white; }'}</style>
             </Helmet>
-            <div className="row">
-                <h2 className="col-3">Liste des projets : </h2>
-                <div className="offset-6">
+            <div className="row justify-content-between mb-2">
+                <h2>Liste des projets : </h2>
+                <div className="d-flex">
+                    <form className="form-inline mr-2">
+                        <input
+                            className="form-control"
+                            type="text"
+                            placeholder="Rechercher un projet"
+                            aria-label="Search"
+                            onChange={handleSearch}
+                            value={searchValue}
+                        />
+                    </form>
                     <Button
                         onClick={onChangeArchivedShow}
                         text={archivedProjects ? "Cacher les projets archivés" : "Montrer les projets archivés"}
@@ -129,9 +130,9 @@ const ListProjectsPage = (props) => {
                         :
                         paginationConfig.paginatedItems.map(project =>
                             
-                            <Link key={project.id} to={'/project/' + project.id} style={{textDecorationLine: "none", color: "black"}} >
+                            <div className="mx-auto" key={project.id}>
 
-                                <div className="card m-4" style={{width: '20rem', height: '26rem'}}>
+                                <Link className="card mb-4" to={'/project/' + project.id} style={{textDecorationLine: "none", color: "black", width: '20rem', height: '26rem'}} >
 
                                     <h5 className="card-title p-2">{project.name}</h5>
 
@@ -154,8 +155,10 @@ const ListProjectsPage = (props) => {
                                         {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}</span>
                                         </p>
                                     </div>
-                                </div>
-                            </Link>
+
+                                </Link>
+
+                            </div>
                         )
 
 

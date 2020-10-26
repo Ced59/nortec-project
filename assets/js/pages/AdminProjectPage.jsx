@@ -16,6 +16,7 @@ import Pagination from "@material-ui/lab/Pagination";
 import Modal from "react-bootstrap/Modal";
 import { Button} from '@material-ui/core';
 import Select from "../components/forms/Select"
+import AuthAPI from "../services/AuthAPI";
 
 const AdminProjectPage = ({history, match, props}) => {
 
@@ -74,8 +75,10 @@ const AdminProjectPage = ({history, match, props}) => {
     const [loadingProject, setLoadingProject] = useState(true);
     const [loadingUsers, setLoadingUsers] = useState(true);
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const [showModal, setShowModal] = useState(false);
+    const [currentPageAddUser, setCurrentPageAddUser] = useState(1);
+    const [currentPageRemUser, setCurrentPageRemUser] = useState(1);
+    const [showLotModal, setShowLotModal] = useState(false);
+    const [showUsersModal, setShowUsersModal] = useState(false);
     const [addLot, setAddLot] = useState (false);
 
     const [edit, setEdit] = useState(false);
@@ -98,7 +101,7 @@ const AdminProjectPage = ({history, match, props}) => {
             const data = await ProjectsAPI.find(id);
             setProject(data);
             setLoadingProject(false);
-            console.log(data);
+            // console.log(data);
         } catch (error) {
             console.log(error.response);
         }
@@ -134,13 +137,19 @@ const AdminProjectPage = ({history, match, props}) => {
 
     // ----------------------------- Mise en place de la pagination ------------------------------------------
 
-    const handleChangePage = (event,page) => {
-        setCurrentPage(page);
+    const handleChangePageAddUser = (event,page) => {
+        setCurrentPageAddUser(page);
     }
 
-    const paginationConfig = pagination_configs.determinePaginationConfig(users, ADMIN_PROJECT_PAGE_PAGINATION_ITEMS_PER_PAGE, currentPage);
+    const handleChangePageRemUser = (event,page) => {
+        setCurrentPageRemUser(page);
+    }
 
+    const usersInProject = users.filter(User =>User.project.indexOf('/api/projects/' + id) !== -1);
+    const paginationConfigRemUser = pagination_configs.determinePaginationConfig(usersInProject, ADMIN_PROJECT_PAGE_PAGINATION_ITEMS_PER_PAGE, currentPageRemUser);
 
+    const usersNotInProject = users.filter(User =>User.project.indexOf('/api/projects/' + id) === -1);
+    const paginationConfigAddUser = pagination_configs.determinePaginationConfig(usersNotInProject, ADMIN_PROJECT_PAGE_PAGINATION_ITEMS_PER_PAGE, currentPageAddUser);
 
 //----------------------------------- gestion de changement des input-----------------------------------
     const handleChange = ({currentTarget}) => {
@@ -153,21 +162,35 @@ const AdminProjectPage = ({history, match, props}) => {
         setLots({...lots, [name]: value});
     }
 
-    const handleChangeUsers = user => {
-        if(edit){
-            project.users.push(user);
-            project.users = project.users.map(userInProject => ("/api/users/" + userInProject.id));
-        }
+    const handleAddUser = user => {
+        const updatedUsers = [...project.users];
+        updatedUsers.push(user);
+        setProject({...project, users: updatedUsers });
     }
 
-    const handleCloseModal = () => {
-        setShowModal(false);
+    const handleRemUser = id => {
+        const updatedUsers = [...project.users];
+        const index = updatedUsers.findIndex((user) => user.id === id);
+        updatedUsers.splice(index, 1);
+        setProject({...project, users: updatedUsers });
+    }
+
+    const handleCloseLotModal = () => {
+        setShowLotModal(false);
         setAddLot(false);
     }
 
-    const handleShowModal = () => {
-        setShowModal(true);
+    const handleShowLotModal = () => {
+        setShowLotModal(true);
         fetchCompany().then(r => '');
+    }
+
+    const handleCloseUsersModal = () => {
+        setShowUsersModal(false);
+    }
+
+    const handleShowUsersModal = () => {
+        setShowUsersModal(true);
     }
 
     const handleCloseAddLot = () => {
@@ -176,6 +199,11 @@ const AdminProjectPage = ({history, match, props}) => {
 
     const handleSubmitLot = async event => {
         event.preventDefault();
+
+        console.log(lots.company);
+        console.log(company);
+        
+        setAddLot(false);
 
         
         try {
@@ -217,10 +245,14 @@ const AdminProjectPage = ({history, match, props}) => {
 
         try {
             if (edit) {
+                project.users = project.users.map(userInProject => ("/api/users/" + userInProject.id));
                 project.dateFinPrevues = project.dateFinPrevues.map(dateInProject => ("/api/project_date_fin_prevues/" + dateInProject.id));
-                console.log(project.dateFinPrevues);
+                project.lots = project.lots.map(lot => ("/api/lots/" + lot.id));
+                // console.log(project.dateFinPrevues);
                 await ProjectsAPI.update(id, project);
                 toast.success("Le projet a bien été modifié !");
+                fetchProject(id);
+                fetchUsers();
             } else {
                 await MediaUploadAPI.upload(data)
                     .then(response => {
@@ -271,7 +303,7 @@ const AdminProjectPage = ({history, match, props}) => {
 
             <form onSubmit={handleSubmit} encType="multipart/form-data">
                 <div className="d-flex flex-wrap justify-content-between">
-                    <fieldset className="border-fieldset col-6">
+                    <fieldset className="border-fieldset col-xl-6 col-12">
                         <legend>Information de localisation</legend>
                         <Field name="name" label="Nom du projet" placeholder="Entrez le nom du projet"
                                onChange={handleChange}
@@ -295,12 +327,12 @@ const AdminProjectPage = ({history, match, props}) => {
 
                         </ImageUpload>
                     </fieldset>
-                    <fieldset className="border-fieldset col-5">
+                    <fieldset className="border-fieldset col-xl-5 col-125">
                         <legend>Dates</legend>
                         <Field name="dateDebut" label="Date de démarrage" type="date" onChange={handleChange}
                                value={DateAPI.formatDateForm(project.dateDebut)} error={error.dateDebut}/>
                     </fieldset>
-                    <fieldset className="border-fieldset col-6 center">
+                    <fieldset className="border-fieldset col-xl-6 col-12 center">
                         <legend>Informations Client</legend>
                         <Field name="nomMOEX" label="MOEX" onChange={handleChange} value={project.nomMOEX}
                                error={error.nomMOEX}/>
@@ -310,40 +342,73 @@ const AdminProjectPage = ({history, match, props}) => {
                                value={project.contactClient} error={error.contactClient}/>
 
                                {edit &&
-                               <button type="button" onClick={() => handleShowModal()} className="btn btn-primary btn-sm">Voir les lots</button>
+                               <button type="button" onClick={() => handleShowLotModal()} className="btn btn-primary btn-sm">Voir les lots</button>
                                }
                     </fieldset>
-                    <fieldset className="border-fieldset col-5">
+                    <fieldset className="border-fieldset col-xl-5 col-12">
                         <legend>Choix des utilisateurs</legend>
                         {edit &&
-                        <table className="table table-hover table-striped">
-                            <thead>
-                            <th>Nom</th>
-                            <th>Prénom</th>
-                            <th>Role</th>
-                            <th/>
-                            </thead>
-                            <tbody>
-                            {paginationConfig.paginatedItems.map(user =>  (
-                                <tr key={user.id}>
-                                    <td>{user.firstName}</td>
-                                    <td>{user.lastName}</td>
-                                    <td>{UsersAPI.determineRole(user)}</td>
-                                    <td>
-                                        <button className="btn btn-primary btn-sm" onClick={()=>handleChangeUsers(user)}>Changer l'affectation</button>
-                                    </td>
-                                </tr>)
-                            )}
-                            </tbody>
-                        </table>
+                        <div>
+                            <button type="button" onClick={() => handleShowUsersModal()} className="btn btn-primary btn-sm mb-4">Ajouter des utilisateurs</button>
+                            {paginationConfigRemUser.paginatedItems.filter(User =>
+                            UsersAPI.determineRole(User)=="Administrateur").length !== 0 &&
+                                <table className="table table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th colSpan="3" className="text-center border-0">Administrateurs</th>
+                                        </tr>
+                                        <tr>
+                                            <th className="border-0">Prénom</th>
+                                            <th className="border-0">Nom</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {paginationConfigRemUser.paginatedItems.filter(User =>
+                                    UsersAPI.determineRole(User)=="Administrateur").map(user =>  (
+                                        <tr key={user.id}>
+                                            <td className="w-35">{user.firstName}</td>
+                                            <td className="w-35">{user.lastName}</td>
+                                            <td className="text-center">
+                                                <button className="btn btn-danger btn-sm" onClick={()=>handleRemUser(user.id)}>Retirer</button>
+                                            </td>
+                                        </tr>)
+                                    )}
+                                    </tbody>
+                                </table>}
+                            {paginationConfigRemUser.paginatedItems.filter(User =>
+                            UsersAPI.determineRole(User)=="Utilisateur").length !== 0 &&
+                            <table className="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th colSpan="3" className="text-center border-0">Utilisateurs</th>
+                                    </tr>
+                                    <tr>
+                                        <th className="border-0">Prénom</th>
+                                        <th className="border-0">Nom</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {paginationConfigRemUser.paginatedItems.filter(User =>
+                                    UsersAPI.determineRole(User)=="Utilisateur").map(user =>  (
+                                    <tr key={user.id}>
+                                        <td className="w-35">{user.firstName}</td>
+                                        <td className="w-35">{user.lastName}</td>
+                                        <td className="text-center">
+                                            <button className="btn btn-danger btn-sm" onClick={()=>handleRemUser(user.id)}>Retirer</button>
+                                        </td>
+                                    </tr>)
+                                )}
+                                </tbody>
+                            </table>}
+                        </div>
                             || <div>Veuillez créer votre projet avant de faire la modification des utilisateurs</div>
                             }
                         {edit && 
                         <div className="mt-2 d-flex justify-content-center">
-                            <Pagination count={paginationConfig.pagesCount}
+                            <Pagination count={paginationConfigRemUser.pagesCount}
                                         color="primary"
-                                        page={currentPage}
-                                        onChange={handleChangePage}
+                                        page={currentPageRemUser}
+                                        onChange={handleChangePageRemUser}
                                         />
                         </div>
 }
@@ -356,42 +421,49 @@ const AdminProjectPage = ({history, match, props}) => {
             </form>
         </main>
 
+        {/* -------------------------------------------MODAL LOTS----------------------------------------------- */}
+
         <Modal {...props}
                    size="lg"
                    aria-labelledby="contained-modal-title-vcenter"
                    centered
-                   show={showModal} onHide={handleCloseModal}>
+                   show={showLotModal} onHide={handleCloseLotModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Liste des lots</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {!addLot &&
-                        <button type="button" className="btn btn-primary" onClick={() => handleAddLot()}>Ajouter un lot</button>
-                    }
-                <table className="table table-hover table-striped">
-                            <thead>
-                            <th>Numéro de lot</th>
-                            <th>Intitulé du lot</th>
-                            <th>Entreprise</th>
-                            <th>Date de début</th>
-                            <th>Date de fin</th>
-                            <th/>
-                            </thead>
-                            <tbody>
-                            {project.lots.map(lot => (
-                                <tr key={lot.id}>
-                                    <td>{lot.numeroLot}</td>
-                                    <td>{lot.libelleLot}</td>
-                                    <td>{lot.company.nom}</td>
-                                    <td>{DateAPI.formatDate(lot.DateDebutEcheance)}</td>
-                                    <td>{DateAPI.formatDate(lot.dateFinEcheance)}</td>
-                                    <td>
-                                        
-                                    </td>
-                                </tr>)
-                            )}
-                            </tbody>
+                {AuthAPI.isAdmin() && !addLot &&
+                    <button type="button" className="btn btn-primary" onClick={() => handleAddLot()}>Ajouter un lot</button>
+                }
+                {!addLot &&
+                    <table className="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>Numéro de lot</th>
+                                <th>Intitulé du lot</th>
+                                <th>Entreprise</th>
+                                <th>Date de début</th>
+                                <th>Date de fin</th>
+                                <th/>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {project.lots.map(lot => (
+                            <tr key={lot.id}>
+                                <td>{lot.numeroLot}</td>
+                                <td>{lot.libelleLot}</td>
+                                <td>{lot.company.nom}</td>
+                                <td>{DateAPI.formatDate(lot.DateDebutEcheance)}</td>
+                                <td>{DateAPI.formatDate(lot.dateFinEcheance)}</td>
+                                <td>
+                                    
+                                </td>
+                            </tr>)
+                        )}
+                        </tbody>
                         </table>
+                }
+                
                         {addLot &&
                         <form onSubmit={handleSubmitLot}>
                             <div className="d-flex justify-content-between">
@@ -413,6 +485,9 @@ const AdminProjectPage = ({history, match, props}) => {
                                 </div>
                             </div>
                                 <Select name="company" label="Entreprise" onChange={handleChangeLot} value={lots.company} error="">
+                                        <option value="notSet">
+                                            Selectionner une entreprise
+                                        </option>
                                     {companies.map(company => ( 
                                         <option key={company.id} value={company.id}>
                                             {company.nom}
@@ -427,13 +502,86 @@ const AdminProjectPage = ({history, match, props}) => {
                         }
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="danger" onClick={handleCloseModal}>
+                    <button className="btn btn-danger" onClick={handleCloseLotModal}>
                         Fermer
-                    </Button>
-                    <Button variant="primary">
+                    </button>
+                    <button className="btn btn-primary">
                         Confirmer
-                    </Button>
+                    </button>
                 </Modal.Footer>
+            </Modal>
+
+            {/* -------------------------------------------MODAL USERS----------------------------------------------- */}
+
+            <Modal {...props}
+                   size="lg"
+                   aria-labelledby="contained-modal-title-vcenter"
+                   centered
+                   show={showUsersModal} onHide={handleCloseUsersModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Liste des utilisateur</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <form onSubmit={handleSubmit}>
+                        {paginationConfigAddUser.paginatedItems.filter(User =>
+                            UsersAPI.determineRole(User)=="Administrateur").length !== 0 &&
+                            <table className="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th colSpan="3" className="text-center border-0">Administrateurs</th>
+                                    </tr>
+                                    <tr>
+                                        <th className="border-0">Prénom</th>
+                                        <th className="border-0">Nom</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {paginationConfigAddUser.paginatedItems.filter(User =>
+                                    UsersAPI.determineRole(User)=="Administrateur").map(user =>  (
+                                    <tr key={user.id}>
+                                        <td className="w-35">{user.firstName}</td>
+                                        <td className="w-35">{user.lastName}</td>
+                                        <td className="text-center">
+                                            <button className="btn btn-primary btn-sm" onClick={()=>handleAddUser(user)}>Ajouter</button>
+                                        </td>
+                                    </tr>)
+                                )}
+                                </tbody>
+                            </table>}
+                            {paginationConfigAddUser.paginatedItems.filter(User =>
+                            UsersAPI.determineRole(User)=="Utilisateur").length !== 0 &&
+                            <table className="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th colSpan="3" className="text-center border-0">Utilisateurs</th>
+                                    </tr>
+                                    <tr>
+                                        <th className="border-0">Prénom</th>
+                                        <th className="border-0">Nom</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {paginationConfigAddUser.paginatedItems.filter(User =>
+                                    UsersAPI.determineRole(User)=="Utilisateur").map(user =>  (
+                                    <tr key={user.id}>
+                                        <td className="w-35">{user.firstName}</td>
+                                        <td className="w-35">{user.lastName}</td>
+                                        <td className="text-center">
+                                            <button className="btn btn-primary btn-sm" onClick={()=>handleAddUser(user)}>Ajouter</button>
+                                        </td>
+                                    </tr>)
+                                )}
+                                </tbody>
+                            </table>}
+                            <div className="mt-2 d-flex justify-content-center">
+                                <Pagination count={paginationConfigAddUser.pagesCount}
+                                            color="primary"
+                                            page={currentPageAddUser}
+                                            onChange={handleChangePageAddUser}
+                                />
+                            </div>
+                    </form>
+                </Modal.Body>
             </Modal>
     </>
 };

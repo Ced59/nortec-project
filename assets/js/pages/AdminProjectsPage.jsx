@@ -2,7 +2,9 @@ import React, {useEffect, useState} from 'react';
 import DateAPI from "../services/DateAPI";
 import {Link} from 'react-router-dom';
 import {toast} from 'react-toastify';
+import AuthAPI from "../services/AuthAPI";
 import ProjectsAPI from '../services/ProjectsAPI';
+import {STATUS_CLASSES, STATUS_LABEL} from "../components/ProjectStatus";
 import '../../css/loading-icon.css';
 import Pagination from "@material-ui/lab/Pagination";
 import pagination_configs, {
@@ -15,20 +17,7 @@ const AdminProjectsPage = () => {
     const [projects, setProjects] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(true);
-
-    const STATUS_CLASSES = {
-        no_start: "info",
-        in_progress: "warning",
-        finished: "success",
-        archived: "primary"
-    };
-
-    const STATUS_LABEL = {
-        no_start: "Pas démarré",
-        in_progress: "En cours",
-        finished: "Fini",
-        archived: "Archivé"
-    };
+    const [userId] = useState(AuthAPI.getUserId());
 
     useEffect(() => {
         fetchProjects().then(r => "");
@@ -62,6 +51,11 @@ const AdminProjectsPage = () => {
 
     return <main className="container">
         <div className="mb-4 d-flex justify-content-between align-items-center">
+            <Link
+                className='btn btn-primary'
+                type='button'
+                to={"/admin/" + userId}
+            > Retour </Link>
             <h2> Projets : </h2>
             <Link
                 className='btn btn-primary'

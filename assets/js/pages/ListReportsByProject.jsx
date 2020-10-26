@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import fakeData from "../components/fakeDataForDev/fakeData";
-import moment from "moment";
 import '../../css/app.css';
 import DateAPI from '../services/DateAPI';
 
@@ -24,8 +23,6 @@ const ListReportsByProject = ({match, history}) => {
         const reportsByProject = reports.filter((r) => r.project.id === idProject);
         setListReport(reportsByProject);
     };
-
-    const formatDate = (str) => moment(str).format('LLLL');
 
     useEffect(() => {
         fetchReports(id);
