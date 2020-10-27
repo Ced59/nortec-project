@@ -17,6 +17,8 @@ function determineStatus(dateDebut, dateFinReelle) {
             status = "finished";
         }
     }
+
+
   return status;
 }
 
@@ -74,9 +76,9 @@ function dateIsAfterDebut(dateToCompare, dateDebut) {
 //Remettre la fonction retard en dayjs
 function retard(dateFin, dateDebut) {
   if (dateFin !== "") {
-    return moment(dateFin).diff(moment(dateDebut), "days");
-  } else if (now().diff(moment(dateDebut), "days") > 0) {
-    return now().diff(moment(dateDebut), "days");
+    return dayjs(dateFin).diff(dayjs(dateDebut), "day");
+  } else if (now().diff(dayjs(dateDebut), "day") > 0) {
+    return now().diff(dayjs(dateDebut), "day");
   }
 }
 

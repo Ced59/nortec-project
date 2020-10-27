@@ -3,7 +3,6 @@ import DateAPI from "../services/DateAPI";
 import AuthAPI from "../services/AuthAPI";
 import {Link} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import AuthAPI from "../services/AuthAPI";
 import ProjectsAPI from '../services/ProjectsAPI';
 import {STATUS_CLASSES, STATUS_LABEL} from "../components/ProjectStatus";
 import '../../css/loading-icon.css';
