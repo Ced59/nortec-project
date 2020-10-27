@@ -260,7 +260,7 @@ const AdminProjectPage = ({ history, match, props }) => {
         // console.log(project.dateFinPrevues);
         await ProjectsAPI.update(id, project);
         toast.success("Le projet a bien été modifié !");
-        fetchProject(id);
+        await fetchProject(id);
         fetchUsers();
       } else {
         await MediaUploadAPI.upload(data)
@@ -566,7 +566,7 @@ const AdminProjectPage = ({ history, match, props }) => {
                   <tr key={lot.id}>
                     <td>{lot.numeroLot}</td>
                     <td>{lot.libelleLot}</td>
-                    <td>{lot.company.nom}</td>
+                    <td>{!edit && lot.company.nom}</td>
                     <td>{DateAPI.formatDate(lot.DateDebutEcheance)}</td>
                     <td>{DateAPI.formatDate(lot.dateFinEcheance)}</td>
                     <td></td>

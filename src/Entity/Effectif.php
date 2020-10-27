@@ -34,6 +34,11 @@ class Effectif
      */
     private $company;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Echeance", inversedBy="effectif", cascade={"persist", "remove"})
+     */
+    private $echeance;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -71,6 +76,18 @@ class Effectif
     public function setCompany(?Company $company): self
     {
         $this->company = $company;
+
+        return $this;
+    }
+
+    public function getEcheance(): ?Echeance
+    {
+        return $this->echeance;
+    }
+
+    public function setEcheance(?Echeance $echeance): self
+    {
+        $this->echeance = $echeance;
 
         return $this;
     }

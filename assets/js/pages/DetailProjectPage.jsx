@@ -64,6 +64,7 @@ const DetailProjectPage = ({ history, match, props }) => {
     dateFinEcheance: "",
     company: "",
     project: "",
+    annuraire: "",
   });
 
   const [dateFinPrevue, setDateFinPrevue] = useState("");
@@ -91,6 +92,7 @@ const DetailProjectPage = ({ history, match, props }) => {
     securityCommentIntern: "",
     installations: "",
     lots: [],
+    chrono: 1,
   });
 
   //----------------------------------------Récupération d'un projet----------------------------
@@ -221,7 +223,7 @@ const DetailProjectPage = ({ history, match, props }) => {
       project.lots = project.lots.map((lot) => "/api/lots/" + lot.id);
       await ProjectsAPI.update(id, project);
       toast.success("Le projet a bien été mis à jour !");
-      fetchProject(id);
+      await fetchProject(id);
       // fetchUsers();
       setEdit(false);
     } catch ({ response }) {
@@ -773,7 +775,7 @@ const DetailProjectPage = ({ history, match, props }) => {
                   <tr key={lot.id}>
                     <td>{lot.numeroLot}</td>
                     <td>{lot.libelleLot}</td>
-                    <td>{lot.company.nom}</td>
+                    <td>{!edit && lot.company.nom}</td>
                     <td>{DateAPI.formatDate(lot.DateDebutEcheance)}</td>
                     <td>{DateAPI.formatDate(lot.dateFinEcheance)}</td>
                     <td></td>
