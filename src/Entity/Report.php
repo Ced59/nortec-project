@@ -139,6 +139,16 @@ class Report
      */
     private $lots;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $chrono;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Echeance", mappedBy="report")
+     */
+    private $echeances;
+
     public function __construct()
     {
         $this->propreteIccessImputation = new ArrayCollection();
@@ -146,6 +156,7 @@ class Report
         $this->securityCommentImputations = new ArrayCollection();
         $this->photos = new ArrayCollection();
         $this->lots = new ArrayCollection();
+        $this->echeances = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -471,6 +482,46 @@ class Report
             if ($lot->getReport() === $this) {
                 $lot->setReport(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getChrono(): ?int
+    {
+        return $this->chrono;
+    }
+
+    public function setChrono(int $chrono): self
+    {
+        $this->chrono = $chrono;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Echeance[]
+     */
+    public function getEcheances(): Collection
+    {
+        return $this->echeances;
+    }
+
+    public function addEcheance(Echeance $echeance): self
+    {
+        if (!$this->echeances->contains($echeance)) {
+            $this->echeances[] = $echeance;
+            $echeance->addReport($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEcheance(Echeance $echeance): self
+    {
+        if ($this->echeances->contains($echeance)) {
+            $this->echeances->removeElement($echeance);
+            $echeance->removeReport($this);
         }
 
         return $this;

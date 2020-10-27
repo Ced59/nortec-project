@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -62,6 +64,21 @@ class Lot
      * @Groups({"lot", "project","report"})
      */
     private $company;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Echeance", mappedBy="lot")
+     */
+    private $echeances;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Annuaire", inversedBy="lot")
+     */
+    private $annuaire;
+
+    public function __construct()
+    {
+        $this->echeances = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -148,6 +165,49 @@ class Lot
     public function setCompany(?Company $company): self
     {
         $this->company = $company;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Echeance[]
+     */
+    public function getEcheances(): Collection
+    {
+        return $this->echeances;
+    }
+
+    public function addEcheance(Echeance $echeance): self
+    {
+        if (!$this->echeances->contains($echeance)) {
+            $this->echeances[] = $echeance;
+            $echeance->setLot($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEcheance(Echeance $echeance): self
+    {
+        if ($this->echeances->contains($echeance)) {
+            $this->echeances->removeElement($echeance);
+            // set the owning side to null (unless already changed)
+            if ($echeance->getLot() === $this) {
+                $echeance->setLot(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getAnnuaire(): ?Annuaire
+    {
+        return $this->annuaire;
+    }
+
+    public function setAnnuaire(?Annuaire $annuaire): self
+    {
+        $this->annuaire = $annuaire;
 
         return $this;
     }

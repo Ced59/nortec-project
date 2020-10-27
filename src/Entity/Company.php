@@ -74,10 +74,16 @@ class Company
      */
     private $lots;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Annuaire", mappedBy="company")
+     */
+    private $annuaires;
+
     public function __construct()
     {
         $this->projects = new ArrayCollection();
         $this->lots = new ArrayCollection();
+        $this->annuaires = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -222,6 +228,37 @@ class Company
             // set the owning side to null (unless already changed)
             if ($lot->getCompany() === $this) {
                 $lot->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Annuaire[]
+     */
+    public function getAnnuaires(): Collection
+    {
+        return $this->annuaires;
+    }
+
+    public function addAnnuaire(Annuaire $annuaire): self
+    {
+        if (!$this->annuaires->contains($annuaire)) {
+            $this->annuaires[] = $annuaire;
+            $annuaire->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnnuaire(Annuaire $annuaire): self
+    {
+        if ($this->annuaires->contains($annuaire)) {
+            $this->annuaires->removeElement($annuaire);
+            // set the owning side to null (unless already changed)
+            if ($annuaire->getCompany() === $this) {
+                $annuaire->setCompany(null);
             }
         }
 
