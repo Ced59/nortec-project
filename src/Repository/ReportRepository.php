@@ -20,17 +20,16 @@ class ReportRepository extends ServiceEntityRepository
         parent::__construct($registry, Report::class);
     }
 
-    //TODO à revoir
-    // public function findLastChrono(Project $project){
-    //     return $this->createQueryBuilder("i")
-    //                 ->select("chrono")
-    //                 ->where("i.project = :project")
-    //                 ->setParameter("project", $project)
-    //                 ->orderBy("i.chrono", "DESC")
-    //                 ->setMaxResults(1)
-    //                 ->getQuery()
-    //                 ->getSingleScalarResult();
-    // }
+    public function findLastChrono(Project $project){
+        return $this->createQueryBuilder("i")
+                    ->select("i.chrono")
+                    ->where("i.Project = :project")
+                    ->setParameter("project", $project)
+                    ->orderBy("i.chrono", "DESC")
+                    ->setMaxResults(1)
+                    ->getQuery()
+                    ->getSingleScalarResult();
+    }
 
     // /**
     //  * @return Report[] Returns an array of Report objects
