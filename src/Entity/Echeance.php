@@ -6,9 +6,12 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ * normalizationContext={"groups"="echeance"}
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\EcheanceRepository")
  */
 class Echeance
@@ -17,57 +20,68 @@ class Echeance
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"lot", "project","report","echeance"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"lot", "project","report","echeance"})
      */
     private $numeroEcheance;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"lot", "project","report","echeance"})
      */
     private $redacteur;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"lot", "project","report","echeance"})
      */
     private $sujet;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"lot", "project","report","echeance"})
      */
     private $categorie;
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @Groups({"lot", "project","report","echeance"})
      */
     private $dateDebut;
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @Groups({"lot", "project","report","echeance"})
      */
     private $dateFinPrevue;
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @Groups({"lot", "project","report","echeance"})
      */
     private $dateCloture;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Lot", inversedBy="echeances")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"echeance"})
      */
     private $lot;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Report", inversedBy="echeances")
+     * @Groups({"echeance"})
      */
     private $report;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Effectif", mappedBy="echeance", cascade={"persist", "remove"})
+     * @Groups({"lot", "project","report","echeance"})
      */
     private $effectif;
 

@@ -26,7 +26,7 @@ class Lot
 
     /**
      * @ORM\Column(type="string", length=500)
-     * @Groups({"lot", "project","report"})
+     * @Groups({"lot", "project","report","echeance"})
      */
     private $numeroLot;
 
@@ -67,11 +67,13 @@ class Lot
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Echeance", mappedBy="lot")
+     * @Groups({"lot", "project","report"})
      */
     private $echeances;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Annuaire", inversedBy="lot")
+     * @Groups({"lot", "project","report"})
      */
     private $annuaire;
 
