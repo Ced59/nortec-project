@@ -1,51 +1,53 @@
 import dayjs from "dayjs";
 
-function determineStatus(dateDebut, dateFinReelle) {
+function determineStatus(dateDebut, dateFinReelle, dateFinPrevue) {
   let status = "";
 
-
-    if (dateFinReelle === "") {
-        if (dayjs().isBefore(dateDebut)) {
-            status = "no_start";
-        } else {
-            status = "in_progress";
-        }
+  if (dateFinReelle === "") {
+    if (dayjs().isBefore(dateDebut)) {
+      status = "no_start";
+    } else if (dayjs().isAfter(dateFinPrevue)) {
+      status = "late";
     } else {
-        if (dayjs().diff(dateFinReelle, 'day') > 7) {
-            status = "archived";
-        } else {
-            status = "finished";
-        }
+      status = "in_progress";
     }
-
+  } else {
+    if (dayjs().diff(dateFinReelle, "day") > 7) {
+      status = "archived";
+    } else {
+      status = "finished";
+    }
+  }
 
   return status;
 }
 
 function formatDate(date) {
-  if(date!==""){
-    return dayjs(date).format('DD/MM/YYYY');
+  if (date) {
+    return dayjs(date).format("DD/MM/YYYY");
   }
 }
 
 function formatDateForm(date) {
-    return dayjs(date).format('YYYY-MM-DD');
+  if (date) {
+    return dayjs(date).format("YYYY-MM-DD");
+  }
 }
 
 function formatDateHours(date) {
-    return dayjs(date).format('DD/MM/YYYY à HH:mm:ss');
+  return dayjs(date).format("DD/MM/YYYY à HH:mm:ss");
 }
 
 function now() {
-    return dayjs();
+  return dayjs();
 }
 
 function verifyDateExist(date) {
-    if (dayjs(date).isSame("1900-01-01T00:00:00+00:00")) {
-        return "";
-    } else {
-        return date;
-    }
+  if (dayjs(date).isSame("1900-01-01T00:00:00+00:00") || !date) {
+    return "";
+  } else {
+    return date;
+  }
 }
 
 function dateIsAfter(dateToCompare, dateDebut, dateFinPrevues) {
@@ -55,23 +57,20 @@ function dateIsAfter(dateToCompare, dateDebut, dateFinPrevues) {
 
   let higherDate = "1900-01-01T00:00:00+00:00";
 
-    dateFinPrevues.map(
-        date => {
-            if (!dayjs(higherDate).isAfter(date.date)) {
-                higherDate = date.date;
-                console.log(higherDate);
-                console.log(date.date);
-            }
-        }
-    )
-    console.log(higherDate);
+  dateFinPrevues.map((date) => {
+    if (!dayjs(higherDate).isAfter(date.date)) {
+      higherDate = date.date;
+      console.log(higherDate);
+      console.log(date.date);
+    }
+  });
+  console.log(higherDate);
 
-    return dayjs(dateToCompare).isAfter(higherDate);
+  return dayjs(dateToCompare).isAfter(higherDate);
 }
 
-
 function dateIsAfterDebut(dateToCompare, dateDebut) {
-    return dayjs(dateToCompare).isAfter(dateDebut);
+  return dayjs(dateToCompare).isAfter(dateDebut);
 }
 //Remettre la fonction retard en dayjs
 function retard(dateFin, dateDebut) {
@@ -82,15 +81,14 @@ function retard(dateFin, dateDebut) {
   }
 }
 
-
 export default {
-    determineStatus,
-    formatDate,
-    formatDateHours,
-    verifyDateExist,
-    formatDateForm,
-    dateIsAfter,
-    dateIsAfterDebut,
-    now,
+  determineStatus,
+  formatDate,
+  formatDateHours,
+  verifyDateExist,
+  formatDateForm,
+  dateIsAfter,
+  dateIsAfterDebut,
+  now,
   retard,
-}
+};
