@@ -62,7 +62,7 @@ const ListReportsByProject = ({ match, history }) => {
           <table className="table table-hover table-striped">
             <thead>
               <tr>
-                <th>Id</th>
+                <th>Rapport n°</th>
                 <th>Rédacteur</th>
                 <th>Date de création</th>
                 <th>Statut</th>
@@ -74,7 +74,7 @@ const ListReportsByProject = ({ match, history }) => {
             <tbody>
               {listReport.map((report) => (
                 <tr key={report.id}>
-                  <td>{report.id}</td>
+                  <td>{report.chrono}</td>
                   <td>{report.redacteur}</td>
                   <td>{DateAPI.formatDate(report.dateRedaction)}</td>
                   <td>{STATUS_REPORT_LABELS[report.status]}</td>

@@ -10,7 +10,10 @@ import AuthAPI from "../services/AuthAPI";
 import Field from "../components/forms/Field";
 import FieldTextArea from "../components/forms/FieldTextArea";
 import { toast } from "react-toastify";
-import { STATUS_CLASSES, STATUS_LABEL } from "../components/ProjectStatus";
+import {
+  determineStatusClasses,
+  determineStatusLabel
+} from "../components/ProjectStatus";
 import Modal from "react-bootstrap/Modal";
 import Select from "../components/forms/Select";
 import ReportsAPI from "../services/ReportsAPI";
@@ -92,7 +95,6 @@ const DetailProjectPage = ({ history, match, props }) => {
     securityCommentIntern: "",
     installations: "",
     lots: [],
-    chrono: 1,
   });
 
   //----------------------------------------Récupération d'un projet----------------------------
@@ -150,7 +152,7 @@ const DetailProjectPage = ({ history, match, props }) => {
       await ReportsAPI.create(report);
       console.log(report);
       history.replace("/project/" + id + "/" + idNewReport + "/effectifs");
-      toast.success("Le raport numéro " + idNewReport + " à été créer ");
+      toast.success("Nouveau rapport créé");
     } catch (error) {
       console.log(error);
     }
@@ -411,22 +413,16 @@ const DetailProjectPage = ({ history, match, props }) => {
                       <p
                         className={
                           "col-2 badge badge-" +
-                          STATUS_CLASSES[
-                            DateAPI.determineStatus(
-                              project.dateDebut,
-                              DateAPI.verifyDateExist(project.dateFinReelle)
-                            )
-                          ]
+                          determineStatusClasses(
+                            project.dateDebut,
+                            project.dateFinReelle
+                          )
                         }
                       >
-                        {
-                          STATUS_LABEL[
-                            DateAPI.determineStatus(
-                              project.dateDebut,
-                              DateAPI.verifyDateExist(project.dateFinReelle)
-                            )
-                          ]
-                        }
+                        {determineStatusLabel(
+                          project.dateDebut,
+                          project.dateFinReelle
+                        )}
                       </p>
                     </div>
                   </div>
@@ -645,22 +641,16 @@ const DetailProjectPage = ({ history, match, props }) => {
                         <p
                           className={
                             "col-2 badge badge-" +
-                            STATUS_CLASSES[
-                              DateAPI.determineStatus(
-                                project.dateDebut,
-                                DateAPI.verifyDateExist(project.dateFinReelle)
-                              )
-                            ]
+                            determineStatusClasses(
+                              project.dateDebut,
+                              project.dateFinReelle
+                            )
                           }
                         >
-                          {
-                            STATUS_LABEL[
-                              DateAPI.determineStatus(
-                                project.dateDebut,
-                                DateAPI.verifyDateExist(project.dateFinReelle)
-                              )
-                            ]
-                          }
+                          {determineStatusLabel(
+                            project.dateDebut,
+                            project.dateFinReelle
+                          )}
                         </p>
                       </div>
                       <div className="row mt-4 d-flex justify-content-end mb-3">

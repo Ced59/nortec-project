@@ -5,11 +5,14 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"={"company"}}
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\CompanyRepository")
  */
 class Company
@@ -18,49 +21,49 @@ class Company
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"lot"})
+     * @Groups({"lot","company"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"lot", "project","report"})
+     * @Groups({"lot", "project","report","company"})
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"lot"})
+     * @Groups({"lot","company"})
      */
     private $adresse1;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"lot"})
+     * @Groups({"lot","company"})
      */
     private $adresse2;
 
     /**
      * @ORM\Column(type="string", length=8)
-     * @Groups({"lot"})
+     * @Groups({"lot","company"})
      */
     private $codePostal;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"lot"})
+     * @Groups({"lot","company"})
      */
     private $ville;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"lot"})
+     * @Groups({"lot","company"})
      */
     private $mail1;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"lot"})
+     * @Groups({"lot","company"})
      */
     private $mail2;
 
@@ -76,6 +79,8 @@ class Company
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Annuaire", mappedBy="company")
+     * @ApiSubresource
+     * @Groups({"lot","company"})
      */
     private $annuaires;
 

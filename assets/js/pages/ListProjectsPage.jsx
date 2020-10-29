@@ -8,7 +8,7 @@ import {Link} from "react-router-dom";
 import Button from "../components/forms/Button";
 import fakeData from "../components/fakeDataForDev/fakeData";
 import DateAPI from "../services/DateAPI";
-import {STATUS_CLASSES, STATUS_LABEL} from "../components/ProjectStatus";
+import {determineStatusClasses, determineStatusLabel} from "../components/ProjectStatus";
 import {toast} from "react-toastify";
 import AuthAPI from "../services/AuthAPI";
 import ProjectsAPI from "../services/ProjectsAPI";
@@ -68,7 +68,7 @@ const ListProjectsPage = (props) => {
     const filteredProjects = filteredArchivedProjects.filter(
         p =>
             p.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-            STATUS_LABEL[DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(projects.dateFinReelle))].toLowerCase().includes(searchValue.toLowerCase()) ||
+            determineStatusLabel(p.dateDebut, projects.dateFinReelle).toLowerCase().includes(searchValue.toLowerCase()) ||
             p.ville.toLowerCase().includes(searchValue.toLowerCase())
     );
 
@@ -150,8 +150,8 @@ const ListProjectsPage = (props) => {
                                     <div className="card-footer pb-0 text-right">
                                         <p><span
                                             className={"pl-2 pr-2 pt-1 pb-1 badge badge-" +
-                                            STATUS_CLASSES[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}>
-                                        {STATUS_LABEL[DateAPI.determineStatus(project.dateDebut, DateAPI.verifyDateExist(project.dateFinReelle))]}</span>
+                                            determineStatusClasses(project.dateDebut, project.dateFinReelle)}>
+                                        {determineStatusLabel(project.dateDebut, project.dateFinReelle)}</span>
                                         </p>
                                     </div>
 

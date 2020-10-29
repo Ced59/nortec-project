@@ -141,6 +141,7 @@ class Report
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"lot","report"})
      */
     private $chrono;
 

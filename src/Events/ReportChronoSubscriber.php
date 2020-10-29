@@ -2,21 +2,21 @@
 
 namespace App\Events;
 
-use ApiPlatform\Core\EventListener\EventPriorities;
+use App\Entity\Report;
+use App\Entity\Project;
 use App\Repository\ReportRepository;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\HttpKernel\Event\ViewEvent;
+use ApiPlatform\Core\EventListener\EventPriorities;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Security;
 
 class ReportChronoSubscriber implements EventSubscriberInterface{
 
-    private $security;
     private $repository;
 
-    public function __construct(Security $security, ReportRepository $repository)
+    public function __construct(ReportRepository $repository)
     {
-        $this->security = $security;
         $this->repository = $repository;
     }
 
@@ -28,7 +28,17 @@ class ReportChronoSubscriber implements EventSubscriberInterface{
     }
 
     public function setChronoForReport(ViewEvent $event){
-        // dd("hello");
+        $report = $event->getControllerResult();
+        $method = $event->getRequest()->getMethod();
+
+        if($report instanceof Report && $method === "POST"){
+            $project = $report->getProject();
+            try {
+                $lastChrono = $this->repository->findLastChrono($project);
+                $report->setChrono($lastChrono + 1);
+            } catch (\Throwable $th) {
+                $report->setChrono(1);
+            }
+        }
     }
 }
-//TOTO à revoir
