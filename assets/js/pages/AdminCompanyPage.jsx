@@ -4,8 +4,9 @@ import CompanyAPI from "../services/CompanyAPI";
 import AnnuaireAPI from "../services/AnnuaireAPI";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import Modal from "react-bootstrap/Modal";
 
-const AdminCompanyPage = ({ history, match }) => {
+const AdminCompanyPage = ({ history, match, props }) => {
   const { id = "new" } = match.params;
 
   const [company, setCompany] = useState({
@@ -29,8 +30,31 @@ const AdminCompanyPage = ({ history, match }) => {
     mail2: "",
   });
 
+  //TODO Trouver une meilleure solution
+  const [contactModel, setContactModel] = useState({
+    company: "/api/companies/" + id,
+    nom: "",
+    email: "",
+    telephone: "",
+  });
+
+  const [contact, setContact] = useState({
+    company: "/api/companies/" + id,
+    nom: "",
+    email: "",
+    telephone: "",
+  });
+
+  //TODO Gêrer les erreurs (les déplacer dans "annuaires" de error)
+  const [contactError, setContactError] = useState({
+    nom: "",
+    email: "",
+    telephone: "",
+  });
+
   const [edit, setEdit] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [showContactModal, setShowContactModal] = useState(false);
 
   const handleChange = ({ currentTarget }) => {
     const { name, value } = currentTarget;
@@ -48,21 +72,97 @@ const AdminCompanyPage = ({ history, match }) => {
     }
   };
 
+  const fetchContact = async (id) => {
+    try {
+      const data = await AnnuaireAPI.find(id);
+      setContact(data);
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
   useEffect(() => {
     if (id !== "new") {
       setEdit(true);
       fetchCompany(id).then((r) => "");
+    } else {
+      setLoading(false);
     }
   }, [id]);
+
+  //--------------------------------------------Gestion des contacts--------------------------------------------------------
+
+  const handleChangeNewContact = ({ currentTarget }) => {
+    const { name, value } = currentTarget;
+    setContact({ ...contact, [name]: value });
+  };
+
+  const handleShowContactModal = (id) => {
+    fetchContact(id);
+    setShowContactModal(true);
+  };
+
+  const handleCloseContactModal = () => {
+    setContact([]);
+    setShowContactModal(false);
+  };
+
+  const handleSubmitAddContact = async () => {
+    try {
+      console.log(contact);
+      await AnnuaireAPI.create(contact);
+      console.log(contact);
+      toast.success("Le contact a bien été ajouté");
+      fetchCompany(id);
+      setContact(contactModel);
+      console.log(contact);
+    } catch ({ response }) {
+      console.log(response);
+    }
+  };
+
+  const handleSubmitUpdateContact = async () => {
+    try {
+      console.log(contact);
+      await AnnuaireAPI.update(contact.id, contact);
+      console.log(contact);
+      toast.success("Le contact a bien été mis à jour");
+      fetchCompany(id);
+      setContact(contactModel);
+      setShowContactModal(false);
+    } catch ({ response }) {
+      console.log(response);
+    }
+  };
+
+  const handleSubmitDeleteContact = async (id) =>{
+    try {
+      await AnnuaireAPI.deleteContact(id)
+      console.log(contact);
+      fetchCompany(company.id);
+      setContact(contactModel);
+      toast.success("Le contact a bien été supprimé");
+      setShowContactModal(false);
+    }
+    catch ({response}){
+      console.log(response);
+    }
+  }
+
+  //-----------------------------------------------Envoie---------------------------------------------------------
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log(company);
 
     try {
+      company.annuaires = company.annuaires.map(
+        (annuaire) => "/api/annuaires/" + annuaire.id
+      );
       if (edit) {
         await CompanyAPI.update(id, company);
         toast.success("L'entreprise a bien été modifié !");
+        fetchCompany(id);
       } else {
         await CompanyAPI.create(company);
         toast.success("L'entreprise a bien été crée !");
@@ -82,6 +182,8 @@ const AdminCompanyPage = ({ history, match }) => {
       console.log(response);
     }
   };
+
+  //--------------------------------------------Template--------------------------------------------------------
 
   return (
     <main className="container">
@@ -130,7 +232,7 @@ const AdminCompanyPage = ({ history, match }) => {
             value={company.ville}
             error={error.ville}
           />
-          <Field
+          {/* <Field
             name="mail1"
             label="Mail (obligatoire)"
             placeholder="Entrez le Mail de l'entreprise"
@@ -147,33 +249,104 @@ const AdminCompanyPage = ({ history, match }) => {
             onChange={handleChange}
             value={company.mail2}
             error={error.mail2}
-          />
-          <table className="table table-hover table-striped">
-            <thead>
-              <tr>
-                <th colSpan="3" className="text-center border-0">
-                  Contacts dans l'entreprise
-                </th>
-              </tr>
-              <tr>
-                <th className="border-0">Nom</th>
-                <th className="border-0">Email</th>
-                <th className="border-0">N° téléphone</th>
-              </tr>
-            </thead>
-            <tbody>
-              {company.annuaires.map((contact) => (
-                <tr key={contact.id}>
-                  <td className="w-35">{contact.nom}</td>
-                  <td className="w-35">{contact.email}</td>
-                  <td className="w-35">{contact.telephone}</td>
-                  <td className="text-center">
-                    <button className="btn btn-primary btn-sm">Modifier</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          /> */}
+          <h3>Contacts dans l'entreprise</h3>
+          {edit && (
+            <>
+              <table className="table table-hover table-striped">
+                <thead>
+                  <tr>
+                    <th className="border-0">Nom</th>
+                    <th className="border-0">Email</th>
+                    <th className="border-0">N° téléphone</th>
+                    <th />
+                  </tr>
+                </thead>
+                <tbody>
+                  {company.annuaires.length !== 0 ? (
+                    company.annuaires.map((contact) => (
+                      <tr key={contact.id}>
+                        <td className="w-35">{contact.nom}</td>
+                        <td className="w-35">{contact.email}</td>
+                        <td className="w-35">{contact.telephone}</td>
+                        <td className="text-center">
+                          <button
+                            type="button"
+                            onClick={() => handleShowContactModal(contact.id)}
+                            className="btn btn-primary btn-sm"
+                          >
+                            Modifier
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <p>Aucun contact dans cette entreprise</p>
+                  )}
+                </tbody>
+              </table>
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th colSpan="4" className="border-0">
+                      Ajouter un contact
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <Field
+                        name="nom"
+                        placeholder="Nom du contact"
+                        type="text"
+                        onChange={handleChangeNewContact}
+                        value={contact.nom}
+                        error={contactError.nom}
+                        noLabel={true}
+                      />
+                    </td>
+                    <td>
+                      <Field
+                        name="email"
+                        placeholder="Email du contact"
+                        type="mail"
+                        onChange={handleChangeNewContact}
+                        value={contact.email}
+                        error={contactError.email}
+                        noLabel={true}
+                      />
+                    </td>
+                    <td>
+                      <Field
+                        name="telephone"
+                        placeholder="Téléphone du contact"
+                        type="text"
+                        onChange={handleChangeNewContact}
+                        value={contact.telephone}
+                        error={contactError.telephone}
+                        noLabel={true}
+                      />
+                    </td>
+                    <td>
+                      <button
+                        type="button"
+                        onClick={() => handleSubmitAddContact()}
+                        className="btn btn-primary btn-sm"
+                      >
+                        Ajouter
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </>
+          )}
+          {!edit && (
+            <p>
+              Veuillez valider l'ajout de l'entreprise pour ajouter des contacts
+            </p>
+          )}
           <div className="form-group d-flex justify-content-between align-items-center mt-2">
             <Link to="/admin/company" className="btn btn-danger">
               Retour à la liste
@@ -185,6 +358,65 @@ const AdminCompanyPage = ({ history, match }) => {
         </form>
       )}
       {loading && <div id="loading-icon" className="mt-5 mb-5" />}
+      <Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        show={showContactModal}
+        onHide={handleCloseContactModal}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Modification du contact</Modal.Title>
+        </Modal.Header>
+        <form>
+          <Modal.Body>
+            <Field
+              name="nom"
+              label="Nom"
+              placeholder="Nom du contact"
+              type="text"
+              onChange={handleChangeNewContact}
+              value={contact.nom}
+              error={contactError.nom}
+            />
+            <Field
+              name="email"
+              label="Email"
+              placeholder="Email du contact"
+              type="mail"
+              onChange={handleChangeNewContact}
+              value={contact.email}
+              error={contactError.email}
+            />
+            <Field
+              name="telephone"
+              label="N° téléphone"
+              placeholder="Téléphone du contact"
+              type="text"
+              onChange={handleChangeNewContact}
+              value={contact.telephone}
+              error={contactError.telephone}
+            />
+          </Modal.Body>
+          <Modal.Footer>
+            <button
+              type="button"
+              onClick={() => handleSubmitDeleteContact(contact.id)}
+              className="btn btn-danger btn-sm"
+            >
+              Supprimer
+            </button>
+            <button
+              type="button"
+              onClick={() => handleSubmitUpdateContact()}
+              className="btn btn-primary btn-sm"
+            >
+              Confirmer
+            </button>
+          </Modal.Footer>
+        </form>
+      </Modal>
     </main>
   );
 };

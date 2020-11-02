@@ -18,30 +18,31 @@ class Annuaire
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"lot","company"})
+     * @Groups({"lot","company", "project"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"lot","company"})
+     * @Groups({"lot","company", "project"})
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"lot","company"})
+     * @Groups({"lot","company", "project"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"lot","company"})
+     * @Groups({"lot","company", "project"})
      */
     private $telephone;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="annuaires")
+     * @Groups({"lot","project"})
      */
     private $company;
 

@@ -45,14 +45,10 @@ const AdminCompaniesPage = (props) => {
         <table className="table table-hover">
             <thead>
             <tr>
-                <th className="text-center">Numéro Entreprise</th>
                 <th className="text-center">Nom Entreprise</th>
                 <th className="text-center">Adresse</th>
-                <th className="text-center">Complement d'adresse</th>
                 <th className="text-center">Code Postal</th>
                 <th className="text-center">Ville</th>
-                <th className="text-center">Mail</th>
-                <th className="text-center">Mail Secondaire</th>
                 <th/>
             </tr>
             </thead>
@@ -60,15 +56,10 @@ const AdminCompaniesPage = (props) => {
             <tbody>
             {companies.map(company => 
                 <tr key={company.id}>
-                    <td className="text-center">{company.id}</td>
                     <td className="text-center">{company.nom}</td>
-                    <td className="text-center">{company.adresse1}</td>
-                    <td className="text-center">{company.adresse2}</td>
+                    <td className="text-center">{company.adresse1}<br/>{company.adresse2}</td>
                     <td className="text-center">{company.codePostal}</td>
                     <td className="text-center">{company.ville}</td>
-                    <td className="text-center">{company.mail1}</td>
-                    <td className="text-center">{company.mail2}</td>
-
                     <td>
                         <Link className="btn btn-primary" to={'/admin/company/' + company.id}> Modifier </Link>
                     </td>
