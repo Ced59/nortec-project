@@ -8,7 +8,10 @@ import Modal from "react-bootstrap/Modal";
 import Field from "../components/forms/Field";
 import DateAPI from "../services/DateAPI";
 import ProjectsAPI from "../services/ProjectsAPI";
-import { STATUS_CLASSES, STATUS_LABEL } from "../components/ProjectStatus";
+import {
+  determineStatusClasses,
+  determineStatusLabel,
+} from "../components/ProjectStatus";
 import AuthAPI from "../services/AuthAPI";
 import ReportsAPI from "../services/ReportsAPI";
 import EcheanceAPI from "../services/EcheanceAPI";
@@ -34,32 +37,6 @@ const ReportEcheancesPage = ({ match }) => {
   const [edit, setEdit] = useState(false);
   const [loading, setLoading] = useState(true);
   const [echeanceDetail, setEcheanceDetail] = useState({});
-
-  const handleShowModalEcheance = () => {
-    setShowModalEcheance(true);
-  };
-  const handleShowModalDetail = async (id) => {
-    await fetchEcheance(id);
-    setShowModalDetail(true);
-  };
-
-  const handleCloseModalEcheance = () => {
-    setShowModalEcheance(false);
-  };
-
-  const handleCloseModalDetail = () => {
-    setShowModalDetail(false);
-    setEdit(false);
-  };
-
-  const handleChangeEcheance = ({ currentTarget }) => {
-    const { name, value } = currentTarget;
-    setEcheance({ ...echeance, [name]: value });
-  };
-  const handleChangeEcheanceDetail = ({ currentTarget }) => {
-    const { name, value } = currentTarget;
-    setEcheanceDetail({ ...echeanceDetail, [name]: value });
-  };
 
   const urlParams = match.params;
 
@@ -92,6 +69,27 @@ const ReportEcheancesPage = ({ match }) => {
     }
   };
 
+  // Chargement du raport si besoin au chargement du composant ou au changement de l'identifiant
+  useEffect(() => {
+    fetchReport(urlParams.idReport);
+    fetchProject(urlParams.id);
+  }, [urlParams.idReport, urlParams.id]);
+
+  // Gestion de la fenêtre modal AddEcheance
+
+  const handleShowModalEcheance = () => {
+    setShowModalEcheance(true);
+  };
+
+  const handleCloseModalEcheance = () => {
+    setShowModalEcheance(false);
+  };
+
+  const handleChangeEcheance = ({ currentTarget }) => {
+    const { name, value } = currentTarget;
+    setEcheance({ ...echeance, [name]: value });
+  };
+
   const handleSubmitAddEcheance = async (event) => {
     event.preventDefault();
     try {
@@ -102,34 +100,45 @@ const ReportEcheancesPage = ({ match }) => {
       await EcheanceAPI.create(echeance);
 
       toast.success("L'échéance est bien ajouté !");
+      fetchProject(urlParams.id);
       handleCloseModalEcheance();
     } catch (error) {
       console.log(error);
     }
   };
+
+  // Gestion de la fenêtre modal Detail Echeance
+
   const handleSubmitChangeEcheance = async (event) => {
     event.preventDefault();
     try {
       console.log(echeanceDetail);
+      echeanceDetail.lot = "/api/lots/" + echeanceDetail.lot.id;
 
       await EcheanceAPI.update(echeanceDetail.id, echeanceDetail);
-
       toast.success("L'échéance est bien modifiée !");
-      handleCloseModalEcheance();
+      setEcheanceDetail({});
+      fetchProject(urlParams.id);
+      handleCloseModalDetail();
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
     }
   };
 
-  // Chargement du raport si besoin au chargement du composant ou au changement de l'identifiant
-  useEffect(() => {
-    fetchReport(urlParams.idReport);
-    console.log(report);
-  }, [urlParams.idReport]);
+  const handleShowModalDetail = async (id) => {
+    await fetchEcheance(id);
+    setShowModalDetail(true);
+  };
 
-  useEffect(() => {
-    fetchProject(urlParams.id);
-  }, [urlParams.id]);
+  const handleCloseModalDetail = () => {
+    setShowModalDetail(false);
+    setEdit(false);
+  };
+
+  const handleChangeEcheanceDetail = ({ currentTarget }) => {
+    const { name, value } = currentTarget;
+    setEcheanceDetail({ ...echeanceDetail, [name]: value });
+  };
 
   const handleEdit = () => {
     setEdit(true);
@@ -165,7 +174,7 @@ const ReportEcheancesPage = ({ match }) => {
                 </thead>
                 <tbody>
                   {project.lots.map((lot) => (
-                    <>
+                    <React.Fragment key={lot.id}>
                       {lot.echeances.map((echeance) => (
                         <tr key={echeance.id}>
                           <td>{echeance.id}</td>
@@ -174,28 +183,18 @@ const ReportEcheancesPage = ({ match }) => {
                             <span
                               className={
                                 "badge badge-" +
-                                STATUS_CLASSES[
-                                  DateAPI.determineStatus(
-                                    echeance.dateDebut,
-                                    DateAPI.verifyDateExist(
-                                      echeance.dateCloture
-                                    ),
-                                    echeance.dateFinPrevue
-                                  )
-                                ]
+                                determineStatusClasses(
+                                  echeance.dateDebut,
+                                  echeance.dateCloture,
+                                  echeance.dateFinPrevue
+                                )
                               }
                             >
-                              {
-                                STATUS_LABEL[
-                                  DateAPI.determineStatus(
-                                    echeance.dateDebut,
-                                    DateAPI.verifyDateExist(
-                                      echeance.dateCloture
-                                    ),
-                                    echeance.dateFinPrevue
-                                  )
-                                ]
-                              }
+                              {determineStatusLabel(
+                                echeance.dateDebut,
+                                echeance.dateCloture,
+                                echeance.dateFinPrevue
+                              )}
                             </span>
                           </td>
                           <td>{echeance.categorie}</td>
@@ -223,7 +222,7 @@ const ReportEcheancesPage = ({ match }) => {
                           </td>
                         </tr>
                       ))}
-                    </>
+                    </React.Fragment>
                   ))}
                 </tbody>
               </table>
@@ -286,11 +285,19 @@ const ReportEcheancesPage = ({ match }) => {
                   onChange={handleChangeEcheance}
                   value={DateAPI.formatDateForm(echeance.dateFinPrevue)}
                 ></Field>
+                <Field
+                  name="effectifPrevu"
+                  label="Effectif Prévu"
+                  type="number"
+                  onChange={handleChangeEcheance}
+                  value={echeance.effectifPrevu}
+                ></Field>
                 <Select
                   name="lot"
                   onChange={handleChangeEcheance}
                   value={echeance.lot}
                 >
+                  <option>Selectionner une entreprise</option>
                   {project.lots.map((lot) => (
                     <option key={lot.id} value={lot.id}>
                       {lot.libelleLot}
@@ -308,6 +315,8 @@ const ReportEcheancesPage = ({ match }) => {
 
       {/*-------------------- Fenêttre modal pour le detail des échéances ----------------------------*/}
 
+      {/* TODO faire le changement des effectifs une fois les champs ajouté à l'échéance dans BDD */}
+
       {!loading && (
         <Modal
           size="lg"
@@ -324,66 +333,108 @@ const ReportEcheancesPage = ({ match }) => {
               <div className="container d-flex  flex-wrap justify-content-around">
                 <div className="col-12 d-flex justify-content-around border-detail">
                   <p>Redacteur: {echeanceDetail.redacteur} </p>
-                  <p>N° Lot: </p>
+                  {echeanceDetail.lot && (
+                    <p>N° Lot: {echeanceDetail.lot.numeroLot} </p>
+                  )}
                 </div>
                 <div className="col-5 mt-3 border-detail d-flex flex-column justify-content-center">
                   <p>Categorie: {echeanceDetail.categorie} </p>
                   <p>Sujet: {echeanceDetail.sujet} </p>
-                  <p>Statut: {STATUS_LABEL[echeanceDetail.status]}</p>
-                </div>
-                <div className="col-5 mt-3 border-detail">
-                  <p className="mt-3">
-                    Debut: {DateAPI.formatDate(echeanceDetail.dateDebut)}{" "}
-                  </p>
                   <p>
-                    Fin prévue:{" "}
-                    {DateAPI.formatDate(echeanceDetail.dateFinPrevue)}{" "}
+                    Statut:{" "}
+                    <span
+                      className={
+                        "badge badge-" +
+                        determineStatusClasses(
+                          echeanceDetail.dateDebut,
+                          echeanceDetail.dateCloture,
+                          echeanceDetail.dateFinPrevue
+                        )
+                      }
+                    >
+                      {determineStatusLabel(
+                        echeanceDetail.dateDebut,
+                        echeanceDetail.dateCloture,
+                        echeanceDetail.dateFinPrevue
+                      )}
+                    </span>
                   </p>
-                  {edit ? (
+                </div>
+                {edit ? (
+                  <div className="col-5 mt-3 border-detail">
+                    <Field
+                      name="dateDebut"
+                      label="Date de debut:"
+                      type="date"
+                      onChange={handleChangeEcheanceDetail}
+                      value={DateAPI.formatDateForm(echeanceDetail.dateDebut)}
+                    ></Field>
+                    <Field
+                      name="dateFinPrevue"
+                      label="Date de fin prevue:"
+                      type="date"
+                      onChange={handleChangeEcheanceDetail}
+                      value={DateAPI.formatDateForm(echeanceDetail.dateFinPrevue)}
+                    ></Field>
                     <Field
                       name="dateCloture"
-                      label="Date de Cloture:"
+                      label="Date de cloture:"
                       type="date"
                       onChange={handleChangeEcheanceDetail}
                       value={DateAPI.formatDateForm(echeanceDetail.dateCloture)}
                     ></Field>
-                  ) : (
+                  </div>
+                ) : (
+                  <div className="col-5 mt-3 border-detail">
+                    <p className="mt-3">
+                      Debut: {DateAPI.formatDate(echeanceDetail.dateDebut)}{" "}
+                    </p>
+                    <p>
+                      Fin prévue:{" "}
+                      {DateAPI.formatDate(echeanceDetail.dateFinPrevue)}{" "}
+                    </p>
+
                     <p>
                       Fini le: {DateAPI.formatDate(echeanceDetail.dateCloture)}{" "}
                     </p>
-                  )}
-                  {DateAPI.retard(
-                    echeanceDetail.dateCloture,
-                    echeanceDetail.dateFinPrevue
-                  ) > 0 && (
-                    <p>
-                      Retard:{" "}
-                      {DateAPI.retard(
-                        echeanceDetail.dateCloture,
-                        echeanceDetail.dateFinPrevue
-                      )}
+                    {DateAPI.retard(
+                      echeanceDetail.dateCloture,
+                      echeanceDetail.dateFinPrevue
+                    ) > 0 && (
+                      <p>
+                        Retard:{" "}
+                        {DateAPI.retard(
+                          echeanceDetail.dateCloture,
+                          echeanceDetail.dateFinPrevue
+                        )}
+                      </p>
+                    )}
+                  </div>
+                )}
+                <div className="col-12 border-detail mt-3">
+                  {echeanceDetail.lot && (
+                    <p className="mt-3">
+                      Entreprise en charge: {echeanceDetail.lot.company.nom}{" "}
                     </p>
                   )}
+                  {echeanceDetail.effectif && (
+                    <>
+                      <p>
+                        Effectif prévu: {echeanceDetail.effectif.effectifPrevu}
+                      </p>
+                      <p>
+                        Effectif constaté:{" "}
+                        {echeanceDetail.effectif.effectifConstate}
+                      </p>
+                    </>
+                  )}
                 </div>
-                <div className="col-12 border-detail mt-3">
-                  <p className="mt-3">Entreprise en charge: </p>
-                  <p>Effectif prévu: {echeanceDetail.effectifPrevu}</p>
-                  {edit ? (
-                    <Field
-                      name="effectifConstate"
-                      label="Effectif constaté"
-                      type="text"
-                      onChange={handleChangeEcheance}
-                      value={echeanceDetail.effectifConstate}
-                    ></Field>
-                  ) : (
-                    <p>Effectif constaté: {echeanceDetail.effectifConstate}</p>
+                <div className="col-12 mt-3 d-flex justify-content-end">
+                  {edit && (
+                    <Button className="btn btn-success" text="Valider"></Button>
                   )}
                 </div>
               </div>
-              {edit && (
-                <Button className="btn btn-success" text="Valider"></Button>
-              )}
             </form>
           </Modal.Body>
           <Modal.Footer>

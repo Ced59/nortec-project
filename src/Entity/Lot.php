@@ -20,7 +20,7 @@ class Lot
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"lot", "project","report"})
+     * @Groups({"lot", "project","report","echeance"})
      */
     private $id;
 
@@ -61,7 +61,7 @@ class Lot
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="lots")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"lot", "project","report"})
+     * @Groups({"lot", "project","report","echeance"})
      */
     private $company;
 

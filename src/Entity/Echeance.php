@@ -10,7 +10,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- * normalizationContext={"groups"="echeance"}
+ * normalizationContext={"groups"={"echeance"}}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\EcheanceRepository")
  */
