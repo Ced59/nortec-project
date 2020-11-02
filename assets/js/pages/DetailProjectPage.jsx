@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import "../../css/detailProjectPage.css";
 import "../../css/loading-icon.css";
 import ImgComponent from "../components/images/ImgComponent";
@@ -12,7 +12,7 @@ import FieldTextArea from "../components/forms/FieldTextArea";
 import { toast } from "react-toastify";
 import {
   determineStatusClasses,
-  determineStatusLabel
+  determineStatusLabel,
 } from "../components/ProjectStatus";
 import Modal from "react-bootstrap/Modal";
 import Select from "../components/forms/Select";
@@ -59,15 +59,24 @@ const DetailProjectPage = ({ history, match, props }) => {
     lots: [],
     companies: [],
   });
+  const [lotsModel, setLotsModel] = useState({
+    numeroLot: "",
+    libelleLot: "",
+    DateDebutEcheance: "1900-01-01",
+    dateFinEcheance: "1900-01-01",
+    company: "",
+    project: "",
+    annuaire: "",
+  });
 
   const [lots, setLots] = useState({
     numeroLot: "",
     libelleLot: "",
-    DateDebutEcheance: "",
-    dateFinEcheance: "",
+    DateDebutEcheance: "1900-01-01",
+    dateFinEcheance: "1900-01-01",
     company: "",
     project: "",
-    annuraire: "",
+    annuaire: "",
   });
 
   const [dateFinPrevue, setDateFinPrevue] = useState("");
@@ -124,12 +133,12 @@ const DetailProjectPage = ({ history, match, props }) => {
   //---------------------------------------- Chargement de projet au changement de l'id --------
   useEffect(() => {
     fetchProject(id).then((r) => "");
-  }, [id]);
-  console.log(project);
-
-  useEffect(() => {
     fetchReports();
-  }, []);
+  }, [id]);
+
+  // useEffect(() => {
+  //   fetchReports();
+  // }, []);
 
   const handleBackClick = () => {
     history.replace("/projects");
@@ -245,6 +254,7 @@ const DetailProjectPage = ({ history, match, props }) => {
   const handleCloseLotModal = () => {
     setShowLotModal(false);
     setAddLot(false);
+    setLots(lotsModel);
   };
 
   const handleShowLotModal = () => {
@@ -258,12 +268,16 @@ const DetailProjectPage = ({ history, match, props }) => {
 
   const handleCloseAddLot = () => {
     setAddLot(false);
+    setLots(lotsModel);
   };
 
   const handleChangeLot = ({ currentTarget }) => {
     const { name, value } = currentTarget;
     setLots({ ...lots, [name]: value });
   };
+  useEffect(() => {
+    setLots({ ...lots, annuaire: "" });
+  }, [lots.company]);
 
   const handleSubmitLot = async (event) => {
     event.preventDefault();
@@ -276,6 +290,7 @@ const DetailProjectPage = ({ history, match, props }) => {
     try {
       lots.project = "/api/projects/" + project.id;
       lots.company = "/api/companies/" + lots.company;
+      lots.annuaire = "/api/annuaires/" + lots.annuaire;
 
       console.log(lots.company);
       console.log(lots);
@@ -295,6 +310,8 @@ const DetailProjectPage = ({ history, match, props }) => {
       }
       console.log(response);
     }
+    fetchProject(id);
+    setLots(lotsModel);
   };
 
   //-----------------------------------------COMPANY FOR LOT------------------------------------------------------
@@ -755,22 +772,32 @@ const DetailProjectPage = ({ history, match, props }) => {
                   <th>Numéro de lot</th>
                   <th>Intitulé du lot</th>
                   <th>Entreprise</th>
-                  <th>Date de début</th>
-                  <th>Date de fin</th>
+                  <th>Contact</th>
+                  {/* <th>Date de début</th>
+                  <th>Date de fin</th> */}
                   <th />
                 </tr>
               </thead>
               <tbody>
-                {project.lots.map((lot) => (
-                  <tr key={lot.id}>
-                    <td>{lot.numeroLot}</td>
-                    <td>{lot.libelleLot}</td>
-                    <td>{!edit && lot.company.nom}</td>
-                    <td>{DateAPI.formatDate(lot.DateDebutEcheance)}</td>
-                    <td>{DateAPI.formatDate(lot.dateFinEcheance)}</td>
-                    <td></td>
-                  </tr>
-                ))}
+                {!loadingProject &&
+                  project.lots.map((lot) => (
+                    <tr key={lot.id}>
+                      <td>{lot.numeroLot}</td>
+                      <td>{lot.libelleLot}</td>
+                      <td>{lot.company.nom}</td>
+                      <td className="dropdown" data-toggle="dropdown">
+                        {lot.annuaire && lot.annuaire.nom} &#11206;
+                        <ul className="dropdown-menu">
+                          {lot.annuaire.email && <li className="dropdown-item">Email: {lot.annuaire.email}</li>}
+                          {lot.annuaire.telephone && <li className="dropdown-item">Tel: {lot.annuaire.telephone}</li>}
+                        </ul>
+                      </td>
+
+                      {/* <td>{DateAPI.formatDate(lot.DateDebutEcheance)}</td>
+                    <td>{DateAPI.formatDate(lot.dateFinEcheance)}</td> */}
+                      <td></td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           )}
@@ -795,7 +822,7 @@ const DetailProjectPage = ({ history, match, props }) => {
                   />
                 </div>
               </div>
-              <div className="d-flex justify-content-between">
+              {/* <div className="d-flex justify-content-between">
                 <div className="col-5">
                   <Field
                     name="DateDebutEcheance"
@@ -814,7 +841,7 @@ const DetailProjectPage = ({ history, match, props }) => {
                     value={DateAPI.formatDateForm(lots.dateFinEcheance)}
                   />
                 </div>
-              </div>
+              </div> */}
               <Select
                 name="company"
                 label="Entreprise"
@@ -822,13 +849,44 @@ const DetailProjectPage = ({ history, match, props }) => {
                 value={lots.company}
                 error=""
               >
-                <option value="notSet">Selectionner une entreprise</option>
+                {!lots.company && (
+                  <option value="notSet">Selectionner une entreprise</option>
+                )}
                 {companies.map((company) => (
                   <option key={company.id} value={company.id}>
                     {company.nom}
                   </option>
                 ))}
               </Select>
+              {lots.company ? (
+                <>
+                  {companies.filter((company) => company.id == lots.company)[0]
+                    .annuaires.length !== 0 ? (
+                    <Select
+                      name="annuaire"
+                      label="Contact"
+                      onChange={handleChangeLot}
+                      value={lots.annuaire}
+                      error=""
+                    >
+                      {!lots.annuaire && (
+                        <option value="notSet">Selectionner un contact</option>
+                      )}
+                      {companies
+                        .filter((company) => company.id == lots.company)[0]
+                        .annuaires.map((contact) => (
+                          <option key={contact.id} value={contact.id}>
+                            {contact.nom}
+                          </option>
+                        ))}
+                    </Select>
+                  ) : (
+                    <p>Aucun contact dans cette entreprise</p>
+                  )}
+                </>
+              ) : (
+                <p>Selectionnez une entreprise pour ajouter un contact</p>
+              )}
               <div className="d-flex justify-content-between">
                 <button
                   type="button"
@@ -846,7 +904,7 @@ const DetailProjectPage = ({ history, match, props }) => {
           <button className="btn btn-danger" onClick={handleCloseLotModal}>
             Fermer
           </button>
-          <button className="btn btn-primary">Confirmer</button>
+          {/* <button className="btn btn-primary">Confirmer</button> */}
         </Modal.Footer>
       </Modal>
     </main>
