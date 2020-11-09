@@ -1,29 +1,56 @@
 import DateAPI from "../services/DateAPI";
 
 export const STATUS_CLASSES = {
-    no_start: "info",
-    in_progress: "warning",
-    finished: "success",
-    archived: "primary",
-    late: "danger"
+  no_start: "info",
+  in_progress: "warning",
+  finished: "success",
+  archived: "primary",
+  late: "danger",
 };
 
 export const STATUS_LABEL = {
-    no_start: "Pas démarré",
-    in_progress: "En cours",
-    finished: "Fini",
-    archived: "Archivé",
-    late: "En retard"
+  no_start: "Pas démarré",
+  in_progress: "En cours",
+  finished: "Fini",
+  archived: "Archivé",
+  late: "En retard",
 };
 
-export function determineStatusClasses(dateDebut, dateFin, dateFinPrevue){
-
-    return STATUS_CLASSES[DateAPI.determineStatus(dateDebut, DateAPI.verifyDateExist(dateFin), dateFinPrevue)];
-
+export function determineStatusClasses(dateDebut, dateFin, dateFinPrevue) {
+  return STATUS_CLASSES[
+    DateAPI.determineStatus(
+      dateDebut,
+      DateAPI.verifyDateExist(dateFin),
+      dateFinPrevue
+    )
+  ];
 }
 
-export function determineStatusLabel(dateDebut, dateFin, dateFinPrevue){
+export function determineStatusLabel(dateDebut, dateFin, dateFinPrevue) {
+  return STATUS_LABEL[
+    DateAPI.determineStatus(
+      dateDebut,
+      DateAPI.verifyDateExist(dateFin),
+      dateFinPrevue
+    )
+  ];
+}
 
-    return STATUS_LABEL[DateAPI.determineStatus(dateDebut, DateAPI.verifyDateExist(dateFin), dateFinPrevue)];
-
+export function statusEcheanceClasses(dateDebut, dateCloture, dateFinPrevue) {
+  if (
+    determineStatusClasses(dateDebut, dateCloture, dateFinPrevue) === "primary"
+  ) {
+    return "success";
+  } else {
+    return determineStatusClasses(dateDebut, dateCloture, dateFinPrevue);
+  }
+}
+export function statusEcheanceLabel(dateDebut, dateCloture, dateFinPrevue) {
+  if (
+    determineStatusLabel(dateDebut, dateCloture, dateFinPrevue) === "Archivé"
+  ) {
+    return "Fini";
+  } else {
+    return determineStatusLabel(dateDebut, dateCloture, dateFinPrevue);
+  }
 }

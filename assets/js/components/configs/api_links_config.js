@@ -10,3 +10,4 @@ export const LOT_API = API_URL + "lots";
 export const REPORT_API = API_URL + "reports";
 export const ANNUAIRE_API = API_URL + "annuaires";
 export const ECHEANCE_API = API_URL + "echeances";
+export const PROPRETE_ACCESS_IMPUTATION = API_URL + "proprete_access_imputations";

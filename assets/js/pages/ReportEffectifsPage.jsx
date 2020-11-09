@@ -28,6 +28,7 @@ const ReportEffectifsPage = ({ match }) => {
       setReport(data);
       console.log(data);
     } catch (error) {
+      toast.error("Erreur lors du chargement du raport");
       console.log(error.response);
     }
   };
@@ -39,6 +40,7 @@ const ReportEffectifsPage = ({ match }) => {
       setProject(data);
       setLoading(false);
     } catch (error) {
+      toast.error("Erreur lors du chargement du projet");
       console.log(error.respose);
     }
   };
@@ -48,6 +50,7 @@ const ReportEffectifsPage = ({ match }) => {
       const data = await EcheanceAPI.findEcheance(id);
       setEcheance(data);
     } catch (error) {
+      toast.error("Erreur lors du chargement de l'échéance");
       console.log(error.repose);
     }
   };
@@ -153,8 +156,11 @@ const ReportEffectifsPage = ({ match }) => {
         show={showModal}
         onHide={handleCloseModal}
       >
+        <Modal.Header closeButton>
+          <h2>Modifications des effectifs</h2>
+        </Modal.Header>
         <Modal.Body>
-          <form onSubmit={handleSubmit}>
+          <form className="d-flex flex-column" onSubmit={handleSubmit}>
             <Field
               name="effectifPrevu"
               label="Effectif Prévu"
@@ -167,7 +173,7 @@ const ReportEffectifsPage = ({ match }) => {
               onChange={handleChange}
               value={echeance.effectifConstate}
             ></Field>
-            <Button text="valider"></Button>
+            <Button className="btn btn-success align-self-end" text="valider"></Button>
           </form>
         </Modal.Body>
       </Modal>

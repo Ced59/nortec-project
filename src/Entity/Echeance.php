@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
@@ -27,6 +28,7 @@ class Echeance
     /**
      * @ORM\Column(type="integer")
      * @Groups({"lot", "project","report","echeance"})
+     * @Assert\NotNull(message="Veuillez entrer un nombre")
      */
     private $numeroEcheance;
 
@@ -39,18 +41,21 @@ class Echeance
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"lot", "project","report","echeance"})
+     * @Assert\NotBlank(message="Veuillez renseigner un sujet!")
      */
     private $sujet;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"lot", "project","report","echeance"})
+     * @Assert\NotBlank(message="Veuillez renseigner une categorie!")
      */
     private $categorie;
 
     /**
      * @ORM\Column(type="date", nullable=true)
      * @Groups({"lot", "project","report","echeance"})
+     * @Assert\NotBlank(message="Veuillez renseigner une date!")
      */
     private $dateDebut;
 
@@ -70,6 +75,7 @@ class Echeance
      * @ORM\ManyToOne(targetEntity="App\Entity\Lot", inversedBy="echeances")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"echeance"})
+     * @Assert\NotBlank(message="Veuillez renseignez un lot !")
      */
     private $lot;
 

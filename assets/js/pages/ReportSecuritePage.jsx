@@ -109,13 +109,9 @@ const ReportSecuritePage = ({ match }) => {
 
   return (
     <main className="container">
+      <NavbarLeftWithRouter selected="securite" />
       {!loading && (
         <>
-          <NavbarLeftWithRouter
-            selected="securite"
-            projectname={report.Project.name}
-          />
-
           <div className="page-content">
             <div className="ml-2 mt-4 d-flex justify-content-between mb-3">
               <h2 className="mb-4">Sécurité :</h2>

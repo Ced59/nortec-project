@@ -72,7 +72,7 @@ function dateIsAfter(dateToCompare, dateDebut, dateFinPrevues) {
 function dateIsAfterDebut(dateToCompare, dateDebut) {
   return dayjs(dateToCompare).isAfter(dateDebut);
 }
-//Remettre la fonction retard en dayjs
+
 function retard(dateFin, dateDebut) {
   if (dateFin !== "") {
     return dayjs(dateFin).diff(dayjs(dateDebut), "day");
