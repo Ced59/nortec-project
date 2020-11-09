@@ -3,9 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -48,16 +46,6 @@ class Annuaire
      * @Groups({"lot","project"})
      */
     private $company;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Lot", mappedBy="annuaire")
-     */
-    private $lot;
-
-    public function __construct()
-    {
-        $this->lot = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -108,37 +96,6 @@ class Annuaire
     public function setCompany(?Company $company): self
     {
         $this->company = $company;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Lot[]
-     */
-    public function getLot(): Collection
-    {
-        return $this->lot;
-    }
-
-    public function addLot(Lot $lot): self
-    {
-        if (!$this->lot->contains($lot)) {
-            $this->lot[] = $lot;
-            $lot->setAnnuaire($this);
-        }
-
-        return $this;
-    }
-
-    public function removeLot(Lot $lot): self
-    {
-        if ($this->lot->contains($lot)) {
-            $this->lot->removeElement($lot);
-            // set the owning side to null (unless already changed)
-            if ($lot->getAnnuaire() === $this) {
-                $lot->setAnnuaire(null);
-            }
-        }
 
         return $this;
     }

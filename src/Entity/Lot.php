@@ -47,18 +47,6 @@ class Lot
     private $project;
 
     /**
-     * @ORM\Column(type="date")
-     * @Groups({"lot", "project","report"})
-     */
-    private $DateDebutEcheance;
-
-    /**
-     * @ORM\Column(type="date")
-     * @Groups({"lot", "project","report"})
-     */
-    private $dateFinEcheance;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="lots")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"lot", "project","report","echeance"})
@@ -70,12 +58,6 @@ class Lot
      * @Groups({"lot", "project","report"})
      */
     private $echeances;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Annuaire", inversedBy="lot")
-     * @Groups({"lot", "project","report"})
-     */
-    private $annuaire;
 
     public function __construct()
     {
@@ -135,30 +117,6 @@ class Lot
         return $this;
     }
 
-    public function getDateDebutEcheance(): ?\DateTimeInterface
-    {
-        return $this->DateDebutEcheance;
-    }
-
-    public function setDateDebutEcheance(\DateTimeInterface $DateDebutEcheance): self
-    {
-        $this->DateDebutEcheance = $DateDebutEcheance;
-
-        return $this;
-    }
-
-    public function getDateFinEcheance(): ?\DateTimeInterface
-    {
-        return $this->dateFinEcheance;
-    }
-
-    public function setDateFinEcheance(\DateTimeInterface $dateFinEcheance): self
-    {
-        $this->dateFinEcheance = $dateFinEcheance;
-
-        return $this;
-    }
-
     public function getCompany(): ?Company
     {
         return $this->company;
@@ -198,18 +156,6 @@ class Lot
                 $echeance->setLot(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getAnnuaire(): ?Annuaire
-    {
-        return $this->annuaire;
-    }
-
-    public function setAnnuaire(?Annuaire $annuaire): self
-    {
-        $this->annuaire = $annuaire;
 
         return $this;
     }

@@ -501,17 +501,9 @@ const ReportEcheancesPage = ({ match }) => {
                       Entreprise en charge: {echeanceDetail.lot.company.nom}{" "}
                     </p>
                   )}
-                  {echeanceDetail.effectif && (
-                    <>
-                      <p>
-                        Effectif prévu: {echeanceDetail.effectif.effectifPrevu}
-                      </p>
-                      <p>
-                        Effectif constaté:{" "}
-                        {echeanceDetail.effectif.effectifConstate}
-                      </p>
-                    </>
-                  )}
+
+                  <p>Effectif prévu: {echeanceDetail.effectifPrevu}</p>
+                  <p>Effectif constaté: {echeanceDetail.effectifConstate}</p>
                 </div>
                 <div className="col-12 mt-3 d-flex justify-content-end">
                   {edit && (
