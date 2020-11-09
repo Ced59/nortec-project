@@ -9,8 +9,8 @@ import Field from "../components/forms/Field";
 import DateAPI from "../services/DateAPI";
 import ProjectsAPI from "../services/ProjectsAPI";
 import {
-  determineStatusClasses,
-  determineStatusLabel,
+  statusEcheanceClasses,
+  statusEcheanceLabel,
 } from "../components/ProjectStatus";
 import AuthAPI from "../services/AuthAPI";
 import ReportsAPI from "../services/ReportsAPI";
@@ -27,11 +27,34 @@ const ReportEcheancesPage = ({ match }) => {
     redacteur: AuthAPI.getUserFirstNameLastName(),
     categorie: "",
     sujet: "",
-    dateDebut: "",
-    dateFin: "",
     lot: "",
     report: [],
   });
+
+  const echeanceModel = {
+    numeroEcheance: "",
+    redacteur: AuthAPI.getUserFirstNameLastName(),
+    categorie: "",
+    sujet: "",
+    lot: "",
+    report: [],
+  };
+
+  const [echeanceError, setEcheanceError] = useState({
+    numeroEcheance: "",
+    categorie: "",
+    sujet: "",
+    dateDebut: "",
+    effectifPrevu: "",
+    effectifConstate: "",
+    lot: "",
+  });
+
+  const [echeanceLotError, setEcheanceLotError] = useState({
+    lot: "",
+  });
+
+  const echeanceErrorModel = useState(echeanceError);
   const [report, setReport] = useState({});
   const [project, setProject] = useState({});
   const [edit, setEdit] = useState(false);
@@ -45,6 +68,7 @@ const ReportEcheancesPage = ({ match }) => {
       const data = await ReportsAPI.findReport(id);
       setReport(data);
     } catch (error) {
+      toast.error("Erreur lors du chargement du raport");
       console.log(error.response);
     }
   };
@@ -55,6 +79,7 @@ const ReportEcheancesPage = ({ match }) => {
       setProject(data);
       setLoading(false);
     } catch (error) {
+      toast.error("Erreur lors du chargement du projet");
       console.log(error.response);
     }
   };
@@ -65,6 +90,7 @@ const ReportEcheancesPage = ({ match }) => {
       setEcheanceDetail(data);
       console.log(echeanceDetail);
     } catch (error) {
+      toast.error("Erreur lors du chargement de l'échéance");
       console.log(error.response);
     }
   };
@@ -78,10 +104,14 @@ const ReportEcheancesPage = ({ match }) => {
   // Gestion de la fenêtre modal AddEcheance
 
   const handleShowModalEcheance = () => {
+    setEcheance(echeanceModel);
     setShowModalEcheance(true);
   };
 
   const handleCloseModalEcheance = () => {
+    setEcheance(echeanceModel);
+    setEcheanceError(echeanceErrorModel);
+    setEcheanceLotError({ ...echeanceLotError, lot: "" });
     setShowModalEcheance(false);
   };
 
@@ -90,11 +120,11 @@ const ReportEcheancesPage = ({ match }) => {
     setEcheance({ ...echeance, [name]: value });
   };
 
+  // TODO revoir la gestion des erreurs
   const handleSubmitAddEcheance = async (event) => {
     event.preventDefault();
+    echeance.numeroEcheance = Number(echeance.numeroEcheance);
     try {
-      echeance.lot = "/api/lots/" + echeance.lot;
-      echeance.numeroEcheance = Number(echeance.numeroEcheance);
       console.log(echeance);
 
       await EcheanceAPI.create(echeance);
@@ -102,8 +132,32 @@ const ReportEcheancesPage = ({ match }) => {
       toast.success("L'échéance est bien ajouté !");
       fetchProject(urlParams.id);
       handleCloseModalEcheance();
-    } catch (error) {
-      console.log(error);
+    } catch ({ response }) {
+      const { violations } = response.data;
+      if (violations) {
+        const apiErrors = {};
+        violations.map(({ propertyPath, message }) => {
+          apiErrors[propertyPath] = message;
+        });
+
+        setEcheanceError(apiErrors);
+      }
+      if (echeance.lot === "") {
+        setEcheanceLotError({
+          ...echeanceLotError,
+          lot: "Veuillez choisir un lot",
+        });
+      } else {
+        setEcheanceLotError({ ...echeanceLotError, lot: "" });
+      }
+      if (echeance.numeroEcheance === 0) {
+        setEcheanceError({
+          ...echeanceError,
+          numeroEcheance: "Veuillez entrer un numero",
+        });
+        setEcheance({ ...echeance, numeroEcheance: "" });
+      }
+      console.log(response);
     }
   };
 
@@ -111,17 +165,37 @@ const ReportEcheancesPage = ({ match }) => {
 
   const handleSubmitChangeEcheance = async (event) => {
     event.preventDefault();
-    try {
-      console.log(echeanceDetail);
-      echeanceDetail.lot = "/api/lots/" + echeanceDetail.lot.id;
+    if (
+      DateAPI.dateIsAfterDebut(
+        echeanceDetail.dateFinPrevue,
+        echeanceDetail.dateDebut
+      )
+    ) {
+      try {
+        console.log(echeanceDetail);
+        echeanceDetail.lot = "/api/lots/" + echeanceDetail.lot.id;
 
-      await EcheanceAPI.update(echeanceDetail.id, echeanceDetail);
-      toast.success("L'échéance est bien modifiée !");
-      setEcheanceDetail({});
-      fetchProject(urlParams.id);
-      handleCloseModalDetail();
-    } catch (error) {
-      console.log(error.response);
+        await EcheanceAPI.update(echeanceDetail.id, echeanceDetail);
+        toast.success("L'échéance est bien modifiée !");
+        setEcheanceDetail({});
+        fetchProject(urlParams.id);
+        handleCloseModalDetail();
+      } catch ({ reponse }) {
+        const { violations } = response.data;
+        if (violations) {
+          const apiErrors = {};
+          violations.map(({ propertyPath, message }) => {
+            apiErrors[propertyPath] = message;
+          });
+          setEcheanceError(apiErrors);
+        }
+        console.log(error.response);
+      }
+    } else {
+      setEcheanceError({
+        ...echeanceError,
+        dateFinPrevue: "Veuillez entrer une date posterieur",
+      });
     }
   };
 
@@ -131,6 +205,7 @@ const ReportEcheancesPage = ({ match }) => {
   };
 
   const handleCloseModalDetail = () => {
+    setEcheanceError(echeanceErrorModel);
     setShowModalDetail(false);
     setEdit(false);
   };
@@ -177,20 +252,20 @@ const ReportEcheancesPage = ({ match }) => {
                     <React.Fragment key={lot.id}>
                       {lot.echeances.map((echeance) => (
                         <tr key={echeance.id}>
-                          <td>{echeance.id}</td>
+                          <td>{echeance.numeroEcheance}</td>
                           <td>{echeance.redacteur}</td>
                           <td>
                             <span
                               className={
                                 "badge badge-" +
-                                determineStatusClasses(
+                                statusEcheanceClasses(
                                   echeance.dateDebut,
                                   echeance.dateCloture,
                                   echeance.dateFinPrevue
                                 )
                               }
                             >
-                              {determineStatusLabel(
+                              {statusEcheanceLabel(
                                 echeance.dateDebut,
                                 echeance.dateCloture,
                                 echeance.dateFinPrevue
@@ -257,26 +332,30 @@ const ReportEcheancesPage = ({ match }) => {
                   label="Catégorie"
                   onChange={handleChangeEcheance}
                   value={echeance.categorie}
+                  error={echeanceError.categorie}
                 ></Field>
                 <Field
                   name="sujet"
                   label="Sujet"
                   onChange={handleChangeEcheance}
                   value={echeance.sujet}
+                  error={echeanceError.sujet}
                 ></Field>
                 <Field
-                  type="number"
                   name="numeroEcheance"
+                  type="number"
                   label="Numero de l'échéance"
                   onChange={handleChangeEcheance}
                   value={echeance.numeroEcheance}
+                  error={echeanceError.numeroEcheance}
                 ></Field>
                 <Field
                   name="dateDebut"
                   label="Date de début"
                   type="date"
                   onChange={handleChangeEcheance}
-                  value={echeance.dateDebut}
+                  value={DateAPI.formatDateForm(echeance.dateDebut)}
+                  error={echeanceError.dateDebut}
                 ></Field>
                 <Field
                   name="dateFinPrevue"
@@ -284,6 +363,7 @@ const ReportEcheancesPage = ({ match }) => {
                   type="date"
                   onChange={handleChangeEcheance}
                   value={DateAPI.formatDateForm(echeance.dateFinPrevue)}
+                  error={echeanceError.dateFinPrevue}
                 ></Field>
                 <Field
                   name="effectifPrevu"
@@ -296,10 +376,11 @@ const ReportEcheancesPage = ({ match }) => {
                   name="lot"
                   onChange={handleChangeEcheance}
                   value={echeance.lot}
+                  error={echeanceLotError.lot}
                 >
-                  <option>Selectionner une entreprise</option>
+                  <option value="">Selectionner une entreprise</option>
                   {project.lots.map((lot) => (
-                    <option key={lot.id} value={lot.id}>
+                    <option key={lot.id} value={"/api/lots/" + lot.id}>
                       {lot.libelleLot}
                     </option>
                   ))}
@@ -325,7 +406,7 @@ const ReportEcheancesPage = ({ match }) => {
           show={showModalDetail}
           onHide={handleCloseModalDetail}
         >
-          <Modal.Header>
+          <Modal.Header closeButton>
             <h2>Detail de l'échéance N° {echeanceDetail.id}</h2>
           </Modal.Header>
           <Modal.Body>
@@ -345,14 +426,14 @@ const ReportEcheancesPage = ({ match }) => {
                     <span
                       className={
                         "badge badge-" +
-                        determineStatusClasses(
+                        statusEcheanceClasses(
                           echeanceDetail.dateDebut,
                           echeanceDetail.dateCloture,
                           echeanceDetail.dateFinPrevue
                         )
                       }
                     >
-                      {determineStatusLabel(
+                      {statusEcheanceLabel(
                         echeanceDetail.dateDebut,
                         echeanceDetail.dateCloture,
                         echeanceDetail.dateFinPrevue
@@ -374,7 +455,10 @@ const ReportEcheancesPage = ({ match }) => {
                       label="Date de fin prevue:"
                       type="date"
                       onChange={handleChangeEcheanceDetail}
-                      value={DateAPI.formatDateForm(echeanceDetail.dateFinPrevue)}
+                      error={echeanceError.dateFinPrevue}
+                      value={DateAPI.formatDateForm(
+                        echeanceDetail.dateFinPrevue
+                      )}
                     ></Field>
                     <Field
                       name="dateCloture"
