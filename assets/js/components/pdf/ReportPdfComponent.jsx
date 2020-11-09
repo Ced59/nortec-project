@@ -189,7 +189,7 @@ const ReportPdfComponent = ({report}) => {
                                 {report.proprete_commune_imputation.map(proprete =>
                                     <View style={styles.listEffectifs}>
                                         <Text
-                                            style={styles.textEffectifsNomEntreprise}>{proprete.company.nom + ' :' + proprete.pourcent + ' %'}
+                                            style={styles.textEffectifsNomEntreprise}>{proprete.company.nom + ' :' + proprete.percent + ' %'}
                                         </Text>
                                         <Text
                                             style={styles.textEffectifsInfos}>{'Commentaire :' + proprete.commentaire}

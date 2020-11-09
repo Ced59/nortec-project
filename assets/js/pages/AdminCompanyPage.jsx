@@ -23,20 +23,10 @@ const AdminCompanyPage = ({ history, match, props }) => {
   const [error, setError] = useState({
     nom: "",
     adresse1: "",
-    adresse2: "",
     codePostal: "",
     ville: "",
-    mail1: "",
-    mail2: "",
   });
-
-  //TODO Trouver une meilleure solution
-  const [contactModel, setContactModel] = useState({
-    company: "/api/companies/" + id,
-    nom: "",
-    email: "",
-    telephone: "",
-  });
+  const errorModel = useState(error);
 
   const [contact, setContact] = useState({
     company: "/api/companies/" + id,
@@ -44,13 +34,13 @@ const AdminCompanyPage = ({ history, match, props }) => {
     email: "",
     telephone: "",
   });
+  const [contactModel] = useState(contact);
 
-  //TODO Gêrer les erreurs (les déplacer dans "annuaires" de error)
   const [contactError, setContactError] = useState({
     nom: "",
     email: "",
-    telephone: "",
   });
+  const contactErrorModel = useState(contactError);
 
   const [edit, setEdit] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -115,9 +105,19 @@ const AdminCompanyPage = ({ history, match, props }) => {
       toast.success("Le contact a bien été ajouté");
       fetchCompany(id);
       setContact(contactModel);
+      setContactError(contactErrorModel);
       console.log(contact);
     } catch ({ response }) {
       console.log(response);
+      const { violations } = response.data;
+      if (violations) {
+        const apiErrors = {};
+        violations.map(({ propertyPath, message }) => {
+          apiErrors[propertyPath] = message;
+        });
+
+        setContactError(apiErrors);
+      }
     }
   };
 
@@ -129,25 +129,34 @@ const AdminCompanyPage = ({ history, match, props }) => {
       toast.success("Le contact a bien été mis à jour");
       fetchCompany(id);
       setContact(contactModel);
+      setContactError(contactErrorModel);
       setShowContactModal(false);
     } catch ({ response }) {
       console.log(response);
+      const { violations } = response.data;
+      if (violations) {
+        const apiErrors = {};
+        violations.map(({ propertyPath, message }) => {
+          apiErrors[propertyPath] = message;
+        });
+
+        setContactError(apiErrors);
+      }
     }
   };
 
-  const handleSubmitDeleteContact = async (id) =>{
+  const handleSubmitDeleteContact = async (id) => {
     try {
-      await AnnuaireAPI.deleteContact(id)
+      await AnnuaireAPI.deleteContact(id);
       console.log(contact);
       fetchCompany(company.id);
       setContact(contactModel);
       toast.success("Le contact a bien été supprimé");
       setShowContactModal(false);
-    }
-    catch ({response}){
+    } catch ({ response }) {
       console.log(response);
     }
-  }
+  };
 
   //-----------------------------------------------Envoie---------------------------------------------------------
 
@@ -163,6 +172,7 @@ const AdminCompanyPage = ({ history, match, props }) => {
         await CompanyAPI.update(id, company);
         toast.success("L'entreprise a bien été modifié !");
         fetchCompany(id);
+        setError(errorModel);
       } else {
         await CompanyAPI.create(company);
         toast.success("L'entreprise a bien été crée !");
@@ -214,7 +224,6 @@ const AdminCompanyPage = ({ history, match, props }) => {
             placeholder="Entrez l'adresse de l'entreprise"
             onChange={handleChange}
             value={company.adresse2}
-            error={error.adresse2}
           />
           <Field
             name="codePostal"
@@ -324,7 +333,6 @@ const AdminCompanyPage = ({ history, match, props }) => {
                         type="text"
                         onChange={handleChangeNewContact}
                         value={contact.telephone}
-                        error={contactError.telephone}
                         noLabel={true}
                       />
                     </td>
@@ -358,6 +366,9 @@ const AdminCompanyPage = ({ history, match, props }) => {
         </form>
       )}
       {loading && <div id="loading-icon" className="mt-5 mb-5" />}
+
+      {/* ------------------------------------------------------MODAL MODIF CONTACT----------------------------------------------------- */}
+
       <Modal
         {...props}
         size="lg"
@@ -396,7 +407,6 @@ const AdminCompanyPage = ({ history, match, props }) => {
               type="text"
               onChange={handleChangeNewContact}
               value={contact.telephone}
-              error={contactError.telephone}
             />
           </Modal.Body>
           <Modal.Footer>

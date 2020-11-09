@@ -4,7 +4,7 @@ import NavbarLeft from "../components/navbars/NavbarLeft";
 import fakeData from "../components/fakeDataForDev/fakeData";
 import DateAPI from "../services/DateAPI";
 import Button from "../components/forms/Button";
-import {PDFDownloadLink, PDFViewer} from "@react-pdf/renderer";
+import ReactPDF, {PDFDownloadLink, PDFViewer} from "@react-pdf/renderer";
 import ReportPdfComponent from "../components/pdf/ReportPdfComponent";
 
 const ReportValidatePage = ({match}) => {
@@ -27,11 +27,18 @@ const ReportValidatePage = ({match}) => {
 
     };
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        fetchReport();
+    //     fetchReport();
 
-    }, []);
+    // }, []);
+
+    console.log(match);
+
+    //TODO à mettre dans un script node?
+    const handleSavePDF = async () => {
+        await ReactPDF.render(<ReportPdfComponent report={report}/>, '../reportPDF/projet'+report.project.id+'rapport'+report.id+'.pdf');
+    }
 
     return (
         <main className="container">
@@ -166,13 +173,25 @@ const ReportValidatePage = ({match}) => {
                     echeances
                 </div>
 
-                <PDFViewer className='offset-3 col-6' height='1000'>
-                    <ReportPdfComponent report={report}/>
-                </PDFViewer>
+                <div>
+                    <PDFDownloadLink className='offset-3 col-6' document={<ReportPdfComponent report={report}/>} fileName={report.project.name+'_rapport_'+report.id+'_au_'+DateAPI.formatDate(DateAPI.now())+'.pdf'}>
+                    {({ loading }) => (loading ? 'PDF en préparation pour téléchargement...' : 'Télécharger le PDF')}
+                    </PDFDownloadLink>
+                </div>
+                <div>
+                    <PDFViewer className='offset-3 col-6' height='1000'>
+                        <ReportPdfComponent report={report}/>
+                    </PDFViewer>
+                </div>
 
 
 
                 <div className='row ml-2 mt-4 d-flex justify-content-between mb-3'>
+                    <Button text='Valider'
+                            className='btn btn-primary mr-4'
+                            type='button'
+                            onClick={handleSavePDF}
+                    />
                     <Button text='Clôturer et envoyer'
                             className='btn btn-primary mr-4'
                             type='button'

@@ -15,8 +15,9 @@ import {
   determineStatusLabel,
 } from "../components/ProjectStatus";
 import Modal from "react-bootstrap/Modal";
+import Select from "../components/forms/Select";
 import ReportsAPI from "../services/ReportsAPI";
-import LotModal from "../components/LotModal";
+import useClippy from "use-clippy";
 
 const DetailProjectPage = ({ history, match, props }) => {
   const { id } = match.params;
@@ -59,13 +60,35 @@ const DetailProjectPage = ({ history, match, props }) => {
     lots: [],
     companies: [],
   });
+  const [lotsModel, setLotsModel] = useState({
+    numeroLot: "",
+    libelleLot: "",
+    DateDebutEcheance: "1900-01-01",
+    dateFinEcheance: "1900-01-01",
+    company: "",
+    project: "",
+    annuaire: "",
+  });
+
+  const [lots, setLots] = useState({
+    numeroLot: "",
+    libelleLot: "",
+    DateDebutEcheance: "1900-01-01",
+    dateFinEcheance: "1900-01-01",
+    company: "",
+    project: "",
+    annuaire: "",
+  });
 
   const [dateFinPrevue, setDateFinPrevue] = useState("");
   const [edit, setEdit] = useState(false);
   const [loadingProject, setLoadingProject] = useState(true);
   const [errorDate, setErrorDate] = useState("");
   const [errorDateFinReelle, setErrorDateFinRelle] = useState("");
+  const [showLotModal, setShowLotModal] = useState(false);
   const [showEcheanceModal, setShowEcheanceModal] = useState(false);
+  const [addLot, setAddLot] = useState(false);
+  const [companies, setCompanies] = useState([]);
   const [reports, setReports] = useState([]);
   const [report, setReport] = useState({
     Project: "/api/projects/" + id,
@@ -84,6 +107,14 @@ const DetailProjectPage = ({ history, match, props }) => {
     installations: "",
     lots: [],
   });
+
+  const [clipboard, setClipboard] = useClippy();
+  const handleClipboard = ({ currentTarget }) => {
+    const value = currentTarget.innerText;
+    setClipboard(value);
+    console.log(value);
+    toast.info("Copié dans le presse-papier");
+  };
 
   //----------------------------------------Récupération d'un projet----------------------------
   const fetchProject = async (id) => {
@@ -114,6 +145,10 @@ const DetailProjectPage = ({ history, match, props }) => {
     fetchProject(id).then((r) => "");
     fetchReports();
   }, [id]);
+
+  // useEffect(() => {
+  //   fetchReports();
+  // }, []);
 
   console.log(project);
 
@@ -226,10 +261,90 @@ const DetailProjectPage = ({ history, match, props }) => {
   // console.log(project);
   // console.log(project.dateFinPrevues);
 
-//-------------------------------------Affichage des échéances--------------------------------------------------
+  //--------------------------------------------GESTION DES LOTS--------------------------------------------------------
+
+  const handleCloseLotModal = () => {
+    setShowLotModal(false);
+    setAddLot(false);
+    setLots(lotsModel);
+  };
+
+  const handleShowLotModal = () => {
+    setShowLotModal(true);
+    fetchCompany().then((r) => "");
+  };
+
+  const handleAddLot = () => {
+    setAddLot(true);
+  };
+
+  const handleCloseAddLot = () => {
+    setAddLot(false);
+    setLots(lotsModel);
+  };
+
+  const handleChangeLot = ({ currentTarget }) => {
+    const { name, value } = currentTarget;
+    setLots({ ...lots, [name]: value });
+  };
+  useEffect(() => {
+    setLots({ ...lots, annuaire: "" });
+  }, [lots.company]);
+
+  const handleSubmitLot = async (event) => {
+    event.preventDefault();
+
+    console.log(lots.company);
+    console.log(company);
+
+    setAddLot(false);
+
+    try {
+      lots.project = "/api/projects/" + project.id;
+      lots.company = "/api/companies/" + lots.company;
+      lots.annuaire = "/api/annuaires/" + lots.annuaire;
+
+      console.log(lots.company);
+      console.log(lots);
+
+      await ProjectsAPI.addLotProject(lots);
+
+      toast.success("Le lot est bien ajouté !");
+    } catch ({ response }) {
+      const { violations } = response.data;
+      if (violations) {
+        const apiErrors = {};
+        violations.map(({ propertyPath, message }) => {
+          apiErrors[propertyPath] = message;
+        });
+
+        setError(apiErrors);
+      }
+      console.log(response);
+    }
+    fetchProject(id);
+    setLots(lotsModel);
+  };
+
+  //-----------------------------------------COMPANY FOR LOT------------------------------------------------------
+
+  const fetchCompany = async () => {
+    try {
+      const data = await ProjectsAPI.findAllCompany();
+      setCompanies(data);
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  //-------------------------------------Affichage des échéances--------------------------------------------------
+
+  const handleCloseEcheanceModal = () => {
+    setShowEcheanceModal(false);
+  };
 
   const handleShowEcheanceModal = () => {
-    setShowEcheanceModal((prevState) => !prevState);
+    setShowEcheanceModal(true);
   };
 
   //--------------------------------------------Template  --------------------------------------------------------
@@ -604,12 +719,12 @@ const DetailProjectPage = ({ history, match, props }) => {
               >
                 Liste des rapports
               </Link>
-              <LotModal
-                id={id}
-                project={project}
-                loadingProject={loadingProject}
-                fetchProject={fetchProject}
-              ></LotModal>
+              <Button
+                text="Gérer les lots"
+                className="btn btn-primary mx-2 mb-3"
+                type="button"
+                onClick={handleShowLotModal}
+              />
               <Button
                 text="Voir les échéances"
                 className="btn btn-primary mx-2 mb-3"
@@ -650,6 +765,185 @@ const DetailProjectPage = ({ history, match, props }) => {
         )}
       </div>
 
+      {/* -------------------------------------------MODAL LOTS----------------------------------------------- */}
+
+      <Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        show={showLotModal}
+        onHide={handleCloseLotModal}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Liste des lots</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {AuthAPI.isAdmin() && !addLot && (
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => handleAddLot()}
+            >
+              Ajouter un lot
+            </button>
+          )}
+          {!addLot && (
+            <table className="table table-hover table-striped">
+              <thead>
+                <tr>
+                  <th>Numéro de lot</th>
+                  <th>Intitulé du lot</th>
+                  <th>Entreprise</th>
+                  <th>Contact</th>
+                  {/* <th>Date de début</th>
+                  <th>Date de fin</th> */}
+                  <th />
+                </tr>
+              </thead>
+              <tbody>
+                {!loadingProject &&
+                  project.lots.map((lot) => (
+                    <tr key={lot.id}>
+                      <td>{lot.numeroLot}</td>
+                      <td>{lot.libelleLot}</td>
+                      <td>{lot.company.nom}</td>
+                      <td className="dropdown" data-toggle="dropdown">
+                        {lot.annuaire && lot.annuaire.nom} &#11206;
+                        <ul className="dropdown-menu">
+                          {lot.annuaire.email && (
+                            <li
+                              className="dropdown-item"
+                              onClick={handleClipboard}
+                            >
+                              Email: {lot.annuaire.email}
+                            </li>
+                          )}
+                          {lot.annuaire.telephone && (
+                            <li
+                              className="dropdown-item"
+                              onClick={handleClipboard}
+                            >
+                              Tel: {lot.annuaire.telephone}
+                            </li>
+                          )}
+                        </ul>
+                      </td>
+
+                      {/* <td>{DateAPI.formatDate(lot.DateDebutEcheance)}</td>
+                    <td>{DateAPI.formatDate(lot.dateFinEcheance)}</td> */}
+                      <td></td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          )}
+          {addLot && (
+            <form onSubmit={handleSubmitLot}>
+              <div className="d-flex justify-content-between">
+                <div className="col-5">
+                  <Field
+                    className="m-auto"
+                    name="numeroLot"
+                    label="Numéro de Lot"
+                    onChange={handleChangeLot}
+                    value={lots.numeroLot}
+                  />
+                </div>
+                <div className="col-5">
+                  <Field
+                    name="libelleLot"
+                    label="Nom du Lot"
+                    onChange={handleChangeLot}
+                    value={lots.libelleLot}
+                  />
+                </div>
+              </div>
+              {/* <div className="d-flex justify-content-between">
+                <div className="col-5">
+                  <Field
+                    name="DateDebutEcheance"
+                    type="date"
+                    label="Date de démarrage du Lot"
+                    onChange={handleChangeLot}
+                    value={DateAPI.formatDateForm(lots.DateDebutEcheance)}
+                  />
+                </div>
+                <div className="col-5">
+                  <Field
+                    name="dateFinEcheance"
+                    type="date"
+                    label="Date de fin du Lot"
+                    onChange={handleChangeLot}
+                    value={DateAPI.formatDateForm(lots.dateFinEcheance)}
+                  />
+                </div>
+              </div> */}
+              <Select
+                name="company"
+                label="Entreprise"
+                onChange={handleChangeLot}
+                value={lots.company}
+                error=""
+              >
+                {!lots.company && (
+                  <option value="notSet">Selectionner une entreprise</option>
+                )}
+                {companies.map((company) => (
+                  <option key={company.id} value={company.id}>
+                    {company.nom}
+                  </option>
+                ))}
+              </Select>
+              {lots.company ? (
+                <>
+                  {companies.filter((company) => company.id == lots.company)[0]
+                    .annuaires.length !== 0 ? (
+                    <Select
+                      name="annuaire"
+                      label="Contact"
+                      onChange={handleChangeLot}
+                      value={lots.annuaire}
+                      error=""
+                    >
+                      {!lots.annuaire && (
+                        <option value="notSet">Selectionner un contact</option>
+                      )}
+                      {companies
+                        .filter((company) => company.id == lots.company)[0]
+                        .annuaires.map((contact) => (
+                          <option key={contact.id} value={contact.id}>
+                            {contact.nom}
+                          </option>
+                        ))}
+                    </Select>
+                  ) : (
+                    <p>Aucun contact dans cette entreprise</p>
+                  )}
+                </>
+              ) : (
+                <p>Selectionnez une entreprise pour ajouter un contact</p>
+              )}
+              <div className="d-flex justify-content-between">
+                <button
+                  type="button"
+                  onClick={() => handleCloseAddLot()}
+                  className="btn btn-danger"
+                >
+                  Annuler
+                </button>
+                <button className="btn btn-success">Valider</button>
+              </div>
+            </form>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <button className="btn btn-danger" onClick={handleCloseLotModal}>
+            Fermer
+          </button>
+          {/* <button className="btn btn-primary">Confirmer</button> */}
+        </Modal.Footer>
+      </Modal>
       {/* -------------------------------------------MODAL ÉCHÉANCES----------------------------------------------- */}
 
       <Modal
@@ -658,7 +952,7 @@ const DetailProjectPage = ({ history, match, props }) => {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         show={showEcheanceModal}
-        onHide={handleShowEcheanceModal}
+        onHide={handleCloseEcheanceModal}
       >
         <Modal.Header closeButton>
           <Modal.Title>Liste des Échéances</Modal.Title>
@@ -668,7 +962,7 @@ const DetailProjectPage = ({ history, match, props }) => {
             <React.Fragment key={lot.id}>
               {lot.echeances.length !== 0 && (
                 <>
-                  <div className="row justify-content-center">
+                  <div className="row justify-content-between">
                     <div className="mx-5">
                       Lot:{" "}
                       <h5>
@@ -678,6 +972,9 @@ const DetailProjectPage = ({ history, match, props }) => {
                     <div className="mx-5">
                       Entreprise: <h5>{lot.company.nom}</h5>
                     </div>
+                    <div className="mx-5">
+                      Contact: <h5>{lot.annuaire.nom}</h5>
+                    </div>
                   </div>
                   <table className="table table-hover">
                     <thead>
@@ -685,6 +982,7 @@ const DetailProjectPage = ({ history, match, props }) => {
                         <th>Numéro</th>
                         <th>Rédacteur</th>
                         <th>Statut</th>
+                        <th>Catégorie</th>
                         <th>Sujet</th>
                         <th>Début</th>
                         <th>Echéance</th>
@@ -715,6 +1013,7 @@ const DetailProjectPage = ({ history, match, props }) => {
                               )}
                             </span>
                           </td>
+                          <td>{echeance.categorie}</td>
                           <td>{echeance.sujet}</td>
                           <td>{DateAPI.formatDate(echeance.dateDebut)}</td>
                           <td>{DateAPI.formatDate(echeance.dateFinPrevue)}</td>
