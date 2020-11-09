@@ -12,21 +12,15 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
   const [lotsModel] = useState({
     numeroLot: "",
     libelleLot: "",
-    DateDebutEcheance: "1900-01-01",
-    dateFinEcheance: "1900-01-01",
     company: "",
     project: "",
-    annuaire: "/api/annuaires/51",
   });
 
   const [lots, setLots] = useState({
     numeroLot: "",
     libelleLot: "",
-    DateDebutEcheance: "1900-01-01",
-    dateFinEcheance: "1900-01-01",
     company: "",
     project: "",
-    annuaire: "/api/annuaires/51",
   });
   const [showLotModal, setShowLotModal] = useState(false);
   const [showLotDetail, setShowLotDetail] = useState(false);

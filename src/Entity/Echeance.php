@@ -46,13 +46,6 @@ class Echeance
     private $sujet;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups({"lot", "project","report","echeance"})
-     * @Assert\NotBlank(message="Veuillez renseigner une categorie!")
-     */
-    private $categorie;
-
-    /**
      * @ORM\Column(type="date", nullable=true)
      * @Groups({"lot", "project","report","echeance"})
      * @Assert\NotBlank(message="Veuillez renseigner une date!")
@@ -90,6 +83,18 @@ class Echeance
      * @Groups({"lot", "project","report","echeance"})
      */
     private $effectif;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"lot", "project","report","echeance"})
+     */
+    private $effectifPrevu;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"lot", "project","report","echeance"})
+     */
+    private $effectifConstate;
 
     public function __construct()
     {
@@ -133,18 +138,6 @@ class Echeance
     public function setSujet(string $sujet): self
     {
         $this->sujet = $sujet;
-
-        return $this;
-    }
-
-    public function getCategorie(): ?string
-    {
-        return $this->categorie;
-    }
-
-    public function setCategorie(string $categorie): self
-    {
-        $this->categorie = $categorie;
 
         return $this;
     }
@@ -237,6 +230,30 @@ class Echeance
         if ($effectif->getEcheance() !== $newEcheance) {
             $effectif->setEcheance($newEcheance);
         }
+
+        return $this;
+    }
+
+    public function getEffectifPrevu(): ?string
+    {
+        return $this->effectifPrevu;
+    }
+
+    public function setEffectifPrevu(?string $effectifPrevu): self
+    {
+        $this->effectifPrevu = $effectifPrevu;
+
+        return $this;
+    }
+
+    public function getEffectifConstate(): ?string
+    {
+        return $this->effectifConstate;
+    }
+
+    public function setEffectifConstate(?string $effectifConstate): self
+    {
+        $this->effectifConstate = $effectifConstate;
 
         return $this;
     }
