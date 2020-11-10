@@ -28,14 +28,14 @@ class Project
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"project"})
+     * @Groups({"project","report"})
      * @Assert\NotBlank(message="Le nom du projet est obligatoire !")
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"project"})
+     * @Groups({"project","report"})
      * @Assert\NotBlank(message="La descrpition du projet est obligatoire !")
      */
     private $description;
@@ -54,20 +54,20 @@ class Project
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"project"})
+     * @Groups({"project","report"})
      * @Assert\NotBlank(message="L'adresse du projet est obligatoire !")
      */
     private $adresse1;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"project"})
+     * @Groups({"project","report"})
      */
     private $adresse2;
 
     /**
      * @ORM\Column(type="string", length=8)
-     * @Groups({"project"})
+     * @Groups({"project","report"})
      * @Assert\NotBlank(message="Le code postal est obligatoire !")
      */
     private $codePostal;
@@ -108,7 +108,7 @@ class Project
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"project"})
+     * @Groups({"project","report"})
      * @Assert\NotBlank(message="Le nom da la ville est obligatoire !")
      */
     private $ville;
