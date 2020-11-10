@@ -113,7 +113,7 @@ class Report
      * @ORM\OneToMany(targetEntity="App\Entity\PropreteAccessImputation", mappedBy="report", orphanRemoval=true)
      * @Groups({"report"})
      */
-    private $propreteIccessImputation;
+    private $propreteAccessImputation;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\PropreteCommuneImputation", mappedBy="report")
@@ -152,7 +152,7 @@ class Report
 
     public function __construct()
     {
-        $this->propreteIccessImputation = new ArrayCollection();
+        $this->propreteAccessImputation = new ArrayCollection();
         $this->propreteCommuneImputations = new ArrayCollection();
         $this->securityCommentImputations = new ArrayCollection();
         $this->photos = new ArrayCollection();
@@ -297,24 +297,24 @@ class Report
         return $this;
     }
 
-    public function getSecurityComment(): ?string
+    public function getSecurityConmment(): ?string
     {
         return $this->securityConmment;
     }
 
-    public function setSecurityComment(string $securityConmment): self
+    public function setSecurityConmment(string $securityConmment): self
     {
         $this->securityConmment = $securityConmment;
 
         return $this;
     }
 
-    public function getSecurityCommentIntern(): ?string
+    public function getSecurityConmmentIntern(): ?string
     {
         return $this->securityConmmentIntern;
     }
 
-    public function setSecurityCommentIntern(string $securityConmmentIntern): self
+    public function setSecurityConmmentIntern(string $securityConmmentIntern): self
     {
         $this->securityConmmentIntern = $securityConmmentIntern;
 
@@ -338,13 +338,13 @@ class Report
      */
     public function getPropreteAccessImputation(): Collection
     {
-        return $this->propreteIccessImputation;
+        return $this->propreteAccessImputation;
     }
 
     public function addPropreteAccessImputation(PropreteAccessImputation $propreteAccessImputation): self
     {
-        if (!$this->propreteIccessImputation->contains($propreteAccessImputation)) {
-            $this->propreteIccessImputation[] = $propreteAccessImputation;
+        if (!$this->propreteAccessImputation->contains($propreteAccessImputation)) {
+            $this->propreteAccessImputation[] = $propreteAccessImputation;
             $propreteAccessImputation->setReport($this);
         }
 
@@ -353,8 +353,8 @@ class Report
 
     public function removePropreteAccessImputation(PropreteAccessImputation $propreteAccessImputation): self
     {
-        if ($this->propreteIccessImputation->contains($propreteAccessImputation)) {
-            $this->propreteIccessImputation->removeElement($propreteAccessImputation);
+        if ($this->propreteAccessImputation->contains($propreteAccessImputation)) {
+            $this->propreteAccessImputation->removeElement($propreteAccessImputation);
             // set the owning side to null (unless already changed)
             if ($propreteAccessImputation->getReport() === $this) {
                 $propreteAccessImputation->setReport(null);
