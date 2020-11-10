@@ -14,7 +14,9 @@ import pagination_configs, {
 } from "../components/configs/pagination_configs";
 import Pagination from "@material-ui/lab/Pagination";
 import Modal from "react-bootstrap/Modal";
-import LotModal from "../components/LotModal";
+import LotModal from "../components/modal/LotModal";
+import EcheanceModal from "../components/modal/EcheanceModal";
+// import AddUserToProjectModal from "../components/modal/AddUserToProjectModal";
 
 const AdminProjectPage = ({ history, match, props }) => {
   const { id = "new" } = match.params;
@@ -168,6 +170,7 @@ const AdminProjectPage = ({ history, match, props }) => {
 
     try {
       if (edit) {
+        console.log(project);
         project.users = project.users.map(
           (userInProject) => "/api/users/" + userInProject.id
         );
@@ -318,12 +321,15 @@ const AdminProjectPage = ({ history, match, props }) => {
               />
 
               {edit && (
-                <LotModal
-                  id={id}
-                  project={project}
-                  loadingProject={loadingProject}
-                  fetchProject={fetchProject}
-                ></LotModal>
+                <>
+                  <LotModal
+                    id={id}
+                    project={project}
+                    loadingProject={loadingProject}
+                    fetchProject={fetchProject}
+                  ></LotModal>
+                  <EcheanceModal project={project}></EcheanceModal>
+                </>
               )}
             </fieldset>
             <fieldset className="border-fieldset col-xl-5 col-12">
@@ -337,6 +343,13 @@ const AdminProjectPage = ({ history, match, props }) => {
                   >
                     Ajouter des utilisateurs
                   </button>
+                  {/* <AddUserToProjectModal
+                    id={id}
+                    project={project}
+                    setProject={setProject}
+                    users={users}
+                    handleSubmit={handleSubmit}
+                  ></AddUserToProjectModal> */}
                   {paginationConfigRemUser.paginatedItems.filter(
                     (User) => UsersAPI.determineRole(User) == "Administrateur"
                   ).length !== 0 && (

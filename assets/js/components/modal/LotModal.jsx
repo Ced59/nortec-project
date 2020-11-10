@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import AuthAPI from "../services/AuthAPI";
-import ProjectsAPI from "../services/ProjectsAPI";
+import AuthAPI from "../../services/AuthAPI";
+import ProjectsAPI from "../../services/ProjectsAPI";
 import Modal from "react-bootstrap/Modal";
-import Button from "../components/forms/Button";
-import Field from "../components/forms/Field";
-import Select from "../components/forms/Select";
+import Button from "../forms/Button";
+import Field from "../forms/Field";
+import Select from "../forms/Select";
 import { toast } from "react-toastify";
 import useClippy from "use-clippy";
 

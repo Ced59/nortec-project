@@ -78,7 +78,7 @@ const AdminProjectsPage = () => {
             <th>Nom Projet</th>
             <th className="text-center">Date début</th>
             <th>Date Fin prévue</th>
-            <th>Nouvelle date de fin</th>
+            {/* <th>Nouvelle date de fin</th> */}
             <th className="text-center">Date fin réelle</th>
             <th />
           </tr>
@@ -115,8 +115,15 @@ const AdminProjectsPage = () => {
                         project.date_fin_prevues.id === 0 &&
                         <span> Hey </span>
                     }</td> */}
-                <td className="text-center" />
-                <td className="text-center" />
+                <td className="text-center">
+                  {project.dateFinPrevues.map((dateFinPrevues) => (
+                    <React.Fragment key={dateFinPrevues.id}>
+                      {DateAPI.formatDate(dateFinPrevues.date)}<br/>
+                    </React.Fragment>
+                  ))}
+                  {/* {project.dateFinPrevues.length !== 0 && DateAPI.formatDate(project.dateFinPrevues[0].date)} */}
+                </td>
+                {/* <td className="text-center" /> */}
                 <td className="text-center">
                   {DateAPI.verifyDateExist(project.dateFinReelle) === "" ? (
                     <span>Aucune</span>
