@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Suspense } from "react";
+import React, { useEffect, useState } from "react";
 import "../../css/detailProjectPage.css";
 import "../../css/loading-icon.css";
 import ImgComponent from "../components/images/ImgComponent";
@@ -14,9 +14,9 @@ import {
   determineStatusClasses,
   determineStatusLabel,
 } from "../components/ProjectStatus";
-import Modal from "react-bootstrap/Modal";
 import ReportsAPI from "../services/ReportsAPI";
-import LotModal from "../components/LotModal";
+import LotModal from "../components/modal/LotModal";
+import EcheanceModal from "../components/modal/EcheanceModal";
 
 const DetailProjectPage = ({ history, match, props }) => {
   const { id } = match.params;
@@ -65,7 +65,6 @@ const DetailProjectPage = ({ history, match, props }) => {
   const [loadingProject, setLoadingProject] = useState(true);
   const [errorDate, setErrorDate] = useState("");
   const [errorDateFinReelle, setErrorDateFinRelle] = useState("");
-  const [showEcheanceModal, setShowEcheanceModal] = useState(false);
   const [reports, setReports] = useState([]);
   const [report, setReport] = useState({
     Project: "/api/projects/" + id,
@@ -225,12 +224,6 @@ const DetailProjectPage = ({ history, match, props }) => {
 
   // console.log(project);
   // console.log(project.dateFinPrevues);
-
-//-------------------------------------Affichage des échéances--------------------------------------------------
-
-  const handleShowEcheanceModal = () => {
-    setShowEcheanceModal((prevState) => !prevState);
-  };
 
   //--------------------------------------------Template  --------------------------------------------------------
 
@@ -610,12 +603,7 @@ const DetailProjectPage = ({ history, match, props }) => {
                 loadingProject={loadingProject}
                 fetchProject={fetchProject}
               ></LotModal>
-              <Button
-                text="Voir les échéances"
-                className="btn btn-primary mx-2 mb-3"
-                type="button"
-                onClick={handleShowEcheanceModal}
-              />
+              <EcheanceModal project={project}></EcheanceModal>
 
               {AuthAPI.isAdmin() && (
                 <>
@@ -649,97 +637,6 @@ const DetailProjectPage = ({ history, match, props }) => {
           <div id="loading-icon" />
         )}
       </div>
-
-      {/* -------------------------------------------MODAL ÉCHÉANCES----------------------------------------------- */}
-
-      <Modal
-        {...props}
-        size="xl"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        show={showEcheanceModal}
-        onHide={handleShowEcheanceModal}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Liste des Échéances</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {project.lots.map((lot) => (
-            <React.Fragment key={lot.id}>
-              {lot.echeances.length !== 0 && (
-                <>
-                  <div className="row justify-content-center">
-                    <div className="mx-5">
-                      Lot:{" "}
-                      <h5>
-                        {lot.numeroLot} {lot.libelleLot}
-                      </h5>
-                    </div>
-                    <div className="mx-5">
-                      Entreprise: <h5>{lot.company.nom}</h5>
-                    </div>
-                  </div>
-                  <table className="table table-hover">
-                    <thead>
-                      <tr>
-                        <th>Numéro</th>
-                        <th>Rédacteur</th>
-                        <th>Statut</th>
-                        <th>Sujet</th>
-                        <th>Début</th>
-                        <th>Echéance</th>
-                        <th>Clotûre</th>
-                        <th>Retard</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {lot.echeances.map((echeance) => (
-                        <tr key={echeance.id}>
-                          <td>{echeance.numeroEcheance}</td>
-                          <td>{echeance.redacteur}</td>
-                          <td>
-                            <span
-                              className={
-                                "badge badge-" +
-                                determineStatusClasses(
-                                  echeance.dateDebut,
-                                  echeance.dateCloture,
-                                  echeance.dateFinPrevue
-                                )
-                              }
-                            >
-                              {determineStatusLabel(
-                                echeance.dateDebut,
-                                echeance.dateCloture,
-                                echeance.dateFinPrevue
-                              )}
-                            </span>
-                          </td>
-                          <td>{echeance.sujet}</td>
-                          <td>{DateAPI.formatDate(echeance.dateDebut)}</td>
-                          <td>{DateAPI.formatDate(echeance.dateFinPrevue)}</td>
-                          <td>{DateAPI.formatDate(echeance.dateCloture)}</td>
-                          <td>
-                            {DateAPI.retard(
-                              echeance.dateCloture,
-                              echeance.dateFinPrevue
-                            ) > 0 &&
-                              DateAPI.retard(
-                                echeance.dateCloture,
-                                echeance.dateFinPrevue
-                              )}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  <hr />
-                </>
-              )}
-            </React.Fragment>
-          ))}
-        </Modal.Body>
-      </Modal>
     </main>
   );
 };

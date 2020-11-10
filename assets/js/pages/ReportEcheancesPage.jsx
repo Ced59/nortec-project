@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import NavbarLeft from "../components/navbars/NavbarLeft";
-import Select from "../components/forms/Select";
 import Button from "../components/forms/Button";
 import "../../css/app.css";
 import Modal from "react-bootstrap/Modal";
@@ -12,33 +11,15 @@ import {
   statusEcheanceClasses,
   statusEcheanceLabel,
 } from "../components/ProjectStatus";
-import AuthAPI from "../services/AuthAPI";
 import ReportsAPI from "../services/ReportsAPI";
 import EcheanceAPI from "../services/EcheanceAPI";
 import { toast } from "react-toastify";
+import AddEcheanceModal from "../components/modal/AddEcheanceModal";
 
 const ReportEcheancesPage = ({ match }) => {
   const NavbarLeftWithRouter = withRouter(NavbarLeft);
 
-  const [showModalEcheance, setShowModalEcheance] = useState(false);
   const [showModalDetail, setShowModalDetail] = useState(false);
-  const [echeance, setEcheance] = useState({
-    numeroEcheance: "",
-    redacteur: AuthAPI.getUserFirstNameLastName(),
-    categorie: "",
-    sujet: "",
-    lot: "",
-    report: [],
-  });
-
-  const echeanceModel = {
-    numeroEcheance: "",
-    redacteur: AuthAPI.getUserFirstNameLastName(),
-    categorie: "",
-    sujet: "",
-    lot: "",
-    report: [],
-  };
 
   const [echeanceError, setEcheanceError] = useState({
     numeroEcheance: "",
@@ -47,10 +28,6 @@ const ReportEcheancesPage = ({ match }) => {
     dateDebut: "",
     effectifPrevu: "",
     effectifConstate: "",
-    lot: "",
-  });
-
-  const [echeanceLotError, setEcheanceLotError] = useState({
     lot: "",
   });
 
@@ -100,66 +77,6 @@ const ReportEcheancesPage = ({ match }) => {
     fetchReport(urlParams.idReport);
     fetchProject(urlParams.id);
   }, [urlParams.idReport, urlParams.id]);
-
-  // Gestion de la fenêtre modal AddEcheance
-
-  const handleShowModalEcheance = () => {
-    setEcheance(echeanceModel);
-    setShowModalEcheance(true);
-  };
-
-  const handleCloseModalEcheance = () => {
-    setEcheance(echeanceModel);
-    setEcheanceError(echeanceErrorModel);
-    setEcheanceLotError({ ...echeanceLotError, lot: "" });
-    setShowModalEcheance(false);
-  };
-
-  const handleChangeEcheance = ({ currentTarget }) => {
-    const { name, value } = currentTarget;
-    setEcheance({ ...echeance, [name]: value });
-  };
-
-  // TODO revoir la gestion des erreurs
-  const handleSubmitAddEcheance = async (event) => {
-    event.preventDefault();
-    echeance.numeroEcheance = Number(echeance.numeroEcheance);
-    try {
-      console.log(echeance);
-
-      await EcheanceAPI.create(echeance);
-
-      toast.success("L'échéance est bien ajouté !");
-      fetchProject(urlParams.id);
-      handleCloseModalEcheance();
-    } catch ({ response }) {
-      const { violations } = response.data;
-      if (violations) {
-        const apiErrors = {};
-        violations.map(({ propertyPath, message }) => {
-          apiErrors[propertyPath] = message;
-        });
-
-        setEcheanceError(apiErrors);
-      }
-      if (echeance.lot === "") {
-        setEcheanceLotError({
-          ...echeanceLotError,
-          lot: "Veuillez choisir un lot",
-        });
-      } else {
-        setEcheanceLotError({ ...echeanceLotError, lot: "" });
-      }
-      if (echeance.numeroEcheance === 0) {
-        setEcheanceError({
-          ...echeanceError,
-          numeroEcheance: "Veuillez entrer un numero",
-        });
-        setEcheance({ ...echeance, numeroEcheance: "" });
-      }
-      console.log(response);
-    }
-  };
 
   // Gestion de la fenêtre modal Detail Echeance
 
@@ -237,7 +154,7 @@ const ReportEcheancesPage = ({ match }) => {
                     <th>Numéro</th>
                     <th>Rédacteur</th>
                     <th>Statut</th>
-                    <th>Catégorie</th>
+                    {/* <th>Catégorie</th> */}
                     <th>Sujet</th>
                     <th>Début</th>
                     <th>Echéance</th>
@@ -272,7 +189,7 @@ const ReportEcheancesPage = ({ match }) => {
                               )}
                             </span>
                           </td>
-                          <td>{echeance.categorie}</td>
+                          {/* <td>{echeance.categorie}</td> */}
                           <td>{echeance.sujet}</td>
                           <td>{DateAPI.formatDate(echeance.dateDebut)}</td>
                           <td>{DateAPI.formatDate(echeance.dateFinPrevue)}</td>
@@ -301,102 +218,21 @@ const ReportEcheancesPage = ({ match }) => {
                   ))}
                 </tbody>
               </table>
-              <Button
-                className="btn btn-primary"
-                text="Ajouter une échéance"
-                onClick={() => handleShowModalEcheance()}
-              />
+              <AddEcheanceModal
+                project={project}
+                loading={loading}
+                echeanceError={echeanceError}
+                setEcheanceError={setEcheanceError}
+                echeanceErrorModel={echeanceErrorModel}
+                fetchProject={fetchProject}
+                urlParams={urlParams}
+              ></AddEcheanceModal>
             </div>
           </>
         )}
       </main>
 
-      {/*-------------------- Fenêttre modal pour l'ajout d'une échéance ------------------------------*/}
-
-      <Modal
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        show={showModalEcheance}
-        onHide={handleCloseModalEcheance}
-      >
-        {!loading && (
-          <>
-            <Modal.Header closeButton>
-              <Modal.Title>Ajouter une échéance</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <form onSubmit={handleSubmitAddEcheance}>
-                <Field
-                  name="categorie"
-                  label="Catégorie"
-                  onChange={handleChangeEcheance}
-                  value={echeance.categorie}
-                  error={echeanceError.categorie}
-                ></Field>
-                <Field
-                  name="sujet"
-                  label="Sujet"
-                  onChange={handleChangeEcheance}
-                  value={echeance.sujet}
-                  error={echeanceError.sujet}
-                ></Field>
-                <Field
-                  name="numeroEcheance"
-                  type="number"
-                  label="Numero de l'échéance"
-                  onChange={handleChangeEcheance}
-                  value={echeance.numeroEcheance}
-                  error={echeanceError.numeroEcheance}
-                ></Field>
-                <Field
-                  name="dateDebut"
-                  label="Date de début"
-                  type="date"
-                  onChange={handleChangeEcheance}
-                  value={DateAPI.formatDateForm(echeance.dateDebut)}
-                  error={echeanceError.dateDebut}
-                ></Field>
-                <Field
-                  name="dateFinPrevue"
-                  label="Date de fin prévue"
-                  type="date"
-                  onChange={handleChangeEcheance}
-                  value={DateAPI.formatDateForm(echeance.dateFinPrevue)}
-                  error={echeanceError.dateFinPrevue}
-                ></Field>
-                <Field
-                  name="effectifPrevu"
-                  label="Effectif Prévu"
-                  type="number"
-                  onChange={handleChangeEcheance}
-                  value={echeance.effectifPrevu}
-                ></Field>
-                <Select
-                  name="lot"
-                  onChange={handleChangeEcheance}
-                  value={echeance.lot}
-                  error={echeanceLotError.lot}
-                >
-                  <option value="">Selectionner une entreprise</option>
-                  {project.lots.map((lot) => (
-                    <option key={lot.id} value={"/api/lots/" + lot.id}>
-                      {lot.libelleLot}
-                    </option>
-                  ))}
-                </Select>
-                <Modal.Footer>
-                  <Button className="btn btn-primary" text="Ajouter"></Button>
-                </Modal.Footer>
-              </form>
-            </Modal.Body>
-          </>
-        )}
-      </Modal>
-
-      {/*-------------------- Fenêttre modal pour le detail des échéances ----------------------------*/}
-
-      {/* TODO faire le changement des effectifs une fois les champs ajouté à l'échéance dans BDD */}
+      {/*-------------------- Fenêtre modal pour le detail des échéances ----------------------------*/}
 
       {!loading && (
         <Modal
