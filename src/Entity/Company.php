@@ -22,7 +22,7 @@ class Company
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"lot","company"})
+     * @Groups({"lot","company","project"})
      */
     private $id;
 
@@ -35,27 +35,27 @@ class Company
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"lot","company"})
+     * @Groups({"lot","company","project"})
      * @Assert\NotBlank(message="Une adresse doit être renseignée")
      */
     private $adresse1;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"lot","company"})
+     * @Groups({"lot","company","project"})
      */
     private $adresse2;
 
     /**
      * @ORM\Column(type="string", length=8)
-     * @Groups({"lot","company"})
+     * @Groups({"lot","company","project"})
      * @Assert\NotBlank(message="Un code postal doit être renseigné")
      */
     private $codePostal;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"lot","company"})
+     * @Groups({"lot","company","project"})
      * @Assert\NotBlank(message="Une ville doit être renseignée")
      */
     private $ville;
@@ -85,7 +85,7 @@ class Company
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Annuaire", mappedBy="company")
      * @ApiSubresource
-     * @Groups({"lot","company"})
+     * @Groups({"lot","company","project"})
      */
     private $annuaires;
 
