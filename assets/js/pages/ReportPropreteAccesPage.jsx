@@ -2,15 +2,13 @@ import React, { useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import NavbarLeft from "../components/navbars/NavbarLeft";
 import Button from "../components/forms/Button";
-import FieldTextArea from "../components/forms/FieldTextArea";
 import ImageUpload from "../components/forms/ImageUpload";
-import fakeData from "../components/fakeDataForDev/fakeData";
 import "../../css/app.css";
 import { toast } from "react-toastify";
 import ProjectsAPI from "../services/ProjectsAPI";
 import ReportsAPI from "../services/ReportsAPI";
+import PropreteAccesAPI from "../services/PropreteAccesAPI";
 import ReportComment from "../components/ReportComment";
-
 
 const ReportPropreteAccesPage = ({ match }) => {
   const urlParams = match.params;
@@ -45,8 +43,31 @@ const ReportPropreteAccesPage = ({ match }) => {
       const data = await ReportsAPI.findReport(id);
       setReport(data);
       console.log(data);
+      // --------------set imputations-------------
+      if (data.propreteAccessImputation == 0) {
+        console.log("vide");
+        data.Project.lots.map((imput) =>
+          imputations.push({
+            company: imput.company.nom,
+            report: "/api/reports/" + urlParams.idReport,
+            pourcent: 0,
+          })
+        );
+        console.log(imputations);
+      } else {
+        console.log("imput");
+        data.propreteAccessImputation.map((imput) =>
+          imputations.push({
+            company: imput.company.nom,
+            report: "/api/reports/" + urlParams.idReport,
+            pourcent: imput.pourcent,
+          })
+        );
+        console.log(imputations);
+        // ---------------------------------------------
+      }
     } catch (error) {
-      toast.error("Erreur lors du chargement du raport");
+      toast.error("Erreur lors du chargement du rapport");
       console.log(error.response);
     }
   };
@@ -56,21 +77,21 @@ const ReportPropreteAccesPage = ({ match }) => {
       const data = await ProjectsAPI.find(id);
       setProject(data);
       setLoading(false);
-      console.log(data);
-      data.lots.map((imput, i) =>
-        imputations.push({
-          company: imput.company.nom,
-          report: urlParams.idReport,
-          pourcent: 0,
-        })
-      );
-      console.log(imputations);
+      // data.lots.map((imput, i) =>
+      //   imputations.push({
+      //     company: imput.company.nom,
+      //     report: urlParams.idReport,
+      //     pourcent: 0,
+      //   })
+      // );
+      // console.log(imputations);
       //   setLoading(false);
     } catch (error) {
       toast.error("Erreur lors du chargement du projet");
       console.log(error);
     }
   };
+  console.log(report);
 
   useEffect(() => {
     fetchProject(urlParams.id);
@@ -81,8 +102,6 @@ const ReportPropreteAccesPage = ({ match }) => {
     const name = currentTarget.name;
     setConforme(name);
   };
-
-
 
   // const handleChangeImputations = ({ currentTarget }) => {
   //   console.log(currentTarget.id);
@@ -102,10 +121,10 @@ const ReportPropreteAccesPage = ({ match }) => {
     const { value, id } = currentTarget;
     const copyImputations = [...imputations];
 
-    const newImput = copyImputations[id]
+    const newImput = copyImputations[id];
     newImput.pourcent = value;
 
-    copyImputations.splice(id,1,newImput);
+    copyImputations.splice(id, 1, newImput);
     setImputations(copyImputations);
 
     console.log(imputations);
@@ -143,12 +162,19 @@ const ReportPropreteAccesPage = ({ match }) => {
       report.Project = "/api/projects/" + urlParams.id;
       report.propreteAccessConformity = "noconform";
       await ReportsAPI.update(urlParams.idReport, report);
+      // imputations.map(imput, i => {
+      //     imput.company = 
+      //       "/api/companies/" + report.Project.lots[i].company.id,
+      //   await PropreteAccesAPI.createPropreteAccessImputations(imput)
+      // });
+      // fetchReport(urlParams.idReport);
 
       toast.success("Statut de la propreté des accès enregistré avec succès!");
     } catch (error) {
+      console.log(error);
       console.log(error.response);
     }
-  }
+  };
 
   return (
     <main className="container">
@@ -216,19 +242,19 @@ const ReportPropreteAccesPage = ({ match }) => {
               <div className="row">
                 <form className="col-8">
                   <div className="col-12">
-                  {imputations.map((imputation, i) => (
-                    <div className="row" key={i}>
-                      <h5 className="col-9">{imputation.company}</h5>
-                      <input
-                        value={imputations[i].pourcent}
-                        className="form-control col-2 mb-1"
-                        name="pourcent"
-                        onChange={handleChangeImputations}
-                        id={i}
-                      />
-                      <h5 className="col-1 mb-1">%</h5>
-                    </div>
-                  ))}
+                    {imputations.map((imputation, i) => (
+                      <div className="row" key={i}>
+                        <h5 className="col-9">{imputation.company}</h5>
+                        <input
+                          value={imputations[i].pourcent}
+                          className="form-control col-2 mb-1"
+                          name="pourcent"
+                          onChange={handleChangeImputations}
+                          id={i}
+                        />
+                        <h5 className="col-1 mb-1">%</h5>
+                      </div>
+                    ))}
 
                     <Button
                       onClick={handleSubmitNonConforme}

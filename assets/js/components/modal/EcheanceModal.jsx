@@ -48,7 +48,7 @@ const EcheanceModal = ({ project }) => {
                   <table className="table table-hover">
                     <thead>
                       <tr>
-                        <th>Numéro</th>
+                        {/* <th>Numéro</th> */}
                         <th>Rédacteur</th>
                         <th>Statut</th>
                         <th>Sujet</th>
@@ -61,7 +61,7 @@ const EcheanceModal = ({ project }) => {
                     <tbody>
                       {lot.echeances.map((echeance) => (
                         <tr key={echeance.id}>
-                          <td>{echeance.numeroEcheance}</td>
+                          {/* <td>{echeance.numeroEcheance}</td> */}
                           <td>{echeance.redacteur}</td>
                           <td>
                             <span

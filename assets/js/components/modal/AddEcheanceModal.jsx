@@ -20,7 +20,7 @@ const AddEcheanceModal = ({
   const [echeance, setEcheance] = useState({
     numeroEcheance: "",
     redacteur: AuthAPI.getUserFirstNameLastName(),
-    categorie: "",
+    // categorie: "",
     sujet: "",
     lot: "",
     report: [],
@@ -29,7 +29,7 @@ const AddEcheanceModal = ({
   const echeanceModel = {
     numeroEcheance: "",
     redacteur: AuthAPI.getUserFirstNameLastName(),
-    categorie: "",
+    // categorie: "",
     sujet: "",
     lot: "",
     report: [],
@@ -126,7 +126,7 @@ const AddEcheanceModal = ({
                   {project.lots &&
                     project.lots.map((lot) => (
                       <option key={lot.id} value={"/api/lots/" + lot.id}>
-                        {lot.libelleLot}
+                        {lot.company.nom}
                       </option>
                     ))}
                 </Select>
@@ -144,14 +144,14 @@ const AddEcheanceModal = ({
                   value={echeance.sujet}
                   error={echeanceError.sujet}
                 ></Field>
-                <Field
+                {/* <Field
                   name="numeroEcheance"
                   type="number"
                   label="Numero de l'échéance"
                   onChange={handleChangeEcheance}
                   value={echeance.numeroEcheance}
                   error={echeanceError.numeroEcheance}
-                ></Field>
+                ></Field> */}
                 <Field
                   name="dateDebut"
                   label="Date de début"

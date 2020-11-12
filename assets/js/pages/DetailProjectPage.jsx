@@ -78,8 +78,8 @@ const DetailProjectPage = ({ history, match, props }) => {
     propreteCommuneComment: "",
     propreteCommuneCommentIntern: "",
     securityConformity: true,
-    securityComment: "",
-    securityCommentIntern: "",
+    securityConmment: "",
+    securityConmmentIntern: "",
     installations: "",
     lots: [],
   });
@@ -136,7 +136,7 @@ const DetailProjectPage = ({ history, match, props }) => {
     try {
       await ReportsAPI.create(report);
       console.log(report);
-      history.replace("/project/" + id + "/" + idNewReport + "/effectifs");
+      history.replace("/project/" + id + "/" + idNewReport + "/echeances");
       toast.success("Nouveau rapport créé");
     } catch (error) {
       console.log(error);
