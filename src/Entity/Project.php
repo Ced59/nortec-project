@@ -87,14 +87,14 @@ class Project
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"project"})
+     * @Groups({"project","report"})
      * @Assert\NotBlank(message="Le nom du MOEX est obligatoire !")
      */
     private $nomMOEX;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"project"})
+     * @Groups({"project","report"})
      * @Assert\NotBlank(message="Le nom de l'OPC est obligatoire !")
      */
     private $nomOPC;
@@ -132,7 +132,7 @@ class Project
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Lot", mappedBy="project")
-     * @Groups({"project"})
+     * @Groups({"project","report"})
      */
     private $lots;
 
