@@ -39,7 +39,7 @@ const ListReportsByProject = ({ match, history }) => {
   };
 
   const handleEdit = (idReport) => {
-    history.push("/project/" + id.id + "/" + idReport + "/effectifs");
+    history.push("/project/" + id.id + "/" + idReport + "/echeances");
     //TODO Envoi sur même route que création des rapports prévoir mode edition
   };
 

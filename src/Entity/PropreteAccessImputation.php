@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -15,17 +16,20 @@ class PropreteAccessImputation
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"report"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"report"})
      */
     private $pourcent;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Company", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"report"})
      */
     private $company;
 

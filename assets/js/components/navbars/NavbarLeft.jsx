@@ -23,6 +23,16 @@ const NavbarLeft = ({ match, selected }) => {
         </li>
         <li className="nav-item">
           <NavLink
+            to={"/project/" + id.id + "/" + id.idReport + "/echeances"}
+            className={
+              "nav-link font-italic" + (selected === "echeances" && " selected")
+            }
+          >
+            Echéances
+          </NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink
             to={"/project/" + id.id + "/" + id.idReport + "/effectifs"}
             className={
               "nav-link font-italic" + (selected === "effectifs" && " selected")
@@ -66,16 +76,6 @@ const NavbarLeft = ({ match, selected }) => {
             }
           >
             Propreté des parties communes
-          </NavLink>
-        </li>
-        <li className="nav-item">
-          <NavLink
-            to={"/project/" + id.id + "/" + id.idReport + "/echeances"}
-            className={
-              "nav-link font-italic" + (selected === "echeances" && " selected")
-            }
-          >
-            Echéances
           </NavLink>
         </li>
         <li className="nav-item">

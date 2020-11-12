@@ -5,6 +5,7 @@ import Button from "../components/forms/Button";
 import "../../css/app.css";
 import Modal from "react-bootstrap/Modal";
 import Field from "../components/forms/Field";
+import FieldTextArea from "../components/forms/FieldTextArea";
 import DateAPI from "../services/DateAPI";
 import ProjectsAPI from "../services/ProjectsAPI";
 import {
@@ -151,11 +152,11 @@ const ReportEcheancesPage = ({ match }) => {
               <table className="table table-hover">
                 <thead>
                   <tr>
-                    <th>Numéro</th>
+                    {/* <th>Numéro</th> */}
                     <th>Rédacteur</th>
-                    <th>Statut</th>
                     {/* <th>Catégorie</th> */}
                     <th>Sujet</th>
+                    <th>Statut</th>
                     <th>Début</th>
                     <th>Echéance</th>
                     <th>Clotûre</th>
@@ -169,8 +170,10 @@ const ReportEcheancesPage = ({ match }) => {
                     <React.Fragment key={lot.id}>
                       {lot.echeances.map((echeance) => (
                         <tr key={echeance.id}>
-                          <td>{echeance.numeroEcheance}</td>
+                          {/* <td>{echeance.numeroEcheance}</td> */}
                           <td>{echeance.redacteur}</td>
+                          {/* <td>{echeance.categorie}</td> */}
+                          <td>{echeance.sujet}</td>
                           <td>
                             <span
                               className={
@@ -189,8 +192,6 @@ const ReportEcheancesPage = ({ match }) => {
                               )}
                             </span>
                           </td>
-                          {/* <td>{echeance.categorie}</td> */}
-                          <td>{echeance.sujet}</td>
                           <td>{DateAPI.formatDate(echeance.dateDebut)}</td>
                           <td>{DateAPI.formatDate(echeance.dateFinPrevue)}</td>
                           <td>{DateAPI.formatDate(echeance.dateCloture)}</td>
@@ -255,7 +256,7 @@ const ReportEcheancesPage = ({ match }) => {
                   )}
                 </div>
                 <div className="col-5 mt-3 border-detail d-flex flex-column justify-content-center">
-                  <p>Categorie: {echeanceDetail.categorie} </p>
+                  <p>Lot: {echeanceDetail.lot && echeanceDetail.lot.company.nom} </p>
                   <p>Sujet: {echeanceDetail.sujet} </p>
                   <p>
                     Statut:{" "}
@@ -305,32 +306,32 @@ const ReportEcheancesPage = ({ match }) => {
                     ></Field>
                   </div>
                 ) : (
-                  <div className="col-5 mt-3 border-detail">
-                    <p className="mt-3">
-                      Debut: {DateAPI.formatDate(echeanceDetail.dateDebut)}{" "}
-                    </p>
-                    <p>
-                      Fin prévue:{" "}
-                      {DateAPI.formatDate(echeanceDetail.dateFinPrevue)}{" "}
-                    </p>
-
-                    <p>
-                      Fini le: {DateAPI.formatDate(echeanceDetail.dateCloture)}{" "}
-                    </p>
-                    {DateAPI.retard(
-                      echeanceDetail.dateCloture,
-                      echeanceDetail.dateFinPrevue
-                    ) > 0 && (
-                      <p>
-                        Retard:{" "}
-                        {DateAPI.retard(
-                          echeanceDetail.dateCloture,
-                          echeanceDetail.dateFinPrevue
-                        )}
+                    <div className="col-5 mt-3 border-detail">
+                      <p className="mt-3">
+                        Debut: {DateAPI.formatDate(echeanceDetail.dateDebut)}{" "}
                       </p>
-                    )}
-                  </div>
-                )}
+                      <p>
+                        Fin prévue:{" "}
+                        {DateAPI.formatDate(echeanceDetail.dateFinPrevue)}{" "}
+                      </p>
+
+                      <p>
+                        Fini le: {DateAPI.formatDate(echeanceDetail.dateCloture)}{" "}
+                      </p>
+                      {DateAPI.retard(
+                        echeanceDetail.dateCloture,
+                        echeanceDetail.dateFinPrevue
+                      ) > 0 && (
+                          <p>
+                            Retard:{" "}
+                            {DateAPI.retard(
+                              echeanceDetail.dateCloture,
+                              echeanceDetail.dateFinPrevue
+                            )}
+                          </p>
+                        )}
+                    </div>
+                  )}
                 <div className="col-12 border-detail mt-3">
                   {echeanceDetail.lot && (
                     <p className="mt-3">
@@ -341,6 +342,17 @@ const ReportEcheancesPage = ({ match }) => {
                   <p>Effectif prévu: {echeanceDetail.effectifPrevu}</p>
                   <p>Effectif constaté: {echeanceDetail.effectifConstate}</p>
                 </div>
+                <fieldset className="border-fieldset col-12">
+                  <legend>Commentaires</legend>
+                  <FieldTextArea
+                    value={echeanceDetail.comment}
+                    name="comment"
+                    placeholder="Commentaire"
+                    onChange={handleChangeEcheanceDetail}
+                    rows="5"
+                    readOnly={!edit && true}
+                  />
+                </fieldset>
                 <div className="col-12 mt-3 d-flex justify-content-end">
                   {edit && (
                     <Button className="btn btn-success" text="Valider"></Button>
@@ -357,14 +369,14 @@ const ReportEcheancesPage = ({ match }) => {
                 onClick={handleEdit}
               ></Button>
             ) : (
-              <>
-                <Button
-                  className="btn btn-danger"
-                  text="Annuler"
-                  onClick={handleCloseEdit}
-                ></Button>
-              </>
-            )}
+                <>
+                  <Button
+                    className="btn btn-danger"
+                    text="Annuler"
+                    onClick={handleCloseEdit}
+                  ></Button>
+                </>
+              )}
           </Modal.Footer>
         </Modal>
       )}

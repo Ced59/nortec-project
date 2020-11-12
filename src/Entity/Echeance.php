@@ -96,6 +96,12 @@ class Echeance
      */
     private $effectifConstate;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @Groups({"lot", "project","report","echeance"})
+     */
+    private $comment;
+
     public function __construct()
     {
         $this->report = new ArrayCollection();
@@ -254,6 +260,18 @@ class Echeance
     public function setEffectifConstate(?string $effectifConstate): self
     {
         $this->effectifConstate = $effectifConstate;
+
+        return $this;
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?string $comment): self
+    {
+        $this->comment = $comment;
 
         return $this;
     }
