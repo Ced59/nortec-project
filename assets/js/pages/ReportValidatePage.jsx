@@ -311,7 +311,10 @@ const ReportValidatePage = ({ match }) => {
                           <tr key={echeance.id}>
                             <td>{DateAPI.formatDate(echeance.dateDebut)}</td>
                             <td>{echeance.zone}</td>
-                            <td>{echeance.sujet}</td>
+                            <td>
+                              <p>{echeance.sujet}</p>
+                              <p>{echeance.comment}</p>
+                            </td>
                             <td>
                               {DateAPI.formatDate(echeance.dateFinPrevue)}
                             </td>
@@ -346,14 +349,14 @@ const ReportValidatePage = ({ match }) => {
           {!reportLoading && (
             <div>
               <PDFDownloadLink
-                className="offset-3 col-6"
+                className="offset-2 col-8"
                 document={
                   <ReportPdfComponent report={report} project={project} />
                 }
                 fileName={
                   report.Project.name +
                   "_rapport_" +
-                  report.id +
+                  report.chrono +
                   "_au_" +
                   DateAPI.formatDate(DateAPI.now()) +
                   ".pdf"
@@ -368,7 +371,7 @@ const ReportValidatePage = ({ match }) => {
             </div>
           )}
           <div>
-            <PDFViewer className="offset-3 col-6" height="1000">
+            <PDFViewer className="offset-2 col-8" height="1000">
               <ReportPdfComponent report={report} project={project} />
             </PDFViewer>
           </div>
