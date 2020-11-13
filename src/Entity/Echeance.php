@@ -102,6 +102,12 @@ class Echeance
      */
     private $comment;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"lot", "project","report","echeance"})
+     */
+    private $zone;
+
     public function __construct()
     {
         $this->report = new ArrayCollection();
@@ -272,6 +278,18 @@ class Echeance
     public function setComment(?string $comment): self
     {
         $this->comment = $comment;
+
+        return $this;
+    }
+
+    public function getZone(): ?string
+    {
+        return $this->zone;
+    }
+
+    public function setZone(?string $zone): self
+    {
+        $this->zone = $zone;
 
         return $this;
     }

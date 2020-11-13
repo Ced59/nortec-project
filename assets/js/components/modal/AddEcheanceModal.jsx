@@ -15,7 +15,7 @@ const AddEcheanceModal = ({
   setEcheanceError,
   echeanceErrorModel,
   fetchProject,
-  urlParams
+  urlParams,
 }) => {
   const [echeance, setEcheance] = useState({
     numeroEcheance: "",
@@ -130,13 +130,13 @@ const AddEcheanceModal = ({
                       </option>
                     ))}
                 </Select>
-                {/* <Field
-                  name="categorie"
-                  label="Catégorie"
+                <Field
+                  name="zone"
+                  label="Zone"
                   onChange={handleChangeEcheance}
-                  value={echeance.categorie}
-                  error={echeanceError.categorie}
-                ></Field> */}
+                  value={echeance.zone}
+                  error={echeanceError.zone}
+                ></Field>
                 <Field
                   name="sujet"
                   label="Sujet"
@@ -144,14 +144,6 @@ const AddEcheanceModal = ({
                   value={echeance.sujet}
                   error={echeanceError.sujet}
                 ></Field>
-                {/* <Field
-                  name="numeroEcheance"
-                  type="number"
-                  label="Numero de l'échéance"
-                  onChange={handleChangeEcheance}
-                  value={echeance.numeroEcheance}
-                  error={echeanceError.numeroEcheance}
-                ></Field> */}
                 <Field
                   name="dateDebut"
                   label="Date de début"

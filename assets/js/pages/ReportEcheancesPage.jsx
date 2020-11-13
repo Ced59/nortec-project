@@ -97,7 +97,8 @@ const ReportEcheancesPage = ({ match }) => {
         toast.success("L'échéance est bien modifiée !");
         setEcheanceDetail({});
         fetchProject(urlParams.id);
-        handleCloseModalDetail();
+        // handleCloseModalDetail();
+        setShowModalDetail(!showModalDetail);
       } catch ({ reponse }) {
         const { violations } = response.data;
         if (violations) {
@@ -118,14 +119,13 @@ const ReportEcheancesPage = ({ match }) => {
   };
 
   const handleShowModalDetail = async (id) => {
-    await fetchEcheance(id);
-    setShowModalDetail(true);
-  };
-
-  const handleCloseModalDetail = () => {
-    setEcheanceError(echeanceErrorModel);
-    setShowModalDetail(false);
-    setEdit(false);
+    if (!showModalDetail) {
+      await fetchEcheance(id);
+      setEdit(false);
+    } else {
+      setEcheanceError(echeanceErrorModel);
+    }
+    setShowModalDetail(!showModalDetail);
   };
 
   const handleChangeEcheanceDetail = ({ currentTarget }) => {
@@ -134,11 +134,7 @@ const ReportEcheancesPage = ({ match }) => {
   };
 
   const handleEdit = () => {
-    setEdit(true);
-  };
-
-  const handleCloseEdit = () => {
-    setEdit(false);
+    setEdit(!edit);
   };
 
   return (
@@ -152,9 +148,7 @@ const ReportEcheancesPage = ({ match }) => {
               <table className="table table-hover">
                 <thead>
                   <tr>
-                    {/* <th>Numéro</th> */}
-                    <th>Rédacteur</th>
-                    {/* <th>Catégorie</th> */}
+                    <th>Zone</th>
                     <th>Sujet</th>
                     <th>Statut</th>
                     <th>Début</th>
@@ -170,9 +164,7 @@ const ReportEcheancesPage = ({ match }) => {
                     <React.Fragment key={lot.id}>
                       {lot.echeances.map((echeance) => (
                         <tr key={echeance.id}>
-                          {/* <td>{echeance.numeroEcheance}</td> */}
-                          <td>{echeance.redacteur}</td>
-                          {/* <td>{echeance.categorie}</td> */}
+                          <td>{echeance.zone}</td>
                           <td>{echeance.sujet}</td>
                           <td>
                             <span
@@ -241,7 +233,7 @@ const ReportEcheancesPage = ({ match }) => {
           aria-labelledby="contained-modal-title-vcenter"
           centered
           show={showModalDetail}
-          onHide={handleCloseModalDetail}
+          onHide={handleShowModalDetail}
         >
           <Modal.Header closeButton>
             <h2>Detail de l'échéance N° {echeanceDetail.id}</h2>
@@ -256,7 +248,9 @@ const ReportEcheancesPage = ({ match }) => {
                   )}
                 </div>
                 <div className="col-5 mt-3 border-detail d-flex flex-column justify-content-center">
-                  <p>Lot: {echeanceDetail.lot && echeanceDetail.lot.company.nom} </p>
+                  <p>
+                    Lot: {echeanceDetail.lot && echeanceDetail.lot.company.nom}{" "}
+                  </p>
                   <p>Sujet: {echeanceDetail.sujet} </p>
                   <p>
                     Statut:{" "}
@@ -306,32 +300,32 @@ const ReportEcheancesPage = ({ match }) => {
                     ></Field>
                   </div>
                 ) : (
-                    <div className="col-5 mt-3 border-detail">
-                      <p className="mt-3">
-                        Debut: {DateAPI.formatDate(echeanceDetail.dateDebut)}{" "}
-                      </p>
-                      <p>
-                        Fin prévue:{" "}
-                        {DateAPI.formatDate(echeanceDetail.dateFinPrevue)}{" "}
-                      </p>
+                  <div className="col-5 mt-3 border-detail">
+                    <p className="mt-3">
+                      Debut: {DateAPI.formatDate(echeanceDetail.dateDebut)}{" "}
+                    </p>
+                    <p>
+                      Fin prévue:{" "}
+                      {DateAPI.formatDate(echeanceDetail.dateFinPrevue)}{" "}
+                    </p>
 
+                    <p>
+                      Fini le: {DateAPI.formatDate(echeanceDetail.dateCloture)}{" "}
+                    </p>
+                    {DateAPI.retard(
+                      echeanceDetail.dateCloture,
+                      echeanceDetail.dateFinPrevue
+                    ) > 0 && (
                       <p>
-                        Fini le: {DateAPI.formatDate(echeanceDetail.dateCloture)}{" "}
-                      </p>
-                      {DateAPI.retard(
-                        echeanceDetail.dateCloture,
-                        echeanceDetail.dateFinPrevue
-                      ) > 0 && (
-                          <p>
-                            Retard:{" "}
-                            {DateAPI.retard(
-                              echeanceDetail.dateCloture,
-                              echeanceDetail.dateFinPrevue
-                            )}
-                          </p>
+                        Retard:{" "}
+                        {DateAPI.retard(
+                          echeanceDetail.dateCloture,
+                          echeanceDetail.dateFinPrevue
                         )}
-                    </div>
-                  )}
+                      </p>
+                    )}
+                  </div>
+                )}
                 <div className="col-12 border-detail mt-3">
                   {echeanceDetail.lot && (
                     <p className="mt-3">
@@ -345,11 +339,12 @@ const ReportEcheancesPage = ({ match }) => {
                 <fieldset className="border-fieldset col-12">
                   <legend>Commentaires</legend>
                   <FieldTextArea
+                    id="commentDetailArea"
                     value={echeanceDetail.comment}
                     name="comment"
                     placeholder="Commentaire"
                     onChange={handleChangeEcheanceDetail}
-                    rows="5"
+                    rows={echeanceDetail.comment && echeanceDetail.comment.split("\n").length + 1}
                     readOnly={!edit && true}
                   />
                 </fieldset>
@@ -369,14 +364,14 @@ const ReportEcheancesPage = ({ match }) => {
                 onClick={handleEdit}
               ></Button>
             ) : (
-                <>
-                  <Button
-                    className="btn btn-danger"
-                    text="Annuler"
-                    onClick={handleCloseEdit}
-                  ></Button>
-                </>
-              )}
+              <>
+                <Button
+                  className="btn btn-danger"
+                  text="Annuler"
+                  onClick={handleEdit}
+                ></Button>
+              </>
+            )}
           </Modal.Footer>
         </Modal>
       )}

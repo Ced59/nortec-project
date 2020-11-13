@@ -22,6 +22,7 @@ const ReportPropreteAccesPage = ({ match }) => {
   const [imputation, setImputation] = useState({
     report: "/api/reports/" + urlParams.idReport,
   });
+  const [editImput, setEditImput] = useState();
 
   const NavbarLeftWithRouter = withRouter(NavbarLeft);
 
@@ -45,20 +46,22 @@ const ReportPropreteAccesPage = ({ match }) => {
       console.log(data);
       // --------------set imputations-------------
       if (data.propreteAccessImputation == 0) {
-        console.log("vide");
+        setEditImput(false);
         data.Project.lots.map((imput) =>
           imputations.push({
-            company: imput.company.nom,
+            companyName: imput.company.nom,
+            company: "/api/companies/" + imput.company.id,
             report: "/api/reports/" + urlParams.idReport,
             pourcent: 0,
           })
         );
         console.log(imputations);
       } else {
-        console.log("imput");
+        setEditImput(true);
         data.propreteAccessImputation.map((imput) =>
           imputations.push({
-            company: imput.company.nom,
+            companyName: imput.company.nom,
+            company: "/api/companies/" + imput.company.id,
             report: "/api/reports/" + urlParams.idReport,
             pourcent: imput.pourcent,
           })
@@ -77,15 +80,6 @@ const ReportPropreteAccesPage = ({ match }) => {
       const data = await ProjectsAPI.find(id);
       setProject(data);
       setLoading(false);
-      // data.lots.map((imput, i) =>
-      //   imputations.push({
-      //     company: imput.company.nom,
-      //     report: urlParams.idReport,
-      //     pourcent: 0,
-      //   })
-      // );
-      // console.log(imputations);
-      //   setLoading(false);
     } catch (error) {
       toast.error("Erreur lors du chargement du projet");
       console.log(error);
@@ -103,26 +97,12 @@ const ReportPropreteAccesPage = ({ match }) => {
     setConforme(name);
   };
 
-  // const handleChangeImputations = ({ currentTarget }) => {
-  //   console.log(currentTarget.id);
-
-  //   console.log(currentTarget.value);
-
-  //   const imputs = imputations;
-  //   imputs[currentTarget.id].pourcent = parseInt(currentTarget.value, 10);
-
-  //   setImputations("");
-  //   setImputations(imputs);
-
-  //   console.log(imputations);
-  // };
-
   const handleChangeImputations = ({ currentTarget }) => {
     const { value, id } = currentTarget;
     const copyImputations = [...imputations];
 
     const newImput = copyImputations[id];
-    newImput.pourcent = value;
+    newImput.pourcent = Number(value);
 
     copyImputations.splice(id, 1, newImput);
     setImputations(copyImputations);
@@ -156,18 +136,33 @@ const ReportPropreteAccesPage = ({ match }) => {
     }
   };
 
+  const submitImput = async (imput) => {
+    if (!editImput) {
+      try {
+        await PropreteAccesAPI.createPropreteAccessImputations(imput);
+        setEditImput(true);
+        toast.success("Imputations créées");
+      } catch (error) {
+        console.log(error.response);
+      }
+    } else {
+      try {
+        await PropreteAccesAPI.updatePropreteAccessImputations(imput);
+        toast.success("Imputations misent à jour");
+      } catch (error) {
+        console.log(error.response);
+      }
+    }
+  };
+
   const handleSubmitNonConforme = async () => {
-    //TODO enregistrement de la conformité à noconform
+    // TODO enregistrement de la conformité à noconform
     try {
       report.Project = "/api/projects/" + urlParams.id;
       report.propreteAccessConformity = "noconform";
       await ReportsAPI.update(urlParams.idReport, report);
-      // imputations.map(imput, i => {
-      //     imput.company = 
-      //       "/api/companies/" + report.Project.lots[i].company.id,
-      //   await PropreteAccesAPI.createPropreteAccessImputations(imput)
-      // });
-      // fetchReport(urlParams.idReport);
+
+      imputations.map((imput) => submitImput(imput));
 
       toast.success("Statut de la propreté des accès enregistré avec succès!");
     } catch (error) {
@@ -244,7 +239,7 @@ const ReportPropreteAccesPage = ({ match }) => {
                   <div className="col-12">
                     {imputations.map((imputation, i) => (
                       <div className="row" key={i}>
-                        <h5 className="col-9">{imputation.company}</h5>
+                        <h5 className="col-9">{imputation.companyName}</h5>
                         <input
                           value={imputations[i].pourcent}
                           className="form-control col-2 mb-1"

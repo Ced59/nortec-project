@@ -22,7 +22,7 @@ class Company
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"lot","company","project"})
+     * @Groups({"lot","company","project","report"})
      */
     private $id;
 
