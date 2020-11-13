@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
 import AuthAPI from "../../services/AuthAPI";
 import ProjectsAPI from "../../services/ProjectsAPI";
 import Modal from "react-bootstrap/Modal";
@@ -24,6 +25,7 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
   });
   const [showLotModal, setShowLotModal] = useState(false);
   const [showLotDetail, setShowLotDetail] = useState(false);
+  const [lotDetail, setLotDetail] = useState([]);
   const [addLot, setAddLot] = useState(false);
   const [companies, setCompanies] = useState([]);
   const [clipboard, setClipboard] = useClippy();
@@ -62,7 +64,10 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
     }
   };
 
-  const handleShowLotDetail = () => {
+  const handleShowLotDetail = (lot) => {
+    if (!showLotDetail) {
+      setLotDetail(lot);
+    }
     setShowLotDetail(!showLotDetail);
   };
 
@@ -117,7 +122,9 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
         onHide={handleShowLotModal}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Liste des lots</Modal.Title>
+          {!showLotDetail ? (
+            <Modal.Title>Liste des lots</Modal.Title>
+          ) : (<Modal.Title>Détails</Modal.Title>)}
         </Modal.Header>
         <Modal.Body>
           {!showLotDetail && (
@@ -152,7 +159,7 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
                             <Button
                               className="btn btn-primary"
                               text="Détails"
-                              onClick={handleShowLotDetail}
+                              onClick={() => handleShowLotDetail(lot)}
                             />
                           </td>
                         </tr>
@@ -164,11 +171,32 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
           )}
           {showLotDetail && (
             <>
-              <Button
-                className="btn btn-primary"
-                text="Fermer les détails"
-                onClick={handleShowLotDetail}
-              />
+              <h4>{lotDetail.company && lotDetail.company.nom}</h4>
+              <h5>Lot {lotDetail.id} : {lotDetail.libelleLot}</h5>
+              <table className="table table-hover table-striped">
+                <thead>
+                  <tr>
+                    <th className="border-0">Contact</th>
+                    <th className="border-0">Email</th>
+                    <th className="border-0">N° téléphone</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {lotDetail.company && lotDetail.company.annuaires.length !== 0 && (
+                    lotDetail.company.annuaires.map((contact) => (
+                      <tr key={contact.id}>
+                        <td className="w-35">{contact.nom}</td>
+                        <td className="w-35" onClick={handleClipboard}>{contact.email}</td>
+                        <td className="w-35" onClick={handleClipboard}>{contact.telephone}</td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+              {lotDetail.company && lotDetail.company.annuaires.length === 0 && (
+                <><p>Aucun contact dans cette entreprise</p>
+                  {AuthAPI.isAdmin() && <Link className="btn btn-primary" to={'/admin/company/' + lotDetail.company.id}> En ajouter un </Link>}</>
+              )}
             </>
           )}
           {addLot && (
@@ -222,9 +250,16 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
           )}
         </Modal.Body>
         <Modal.Footer>
-          <button className="btn btn-danger" onClick={handleShowLotModal}>
-            Fermer
-          </button>
+          {!showLotDetail ? (
+            <button className="btn btn-danger" onClick={handleShowLotModal}>
+              Fermer
+            </button>
+          ) :
+            <Button
+              className="btn btn-primary"
+              text="Retour"
+              onClick={() => handleShowLotDetail()}
+            />}
         </Modal.Footer>
       </Modal>
       <Button

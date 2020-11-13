@@ -11,7 +11,6 @@ import ReportsAPI from "../services/ReportsAPI";
 import ProjectsAPI from "../services/ProjectsAPI";
 import ReportComment from "../components/ReportComment";
 
-
 const ReportSecuritePage = ({ match }) => {
   const NavbarLeftWithRouter = withRouter(NavbarLeft);
 
@@ -31,10 +30,11 @@ const ReportSecuritePage = ({ match }) => {
 
   const [comment, setComment] = useState("");
   const [commentIntern, setCommentIntern] = useState("");
-  const [imputations, setImputations] = useState("");
+  const [imputations, setImputations] = useState([]);
   const [imputation, setImputation] = useState({
     commentaire: "",
   });
+  const [editImput, setEditImput] = useState();
 
   //   const fetchReport = () => {
   //     setReport(reportById);
@@ -67,9 +67,34 @@ const ReportSecuritePage = ({ match }) => {
       const data = await ReportsAPI.findReport(id);
       setReport(data);
       console.log(data);
+      // --------------set imputations-------------
+      if (data.securityCommentImputations == 0) {
+        setEditImput(false);
+        data.Project.lots.map((imput) =>
+          imputations.push({
+            companyName: imput.company.nom,
+            company: "/api/companies/" + imput.company.id,
+            report: "/api/reports/" + urlParams.idReport,
+            commentaire: "",
+          })
+        );
+        console.log(imputations);
+      } else {
+        setEditImput(true);
+        data.securityCommentImputations.map((imput) =>
+          imputations.push({
+            companyName: imput.company.nom,
+            company: "/api/companies/" + imput.company.id,
+            report: "/api/reports/" + urlParams.idReport,
+            commentaire: imput.commentaire,
+          })
+        );
+        console.log(imputations);
+        // ---------------------------------------------
+      }
     } catch (error) {
-      toast.error("Erreur lors du chargement du raport");
-      console.log(error.response);
+      toast.error("Erreur lors du chargement du rapport");
+      console.log(error);
     }
   };
 
@@ -90,11 +115,50 @@ const ReportSecuritePage = ({ match }) => {
     fetchReport(urlParams.idReport);
   }, [urlParams.id, urlParams.idReport]);
 
+  const handleChangeImputations = ({ currentTarget }) => {
+    const { value, id, name } = currentTarget;
+    const copyImputations = [...imputations];
+    console.log(copyImputations[id]);
+    console.log(currentTarget.id);
+    console.log(name);
+    console.log(value);
+
+    const newImput = copyImputations[id];
+    newImput.commentaire = value;
+
+    copyImputations.splice(id, 1, newImput);
+    setImputations(copyImputations);
+
+    console.log(imputations);
+    console.log(newImput);
+  };
+
+  const submitImput = async (imput) => {
+    if (!editImput) {
+      try {
+        await PropreteAccesAPI.createPropreteAccessImputations(imput);
+        setEditImput(true);
+        toast.success("Imputations créées");
+      } catch (error) {
+        console.log(error.response);
+      }
+    } else {
+      try {
+        await PropreteAccesAPI.updatePropreteAccessImputations(imput);
+        toast.success("Imputations misent à jour");
+      } catch (error) {
+        console.log(error.response);
+      }
+    }
+  };
+
   const handleSubmitConform = async () => {
     try {
       report.Project = "/api/projects/" + urlParams.id;
       report.securityConformity = true;
       await ReportsAPI.update(urlParams.idReport, report);
+
+      imputations.map((imput) => submitImput(imput));
 
       toast.success("Statut de la propreté des accès enregistré avec succès!");
     } catch (error) {
@@ -112,20 +176,6 @@ const ReportSecuritePage = ({ match }) => {
     } catch (error) {
       console.log(error.response);
     }
-  };
-
-  const handleChangeImputations = ({ currentTarget }) => {
-    console.log(currentTarget.id);
-
-    console.log(currentTarget.value);
-
-    const imputs = imputations;
-    imputs[currentTarget.id].pourcent = parseInt(currentTarget.value, 10);
-
-    setImputations("");
-    setImputations(imputs);
-
-    console.log(imputations);
   };
 
   const handleChange = ({ currentTarget }) => {
@@ -175,18 +225,19 @@ const ReportSecuritePage = ({ match }) => {
                 <div className="row col-12">
                   <form className="col-8">
                     <div className="col-12">
-                      {project.lots.map((lot) => (
+                      {imputations.map((imputation, i) => (
                         <div
                           className="d-flex flex-row align-items-center"
-                          key={lot.id}
+                          key={i}
                         >
-                          <h5 className="col-7">{lot.company.nom}</h5>
+                          <h5 className="col-7">{imputation.companyName}</h5>
 
                           <FieldTextArea
-                            value={imputation.commentaire}
+                            value={imputations[i].commentaire}
                             className="form-control mb-1"
-                            name={"name" + lot.company.id}
+                            name="commentaire"
                             onChange={handleChangeImputations}
+                            id={i}
                           />
                         </div>
                       ))}
