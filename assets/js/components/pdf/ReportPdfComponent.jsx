@@ -108,6 +108,27 @@ const styles = StyleSheet.create({
   tableCell: {
     fontSize: 8,
   },
+  flexAlignBetween: {
+    height: "70%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-around",
+  },
+  projectImage: {
+    width: "80%",
+    marginLeft: "auto",
+    marginRight: "auto",
+  },
+
+  pageNumber: {
+    position: "absolute",
+    fontSize: 12,
+    bottom: 30,
+    left: 0,
+    right: 0,
+    textAlign: "center",
+    color: "grey",
+  },
 });
 
 const ReportPdfComponent = ({ report, project }) => {
@@ -131,33 +152,43 @@ const ReportPdfComponent = ({ report, project }) => {
             {"Rapport OPC du " + DateAPI.formatDate(report.dateRedaction)}
           </Text>
         </View>
-        <View style={styles.sectionBorder}>
-          <Text style={styles.text}>
-            {"Opération : " + report.Project.name}
-          </Text>
-          <Text style={styles.text}>
-            {"Description : " + report.Project.description}
-          </Text>
-          <Text style={styles.text}>
-            {"Adresse 1 : " + report.Project.adresse1}
-          </Text>
-          <Text style={styles.text}>
-            {"Adresse 2 : " + report.Project.adresse2}
-          </Text>
-          <Text style={styles.text}>
-            {"Code Postal : " + report.Project.codePostal}
-          </Text>
-          <Text style={styles.text}>{"Ville : " + report.Project.ville}</Text>
+        <View style={styles.flexAlignBetween}>
+          <View style={styles.sectionBorder}>
+            <Text style={styles.text}>
+              {"Opération : " + report.Project.name}
+            </Text>
+            <Text style={styles.text}>
+              {"Description : " + report.Project.description}
+            </Text>
+            <Text style={styles.text}>
+              {"Adresse 1 : " + report.Project.adresse1}
+            </Text>
+            <Text style={styles.text}>
+              {"Adresse 2 : " + report.Project.adresse2}
+            </Text>
+            <Text style={styles.text}>
+              {"Code Postal : " + report.Project.codePostal}
+            </Text>
+            <Text style={styles.text}>{"Ville : " + report.Project.ville}</Text>
+          </View>
+          <Image style={styles.projectImage} src={project.photo}></Image>
+          <View style={styles.sectionBorder}>
+            <Text style={styles.text}>{"Maitre d'ouvrage : "}</Text>
+            <Text style={styles.text}>
+              {"MOEX - OPC : " +
+                report.Project.nomMOEX +
+                " - " +
+                report.Project.nomOPC}
+            </Text>
+          </View>
         </View>
-        <View style={styles.sectionBorder}>
-          <Text style={styles.text}>{"Maitre d'ouvrage : "}</Text>
-          <Text style={styles.text}>
-            {"MOEX - OPC : " +
-              report.Project.nomMOEX +
-              " - " +
-              report.Project.nomOPC}
-          </Text>
-        </View>
+        <Text
+          style={styles.pageNumber}
+          render={({ pageNumber, totalPages}) =>
+            `${report.Project.name} - ${report.Project.ville} ${pageNumber} / ${totalPages}`
+          }
+          fixed
+        />
       </Page>
 
       <Page size="A4" style={styles.page}>
@@ -216,6 +247,13 @@ const ReportPdfComponent = ({ report, project }) => {
             ))}
           </View>
         </View>
+        <Text
+          style={styles.pageNumber}
+          render={({ pageNumber, totalPages }) =>
+            `${report.Project.name} - ${report.Project.ville} ${pageNumber} / ${totalPages}`
+          }
+          fixed
+        />
       </Page>
 
       <Page size="A4" style={styles.page}>
@@ -253,6 +291,13 @@ const ReportPdfComponent = ({ report, project }) => {
             </View>
           )}
         </View>
+        <Text
+          style={styles.pageNumber}
+          render={({ pageNumber, totalPages }) =>
+            `${report.Project.name} - ${report.Project.ville} ${pageNumber} / ${totalPages}`
+          }
+          fixed
+        />
       </Page>
 
       <Page size="A4" style={styles.page}>
@@ -276,7 +321,7 @@ const ReportPdfComponent = ({ report, project }) => {
               <Text style={styles.title}>Non Conforme</Text>
               <View style={styles.listEffectifs}>
                 <Text>Imputations : </Text>
-                {report.propreteIccessImputation.map((proprete) => (
+                {report.propreteAccessImputation.map((proprete) => (
                   <View style={styles.listEffectifs}>
                     <Text style={styles.textEffectifsNomEntreprise}>
                       {proprete.company.nom + " :" + proprete.pourcent + " %"}
@@ -284,9 +329,18 @@ const ReportPdfComponent = ({ report, project }) => {
                   </View>
                 ))}
               </View>
+              <Text>Commentaire : </Text>
+              <Text>{report.propreteAccessComment}</Text>
             </View>
           )}
         </View>
+        <Text
+          style={styles.pageNumber}
+          render={({ pageNumber, totalPages }) =>
+            `${report.Project.name} - ${report.Project.ville} ${pageNumber} / ${totalPages}`
+          }
+          fixed
+        />
       </Page>
 
       <Page size="A4" style={styles.page}>
@@ -306,7 +360,7 @@ const ReportPdfComponent = ({ report, project }) => {
               <Text style={styles.title}>Non Conforme</Text>
               <View style={styles.listEffectifs}>
                 <Text>Imputations : </Text>
-                {report.proprete_commune_imputation.map((proprete) => (
+                {report.propreteCommuneImputations.map((proprete) => (
                   <View style={styles.listEffectifs}>
                     <Text style={styles.textEffectifsNomEntreprise}>
                       {proprete.company.nom + " :" + proprete.percent + " %"}
@@ -320,77 +374,104 @@ const ReportPdfComponent = ({ report, project }) => {
             </View>
           )}
         </View>
+        <Text
+          style={styles.pageNumber}
+          render={({ pageNumber, totalPages }) =>
+            `${report.Project.name} - ${report.Project.ville} ${pageNumber} / ${totalPages}`
+          }
+          fixed
+        />
       </Page>
       <Page size="A4" style={styles.page}>
-        <View style={styles.section}>
+        <View style={styles.section} fixed>
           <Image
             source="../img/logo-company/logo-nortec.png"
             style={styles.image}
           />
         </View>
-        <View style={styles.sectionBorder}>
-          {project.lots.map((lot) => (
-            <View>
-              {lot.echeances.length !== 0 && (
-                <>
-                  <View style={styles.table}>
-                    <Text style={styles.tableCell}>
-                      Entreprise: {lot.company.nom}
-                    </Text>
+        {project.lots.map((lot) => (
+          <View>
+            {lot.echeances.length !== 0 && (
+              <View break>
+                <View
+                  style={[
+                    styles.table,
+                    { width: "90%" },
+                    { marginLeft: "5%" },
+                    { marginRight: "5%" },
+                  ]}
+                >
+                  <Text style={styles.tableCell}>
+                    Entreprise: {lot.company.nom}
+                  </Text>
+                </View>
+                <View
+                  style={[
+                    styles.table,
+                    { width: "90%" },
+                    { marginLeft: "5%" },
+                    { marginRight: "5%" },
+                  ]}
+                >
+                  <View style={styles.tableRowHead}>
+                    <View style={[styles.tableCol1Head, { width: "10%" }]}>
+                      <Text style={styles.tableCell}>Date</Text>
+                    </View>
+                    <View style={styles.tableColHead}>
+                      <Text style={styles.tableCell}>Zone</Text>
+                    </View>
+                    <View style={[styles.tableColHead, { width: "40%" }]}>
+                      <Text style={styles.tableCell}>Désignation</Text>
+                    </View>
+                    <View style={[styles.tableColHead, { width: "10%" }]}>
+                      <Text style={styles.tableCell}>Pour le</Text>
+                    </View>
+                    <View style={styles.tableColHead}>
+                      <Text style={styles.tableCell}>Planning</Text>
+                    </View>
                   </View>
-                  <View style={styles.table}>
-                    <View style={styles.tableRowHead}>
-                      <View style={styles.tableCol1Head}>
-                        <Text style={styles.tableCell}>Date</Text>
+                  {lot.echeances.map((echeance) => (
+                    <View style={styles.tableRow}>
+                      <View style={[styles.tableCol1, { width: "10%" }]}>
+                        <Text style={styles.tableCell}>
+                          {DateAPI.formatDate(echeance.dateDebut)}
+                        </Text>
                       </View>
-                      <View style={styles.tableColHead}>
-                        <Text style={styles.tableCell}>Zone</Text>
+                      <View style={styles.tableCol}>
+                        <Text style={styles.tableCell}>{echeance.zone}</Text>
                       </View>
-                      <View style={styles.tableColHead}>
-                        <Text style={styles.tableCell}>Désignation</Text>
+                      <View style={[styles.tableCol, { width: "40%" }]}>
+                        <Text style={styles.tableCell}>{echeance.sujet}</Text>
+                        <Text style={styles.tableCell}>{echeance.comment}</Text>
                       </View>
-                      <View style={styles.tableColHead}>
-                        <Text style={styles.tableCell}>Pour le</Text>
+                      <View style={[styles.tableCol, { width: "10%" }]}>
+                        <Text style={styles.tableCell}>
+                          {DateAPI.formatDate(echeance.dateFinPrevue)}
+                        </Text>
                       </View>
-                      <View style={styles.tableColHead}>
-                        <Text style={styles.tableCell}>Planning</Text>
+                      <View style={styles.tableCol}>
+                        <Text style={styles.tableCell}>
+                          {statusEcheanceLabel(
+                            echeance.dateDebut,
+                            echeance.dateCloture,
+                            echeance.dateFinPrevue
+                          )}
+                        </Text>
                       </View>
                     </View>
-                    {lot.echeances.map((echeance) => (
-                      <View style={styles.tableRow}>
-                        <View style={styles.tableCol1}>
-                          <Text style={styles.tableCell}>
-                            {DateAPI.formatDate(echeance.dateDebut)}
-                          </Text>
-                        </View>
-                        <View style={styles.tableCol}>
-                          <Text style={styles.tableCell}>{echeance.zone}</Text>
-                        </View>
-                        <View style={styles.tableCol}>
-                          <Text style={styles.tableCell}>{echeance.sujet}</Text>
-                        </View>
-                        <View style={styles.tableCol}>
-                          <Text style={styles.tableCell}>
-                            {DateAPI.formatDate(echeance.dateFinPrevue)}
-                          </Text>
-                        </View>
-                        <View style={styles.tableCol}>
-                          <Text style={styles.tableCell}>
-                            {statusEcheanceLabel(
-                              echeance.dateDebut,
-                              echeance.dateCloture,
-                              echeance.dateFinPrevue
-                            )}
-                          </Text>
-                        </View>
-                      </View>
-                    ))}
-                  </View>
-                </>
-              )}
-            </View>
-          ))}
-        </View>
+                  ))}
+                </View>
+              </View>
+            )}
+          </View>
+        ))}
+
+        <Text
+        style={styles.pageNumber}
+          render={({ pageNumber, totalPages }) =>
+          `${report.Project.name} - ${report.Project.ville} - Page: ${pageNumber} / ${totalPages}`
+        } fixed
+        />
       </Page>
     </Document>
   );

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const FieldTextArea = ({ name, label, value, onChange, rows, placeholder = "", error = "", readOnly = false}) => {
+const FieldTextArea = ({ id, name, label, value, onChange, rows, placeholder = "", error = "", readOnly = false}) => {
     return (
         <div className="form-group">
             <label htmlFor={name}>
@@ -12,7 +12,7 @@ const FieldTextArea = ({ name, label, value, onChange, rows, placeholder = "", e
                 onChange={onChange}
                 placeholder={placeholder || label}
                 name={name}
-                id={name}
+                id={id}
                 rows={rows}
                 className={"form-control" + (error && " is-invalid")}
             />

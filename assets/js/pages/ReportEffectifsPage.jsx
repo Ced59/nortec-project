@@ -73,13 +73,11 @@ const ReportEffectifsPage = ({ match }) => {
     try {
       console.log(echeance);
       echeance.lot = "/api/lots/" + echeance.lot.id;
-      // A retirer après changement des effectifs dans BDD
-      echeance.effectif = "/api/effectifs/1";
       await EcheanceAPI.update(echeance.id, echeance);
       toast.success("L'effectif est bien modifié !");
       handleCloseModal();
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
     }
   };
 
