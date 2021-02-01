@@ -2,6 +2,8 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Annuaire;
+use App\Entity\Company;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -66,7 +68,7 @@ class AppFixtures extends Fixture
             ->setActive(true);
 
         $manager->persist($user);
-        
+
         $user = new User();
         $hash = $this->encoder->encodePassword($user, "password");
         $user->setFirstName("Charles")
@@ -80,19 +82,19 @@ class AppFixtures extends Fixture
 
         $user = new User();
         $hash = $this->encoder->encodePassword($user, "password");
-      
+
         $user->setFirstName("Charles")
             ->setEmail("charles@user.com")
             ->setLastName("Choquet")
-          ->setPassword($hash)
+            ->setPassword($hash)
             ->setRoles(['ROLE_USER'])
             ->setActive(true);
 
         $manager->persist($user);
-  
-      $user = new User();
+
+        $user = new User();
         $hash = $this->encoder->encodePassword($user, "password");
-      
+
         $user->setFirstName("Dany")
             ->setEmail("dany@admin.com")
             ->setLastName("Rose")
@@ -138,8 +140,40 @@ class AppFixtures extends Fixture
 
         $manager->flush();
 
-    }
+        for ($c = 0; $c < 15; $c++) {
+            $company = new Company();
 
+            $mail = str_to_noaccent(mb_strtolower($firstName . "." . $lastName));
+            $mail = $mail . "@fake.com";
+
+            $company->setNom($faker->company())
+                ->setAdresse1($faker->address)
+                ->setAdresse2($faker->address)
+                ->setCodePostal($faker->postcode)
+                ->setMail1($mail)
+                ->setMail2($mail)
+                ->setVille($faker->city);
+            $manager->persist($company);
+
+            for ($a = 0; $a < mt_rand(1, 2); $a++) {
+                $annuaire = new Annuaire();
+
+                $firstName = $faker->firstName;
+                $lastName = $faker->lastName;
+                $nom = $firstName. " " .$lastName;
+
+                $mail = str_to_noaccent(mb_strtolower($firstName .".". $lastName));
+                $mail = $mail . "@fake.com";
+
+                $annuaire->setNom($nom)
+                    ->setTelephone($faker->phoneNumber)
+                    ->setEmail($mail)
+                    ->setCompany($company);
+                $manager->persist($annuaire);
+            }
+        }
+        $manager->flush();
+    }
 }
 
 function str_to_noaccent($str)

@@ -122,16 +122,35 @@ const styles = StyleSheet.create({
 
   pageNumber: {
     position: "absolute",
-    fontSize: 12,
+    fontSize: 10,
     bottom: 30,
     left: 0,
     right: 0,
     textAlign: "center",
-    color: "grey",
   },
 });
 
 const ReportPdfComponent = ({ report, project }) => {
+  const statusColor = (dateDebut, dateCloture, dateFinPrevue) => {
+    if (
+      statusEcheanceLabel(dateDebut, dateCloture, dateFinPrevue) === "En cours"
+    ) {
+      return "#ffc107";
+    } else if (
+      statusEcheanceLabel(dateDebut, dateCloture, dateFinPrevue) === "En retard"
+    ) {
+      return "#dc3545";
+    } else if (
+      statusEcheanceLabel(dateDebut, dateCloture, dateFinPrevue) === "Fini"
+    ) {
+      return "#28a745";
+    }
+    else if (
+      statusEcheanceLabel(dateDebut, dateCloture, dateFinPrevue) === "Pas démarré"
+    ) {
+      return "#17a2b8";
+    }
+  };
   return (
     <Document
       title={report.Project.name}
@@ -184,8 +203,8 @@ const ReportPdfComponent = ({ report, project }) => {
         </View>
         <Text
           style={styles.pageNumber}
-          render={({ pageNumber, totalPages}) =>
-            `${report.Project.name} - ${report.Project.ville} ${pageNumber} / ${totalPages}`
+          render={({ pageNumber, totalPages }) =>
+            `${report.Project.name} - ${report.Project.ville} - Page: ${pageNumber} / ${totalPages}`
           }
           fixed
         />
@@ -250,7 +269,7 @@ const ReportPdfComponent = ({ report, project }) => {
         <Text
           style={styles.pageNumber}
           render={({ pageNumber, totalPages }) =>
-            `${report.Project.name} - ${report.Project.ville} ${pageNumber} / ${totalPages}`
+            `${report.Project.name} - ${report.Project.ville} - Page: ${pageNumber} / ${totalPages}`
           }
           fixed
         />
@@ -294,7 +313,7 @@ const ReportPdfComponent = ({ report, project }) => {
         <Text
           style={styles.pageNumber}
           render={({ pageNumber, totalPages }) =>
-            `${report.Project.name} - ${report.Project.ville} ${pageNumber} / ${totalPages}`
+            `${report.Project.name} - ${report.Project.ville} - Page: ${pageNumber} / ${totalPages}`
           }
           fixed
         />
@@ -323,21 +342,21 @@ const ReportPdfComponent = ({ report, project }) => {
                 <Text>Imputations : </Text>
                 {report.propreteAccessImputation.map((proprete) => (
                   <View style={styles.listEffectifs}>
-                    <Text style={styles.textEffectifsNomEntreprise}>
-                      {proprete.company.nom + " :" + proprete.pourcent + " %"}
+                    <Text style={[styles.textEffectifsNomEntreprise, {fontSize:10}]}>
+                      {proprete.company.nom + " :  " + proprete.pourcent + " %"}
                     </Text>
                   </View>
                 ))}
               </View>
-              <Text>Commentaire : </Text>
-              <Text>{report.propreteAccessComment}</Text>
+              <Text style={{marginVertical:10}}>Commentaire : </Text>
+              <Text style={{fontSize:10}}>{report.propreteAccessComment}</Text>
             </View>
           )}
         </View>
         <Text
           style={styles.pageNumber}
           render={({ pageNumber, totalPages }) =>
-            `${report.Project.name} - ${report.Project.ville} ${pageNumber} / ${totalPages}`
+            `${report.Project.name} - ${report.Project.ville} - Page: ${pageNumber} / ${totalPages}`
           }
           fixed
         />
@@ -377,7 +396,7 @@ const ReportPdfComponent = ({ report, project }) => {
         <Text
           style={styles.pageNumber}
           render={({ pageNumber, totalPages }) =>
-            `${report.Project.name} - ${report.Project.ville} ${pageNumber} / ${totalPages}`
+            `${report.Project.name} - ${report.Project.ville} - Page: ${pageNumber} / ${totalPages}`
           }
           fixed
         />
@@ -401,7 +420,7 @@ const ReportPdfComponent = ({ report, project }) => {
                     { marginRight: "5%" },
                   ]}
                 >
-                  <Text style={styles.tableCell}>
+                  <Text style={[styles.tableCell, { fontSize: 10 }]}>
                     Entreprise: {lot.company.nom}
                   </Text>
                 </View>
@@ -449,7 +468,18 @@ const ReportPdfComponent = ({ report, project }) => {
                           {DateAPI.formatDate(echeance.dateFinPrevue)}
                         </Text>
                       </View>
-                      <View style={styles.tableCol}>
+                      <View
+                        style={[
+                          styles.tableCol,
+                          {
+                            backgroundColor: statusColor(
+                              echeance.dateDebut,
+                              echeance.dateCloture,
+                              echeance.dateFinPrevue
+                            ),
+                          },
+                        ]}
+                      >
                         <Text style={styles.tableCell}>
                           {statusEcheanceLabel(
                             echeance.dateDebut,
@@ -467,10 +497,11 @@ const ReportPdfComponent = ({ report, project }) => {
         ))}
 
         <Text
-        style={styles.pageNumber}
+          style={styles.pageNumber}
           render={({ pageNumber, totalPages }) =>
-          `${report.Project.name} - ${report.Project.ville} - Page: ${pageNumber} / ${totalPages}`
-        } fixed
+            `${report.Project.name} - ${report.Project.ville} - Page: ${pageNumber} / ${totalPages}`
+          }
+          fixed
         />
       </Page>
     </Document>
