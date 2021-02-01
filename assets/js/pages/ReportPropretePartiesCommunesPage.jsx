@@ -29,6 +29,7 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
       setLoading(false);
       setTempImputations([]);
       setImputations([]);
+      setConforme(data.propreteCommuneConformity);
       // --------------set imputations-------------
       if (data.propreteCommuneImputations == 0) {
         setEditImput(false);

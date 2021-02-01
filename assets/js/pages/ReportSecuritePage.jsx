@@ -29,6 +29,7 @@ const ReportSecuritePage = ({ match }) => {
       setReport(data);
       console.log(data);
       setLoading(false);
+      setConforme(data.securityConformity);
       // --------------set imputations-------------
       if (data.securityCommentImputations == 0) {
         setEditImput(false);

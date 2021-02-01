@@ -30,6 +30,7 @@ const ReportPropreteAccesPage = ({ match }) => {
       setLoading(false);
       setTempImputations([]);
       setImputations([]);
+      setConforme(data.propreteAccessConformity);
       // --------------set imputations-------------
       if (data.propreteAccessImputation == 0) {
         setEditImput(false);
