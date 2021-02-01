@@ -12,7 +12,7 @@ import ReportConformity from "../components/ReportConformity";
 
 const ReportPropreteAccesPage = ({ match }) => {
   const urlParams = match.params;
-  const [conforme, setConforme] = useState("");
+  const [conforme, setConforme] = useState("noconform");
   const [tempImputations, setTempImputations] = useState([]);
   const [imputations, setImputations] = useState([]);
   const [report, setReport] = useState({});

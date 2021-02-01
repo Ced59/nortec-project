@@ -11,7 +11,7 @@ import ReportComment from "../components/ReportComment";
 
 const ReportSecuritePage = ({ match }) => {
   const NavbarLeftWithRouter = withRouter(NavbarLeft);
-  const [conforme, setConforme] = useState(null);
+  const [conforme, setConforme] = useState(false);
   const [imputations, setImputations] = useState([]);
   const [tempImputations, setTempImputations] = useState([]);
   const [editImput, setEditImput] = useState();
