@@ -89,11 +89,29 @@ class Company
      */
     private $annuaires;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\SecurityCommentImputation", mappedBy="company")
+     */
+    private $securityCommentImputations;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PropreteCommuneImputation", mappedBy="company")
+     */
+    private $propreteCommuneImputations;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PropreteAccessImputation", mappedBy="company")
+     */
+    private $propreteAccessImputation;
+
     public function __construct()
     {
         $this->projects = new ArrayCollection();
         $this->lots = new ArrayCollection();
         $this->annuaires = new ArrayCollection();
+        $this->securityCommentImputations = new ArrayCollection();
+        $this->propreteCommuneImputations = new ArrayCollection();
+        $this->propreteAccessImputation = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -269,6 +287,99 @@ class Company
             // set the owning side to null (unless already changed)
             if ($annuaire->getCompany() === $this) {
                 $annuaire->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|SecurityCommentImputation[]
+     */
+    public function getSecurityCommentImputations(): Collection
+    {
+        return $this->securityCommentImputations;
+    }
+
+    public function addSecurityCommentImputation(SecurityCommentImputation $securityCommentImputation): self
+    {
+        if (!$this->securityCommentImputations->contains($securityCommentImputation)) {
+            $this->securityCommentImputations[] = $securityCommentImputation;
+            $securityCommentImputation->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSecurityCommentImputation(SecurityCommentImputation $securityCommentImputation): self
+    {
+        if ($this->securityCommentImputations->contains($securityCommentImputation)) {
+            $this->securityCommentImputations->removeElement($securityCommentImputation);
+            // set the owning side to null (unless already changed)
+            if ($securityCommentImputation->getCompany() === $this) {
+                $securityCommentImputation->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PropreteCommuneImputation[]
+     */
+    public function getPropreteCommuneImputations(): Collection
+    {
+        return $this->propreteCommuneImputations;
+    }
+
+    public function addPropreteCommuneImputation(PropreteCommuneImputation $propreteCommuneImputation): self
+    {
+        if (!$this->propreteCommuneImputations->contains($propreteCommuneImputation)) {
+            $this->propreteCommuneImputations[] = $propreteCommuneImputation;
+            $propreteCommuneImputation->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removePropreteCommuneImputation(PropreteCommuneImputation $propreteCommuneImputation): self
+    {
+        if ($this->propreteCommuneImputations->contains($propreteCommuneImputation)) {
+            $this->propreteCommuneImputations->removeElement($propreteCommuneImputation);
+            // set the owning side to null (unless already changed)
+            if ($propreteCommuneImputation->getCompany() === $this) {
+                $propreteCommuneImputation->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PropreteAccessImputation[]
+     */
+    public function getPropreteAccessImputation(): Collection
+    {
+        return $this->propreteAccessImputation;
+    }
+
+    public function addPropreteAccessImputation(PropreteAccessImputation $propreteAccessImputation): self
+    {
+        if (!$this->propreteAccessImputation->contains($propreteAccessImputation)) {
+            $this->propreteAccessImputation[] = $propreteAccessImputation;
+            $propreteAccessImputation->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removePropreteAccessImputation(PropreteAccessImputation $propreteAccessImputation): self
+    {
+        if ($this->propreteAccessImputation->contains($propreteAccessImputation)) {
+            $this->propreteAccessImputation->removeElement($propreteAccessImputation);
+            // set the owning side to null (unless already changed)
+            if ($propreteAccessImputation->getCompany() === $this) {
+                $propreteAccessImputation->setCompany(null);
             }
         }
 

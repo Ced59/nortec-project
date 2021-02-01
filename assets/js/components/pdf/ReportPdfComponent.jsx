@@ -122,6 +122,7 @@ const styles = StyleSheet.create({
 
   pageNumber: {
     position: "absolute",
+    fontSize: 12,
     fontSize: 10,
     bottom: 30,
     left: 0,
@@ -379,7 +380,7 @@ const ReportPdfComponent = ({ report, project }) => {
               <Text style={styles.title}>Non Conforme</Text>
               <View style={styles.listEffectifs}>
                 <Text>Imputations : </Text>
-                {report.proprete_commune_imputation.map((proprete) => (
+                {report.propreteCommuneImputations.map((proprete) => (
                   <View style={styles.listEffectifs}>
                     <Text style={styles.textEffectifsNomEntreprise}>
                       {proprete.company.nom + " :" + proprete.percent + " %"}

@@ -251,7 +251,29 @@ const ReportEcheancesPage = ({ match }) => {
                   <p>
                     Lot: {echeanceDetail.lot && echeanceDetail.lot.company.nom}{" "}
                   </p>
-                  <p>Sujet: {echeanceDetail.sujet} </p>
+                  {!edit ? (
+                    <>
+                      <p>Zone: {echeanceDetail.zone} </p>
+                      <p>Sujet: {echeanceDetail.sujet} </p>
+                    </>
+                  ) : (
+                    <>
+                    <Field
+                      name="zone"
+                      label="Zone"
+                      type="text"
+                      onChange={handleChangeEcheanceDetail}
+                      value={echeanceDetail.zone}
+                    ></Field>
+                    <Field
+                      name="sujet"
+                      label="Sujer"
+                      type="text"
+                      onChange={handleChangeEcheanceDetail}
+                      value={echeanceDetail.sujet}
+                    ></Field>
+                    </>
+                  )}
                   <p>
                     Statut:{" "}
                     <span
@@ -344,7 +366,10 @@ const ReportEcheancesPage = ({ match }) => {
                     name="comment"
                     placeholder="Commentaire"
                     onChange={handleChangeEcheanceDetail}
-                    rows={echeanceDetail.comment && echeanceDetail.comment.split("\n").length + 1}
+                    rows={
+                      echeanceDetail.comment &&
+                      echeanceDetail.comment.split("\n").length + 1
+                    }
                     readOnly={!edit && true}
                   />
                 </fieldset>

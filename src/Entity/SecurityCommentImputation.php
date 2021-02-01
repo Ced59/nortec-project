@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -15,6 +16,7 @@ class SecurityCommentImputation
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"report"})
      */
     private $id;
 
@@ -24,13 +26,15 @@ class SecurityCommentImputation
     private $report;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Company", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="securityCommentImputations")
+     * @ORM\JoinColumn(nullable=true)
+     * @Groups({"report"})
      */
     private $company;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"report"})
      */
     private $commentaire;
 

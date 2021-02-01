@@ -5,171 +5,108 @@ import Button from "../components/forms/Button";
 import ImageUpload from "../components/forms/ImageUpload";
 import "../../css/app.css";
 import { toast } from "react-toastify";
-import ProjectsAPI from "../services/ProjectsAPI";
 import ReportsAPI from "../services/ReportsAPI";
-import PropreteAccesAPI from "../services/PropreteAccesAPI";
+import ReportImputation from "../components/ReportImputation";
 import ReportComment from "../components/ReportComment";
+import ReportConformity from "../components/ReportConformity";
 
 const ReportPropreteAccesPage = ({ match }) => {
   const urlParams = match.params;
   const [conforme, setConforme] = useState("");
-  const [comment, setComment] = useState("");
-  const [commentIntern, setCommentIntern] = useState("");
+  const [tempImputations, setTempImputations] = useState([]);
   const [imputations, setImputations] = useState([]);
-  const [project, setProject] = useState({});
   const [report, setReport] = useState({});
   const [loading, setLoading] = useState(true);
-  const [imputation, setImputation] = useState({
-    report: "/api/reports/" + urlParams.idReport,
-  });
   const [editImput, setEditImput] = useState();
-
   const NavbarLeftWithRouter = withRouter(NavbarLeft);
 
-  // const fetchReport = () => {
+  // -------------------------------------------------------function------------------------------------------------
 
-  //     const reportById = fakeData.reportById(parseInt(urlParams.idReport, 10));
-
-  //     //Vérification si édition ou nouveau rapport... Dans la version finale, le nouveau rapport existera mais avec valeurs vides donc pas de vérification à ce niveau
-  //     if (reportById) {
-  //         setConforme(reportById.propreteAccessConformity);
-  //         setComment(reportById.propreteAccessComment);
-  //         setCommentIntern(reportById.propreteAccessCommentIntern);
-  //         setImputations(reportById.propreteIccessImputation);
-  //     }
-
-  // };
   const fetchReport = async (id) => {
     try {
       const data = await ReportsAPI.findReport(id);
       setReport(data);
       console.log(data);
+      setLoading(false);
+      setTempImputations([]);
+      setImputations([]);
       // --------------set imputations-------------
       if (data.propreteAccessImputation == 0) {
         setEditImput(false);
         data.Project.lots.map((imput) =>
-          imputations.push({
+          tempImputations.push({
             companyName: imput.company.nom,
             company: "/api/companies/" + imput.company.id,
             report: "/api/reports/" + urlParams.idReport,
             pourcent: 0,
           })
         );
+        setImputations(tempImputations);
         console.log(imputations);
       } else {
         setEditImput(true);
         data.propreteAccessImputation.map((imput) =>
-          imputations.push({
+          tempImputations.push({
+            idImput: imput.id,
             companyName: imput.company.nom,
             company: "/api/companies/" + imput.company.id,
             report: "/api/reports/" + urlParams.idReport,
             pourcent: imput.pourcent,
           })
         );
+        setImputations(tempImputations);
         console.log(imputations);
-        // ---------------------------------------------
       }
+      // ---------------------------------------------
     } catch (error) {
       toast.error("Erreur lors du chargement du rapport");
       console.log(error.response);
     }
   };
-
-  const fetchProject = async (id) => {
-    try {
-      const data = await ProjectsAPI.find(id);
-      setProject(data);
-      setLoading(false);
-    } catch (error) {
-      toast.error("Erreur lors du chargement du projet");
-      console.log(error);
-    }
-  };
   console.log(report);
 
   useEffect(() => {
-    fetchProject(urlParams.id);
     fetchReport(urlParams.idReport);
   }, [urlParams.id, urlParams.idReport]);
 
-  const handleCheckConformity = ({ currentTarget }) => {
-    const name = currentTarget.name;
-    setConforme(name);
+  // -------------------------------------------------gestion conformité/commentaire------------------------------------------
+
+  const handleCheckConformity = (etat) => {
+    setConforme(etat);
   };
 
-  const handleChangeImputations = ({ currentTarget }) => {
-    const { value, id } = currentTarget;
-    const copyImputations = [...imputations];
-
-    const newImput = copyImputations[id];
-    newImput.pourcent = Number(value);
-
-    copyImputations.splice(id, 1, newImput);
-    setImputations(copyImputations);
-
-    console.log(imputations);
-    console.log(newImput);
-  };
-
-  const handleSubmitConform = async () => {
+  const handleSubmitReport = async ({ currentTarget }) => {
     try {
       report.Project = "/api/projects/" + urlParams.id;
-      report.propreteAccessConformity = "conform";
-      await ReportsAPI.update(urlParams.idReport, report);
-
-      toast.success("Statut de la propreté des accès enregistré avec succès!");
-    } catch (error) {
-      console.log(error.response);
-    }
-  };
-
-  const handleSubmitProrata = async () => {
-    //TODO enregistrement de la conformité à prorata
-    try {
-      report.Project = "/api/projects/" + urlParams.id;
-      report.propreteAccessConformity = "proprata";
-      await ReportsAPI.update(urlParams.idReport, report);
-
-      toast.success("Statut de la propreté des accès enregistré avec succès!");
-    } catch (error) {
-      console.log(error.response);
-    }
-  };
-
-  const submitImput = async (imput) => {
-    if (!editImput) {
-      try {
-        await PropreteAccesAPI.createPropreteAccessImputations(imput);
-        setEditImput(true);
-        toast.success("Imputations créées");
-      } catch (error) {
-        console.log(error.response);
+      if (currentTarget.name == "conformity") {
+        console.log(conforme);
+        report.propreteAccessConformity = conforme;
       }
-    } else {
-      try {
-        await PropreteAccesAPI.updatePropreteAccessImputations(imput);
-        toast.success("Imputations misent à jour");
-      } catch (error) {
-        console.log(error.response);
-      }
-    }
-  };
+      report.securityCommentImputations = report.securityCommentImputations.map(
+        (imput) => "/api/security_comment_imputations/" + imput.id
+      );
+      report.propreteAccessImputation = report.propreteAccessImputation.map(
+        (imput) => "/api/proprete_access_imputations/" + imput.id
+      );
+      report.propreteCommuneImputations = report.propreteCommuneImputations.map(
+        (imput) => "/api/proprete_commune_imputations/" + imput.id
+      );
 
-  const handleSubmitNonConforme = async () => {
-    // TODO enregistrement de la conformité à noconform
-    try {
-      report.Project = "/api/projects/" + urlParams.id;
-      report.propreteAccessConformity = "noconform";
       await ReportsAPI.update(urlParams.idReport, report);
-
-      imputations.map((imput) => submitImput(imput));
-
-      toast.success("Statut de la propreté des accès enregistré avec succès!");
+      if (currentTarget.name == "conformity") {
+        toast.success(
+          "Statut de la propreté des accès enregistré avec succès!"
+        );
+      } else {
+        toast.success("Commentaires enregistré avec succès!");
+      }
     } catch (error) {
-      console.log(error);
       console.log(error.response);
     }
+    fetchReport(urlParams.idReport);
   };
+
+  // ----------------------------------------------------template-------------------------------------------------------------
 
   return (
     <main className="container">
@@ -179,16 +116,14 @@ const ReportPropreteAccesPage = ({ match }) => {
           <div className="row ml-2 mt-4 d-flex justify-content-between mb-3">
             <h2 className="mb-4">Propreté des accès :</h2>
             <Button
-              onClick={handleCheckConformity}
-              name="conform"
+              onClick={() => handleCheckConformity("conform")}
               className="btn btn-success mb-4"
               text="Conforme"
               type="button"
             />
 
             <Button
-              onClick={handleCheckConformity}
-              name="noconform"
+              onClick={() => handleCheckConformity("noconform")}
               className="btn btn-danger ml-5 mb-4"
               text="Non Conforme"
               type="button"
@@ -202,10 +137,11 @@ const ReportPropreteAccesPage = ({ match }) => {
               </div>
               <div className="row ml-2 d-flex justify-content-center">
                 <Button
-                  onClick={handleSubmitConform}
-                  className="btn btn-info mb-4 row"
-                  text="Valider"
+                  onClick={handleSubmitReport}
+                  className="btn btn-primary mb-4 row"
+                  text="Confirmer"
                   type="button"
+                  name="conformity"
                 />
               </div>
             </div>
@@ -217,10 +153,11 @@ const ReportPropreteAccesPage = ({ match }) => {
               </div>
               <div className="row ml-2 d-flex justify-content-center">
                 <Button
-                  onClick={handleSubmitProrata}
-                  className="btn btn-info mb-4 row"
-                  text="Valider"
+                  onClick={handleSubmitReport}
+                  className="btn btn-primary mb-4 row"
+                  text="Confirmer"
                   type="button"
+                  name="conformity"
                 />
               </div>
             </div>
@@ -228,50 +165,44 @@ const ReportPropreteAccesPage = ({ match }) => {
           {conforme === "noconform" && (
             <>
               <Button
-                onClick={handleCheckConformity}
-                name="prorata"
+                onClick={() => handleCheckConformity("prorata")}
                 className="btn btn-warning ml-5 mb-4"
                 text="Prorata"
                 type="button"
               />
               <div className="row">
-                <form className="col-8">
-                  <div className="col-12">
-                    {imputations.map((imputation, i) => (
-                      <div className="row" key={i}>
-                        <h5 className="col-9">{imputation.companyName}</h5>
-                        <input
-                          value={imputations[i].pourcent}
-                          className="form-control col-2 mb-1"
-                          name="pourcent"
-                          onChange={handleChangeImputations}
-                          id={i}
-                        />
-                        <h5 className="col-1 mb-1">%</h5>
-                      </div>
-                    ))}
-
-                    <Button
-                      onClick={handleSubmitNonConforme}
-                      className="btn btn-info offset-10 col-2 mb-4 mt-3"
-                      text="Valider"
-                      type="button"
-                    />
-                  </div>
-                </form>
+                <ReportImputation
+                  setLoading={setLoading}
+                  setImputations={setImputations}
+                  imputations={imputations}
+                  editImput={editImput}
+                  setEditImput={setEditImput}
+                  fetchReport={fetchReport}
+                  urlParams={urlParams}
+                  api={"propreteAcces"}
+                ></ReportImputation>
                 <div className="col-4">
                   <ImageUpload buttonText="Choisir l'image" />
                 </div>
               </div>
               <ReportComment
-                urlParams={urlParams}
                 setReport={setReport}
                 report={report}
                 valueComment={report.propreteAccessComment}
                 nameComment="propreteAccessComment"
                 valueCommentIntern={report.propreteAccessCommentIntern}
                 nameCommentIntern="propreteAccessCommentIntern"
+                handleSubmitComment={handleSubmitReport}
               ></ReportComment>
+              <div className="d-flex justify-content-center">
+                <Button
+                  onClick={handleSubmitReport}
+                  className="btn btn-primary"
+                  text="Confirmer"
+                  type="button"
+                  name="conformity"
+                />
+              </div>
             </>
           )}
         </div>
