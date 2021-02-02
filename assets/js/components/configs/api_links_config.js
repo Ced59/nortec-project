@@ -13,3 +13,4 @@ export const ECHEANCE_API = API_URL + "echeances";
 export const SECURITE_IMPUTATION = API_URL + "security_comment_imputations";
 export const PROPRETE_ACCESS_IMPUTATION = API_URL + "proprete_access_imputations";
 export const PROPRETE_COMMUN_IMPUTATION = API_URL + "proprete_commune_imputations";
+export const PHOTO_API= API_URL+"photos";

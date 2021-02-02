@@ -8,6 +8,8 @@ import { toast } from "react-toastify";
 import ReportsAPI from "../services/ReportsAPI";
 import ReportImputation from "../components/ReportImputation";
 import ReportComment from "../components/ReportComment";
+import MediaUploadAPI from "../services/MediaUploadAPI";
+import PhotoAPI from "../services/PhotoAPI";
 
 const ReportSecuritePage = ({ match }) => {
   const NavbarLeftWithRouter = withRouter(NavbarLeft);
@@ -18,6 +20,15 @@ const ReportSecuritePage = ({ match }) => {
   const urlParams = match.params;
   const [report, setReport] = useState({});
   const [loading, setLoading] = useState(true);
+  const [picture, setPicture] = useState([]);
+  const [photo, setPhoto] = useState({
+    Report: "",
+    link: "",
+    type: "jpeg",
+  });
+
+  const data = new FormData();
+  data.append("file", picture[0]);
 
   // ------------------------------------------------------function------------------------------------------------------
 
@@ -70,6 +81,13 @@ const ReportSecuritePage = ({ match }) => {
     fetchReport(urlParams.idReport);
   }, [urlParams.id, urlParams.idReport]);
 
+  //--------------------------------------------------gestion des photos------------------------------------------------------
+
+  const onDrop = (picture) => {
+    setPicture([...picture, picture]);
+    console.log(picture);
+  };
+
   // -------------------------------------------------gestion conformité/commentaire------------------------------------------
 
   const handleCheckConformity = (etat) => {
@@ -91,6 +109,17 @@ const ReportSecuritePage = ({ match }) => {
       report.propreteCommuneImputations = report.propreteCommuneImputations.map(
         (imput) => "/api/proprete_commune_imputations/" + imput.id
       );
+      await MediaUploadAPI.upload(data)
+        .then((response) => {
+          console.log(response.data);
+          console.log(report.id.toString());
+          photo.link = response.data.contentUrl;
+          photo.Report = "/api/reports/" + report.id.toString();
+          PhotoAPI.create(photo);
+        })
+        .catch(function () {
+          console.log("FAILURE");
+        });
 
       await ReportsAPI.update(urlParams.idReport, report);
       if (currentTarget.name == "conformity") {
@@ -160,7 +189,11 @@ const ReportSecuritePage = ({ match }) => {
                     api={"securite"}
                   ></ReportImputation>
                   <div className="ml-auto">
-                    <ImageUpload buttonText="Choisir l'image" />
+                    <ImageUpload
+                      buttonText="Choisir l'image"
+                      singleImg={true}
+                      onChange={onDrop}
+                    />
                   </div>
                 </div>
                 <ReportComment
