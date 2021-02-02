@@ -29,6 +29,7 @@ import AdminProjectPage from './pages/AdminProjectPage';
 import 'fontsource-roboto';
 import AdminCompaniesPage from './pages/AdminCompaniesPage';
 import AdminCompanyPage from './pages/AdminCompanyPage';
+import ShowReport from './pages/ShowReport';
 
 
 AuthAPI.setup();
@@ -72,6 +73,7 @@ const App = () => {
                         <PrivateRoute path="/admin/company" component={AdminCompaniesPage}/>
                         <PrivateRoute path="/admin/:id" component={AdminPage}/>
                         <PrivateRoute path="/projects" component={ListProjectsPage}/>
+                        <PrivateRoute path="/showReport/:id" component={ShowReport}/>
 
                     </Switch>
 
