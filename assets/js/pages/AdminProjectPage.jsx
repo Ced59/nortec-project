@@ -171,6 +171,14 @@ const AdminProjectPage = ({ history, match, props }) => {
     try {
       if (edit) {
         console.log(project);
+        await MediaUploadAPI.upload(data)
+          .then((response) => {
+            console.log(response.data);
+            project.photo = response.data.contentUrl;
+          })
+          .catch(function () {
+            console.log("FAILURE");
+          });
         project.users = project.users.map(
           (userInProject) => "/api/users/" + userInProject.id
         );
@@ -184,15 +192,19 @@ const AdminProjectPage = ({ history, match, props }) => {
         await fetchProject(id);
         fetchUsers();
       } else {
-        await MediaUploadAPI.upload(data)
+        await ProjectsAPI.create(project).then((response)=>{
+          const projectID = response.data["@id"].split('/')[response.data["@id"].split('/').length - 1];
+          console.log(projectID);
+          MediaUploadAPI.upload(data)
           .then((response) => {
             console.log(response.data);
             project.photo = response.data.contentUrl;
+            ProjectsAPI.update(projectID, project)
           })
           .catch(function () {
             console.log("FAILURE");
           });
-        await ProjectsAPI.create(project);
+        });
         toast.success("Le projet a bien été crée !");
         console.log(project);
         history.replace("/admin/project");
