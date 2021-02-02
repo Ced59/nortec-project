@@ -10,7 +10,7 @@ import ReportImputation from "../components/ReportImputation";
 import ReportComment from "../components/ReportComment";
 
 const ReportPropretePartiesCommunesPage = ({ match }) => {
-  const [conforme, setConforme] = useState(null);
+  const [conforme, setConforme] = useState(false);
   const [report, setReport] = useState({});
   const [loading, setLoading] = useState(true);
   const [imputations, setImputations] = useState("");
@@ -29,6 +29,7 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
       setLoading(false);
       setTempImputations([]);
       setImputations([]);
+      setConforme(data.propreteCommuneConformity);
       // --------------set imputations-------------
       if (data.propreteCommuneImputations == 0) {
         setEditImput(false);
@@ -81,7 +82,7 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
     try {
       report.Project = "/api/projects/" + urlParams.id;
       if (currentTarget.name == "conformity") {
-        report.securityConformity = conforme;
+        report.propreteCommuneConformity = conforme;
       }
       report.securityCommentImputations = report.securityCommentImputations.map(
         (imput) => "/api/security_comment_imputations/" + imput.id

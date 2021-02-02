@@ -34,7 +34,7 @@ const AddEcheanceModal = ({
     lot: "",
     report: [],
   };
-
+  
   const [echeanceLotError, setEcheanceLotError] = useState({
     lot: "",
   });
@@ -86,15 +86,8 @@ const AddEcheanceModal = ({
         });
       } else {
         setEcheanceLotError({ ...echeanceLotError, lot: "" });
-      }
-      if (echeance.numeroEcheance === 0) {
-        setEcheanceError({
-          ...echeanceError,
-          numeroEcheance: "Veuillez entrer un numero",
-        });
-        setEcheance({ ...echeance, numeroEcheance: "" });
-      }
-      console.log(response);
+      }      
+      console.log(error);
     }
   };
 
