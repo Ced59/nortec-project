@@ -6,26 +6,22 @@ import '../../css/loading-icon.css';
 import {Helmet} from "react-helmet";
 import {Link} from "react-router-dom";
 import Button from "../components/forms/Button";
-import fakeData from "../components/fakeDataForDev/fakeData";
 import DateAPI from "../services/DateAPI";
 import {determineStatusClasses, determineStatusLabel} from "../components/ProjectStatus";
 import {toast} from "react-toastify";
-import AuthAPI from "../services/AuthAPI";
 import ProjectsAPI from "../services/ProjectsAPI";
 import Pagination from "@material-ui/lab/Pagination";
 import pagination_configs, {
   LIST_PROJECTS_PAGE_PAGINATION_ITEMS_PER_PAGE,
 } from "../components/configs/pagination_configs";
 
-const ListProjectsPage = (props) => {
+const ListProjectsPage = () => {
 
     const [projects, setProjects] = useState([]);
     const [archivedProjects, setArchivedProjects] = useState(false);
     const [loading, setLoading] = useState(true);
     const [searchValue, setSearchValue] = useState('');
-
     const [currentPage, setCurrentPage] = useState(1);
-
 
     const handleSearch = ({currentTarget}) => {
         setSearchValue(currentTarget.value);
@@ -38,7 +34,6 @@ const ListProjectsPage = (props) => {
             const data = await ProjectsAPI.findAll();
             setProjects(data);
             setLoading(false);
-            
         } catch (error) {
             toast.error("Erreur lors du chargement de la liste des projets");
             console.log(error.response);
@@ -48,6 +43,9 @@ const ListProjectsPage = (props) => {
     useEffect(() => {
         fetchProjects().then(r => "");
     }, []);
+    console.log(projects);
+
+    // ----------------------------- FILTRAGE ARCHIVES ----------------------------------------
 
     const filteredArchivedProjects = projects.filter(
         archivedProjects
@@ -64,15 +62,16 @@ const ListProjectsPage = (props) => {
                 DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'finished'
     );  //TODO Trouver façon de refactoriser cette condition... C'est moche...
 
+    // ----------------------------- FILTRAGE RECHERCHE ----------------------------------------
 
     const filteredProjects = filteredArchivedProjects.filter(
         p =>
-            p.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-            determineStatusLabel(p.dateDebut, projects.dateFinReelle).toLowerCase().includes(searchValue.toLowerCase()) ||
-            p.ville.toLowerCase().includes(searchValue.toLowerCase())
+            p.name.toLowerCase().includes(searchValue.toLowerCase()) || //filtre par nom
+            determineStatusLabel(p.dateDebut, projects.dateFinReelle).toLowerCase().includes(searchValue.toLowerCase()) || //filtre par statut
+            p.ville.toLowerCase().includes(searchValue.toLowerCase()) //filtre par ville
     );
 
-    const onChangeArchivedShow = event => {
+    const onChangeArchivedShow = () => {
         setArchivedProjects(!archivedProjects);
         //TODO: Optimisation voir si on charge tout et on change l'affichage ou si l'on charge uniquement le nécessaire. Si chargement ou pas quand on affiche archivés...
     };
@@ -86,10 +85,7 @@ const ListProjectsPage = (props) => {
 
     const paginationConfig = pagination_configs.determinePaginationConfig(filteredProjects, LIST_PROJECTS_PAGE_PAGINATION_ITEMS_PER_PAGE, currentPage);
 
-
     // ----------------------------- Template ------------------------------------------
-
-
 
     return (
         <main className="container">
