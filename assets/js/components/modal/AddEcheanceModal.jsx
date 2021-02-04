@@ -23,7 +23,7 @@ const AddEcheanceModal = ({
     // categorie: "",
     sujet: "",
     lot: "",
-    report: [],
+    report: []
   });
 
   const echeanceModel = {
@@ -32,7 +32,7 @@ const AddEcheanceModal = ({
     // categorie: "",
     sujet: "",
     lot: "",
-    report: [],
+    report: ["api/reports/"+ urlParams.idReport],
   };
   
   const [echeanceLotError, setEcheanceLotError] = useState({

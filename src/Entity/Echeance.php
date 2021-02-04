@@ -74,7 +74,7 @@ class Echeance
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Report", inversedBy="echeances")
-     * @Groups({"echeance"})
+     * @Groups({"echeance","project"})
      */
     private $report;
 
