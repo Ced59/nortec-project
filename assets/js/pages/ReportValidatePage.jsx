@@ -260,74 +260,79 @@ const ReportValidatePage = ({ match }) => {
             <h4 className="mb-3">Liste des echeances</h4>
             {project.lots.map((lot) => (
               <React.Fragment key={lot.id}>
-                {lot.echeances.length !== 0 && (
-                  <>
-                    <div className="row justify-content-center">
-                      <div className="mx-5">
-                        Lot:{" "}
-                        <h5>
-                          {lot.numeroLot} {lot.libelleLot}
-                        </h5>
+                {lot.echeances.length !== 0 &&
+                  lot.echeances.some((echeance) =>
+                    echeance.report.includes(
+                      "/api/reports/" + urlParams.idReport
+                    )
+                  ) && (
+                    <>
+                      <div className="row justify-content-center">
+                        <div className="mx-5">
+                          Lot:{" "}
+                          <h5>
+                            {lot.numeroLot} {lot.libelleLot}
+                          </h5>
+                        </div>
+                        <div className="mx-5">
+                          Entreprise: <h5>{lot.company.nom}</h5>
+                        </div>
                       </div>
-                      <div className="mx-5">
-                        Entreprise: <h5>{lot.company.nom}</h5>
-                      </div>
-                    </div>
-                    <table className="table table-hover">
-                      <thead>
-                        <tr>
-                          <th>Date</th>
-                          <th>Zone</th>
-                          <th>Désignation</th>
-                          <th>Pour le</th>
-                          <th>Planning</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {lot.echeances.map((echeance) => (
-                          <React.Fragment key={echeance.id}>
-                            {echeance.report.includes(
-                              "/api/reports/" + urlParams.idReport
-                            ) && (
-                              <tr key={echeance.id}>
-                                <td>
-                                  {DateAPI.formatDate(echeance.dateDebut)}
-                                </td>
-                                <td>{echeance.zone}</td>
-                                <td>
-                                  <p>{echeance.sujet}</p>
-                                  <p>{echeance.comment}</p>
-                                </td>
-                                <td>
-                                  {DateAPI.formatDate(echeance.dateFinPrevue)}
-                                </td>
-                                <td>
-                                  <span
-                                    className={
-                                      "badge badge-" +
-                                      statusEcheanceClasses(
+                      <table className="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>Date</th>
+                            <th>Zone</th>
+                            <th>Désignation</th>
+                            <th>Pour le</th>
+                            <th>Planning</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {lot.echeances.map((echeance) => (
+                            <React.Fragment key={echeance.id}>
+                              {echeance.report.includes(
+                                "/api/reports/" + urlParams.idReport
+                              ) && (
+                                <tr key={echeance.id}>
+                                  <td>
+                                    {DateAPI.formatDate(echeance.dateDebut)}
+                                  </td>
+                                  <td>{echeance.zone}</td>
+                                  <td>
+                                    <p>{echeance.sujet}</p>
+                                    <p>{echeance.comment}</p>
+                                  </td>
+                                  <td>
+                                    {DateAPI.formatDate(echeance.dateFinPrevue)}
+                                  </td>
+                                  <td>
+                                    <span
+                                      className={
+                                        "badge badge-" +
+                                        statusEcheanceClasses(
+                                          echeance.dateDebut,
+                                          echeance.dateCloture,
+                                          echeance.dateFinPrevue
+                                        )
+                                      }
+                                    >
+                                      {statusEcheanceLabel(
                                         echeance.dateDebut,
                                         echeance.dateCloture,
                                         echeance.dateFinPrevue
-                                      )
-                                    }
-                                  >
-                                    {statusEcheanceLabel(
-                                      echeance.dateDebut,
-                                      echeance.dateCloture,
-                                      echeance.dateFinPrevue
-                                    )}
-                                  </span>
-                                </td>
-                              </tr>
-                            )}
-                          </React.Fragment>
-                        ))}
-                      </tbody>
-                    </table>
-                    <hr />
-                  </>
-                )}
+                                      )}
+                                    </span>
+                                  </td>
+                                </tr>
+                              )}
+                            </React.Fragment>
+                          ))}
+                        </tbody>
+                      </table>
+                      <hr />
+                    </>
+                  )}
               </React.Fragment>
             ))}
           </div>

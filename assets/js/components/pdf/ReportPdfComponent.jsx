@@ -413,7 +413,11 @@ const ReportPdfComponent = ({ report, project }) => {
         </View>
         {project.lots.map((lot) => (
           <View>
-            {lot.echeances.length !== 0 && (
+            {lot.echeances.length !== 0 && lot.echeances.some((echeance) =>
+                    echeance.report.includes(
+                      "/api/reports/" + report.id
+                    )
+                  ) &&  (
               <View break>
                 <View
                   style={[
@@ -453,6 +457,10 @@ const ReportPdfComponent = ({ report, project }) => {
                     </View>
                   </View>
                   {lot.echeances.map((echeance) => (
+                    <View>
+                      {echeance.report.includes(
+                                "/api/reports/" + report.id
+                              ) && (
                     <View style={styles.tableRow}>
                       <View style={[styles.tableCol1, { width: "10%" }]}>
                         <Text style={styles.tableCell}>
@@ -491,7 +499,9 @@ const ReportPdfComponent = ({ report, project }) => {
                           )}
                         </Text>
                       </View>
-                    </View>
+                      </View>
+                      )}
+                      </View>
                   ))}
                 </View>
               </View>
