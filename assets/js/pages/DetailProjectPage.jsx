@@ -17,6 +17,7 @@ import {
 import ReportsAPI from "../services/ReportsAPI";
 import LotModal from "../components/modal/LotModal";
 import EcheanceModal from "../components/modal/EcheanceModal";
+import EcheanceAPI from "../services/EcheanceAPI";
 
 const DetailProjectPage = ({ history, match, props }) => {
   const { id } = match.params;
@@ -108,6 +109,31 @@ const DetailProjectPage = ({ history, match, props }) => {
 
   //Récupération du bon projet à chaque chargement du composant
 
+  const copyEcheance= (idNewReport)=>{
+    EcheanceAPI.findByReport(idNewReport - 1).then((response) => {
+      response.forEach((r) => {
+        r.report = ["api/reports/"+idNewReport];
+        r.lot = "/api/lots/" + r.lot.id;
+
+        EcheanceAPI.create({
+          numeroEcheance: r.numeroEcheance,
+          sujet: r.sujet,
+          dateDebut: r.dateDebut,
+          dateFinPrevue: r.dateFinPrevue,
+          lot: r.lot,
+          redacteur: r.redacteur,
+          report: r.report,
+          zone: r.zone,
+          effectifPrevu: r.effectifPrevu,
+          effectifConstate: r.effectifConstate,
+          comment: r.comment,
+          dateCloture: r.dateCloture,
+        });
+        console.log(r);
+      });
+    });
+  }
+
   //---------------------------------------- Chargement de projet au changement de l'id --------
   useEffect(() => {
     fetchProject(id).then((r) => "");
@@ -134,6 +160,7 @@ const DetailProjectPage = ({ history, match, props }) => {
       idNewReport = 1;
     }
     try {
+      copyEcheance(idNewReport);
       await ReportsAPI.create(report);
       console.log(report);
       history.replace("/project/" + id + "/" + idNewReport + "/echeances");

@@ -19,7 +19,7 @@ function findEcheance(id) {
 
 function findByReport(idReport) {
   return axios
-    .get(REPORT_API + "/" + idReport + "/" + ECHEANCE_API)
+    .get(REPORT_API+"/"+idReport+"/echeances")
     .then((response) => response.data["hydra:member"]);
 }
 
