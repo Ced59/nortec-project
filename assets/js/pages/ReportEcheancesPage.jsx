@@ -163,49 +163,61 @@ const ReportEcheancesPage = ({ match }) => {
                   {project.lots.map((lot) => (
                     <React.Fragment key={lot.id}>
                       {lot.echeances.map((echeance) => (
-                        <tr key={echeance.id}>
-                          <td>{echeance.zone}</td>
-                          <td>{echeance.sujet}</td>
-                          <td>
-                            <span
-                              className={
-                                "badge badge-" +
-                                statusEcheanceClasses(
-                                  echeance.dateDebut,
+                        <React.Fragment key={echeance.id}>
+                          {echeance.report.includes(
+                            "/api/reports/" + urlParams.idReport
+                          ) && (
+                            <tr>
+                              <td>{echeance.zone}</td>
+                              <td>{echeance.sujet}</td>
+                              <td>
+                                <span
+                                  className={
+                                    "badge badge-" +
+                                    statusEcheanceClasses(
+                                      echeance.dateDebut,
+                                      echeance.dateCloture,
+                                      echeance.dateFinPrevue
+                                    )
+                                  }
+                                >
+                                  {statusEcheanceLabel(
+                                    echeance.dateDebut,
+                                    echeance.dateCloture,
+                                    echeance.dateFinPrevue
+                                  )}
+                                </span>
+                              </td>
+                              <td>{DateAPI.formatDate(echeance.dateDebut)}</td>
+                              <td>
+                                {DateAPI.formatDate(echeance.dateFinPrevue)}
+                              </td>
+                              <td>
+                                {DateAPI.formatDate(echeance.dateCloture)}
+                              </td>
+                              <td>
+                                {DateAPI.retard(
                                   echeance.dateCloture,
                                   echeance.dateFinPrevue
-                                )
-                              }
-                            >
-                              {statusEcheanceLabel(
-                                echeance.dateDebut,
-                                echeance.dateCloture,
-                                echeance.dateFinPrevue
-                              )}
-                            </span>
-                          </td>
-                          <td>{DateAPI.formatDate(echeance.dateDebut)}</td>
-                          <td>{DateAPI.formatDate(echeance.dateFinPrevue)}</td>
-                          <td>{DateAPI.formatDate(echeance.dateCloture)}</td>
-                          <td>
-                            {DateAPI.retard(
-                              echeance.dateCloture,
-                              echeance.dateFinPrevue
-                            ) > 0 &&
-                              DateAPI.retard(
-                                echeance.dateCloture,
-                                echeance.dateFinPrevue
-                              )}
-                          </td>
-                          <td>{lot.company.nom}</td>
-                          <td>
-                            <Button
-                              className="btn btn-primary"
-                              text="Détails"
-                              onClick={() => handleShowModalDetail(echeance.id)}
-                            />
-                          </td>
-                        </tr>
+                                ) > 0 &&
+                                  DateAPI.retard(
+                                    echeance.dateCloture,
+                                    echeance.dateFinPrevue
+                                  )}
+                              </td>
+                              <td>{lot.company.nom}</td>
+                              <td>
+                                <Button
+                                  className="btn btn-primary"
+                                  text="Détails"
+                                  onClick={() =>
+                                    handleShowModalDetail(echeance.id)
+                                  }
+                                />
+                              </td>
+                            </tr>
+                          )}
+                        </React.Fragment>
                       ))}
                     </React.Fragment>
                   ))}
@@ -258,20 +270,20 @@ const ReportEcheancesPage = ({ match }) => {
                     </>
                   ) : (
                     <>
-                    <Field
-                      name="zone"
-                      label="Zone"
-                      type="text"
-                      onChange={handleChangeEcheanceDetail}
-                      value={echeanceDetail.zone}
-                    ></Field>
-                    <Field
-                      name="sujet"
-                      label="Sujer"
-                      type="text"
-                      onChange={handleChangeEcheanceDetail}
-                      value={echeanceDetail.sujet}
-                    ></Field>
+                      <Field
+                        name="zone"
+                        label="Zone"
+                        type="text"
+                        onChange={handleChangeEcheanceDetail}
+                        value={echeanceDetail.zone}
+                      ></Field>
+                      <Field
+                        name="sujet"
+                        label="Sujer"
+                        type="text"
+                        onChange={handleChangeEcheanceDetail}
+                        value={echeanceDetail.sujet}
+                      ></Field>
                     </>
                   )}
                   <p>
