@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, withRouter } from "react-router-dom";
 import NavbarLeft from "../components/navbars/NavbarLeft";
-import fakeData from "../components/fakeDataForDev/fakeData";
 import DateAPI from "../services/DateAPI";
 import Button from "../components/forms/Button";
 import ReactPDF, { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
@@ -15,34 +14,12 @@ import {
 
 const ReportValidatePage = ({ match }) => {
   const urlParams = match.params;
-
-  //   const [report, setReport] = useState(
-  //     fakeData.reportById(parseInt(urlParams.idReport, 10))
-  //   );
   const [report, setReport] = useState({});
   const [project, setProject] = useState({});
   const [loading, setLoading] = useState(true);
   const [reportLoading, setReportLoading] = useState(true);
 
   const NavbarLeftWithRouter = withRouter(NavbarLeft);
-
-  // const fetchReport = () => {
-
-  //     const reportById = fakeData.reportById(parseInt(urlParams.idReport, 10));
-
-  //     if (reportById) {
-  //         setReport(reportById);
-  //         console.log(reportById);
-  //         console.log(report);
-  //     }
-
-  // };
-
-  // useEffect(() => {
-
-  //     fetchReport();
-
-  // }, []);
 
   const fetchReport = async (id) => {
     try {
@@ -196,11 +173,11 @@ const ReportValidatePage = ({ match }) => {
                   ))}
                 </ul>
                 <h6>Commentaire : </h6>
-                <p className="ml-3">{report.propreteAccessComment}</p>
+                <p className="ml-3">{report.propreteSecurityComment}</p>
                 <h6>
                   Commentaire interne (non visible sur le rapport final):{" "}
                 </h6>
-                <p className="ml-3">{report.propreteAccessCommentIntern}</p>
+                <p className="ml-3">{report.propreteSecurityCommentIntern}</p>
               </>
             )}
           </div>
@@ -271,11 +248,11 @@ const ReportValidatePage = ({ match }) => {
                   </ul>
                 )}
                 <h6>Commentaire : </h6>
-                <p className="ml-3">{report.propreteAccessComment}</p>
+                <p className="ml-3">{report.propreteCommuneComment}</p>
                 <h6>
                   Commentaire interne (non visible sur le rapport final):{" "}
                 </h6>
-                <p className="ml-3">{report.propreteAccessCommentIntern}</p>
+                <p className="ml-3">{report.propreteCommuneCommentIntern}</p>
               </>
             )}
           </div>
@@ -308,35 +285,43 @@ const ReportValidatePage = ({ match }) => {
                       </thead>
                       <tbody>
                         {lot.echeances.map((echeance) => (
-                          <tr key={echeance.id}>
-                            <td>{DateAPI.formatDate(echeance.dateDebut)}</td>
-                            <td>{echeance.zone}</td>
-                            <td>
-                              <p>{echeance.sujet}</p>
-                              <p>{echeance.comment}</p>
-                            </td>
-                            <td>
-                              {DateAPI.formatDate(echeance.dateFinPrevue)}
-                            </td>
-                            <td>
-                              <span
-                                className={
-                                  "badge badge-" +
-                                  statusEcheanceClasses(
-                                    echeance.dateDebut,
-                                    echeance.dateCloture,
-                                    echeance.dateFinPrevue
-                                  )
-                                }
-                              >
-                                {statusEcheanceLabel(
-                                  echeance.dateDebut,
-                                  echeance.dateCloture,
-                                  echeance.dateFinPrevue
-                                )}
-                              </span>
-                            </td>
-                          </tr>
+                          <React.Fragment key={echeance.id}>
+                            {echeance.report.includes(
+                              "/api/reports/" + urlParams.idReport
+                            ) && (
+                              <tr key={echeance.id}>
+                                <td>
+                                  {DateAPI.formatDate(echeance.dateDebut)}
+                                </td>
+                                <td>{echeance.zone}</td>
+                                <td>
+                                  <p>{echeance.sujet}</p>
+                                  <p>{echeance.comment}</p>
+                                </td>
+                                <td>
+                                  {DateAPI.formatDate(echeance.dateFinPrevue)}
+                                </td>
+                                <td>
+                                  <span
+                                    className={
+                                      "badge badge-" +
+                                      statusEcheanceClasses(
+                                        echeance.dateDebut,
+                                        echeance.dateCloture,
+                                        echeance.dateFinPrevue
+                                      )
+                                    }
+                                  >
+                                    {statusEcheanceLabel(
+                                      echeance.dateDebut,
+                                      echeance.dateCloture,
+                                      echeance.dateFinPrevue
+                                    )}
+                                  </span>
+                                </td>
+                              </tr>
+                            )}
+                          </React.Fragment>
                         ))}
                       </tbody>
                     </table>

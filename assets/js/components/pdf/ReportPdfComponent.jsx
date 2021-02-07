@@ -391,6 +391,8 @@ const ReportPdfComponent = ({ report, project }) => {
                   </View>
                 ))}
               </View>
+              <Text style={{marginVertical:10}}>Commentaire : </Text>
+              <Text style={{fontSize:10}}>{report.propreteCommuneComment}</Text>
             </View>
           )}
         </View>
