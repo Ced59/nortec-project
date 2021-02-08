@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import ReportsAPI from "../services/ReportsAPI";
 import ReportImputation from "../components/ReportImputation";
 import ReportComment from "../components/ReportComment";
+import ReportAddPhoto from "../components/ReportAddPhoto";
 
 const ReportPropretePartiesCommunesPage = ({ match }) => {
   const [conforme, setConforme] = useState(false);
@@ -162,10 +163,11 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
                   urlParams={urlParams}
                   api={"propreteCommun"}
                 ></ReportImputation>
-                <div className="ml-auto">
-                  <ImageUpload buttonText="Choisir l'image" />
-                </div>
               </div>
+              <ReportAddPhoto
+                reportID={urlParams.idReport}
+                typePhoto="commune"
+              />
               <ReportComment
                 setReport={setReport}
                 report={report}
