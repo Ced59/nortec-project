@@ -109,10 +109,12 @@ const DetailProjectPage = ({ history, match, props }) => {
 
   //Récupération du bon projet à chaque chargement du composant
 
-  const copyEcheance= (idNewReport)=>{
+  //--------------------------------------- Copie des echeances d'un raport------------------
+
+  const copyEcheance = (idNewReport) => {
     EcheanceAPI.findByReport(idNewReport - 1).then((response) => {
       response.forEach((r) => {
-        r.report = ["api/reports/"+idNewReport];
+        r.report = ["api/reports/" + idNewReport];
         r.lot = "/api/lots/" + r.lot.id;
 
         EcheanceAPI.create({
@@ -129,10 +131,9 @@ const DetailProjectPage = ({ history, match, props }) => {
           comment: r.comment,
           dateCloture: r.dateCloture,
         });
-        console.log(r);
       });
     });
-  }
+  };
 
   //---------------------------------------- Chargement de projet au changement de l'id --------
   useEffect(() => {

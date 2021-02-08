@@ -11,6 +11,7 @@ import {
   statusEcheanceLabel,
   statusEcheanceClasses,
 } from "../components/ProjectStatus";
+import PhotoAPI from "../services/PhotoAPI";
 
 const ReportValidatePage = ({ match }) => {
   const urlParams = match.params;
@@ -18,6 +19,7 @@ const ReportValidatePage = ({ match }) => {
   const [project, setProject] = useState({});
   const [loading, setLoading] = useState(true);
   const [reportLoading, setReportLoading] = useState(true);
+  const [photos, setPhotos] = useState([]);
 
   const NavbarLeftWithRouter = withRouter(NavbarLeft);
 
@@ -44,9 +46,19 @@ const ReportValidatePage = ({ match }) => {
     }
   };
 
+  const fetchPhotos = async () => {
+    try {
+      const data = await PhotoAPI.findByReport(urlParams.idReport);
+      setPhotos(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchProject(urlParams.id);
     fetchReport(urlParams.idReport);
+    fetchPhotos();
   }, [urlParams.id, urlParams.idReport]);
 
   console.log(match);
@@ -178,6 +190,21 @@ const ReportValidatePage = ({ match }) => {
                   Commentaire interne (non visible sur le rapport final):{" "}
                 </h6>
                 <p className="ml-3">{report.propreteSecurityCommentIntern}</p>
+                <h6>Photos : </h6>
+                <div className="d-flex justify-content-around">
+                  {photos.map((photo) => (
+                    <React.Fragment key={photo.id}>
+                      {photo.type === "security" && (
+                        <img
+                          
+                          className="col-5"
+                          src={photo.link}
+                          alt=""
+                        />
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
               </>
             )}
           </div>

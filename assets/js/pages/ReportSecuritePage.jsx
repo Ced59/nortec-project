@@ -24,7 +24,7 @@ const ReportSecuritePage = ({ match }) => {
   const [photo, setPhoto] = useState({
     Report: "",
     link: "",
-    type: "jpeg",
+    type: "security",
   });
 
   const data = new FormData();
@@ -113,8 +113,9 @@ const ReportSecuritePage = ({ match }) => {
         .then((response) => {
           console.log(response.data);
           console.log(report.id.toString());
-          photo.link = response.data.contentUrl;
           photo.Report = "/api/reports/" + report.id.toString();
+          photo.link = response.data.contentUrl;
+          console.log(photo.Report);
           PhotoAPI.create(photo);
         })
         .catch(function () {

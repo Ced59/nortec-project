@@ -131,6 +131,7 @@ class Report
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Photo", mappedBy="Report")
      * @Groups({"report"})
+     * @ApiSubresource
      */
     private $photos;
 
