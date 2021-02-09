@@ -34,7 +34,7 @@ import ResetPasswordPage from './pages/ResetPasswordPage';
 import NewPasswordPage from './pages/NewPasswordPage';
 import NotFoundPage from './pages/NotFoundPage';
 import AdminRoute from "./components/AdminRoute";
-import Redirect from "react-router-dom/es/Redirect";
+import { Redirect } from "react-router-dom";
 
 
 AuthAPI.setup();
@@ -51,46 +51,47 @@ const App = () => {
         <AuthContext.Provider value={{isAuthenticated, setIsAuthenticated}}>
 
 
-                <HashRouter>
+            <HashRouter>
 
-                        {isAuthenticated && <NavbarTopWithRouter/>}
+                {isAuthenticated && <NavbarTopWithRouter/>}
 
 
-                    <Switch>
-                        {!isAuthenticated && <Route exact path="/reinitialisation/:id" component={NewPasswordPage}/>}
-                        {!isAuthenticated && <Route exact path="/reinitialisation" component={ResetPasswordPage}/>}
-                        {!isAuthenticated && <Route exact path="/" component={LoginPage}/>}
-                        <PrivateRoute exact path="/profil/:id" component={ProfilPage}/>
-                        <PrivateRoute exact path="/project/:id/:idReport/effectifs" component={ReportEffectifsPage}/>
-                        <PrivateRoute exact path="/project/:id/:idReport/propreteacces" component={ReportPropreteAccesPage}/>
-                        <PrivateRoute exact path="/project/:id/:idReport/securite" component={ReportSecuritePage}/>
-                        <PrivateRoute exact path="/project/:id/:idReport/propretepartiescommunes"
-                                      component={ReportPropretePartiesCommunesPage}/>
-                        <PrivateRoute exact path="/project/:id/:idReport/echeances" component={ReportEcheancesPage}/>
-                        <PrivateRoute exact path="/project/:id/:idReport/validate" component={ReportValidatePage}/>
+                <Switch>
+                    {!isAuthenticated && <Route exact path="/reinitialisation/:id" component={NewPasswordPage}/>}
+                    {!isAuthenticated && <Route exact path="/reinitialisation" component={ResetPasswordPage}/>}
+                    {!isAuthenticated && <Route exact path="/" component={LoginPage}/>}
+                    <PrivateRoute exact path="/profil/:id" component={ProfilPage}/>
+                    <PrivateRoute exact path="/project/:id/:idReport/effectifs" component={ReportEffectifsPage}/>
+                    <PrivateRoute exact path="/project/:id/:idReport/propreteacces"
+                                  component={ReportPropreteAccesPage}/>
+                    <PrivateRoute exact path="/project/:id/:idReport/securite" component={ReportSecuritePage}/>
+                    <PrivateRoute exact path="/project/:id/:idReport/propretepartiescommunes"
+                                  component={ReportPropretePartiesCommunesPage}/>
+                    <PrivateRoute exact path="/project/:id/:idReport/echeances" component={ReportEcheancesPage}/>
+                    <PrivateRoute exact path="/project/:id/:idReport/validate" component={ReportValidatePage}/>
 
-                        <PrivateRoute exact path="/project/:id/listReports" component={ListReportsByProject}/>
-                        <PrivateRoute exact path="/project/:id" component={DetailProjectPage}/>
+                    <PrivateRoute exact path="/project/:id/listReports" component={ListReportsByProject}/>
+                    <PrivateRoute exact path="/project/:id" component={DetailProjectPage}/>
 
-                        <AdminRoute exact path="/admin/userslist" component={AdminUsersPage}/>
-                        <AdminRoute exact path="/admin/user/:id" component={AdminUserPage}/>
-                        <AdminRoute exact path="/admin/project/:id" component={AdminProjectPage}/>
-                        <AdminRoute exact path="/admin/project" component={AdminProjectsPage}/>
-                        <AdminRoute exact path="/admin/company/:id" component={AdminCompanyPage}/>
-                        <AdminRoute exact path="/admin/company" component={AdminCompaniesPage}/>
-                        <AdminRoute exact path="/admin" component={AdminPage}/>
-                        <PrivateRoute exact path="/showReport/:id" component={ShowReport}/>
-                        <PrivateRoute exact path="/projects" component={ListProjectsPage}/>
-                        {isAuthenticated && <Route exact path="/"> <Redirect to="/projects"/> </Route>}
-                        <Route component={NotFoundPage}/>
+                    <AdminRoute exact path="/admin/userslist" component={AdminUsersPage}/>
+                    <AdminRoute exact path="/admin/user/:id" component={AdminUserPage}/>
+                    <AdminRoute exact path="/admin/project/:id" component={AdminProjectPage}/>
+                    <AdminRoute exact path="/admin/project" component={AdminProjectsPage}/>
+                    <AdminRoute exact path="/admin/company/:id" component={AdminCompanyPage}/>
+                    <AdminRoute exact path="/admin/company" component={AdminCompaniesPage}/>
+                    <AdminRoute exact path="/admin" component={AdminPage}/>
+                    <PrivateRoute exact path="/showReport/:id" component={ShowReport}/>
+                    <PrivateRoute exact path="/projects" component={ListProjectsPage}/>
+                    {isAuthenticated && <Route exact path="/"> <Redirect to="/projects"/> </Route>}
+                    <Route component={NotFoundPage}/>
 
-                    </Switch>
+                </Switch>
 
-                </HashRouter>
+            </HashRouter>
 
-                < ToastContainer
-                    position={toast.POSITION.BOTTOM_LEFT}
-                />
+            < ToastContainer
+                position={toast.POSITION.BOTTOM_LEFT}
+            />
 
         </AuthContext.Provider>
 
