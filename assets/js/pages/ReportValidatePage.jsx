@@ -26,7 +26,6 @@ const ReportValidatePage = ({ match }) => {
   const fetchReport = async (id) => {
     try {
       const data = await ReportsAPI.findReport(id);
-      console.log(data);
       setReport(data);
       setReportLoading(false);
     } catch (error) {
@@ -37,7 +36,6 @@ const ReportValidatePage = ({ match }) => {
   const fetchProject = async (id) => {
     try {
       const data = await ProjectsAPI.find(id);
-      console.log(data);
       setProject(data);
 
       setLoading(false);
@@ -420,7 +418,7 @@ const ReportValidatePage = ({ match }) => {
           </div>
         </div>
       )}
-      {loading && reportLoading && <div id="loading-icon"> </div>}
+      {loading && reportLoading && <div id="loading-icon"/>}
     </main>
   );
 };

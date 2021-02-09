@@ -56,7 +56,6 @@ const AdminCompanyPage = ({ history, match, props }) => {
       const data = await CompanyAPI.find(id);
       setCompany(data);
       setLoading(false);
-      console.log(data);
     } catch (error) {
       console.log(error.response);
     }
@@ -99,14 +98,11 @@ const AdminCompanyPage = ({ history, match, props }) => {
 
   const handleSubmitAddContact = async () => {
     try {
-      console.log(contact);
       await AnnuaireAPI.create(contact);
-      console.log(contact);
       toast.success("Le contact a bien été ajouté");
       fetchCompany(id);
       setContact(contactModel);
       setContactError(contactErrorModel);
-      console.log(contact);
     } catch ({ response }) {
       console.log(response);
       const { violations } = response.data;
@@ -123,9 +119,7 @@ const AdminCompanyPage = ({ history, match, props }) => {
 
   const handleSubmitUpdateContact = async () => {
     try {
-      console.log(contact);
       await AnnuaireAPI.update(contact.id, contact);
-      console.log(contact);
       toast.success("Le contact a bien été mis à jour");
       fetchCompany(id);
       setContact(contactModel);
@@ -148,7 +142,6 @@ const AdminCompanyPage = ({ history, match, props }) => {
   const handleSubmitDeleteContact = async (id) => {
     try {
       await AnnuaireAPI.deleteContact(id);
-      console.log(contact);
       fetchCompany(company.id);
       setContact(contactModel);
       toast.success("Le contact a bien été supprimé");
@@ -162,7 +155,6 @@ const AdminCompanyPage = ({ history, match, props }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(company);
 
     try {
       company.annuaires = company.annuaires.map(
@@ -176,7 +168,6 @@ const AdminCompanyPage = ({ history, match, props }) => {
       } else {
         await CompanyAPI.create(company);
         toast.success("L'entreprise a bien été crée !");
-        console.log(company);
         history.replace("/admin/company");
       }
     } catch ({ response }) {
@@ -241,24 +232,6 @@ const AdminCompanyPage = ({ history, match, props }) => {
             value={company.ville}
             error={error.ville}
           />
-          {/* <Field
-            name="mail1"
-            label="Mail (obligatoire)"
-            placeholder="Entrez le Mail de l'entreprise"
-            type="email"
-            onChange={handleChange}
-            value={company.mail1}
-            error={error.mail1}
-          />
-          <Field
-            name="mail2"
-            label="Mail (optionnel)"
-            placeholder="Entrez une adresse mail "
-            type="email"
-            onChange={handleChange}
-            value={company.mail2}
-            error={error.mail2}
-          /> */}
           <h3>Contacts dans l'entreprise</h3>
           {edit && (
             <>

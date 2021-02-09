@@ -13,7 +13,6 @@ const AdminCompaniesPage = (props) => {
     const fetchCompanies = async () => {
         try {
             const data = await CompanyAPI.findAll();
-            console.log(data)
             setCompanies(data);
             setLoading(false);
         } catch (error) {

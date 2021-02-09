@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "../../../css/navbarLeft.css";
 import { NavLink } from "react-router-dom";
-import fakeData from "../fakeDataForDev/fakeData";
-import ProjectsAPI from "../../services/ProjectsAPI";
 
 // TODO changer la class selected en fonction du clic
 

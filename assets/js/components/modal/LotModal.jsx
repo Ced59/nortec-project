@@ -39,7 +39,6 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
   const handleClipboard = ({ currentTarget }) => {
     const value = currentTarget.innerText;
     setClipboard(value);
-    console.log(value);
     toast.info("Copié dans le presse-papier");
   };
 
@@ -58,7 +57,6 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
     setShowLotDetail(false);
     if (showLotModal) {
       fetchCompany().then((r) => "");
-      console.log(companies);
     } else {
       setLots(lotsModel);
     }
@@ -90,7 +88,6 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
       lots.project = "/api/projects/" + project.id;
       lots.company = "/api/companies/" + lots.company;
 
-      console.log(lots);
 
       await ProjectsAPI.addLotProject(lots);
 

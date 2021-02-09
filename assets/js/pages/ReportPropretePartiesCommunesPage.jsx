@@ -26,7 +26,6 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
     try {
       const data = await ReportsAPI.findReport(id);
       setReport(data);
-      console.log(data);
       setLoading(false);
       setTempImputations([]);
       setImputations([]);
@@ -34,7 +33,6 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
       // --------------set imputations-------------
       if (data.propreteCommuneImputations == 0) {
         setEditImput(false);
-        console.log("new");
         data.Project.lots.map((imput) =>
           tempImputations.push({
             companyName: imput.company.nom,
@@ -45,10 +43,8 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
           })
         );
         setImputations(tempImputations);
-        console.log(imputations);
       } else {
         setEditImput(true);
-        console.log("edit");
         data.propreteCommuneImputations.map((imput) =>
           tempImputations.push({
             idImput: imput.id,
@@ -60,7 +56,6 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
           })
         );
         setImputations(tempImputations);
-        console.log(imputations);
       }
       // ---------------------------------------------
     } catch (error) {
@@ -156,6 +151,7 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
                 <ReportImputation
                   setLoading={setLoading}
                   setImputations={setImputations}
+                  setTempImputations={setTempImputations}
                   imputations={imputations}
                   editImput={editImput}
                   setEditImput={setEditImput}

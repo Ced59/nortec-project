@@ -43,7 +43,6 @@ const ListProjectsPage = () => {
     useEffect(() => {
         fetchProjects().then(r => "");
     }, []);
-    console.log(projects);
 
     // ----------------------------- FILTRAGE ARCHIVES ----------------------------------------
 
