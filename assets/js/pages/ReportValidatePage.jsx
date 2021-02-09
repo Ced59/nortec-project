@@ -191,16 +191,11 @@ const ReportValidatePage = ({ match }) => {
                 </h6>
                 <p className="ml-3">{report.propreteSecurityCommentIntern}</p>
                 <h6>Photos : </h6>
-                <div className="d-flex justify-content-around">
+                <div className="d-flex flex-wrap justify-content-around">
                   {photos.map((photo) => (
                     <React.Fragment key={photo.id}>
                       {photo.type === "security" && (
-                        <img
-                          
-                          className="col-5"
-                          src={photo.link}
-                          alt=""
-                        />
+                        <img className="col-5 mb-2" src={photo.link} alt="" />
                       )}
                     </React.Fragment>
                   ))}
@@ -240,6 +235,16 @@ const ReportValidatePage = ({ match }) => {
                   Commentaire interne (non visible sur le rapport final):{" "}
                 </h6>
                 <p className="ml-3">{report.propreteAccessCommentIntern}</p>
+                <h6>Photos : </h6>
+                <div className="d-flex flex-wrap justify-content-around">
+                  {photos.map((photo) => (
+                    <React.Fragment key={photo.id}>
+                      {photo.type === "access" && (
+                        <img className="col-5 mb-2" src={photo.link} alt="" />
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
               </>
             )}
           </div>
@@ -280,6 +285,16 @@ const ReportValidatePage = ({ match }) => {
                   Commentaire interne (non visible sur le rapport final):{" "}
                 </h6>
                 <p className="ml-3">{report.propreteCommuneCommentIntern}</p>
+                <h6>Photos : </h6>
+                <div className="d-flex flex-wrap justify-content-around">
+                  {photos.map((photo) => (
+                    <React.Fragment key={photo.id}>
+                      {photo.type === "commune" && (
+                        <img className="col-5 mb-2" src={photo.link} alt="" />
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
               </>
             )}
           </div>
@@ -368,7 +383,7 @@ const ReportValidatePage = ({ match }) => {
               <PDFDownloadLink
                 className="offset-2 col-8"
                 document={
-                  <ReportPdfComponent report={report} project={project} />
+                  <ReportPdfComponent report={report} project={project} photos={photos} />
                 }
                 fileName={
                   report.Project.name +
@@ -389,7 +404,7 @@ const ReportValidatePage = ({ match }) => {
           )}
           <div>
             <PDFViewer className="offset-2 col-8" height="1000">
-              <ReportPdfComponent report={report} project={project} />
+              <ReportPdfComponent report={report} project={project} photos={photos} />
             </PDFViewer>
           </div>
 
