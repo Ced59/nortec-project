@@ -60,11 +60,8 @@ function dateIsAfter(dateToCompare, dateDebut, dateFinPrevues) {
   dateFinPrevues.map((date) => {
     if (!dayjs(higherDate).isAfter(date.date)) {
       higherDate = date.date;
-      console.log(higherDate);
-      console.log(date.date);
     }
   });
-  console.log(higherDate);
 
   return dayjs(dateToCompare).isAfter(higherDate);
 }

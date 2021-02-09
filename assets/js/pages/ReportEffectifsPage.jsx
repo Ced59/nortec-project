@@ -26,7 +26,6 @@ const ReportEffectifsPage = ({ match }) => {
     try {
       const data = await ReportsAPI.findReport(id);
       setReport(data);
-      console.log(data);
     } catch (error) {
       toast.error("Erreur lors du chargement du raport");
       console.log(error.response);
@@ -36,7 +35,6 @@ const ReportEffectifsPage = ({ match }) => {
   const fetchProject = async (id) => {
     try {
       const data = await ProjectsAPI.find(id);
-      console.log(data);
       setProject(data);
       setLoading(false);
     } catch (error) {
@@ -71,7 +69,6 @@ const ReportEffectifsPage = ({ match }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      console.log(echeance);
       echeance.lot = "/api/lots/" + echeance.lot.id;
       await EcheanceAPI.update(echeance.id, echeance);
       toast.success("L'effectif est bien modifié !");

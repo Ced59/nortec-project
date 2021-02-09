@@ -26,7 +26,6 @@ const ReportPropreteAccesPage = ({ match }) => {
     try {
       const data = await ReportsAPI.findReport(id);
       setReport(data);
-      console.log(data);
       setLoading(false);
       setTempImputations([]);
       setImputations([]);
@@ -43,7 +42,6 @@ const ReportPropreteAccesPage = ({ match }) => {
           })
         );
         setImputations(tempImputations);
-        console.log(imputations);
       } else {
         setEditImput(true);
         data.propreteAccessImputation.map((imput) =>
@@ -56,7 +54,6 @@ const ReportPropreteAccesPage = ({ match }) => {
           })
         );
         setImputations(tempImputations);
-        console.log(imputations);
       }
       // ---------------------------------------------
     } catch (error) {
@@ -64,7 +61,6 @@ const ReportPropreteAccesPage = ({ match }) => {
       console.log(error.response);
     }
   };
-  console.log(report);
 
   useEffect(() => {
     fetchReport(urlParams.idReport);
@@ -80,7 +76,6 @@ const ReportPropreteAccesPage = ({ match }) => {
     try {
       report.Project = "/api/projects/" + urlParams.id;
       if (currentTarget.name == "conformity") {
-        console.log(conforme);
         report.propreteAccessConformity = conforme;
       }
       report.securityCommentImputations = report.securityCommentImputations.map(
@@ -175,6 +170,7 @@ const ReportPropreteAccesPage = ({ match }) => {
                 <ReportImputation
                   setLoading={setLoading}
                   setImputations={setImputations}
+                  setTempImputations={setTempImputations}
                   imputations={imputations}
                   editImput={editImput}
                   setEditImput={setEditImput}

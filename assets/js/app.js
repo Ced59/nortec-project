@@ -30,6 +30,9 @@ import 'fontsource-roboto';
 import AdminCompaniesPage from './pages/AdminCompaniesPage';
 import AdminCompanyPage from './pages/AdminCompanyPage';
 import ShowReport from './pages/ShowReport';
+import ResetPasswordPage from './pages/ResetPasswordPage';
+import NewPasswordPage from './pages/NewPasswordPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 
 AuthAPI.setup();
@@ -52,28 +55,31 @@ const App = () => {
 
 
                     <Switch>
-                        {!isAuthenticated && <Route path="/" component={LoginPage}/>}
-                        <PrivateRoute path="/profil/:id" component={ProfilPage}/>
-                        <PrivateRoute path="/project/:id/:idReport/effectifs" component={ReportEffectifsPage}/>
-                        <PrivateRoute path="/project/:id/:idReport/propreteacces" component={ReportPropreteAccesPage}/>
-                        <PrivateRoute path="/project/:id/:idReport/securite" component={ReportSecuritePage}/>
-                        <PrivateRoute path="/project/:id/:idReport/propretepartiescommunes"
+                        {!isAuthenticated && <Route exact path="/reinitialisation/:id" component={NewPasswordPage}/>}
+                        {!isAuthenticated && <Route exact path="/reinitialisation" component={ResetPasswordPage}/>}
+                        {!isAuthenticated && <Route exact path="/" component={LoginPage}/>}
+                        <PrivateRoute exact path="/profil/:id" component={ProfilPage}/>
+                        <PrivateRoute exact path="/project/:id/:idReport/effectifs" component={ReportEffectifsPage}/>
+                        <PrivateRoute exact path="/project/:id/:idReport/propreteacces" component={ReportPropreteAccesPage}/>
+                        <PrivateRoute exact path="/project/:id/:idReport/securite" component={ReportSecuritePage}/>
+                        <PrivateRoute exact path="/project/:id/:idReport/propretepartiescommunes"
                                       component={ReportPropretePartiesCommunesPage}/>
-                        <PrivateRoute path="/project/:id/:idReport/echeances" component={ReportEcheancesPage}/>
-                        <PrivateRoute path="/project/:id/:idReport/validate" component={ReportValidatePage}/>
+                        <PrivateRoute exact path="/project/:id/:idReport/echeances" component={ReportEcheancesPage}/>
+                        <PrivateRoute exact path="/project/:id/:idReport/validate" component={ReportValidatePage}/>
 
-                        <PrivateRoute path="/project/:id/listReports" component={ListReportsByProject}/>
-                        <PrivateRoute path="/project/:id" component={DetailProjectPage}/>
+                        <PrivateRoute exact path="/project/:id/listReports" component={ListReportsByProject}/>
+                        <PrivateRoute exact path="/project/:id" component={DetailProjectPage}/>
 
-                        <PrivateRoute path="/admin/userslist" component={AdminUsersPage}/>
-                        <PrivateRoute path="/admin/user/:id" component={AdminUserPage}/>
-                        <PrivateRoute path="/admin/project/:id" component={AdminProjectPage}/>
-                        <PrivateRoute path="/admin/project" component={AdminProjectsPage}/>
-                        <PrivateRoute path="/admin/company/:id" component={AdminCompanyPage}/>
-                        <PrivateRoute path="/admin/company" component={AdminCompaniesPage}/>
-                        <PrivateRoute path="/admin/:id" component={AdminPage}/>
-                        <PrivateRoute path="/projects" component={ListProjectsPage}/>
-                        <PrivateRoute path="/showReport/:id" component={ShowReport}/>
+                        <PrivateRoute exact path="/admin/userslist" component={AdminUsersPage}/>
+                        <PrivateRoute exact path="/admin/user/:id" component={AdminUserPage}/>
+                        <PrivateRoute exact path="/admin/project/:id" component={AdminProjectPage}/>
+                        <PrivateRoute exact path="/admin/project" component={AdminProjectsPage}/>
+                        <PrivateRoute exact path="/admin/company/:id" component={AdminCompanyPage}/>
+                        <PrivateRoute exact path="/admin/company" component={AdminCompaniesPage}/>
+                        <PrivateRoute exact path="/admin/:id" component={AdminPage}/>
+                        <PrivateRoute exact path="/showReport/:id" component={ShowReport}/>
+                        <PrivateRoute exact path={["/projects","/"]} component={ListProjectsPage}/>
+                        <Route component={NotFoundPage}/>
 
                     </Switch>
 

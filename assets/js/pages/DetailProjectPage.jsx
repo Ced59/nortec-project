@@ -86,7 +86,6 @@ const DetailProjectPage = ({ history, match, props }) => {
 
   //----------------------------------------Récupération d'un projet----------------------------
   const fetchProject = async (id) => {
-    // console.log(id)
     try {
       const data = await ProjectsAPI.find(id);
       setProject(data);
@@ -114,7 +113,6 @@ const DetailProjectPage = ({ history, match, props }) => {
     fetchReports();
   }, [id]);
 
-  console.log(project);
 
   const handleBackClick = () => {
     history.replace("/projects");
@@ -135,7 +133,6 @@ const DetailProjectPage = ({ history, match, props }) => {
     }
     try {
       await ReportsAPI.create(report);
-      console.log(report);
       history.replace("/project/" + id + "/" + idNewReport + "/echeances");
       toast.success("Nouveau rapport créé");
     } catch (error) {
@@ -221,9 +218,6 @@ const DetailProjectPage = ({ history, match, props }) => {
       console.log(response);
     }
   };
-
-  // console.log(project);
-  // console.log(project.dateFinPrevues);
 
   //--------------------------------------------Template  --------------------------------------------------------
 

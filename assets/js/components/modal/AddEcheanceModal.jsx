@@ -20,7 +20,6 @@ const AddEcheanceModal = ({
   const [echeance, setEcheance] = useState({
     numeroEcheance: "",
     redacteur: AuthAPI.getUserFirstNameLastName(),
-    // categorie: "",
     sujet: "",
     lot: "",
     report: [],
@@ -29,12 +28,11 @@ const AddEcheanceModal = ({
   const echeanceModel = {
     numeroEcheance: "",
     redacteur: AuthAPI.getUserFirstNameLastName(),
-    // categorie: "",
     sujet: "",
     lot: "",
     report: [],
   };
-  
+
   const [echeanceLotError, setEcheanceLotError] = useState({
     lot: "",
   });
@@ -61,8 +59,6 @@ const AddEcheanceModal = ({
     event.preventDefault();
     echeance.numeroEcheance = Number(echeance.numeroEcheance);
     try {
-      console.log(echeance);
-
       await EcheanceAPI.create(echeance);
 
       toast.success("L'échéance est bien ajouté !");

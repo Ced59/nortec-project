@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, withRouter } from "react-router-dom";
 import NavbarLeft from "../components/navbars/NavbarLeft";
-import fakeData from "../components/fakeDataForDev/fakeData";
 import DateAPI from "../services/DateAPI";
 import Button from "../components/forms/Button";
 import ReactPDF, { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
@@ -15,10 +14,6 @@ import {
 
 const ReportValidatePage = ({ match }) => {
   const urlParams = match.params;
-
-  //   const [report, setReport] = useState(
-  //     fakeData.reportById(parseInt(urlParams.idReport, 10))
-  //   );
   const [report, setReport] = useState({});
   const [project, setProject] = useState({});
   const [loading, setLoading] = useState(true);
@@ -26,28 +21,9 @@ const ReportValidatePage = ({ match }) => {
 
   const NavbarLeftWithRouter = withRouter(NavbarLeft);
 
-  // const fetchReport = () => {
-
-  //     const reportById = fakeData.reportById(parseInt(urlParams.idReport, 10));
-
-  //     if (reportById) {
-  //         setReport(reportById);
-  //         console.log(reportById);
-  //         console.log(report);
-  //     }
-
-  // };
-
-  // useEffect(() => {
-
-  //     fetchReport();
-
-  // }, []);
-
   const fetchReport = async (id) => {
     try {
       const data = await ReportsAPI.findReport(id);
-      console.log(data);
       setReport(data);
       setReportLoading(false);
     } catch (error) {
@@ -58,7 +34,6 @@ const ReportValidatePage = ({ match }) => {
   const fetchProject = async (id) => {
     try {
       const data = await ProjectsAPI.find(id);
-      console.log(data);
       setProject(data);
 
       setLoading(false);
@@ -403,7 +378,7 @@ const ReportValidatePage = ({ match }) => {
           </div>
         </div>
       )}
-      {loading && reportLoading && <div id="loading-icon"> </div>}
+      {loading && reportLoading && <div id="loading-icon"/>}
     </main>
   );
 };
