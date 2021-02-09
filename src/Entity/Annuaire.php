@@ -43,7 +43,6 @@ class Annuaire
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="annuaires")
-     * @Groups({"lot"})
      */
     private $company;
 

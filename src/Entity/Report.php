@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
@@ -130,6 +131,7 @@ class Report
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Photo", mappedBy="Report")
      * @Groups({"report"})
+     * @ApiSubresource
      */
     private $photos;
 
@@ -147,6 +149,7 @@ class Report
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Echeance", mappedBy="report")
+     * @ApiSubresource
      */
     private $echeances;
 

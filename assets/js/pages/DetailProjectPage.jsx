@@ -17,6 +17,7 @@ import {
 import ReportsAPI from "../services/ReportsAPI";
 import LotModal from "../components/modal/LotModal";
 import EcheanceModal from "../components/modal/EcheanceModal";
+import EcheanceAPI from "../services/EcheanceAPI";
 
 const DetailProjectPage = ({ history, match, props }) => {
   const { id } = match.params;
@@ -107,6 +108,32 @@ const DetailProjectPage = ({ history, match, props }) => {
 
   //Récupération du bon projet à chaque chargement du composant
 
+  //--------------------------------------- Copie des echeances d'un raport------------------
+
+  const copyEcheance = (idNewReport) => {
+    EcheanceAPI.findByReport(idNewReport - 1).then((response) => {
+      response.forEach((r) => {
+        r.report = ["api/reports/" + idNewReport];
+        r.lot = "/api/lots/" + r.lot.id;
+
+        EcheanceAPI.create({
+          numeroEcheance: r.numeroEcheance,
+          sujet: r.sujet,
+          dateDebut: r.dateDebut,
+          dateFinPrevue: r.dateFinPrevue,
+          lot: r.lot,
+          redacteur: r.redacteur,
+          report: r.report,
+          zone: r.zone,
+          effectifPrevu: r.effectifPrevu,
+          effectifConstate: r.effectifConstate,
+          comment: r.comment,
+          dateCloture: r.dateCloture,
+        });
+      });
+    });
+  };
+
   //---------------------------------------- Chargement de projet au changement de l'id --------
   useEffect(() => {
     fetchProject(id).then((r) => "");
@@ -132,6 +159,7 @@ const DetailProjectPage = ({ history, match, props }) => {
       idNewReport = 1;
     }
     try {
+      copyEcheance(idNewReport);
       await ReportsAPI.create(report);
       history.replace("/project/" + id + "/" + idNewReport + "/echeances");
       toast.success("Nouveau rapport créé");

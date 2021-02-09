@@ -9,6 +9,7 @@ import ReportsAPI from "../services/ReportsAPI";
 import ReportImputation from "../components/ReportImputation";
 import ReportComment from "../components/ReportComment";
 import ReportConformity from "../components/ReportConformity";
+import ReportAddPhoto from "../components/ReportAddPhoto";
 
 const ReportPropreteAccesPage = ({ match }) => {
   const urlParams = match.params;
@@ -178,10 +179,11 @@ const ReportPropreteAccesPage = ({ match }) => {
                   urlParams={urlParams}
                   api={"propreteAcces"}
                 ></ReportImputation>
-                <div className="col-4">
-                  <ImageUpload buttonText="Choisir l'image" />
-                </div>
               </div>
+              <ReportAddPhoto
+                reportID={urlParams.idReport}
+                typePhoto="access"
+              />
               <ReportComment
                 setReport={setReport}
                 report={report}

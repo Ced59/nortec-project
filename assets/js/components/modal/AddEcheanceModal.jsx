@@ -22,7 +22,7 @@ const AddEcheanceModal = ({
     redacteur: AuthAPI.getUserFirstNameLastName(),
     sujet: "",
     lot: "",
-    report: [],
+    report: []
   });
 
   const echeanceModel = {
@@ -30,7 +30,7 @@ const AddEcheanceModal = ({
     redacteur: AuthAPI.getUserFirstNameLastName(),
     sujet: "",
     lot: "",
-    report: [],
+    report: ["api/reports/"+ urlParams.idReport],
   };
 
   const [echeanceLotError, setEcheanceLotError] = useState({

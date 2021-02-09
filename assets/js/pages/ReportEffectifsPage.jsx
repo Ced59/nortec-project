@@ -112,25 +112,31 @@ const ReportEffectifsPage = ({ match }) => {
                     project.lots.map((lot) => (
                       <React.Fragment key={lot.id}>
                         {lot.echeances.map((echeance) => (
-                          <tr key={echeance.id}>
-                            <td>{echeance.numeroEcheance}</td>
-                            <td>{lot.company.nom}</td>
-                            <td>{lot.numeroLot}</td>
-                            <td>{echeance.sujet}</td>
-                            <td className="text-center">
-                              {echeance.effectifPrevu}
-                            </td>
-                            <td className="text-center">
-                              {echeance.effectifConstate}
-                            </td>
-                            <td>
-                              <Button
-                                className="btn btn-danger"
-                                text="Modifer"
-                                onClick={() => handleShowModal(echeance.id)}
-                              ></Button>
-                            </td>
-                          </tr>
+                          <React.Fragment key={echeance.id}>
+                            {echeance.report.includes(
+                              "/api/reports/" + urlParams.idReport
+                            ) && (
+                              <tr key={echeance.id}>
+                                <td>{echeance.numeroEcheance}</td>
+                                <td>{lot.company.nom}</td>
+                                <td>{lot.numeroLot}</td>
+                                <td>{echeance.sujet}</td>
+                                <td className="text-center">
+                                  {echeance.effectifPrevu}
+                                </td>
+                                <td className="text-center">
+                                  {echeance.effectifConstate}
+                                </td>
+                                <td>
+                                  <Button
+                                    className="btn btn-danger"
+                                    text="Modifer"
+                                    onClick={() => handleShowModal(echeance.id)}
+                                  ></Button>
+                                </td>
+                              </tr>
+                            )}
+                          </React.Fragment>
                         ))}
                       </React.Fragment>
                     ))}
@@ -168,7 +174,10 @@ const ReportEffectifsPage = ({ match }) => {
               onChange={handleChange}
               value={echeance.effectifConstate}
             ></Field>
-            <Button className="btn btn-success align-self-end" text="valider"></Button>
+            <Button
+              className="btn btn-success align-self-end"
+              text="valider"
+            ></Button>
           </form>
         </Modal.Body>
       </Modal>

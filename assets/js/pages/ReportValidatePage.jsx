@@ -11,6 +11,7 @@ import {
   statusEcheanceLabel,
   statusEcheanceClasses,
 } from "../components/ProjectStatus";
+import PhotoAPI from "../services/PhotoAPI";
 
 const ReportValidatePage = ({ match }) => {
   const urlParams = match.params;
@@ -18,6 +19,7 @@ const ReportValidatePage = ({ match }) => {
   const [project, setProject] = useState({});
   const [loading, setLoading] = useState(true);
   const [reportLoading, setReportLoading] = useState(true);
+  const [photos, setPhotos] = useState([]);
 
   const NavbarLeftWithRouter = withRouter(NavbarLeft);
 
@@ -42,9 +44,19 @@ const ReportValidatePage = ({ match }) => {
     }
   };
 
+  const fetchPhotos = async () => {
+    try {
+      const data = await PhotoAPI.findByReport(urlParams.idReport);
+      setPhotos(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchProject(urlParams.id);
     fetchReport(urlParams.idReport);
+    fetchPhotos();
   }, [urlParams.id, urlParams.idReport]);
 
   console.log(match);
@@ -171,11 +183,26 @@ const ReportValidatePage = ({ match }) => {
                   ))}
                 </ul>
                 <h6>Commentaire : </h6>
-                <p className="ml-3">{report.propreteAccessComment}</p>
+                <p className="ml-3">{report.propreteSecurityComment}</p>
                 <h6>
                   Commentaire interne (non visible sur le rapport final):{" "}
                 </h6>
-                <p className="ml-3">{report.propreteAccessCommentIntern}</p>
+                <p className="ml-3">{report.propreteSecurityCommentIntern}</p>
+                <h6>Photos : </h6>
+                <div className="d-flex justify-content-around">
+                  {photos.map((photo) => (
+                    <React.Fragment key={photo.id}>
+                      {photo.type === "security" && (
+                        <img
+                          
+                          className="col-5"
+                          src={photo.link}
+                          alt=""
+                        />
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
               </>
             )}
           </div>
@@ -246,11 +273,11 @@ const ReportValidatePage = ({ match }) => {
                   </ul>
                 )}
                 <h6>Commentaire : </h6>
-                <p className="ml-3">{report.propreteAccessComment}</p>
+                <p className="ml-3">{report.propreteCommuneComment}</p>
                 <h6>
                   Commentaire interne (non visible sur le rapport final):{" "}
                 </h6>
-                <p className="ml-3">{report.propreteAccessCommentIntern}</p>
+                <p className="ml-3">{report.propreteCommuneCommentIntern}</p>
               </>
             )}
           </div>
@@ -258,66 +285,79 @@ const ReportValidatePage = ({ match }) => {
             <h4 className="mb-3">Liste des echeances</h4>
             {project.lots.map((lot) => (
               <React.Fragment key={lot.id}>
-                {lot.echeances.length !== 0 && (
-                  <>
-                    <div className="row justify-content-center">
-                      <div className="mx-5">
-                        Lot:{" "}
-                        <h5>
-                          {lot.numeroLot} {lot.libelleLot}
-                        </h5>
+                {lot.echeances.length !== 0 &&
+                  lot.echeances.some((echeance) =>
+                    echeance.report.includes(
+                      "/api/reports/" + urlParams.idReport
+                    )
+                  ) && (
+                    <>
+                      <div className="row justify-content-center">
+                        <div className="mx-5">
+                          Lot:{" "}
+                          <h5>
+                            {lot.numeroLot} {lot.libelleLot}
+                          </h5>
+                        </div>
+                        <div className="mx-5">
+                          Entreprise: <h5>{lot.company.nom}</h5>
+                        </div>
                       </div>
-                      <div className="mx-5">
-                        Entreprise: <h5>{lot.company.nom}</h5>
-                      </div>
-                    </div>
-                    <table className="table table-hover">
-                      <thead>
-                        <tr>
-                          <th>Date</th>
-                          <th>Zone</th>
-                          <th>Désignation</th>
-                          <th>Pour le</th>
-                          <th>Planning</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {lot.echeances.map((echeance) => (
-                          <tr key={echeance.id}>
-                            <td>{DateAPI.formatDate(echeance.dateDebut)}</td>
-                            <td>{echeance.zone}</td>
-                            <td>
-                              <p>{echeance.sujet}</p>
-                              <p>{echeance.comment}</p>
-                            </td>
-                            <td>
-                              {DateAPI.formatDate(echeance.dateFinPrevue)}
-                            </td>
-                            <td>
-                              <span
-                                className={
-                                  "badge badge-" +
-                                  statusEcheanceClasses(
-                                    echeance.dateDebut,
-                                    echeance.dateCloture,
-                                    echeance.dateFinPrevue
-                                  )
-                                }
-                              >
-                                {statusEcheanceLabel(
-                                  echeance.dateDebut,
-                                  echeance.dateCloture,
-                                  echeance.dateFinPrevue
-                                )}
-                              </span>
-                            </td>
+                      <table className="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>Date</th>
+                            <th>Zone</th>
+                            <th>Désignation</th>
+                            <th>Pour le</th>
+                            <th>Planning</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                    <hr />
-                  </>
-                )}
+                        </thead>
+                        <tbody>
+                          {lot.echeances.map((echeance) => (
+                            <React.Fragment key={echeance.id}>
+                              {echeance.report.includes(
+                                "/api/reports/" + urlParams.idReport
+                              ) && (
+                                <tr key={echeance.id}>
+                                  <td>
+                                    {DateAPI.formatDate(echeance.dateDebut)}
+                                  </td>
+                                  <td>{echeance.zone}</td>
+                                  <td>
+                                    <p>{echeance.sujet}</p>
+                                    <p>{echeance.comment}</p>
+                                  </td>
+                                  <td>
+                                    {DateAPI.formatDate(echeance.dateFinPrevue)}
+                                  </td>
+                                  <td>
+                                    <span
+                                      className={
+                                        "badge badge-" +
+                                        statusEcheanceClasses(
+                                          echeance.dateDebut,
+                                          echeance.dateCloture,
+                                          echeance.dateFinPrevue
+                                        )
+                                      }
+                                    >
+                                      {statusEcheanceLabel(
+                                        echeance.dateDebut,
+                                        echeance.dateCloture,
+                                        echeance.dateFinPrevue
+                                      )}
+                                    </span>
+                                  </td>
+                                </tr>
+                              )}
+                            </React.Fragment>
+                          ))}
+                        </tbody>
+                      </table>
+                      <hr />
+                    </>
+                  )}
               </React.Fragment>
             ))}
           </div>
