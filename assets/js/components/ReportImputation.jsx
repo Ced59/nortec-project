@@ -11,6 +11,7 @@ const ReportImputation = ({
   editImput,
   setEditImput,
   setImputations,
+  setTempImputations,
   imputations,
   fetchReport,
   urlParams,

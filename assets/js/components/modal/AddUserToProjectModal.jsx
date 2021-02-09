@@ -23,7 +23,6 @@ const AddUserToProjectModal = ({ id, users, handleSubmit, project, setProject })
 
   const handleShowUsersModal = () => {
     setShowUsersModal(!showUsersModal);
-    console.log(project);
   };
 
   const handleChangePageAddUser = (page) => {
@@ -31,12 +30,9 @@ const AddUserToProjectModal = ({ id, users, handleSubmit, project, setProject })
   };
 
   const handleAddUser = (user) => {
-    // console.log(user);
     const updatedUsers = [...project.users];
     updatedUsers.push(user);
     setProject({ ...project, users: updatedUsers });
-    // console.log(updatedUsers);
-    // console.log(project.users);
   };
 
   return (

@@ -66,7 +66,6 @@ const ReportEcheancesPage = ({ match }) => {
     try {
       const data = await EcheanceAPI.findEcheance(id);
       setEcheanceDetail(data);
-      console.log(echeanceDetail);
     } catch (error) {
       toast.error("Erreur lors du chargement de l'échéance");
       console.log(error.response);
@@ -90,7 +89,6 @@ const ReportEcheancesPage = ({ match }) => {
       )
     ) {
       try {
-        console.log(echeanceDetail);
         echeanceDetail.lot = "/api/lots/" + echeanceDetail.lot.id;
 
         await EcheanceAPI.update(echeanceDetail.id, echeanceDetail);

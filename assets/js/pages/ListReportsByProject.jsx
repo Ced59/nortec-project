@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import fakeData from "../components/fakeDataForDev/fakeData";
 import ReportsAPI from "../services/ReportsAPI";
 import '../../css/app.css';
 import DateAPI from '../services/DateAPI';
