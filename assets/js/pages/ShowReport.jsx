@@ -1,12 +1,14 @@
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import ImgGallery from "../components/images/ImgGallery";
 import ReportPdfComponent from "../components/pdf/ReportPdfComponent";
 import {
   statusEcheanceClasses,
   statusEcheanceLabel,
 } from "../components/ProjectStatus";
 import DateAPI from "../services/DateAPI";
+import PhotoAPI from "../services/PhotoAPI";
 import ProjectsAPI from "../services/ProjectsAPI";
 import ReportsAPI from "../services/ReportsAPI";
 
@@ -17,12 +19,15 @@ const ShowReport = ({ match }) => {
   const [loading, setLoading] = useState(true);
   const [reportLoading, setReportLoading] = useState(true);
   const [project, setProject] = useState({});
+  const [photos, setPhotos] = useState([]);
+
 
   const fetchReport = async (id) => {
     try {
       const data = await ReportsAPI.findReport(id);
       console.log(data);
       setReport(data);
+      fetchPhotos();
       fetchProject(data.Project.id).then(() => {
         setLoading(false);
       });
@@ -37,6 +42,15 @@ const ShowReport = ({ match }) => {
       setProject(data);
 
       setReportLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const fetchPhotos = async () => {
+    try {
+      const data = await PhotoAPI.findByReport(reportId);
+      console.log(data);
+      setPhotos(data);
     } catch (error) {
       console.log(error);
     }
@@ -171,6 +185,8 @@ const ShowReport = ({ match }) => {
                   Commentaire interne (non visible sur le rapport final):{" "}
                 </h6>
                 <p className="ml-3">{report.propreteAccessCommentIntern}</p>
+                <h6>Photos : </h6>
+                <ImgGallery photos={photos} typePhoto="security"></ImgGallery>
               </>
             )}
           </div>
@@ -206,6 +222,8 @@ const ShowReport = ({ match }) => {
                   Commentaire interne (non visible sur le rapport final):{" "}
                 </h6>
                 <p className="ml-3">{report.propreteAccessCommentIntern}</p>
+                <h6>Photos : </h6>
+                <ImgGallery photos={photos} typePhoto="access"></ImgGallery>
               </>
             )}
           </div>
@@ -246,6 +264,8 @@ const ShowReport = ({ match }) => {
                   Commentaire interne (non visible sur le rapport final):{" "}
                 </h6>
                 <p className="ml-3">{report.propreteAccessCommentIntern}</p>
+                <h6>Photos : </h6>
+                <ImgGallery photos={photos} typePhoto="commune"></ImgGallery>
               </>
             )}
           </div>
@@ -332,7 +352,7 @@ const ShowReport = ({ match }) => {
               <PDFDownloadLink
                 className="col-2 offset-5 mb-5 btn btn-primary"
                 document={
-                  <ReportPdfComponent report={report} project={project} />
+                  <ReportPdfComponent report={report} project={project} photos={photos} />
                 }
                 fileName={
                   report.Project.name +

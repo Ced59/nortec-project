@@ -3,6 +3,7 @@ import ImageUpload from "./forms/ImageUpload";
 import MediaUploadAPI from "../services/MediaUploadAPI";
 import PhotoAPI from "../services/PhotoAPI";
 import Button from "../components/forms/Button";
+import { toast } from "react-toastify";
 
 
 
@@ -36,9 +37,10 @@ const ReportAddPhoto = ({reportID, typePhoto}) => {
           photo.link = response.data.contentUrl;
           console.log(photo.Report);
           PhotoAPI.create(photo);
+          toast.success("La photo a bien été ajouté")
         })
         .catch(function () {
-          console.log("FAILURE");
+          toast.error("Une erreur dans l'ajout de la photo")
         });
     }
   };
