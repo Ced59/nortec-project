@@ -31,7 +31,7 @@ const AdminCompaniesPage = (props) => {
 
                 className='btn btn-danger'
                 type='button'
-                to={'/admin/' + userId}
+                to={'/admin'}
 
             > Retour </Link>
             <h2> Entreprises : </h2>
