@@ -8,7 +8,8 @@ import {
   Image,
 } from "@react-pdf/renderer";
 import DateAPI from "../../services/DateAPI";
-import { statusEcheanceLabel, statusEcheanceClasses } from "../ProjectStatus";
+import { statusEcheanceLabel } from "../ProjectStatus";
+import PdfPhotoGallery from "./PdfPhotoGallery";
 
 const styles = StyleSheet.create({
   page: {
@@ -132,8 +133,7 @@ const styles = StyleSheet.create({
 
   photosImputation: {
     width: "30%",
-    marginLeft: "auto",
-    marginRight: "auto",
+    marginTop: 5,
   },
 
   flexAround: {
@@ -322,13 +322,12 @@ const ReportPdfComponent = ({ report, project, photos }) => {
                 ))}
               </View>
               <Text style={styles.listEffectifs}> Photos : </Text>
-              <View style={styles.flexAround}>
-                {photos.map((photo) => (
-                  <View key={photo.id} style={styles.photosImputation}>
-                    {photo.type === "security" && <Image src={photo.link} />}
-                  </View>
-                ))}
-              </View>
+              <PdfPhotoGallery
+                photos={photos}
+                viewStyle={styles.flexAround}
+                imageStyle={styles.photosImputation}
+                typePhoto="security"
+              ></PdfPhotoGallery>
             </View>
           )}
         </View>
@@ -380,13 +379,12 @@ const ReportPdfComponent = ({ report, project, photos }) => {
                 {report.propreteAccessComment}
               </Text>
               <Text style={styles.listEffectifs}> Photos : </Text>
-              <View style={styles.flexAround}>
-                {photos.map((photo) => (
-                  <View key={photo.id} style={styles.photosImputation}>
-                    {photo.type === "access" && <Image src={photo.link} />}
-                  </View>
-                ))}
-              </View>
+              <PdfPhotoGallery
+                photos={photos}
+                viewStyle={styles.flexAround}
+                imageStyle={styles.photosImputation}
+                typePhoto="access"
+              ></PdfPhotoGallery>
             </View>
           )}
         </View>
@@ -432,13 +430,12 @@ const ReportPdfComponent = ({ report, project, photos }) => {
                 {report.propreteCommuneComment}
               </Text>
               <Text style={styles.listEffectifs}> Photos : </Text>
-              <View style={styles.flexAround}>
-                {photos.map((photo) => (
-                  <View key={photo.id} style={styles.photosImputation}>
-                    {photo.type === "commune" && <Image src={photo.link} />}
-                  </View>
-                ))}
-              </View>
+              <PdfPhotoGallery
+                photos={photos}
+                viewStyle={styles.flexAround}
+                imageStyle={styles.photosImputation}
+                typePhoto="commune"
+              ></PdfPhotoGallery>
             </View>
           )}
         </View>

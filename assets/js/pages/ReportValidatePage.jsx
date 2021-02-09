@@ -19,6 +19,7 @@ const ReportValidatePage = ({ match }) => {
   const [project, setProject] = useState({});
   const [loading, setLoading] = useState(true);
   const [reportLoading, setReportLoading] = useState(true);
+  const [photoLoading, setPhotoLoading]= useState(true);
   const [photos, setPhotos] = useState([]);
 
   const NavbarLeftWithRouter = withRouter(NavbarLeft);
@@ -48,6 +49,7 @@ const ReportValidatePage = ({ match }) => {
     try {
       const data = await PhotoAPI.findByReport(urlParams.idReport);
       setPhotos(data);
+      setPhotoLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -376,7 +378,8 @@ const ReportValidatePage = ({ match }) => {
               </React.Fragment>
             ))}
           </div>
-          {!reportLoading && (
+          {!reportLoading && !photoLoading && (
+            <>
             <div>
               <PDFDownloadLink
                 className="offset-2 col-8"
@@ -399,12 +402,13 @@ const ReportValidatePage = ({ match }) => {
                 }
               </PDFDownloadLink>
             </div>
-          )}
           <div>
             <PDFViewer className="offset-2 col-8" height="1000">
               <ReportPdfComponent report={report} project={project} photos={photos} />
             </PDFViewer>
           </div>
+          </>
+            )}
 
           <div className="row ml-2 mt-4 d-flex justify-content-between mb-3">
             <Button
