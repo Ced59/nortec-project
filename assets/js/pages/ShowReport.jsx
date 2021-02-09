@@ -7,6 +7,7 @@ import {
   statusEcheanceLabel,
 } from "../components/ProjectStatus";
 import DateAPI from "../services/DateAPI";
+import PhotoAPI from "../services/PhotoAPI";
 import ProjectsAPI from "../services/ProjectsAPI";
 import ReportsAPI from "../services/ReportsAPI";
 
@@ -17,12 +18,15 @@ const ShowReport = ({ match }) => {
   const [loading, setLoading] = useState(true);
   const [reportLoading, setReportLoading] = useState(true);
   const [project, setProject] = useState({});
+  const [photos, setPhotos] = useState([]);
+
 
   const fetchReport = async (id) => {
     try {
       const data = await ReportsAPI.findReport(id);
       console.log(data);
       setReport(data);
+      fetchPhotos();
       fetchProject(data.Project.id).then(() => {
         setLoading(false);
       });
@@ -37,6 +41,15 @@ const ShowReport = ({ match }) => {
       setProject(data);
 
       setReportLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const fetchPhotos = async () => {
+    try {
+      const data = await PhotoAPI.findByReport(reportId);
+      console.log(data);
+      setPhotos(data);
     } catch (error) {
       console.log(error);
     }
@@ -171,6 +184,16 @@ const ShowReport = ({ match }) => {
                   Commentaire interne (non visible sur le rapport final):{" "}
                 </h6>
                 <p className="ml-3">{report.propreteAccessCommentIntern}</p>
+                <h6>Photos : </h6>
+                <div className="d-flex flex-wrap justify-content-around">
+                  {photos.map((photo) => (
+                    <React.Fragment key={photo.id}>
+                      {photo.type === "security" && (
+                        <img className="col-5 mb-2" src={photo.link} alt="" />
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
               </>
             )}
           </div>
@@ -206,6 +229,16 @@ const ShowReport = ({ match }) => {
                   Commentaire interne (non visible sur le rapport final):{" "}
                 </h6>
                 <p className="ml-3">{report.propreteAccessCommentIntern}</p>
+                <h6>Photos : </h6>
+                <div className="d-flex flex-wrap justify-content-around">
+                  {photos.map((photo) => (
+                    <React.Fragment key={photo.id}>
+                      {photo.type === "access" && (
+                        <img className="col-5 mb-2" src={photo.link} alt="" />
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
               </>
             )}
           </div>
@@ -246,6 +279,16 @@ const ShowReport = ({ match }) => {
                   Commentaire interne (non visible sur le rapport final):{" "}
                 </h6>
                 <p className="ml-3">{report.propreteAccessCommentIntern}</p>
+                <h6>Photos : </h6>
+                <div className="d-flex flex-wrap justify-content-around">
+                  {photos.map((photo) => (
+                    <React.Fragment key={photo.id}>
+                      {photo.type === "commune" && (
+                        <img className="col-5 mb-2" src={photo.link} alt="" />
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
               </>
             )}
           </div>
@@ -332,7 +375,7 @@ const ShowReport = ({ match }) => {
               <PDFDownloadLink
                 className="col-2 offset-5 mb-5 btn btn-primary"
                 document={
-                  <ReportPdfComponent report={report} project={project} />
+                  <ReportPdfComponent report={report} project={project} photos={photos} />
                 }
                 fileName={
                   report.Project.name +
