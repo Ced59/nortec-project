@@ -248,7 +248,7 @@ const ReportPdfComponent = ({ report, project, photos }) => {
               </View>
             </View>
             {project.lots.map((lot) => (
-              <View style={styles.tableRow}>
+              <View key= {lot.id} style={styles.tableRow}>
                 <View style={styles.tableCol1}>
                   <Text style={styles.tableCell}>{lot.company.nom}</Text>
                   <Text style={styles.tableCell}>{lot.libelleLot}</Text>
@@ -263,17 +263,17 @@ const ReportPdfComponent = ({ report, project, photos }) => {
                 </View>
                 <View style={styles.tableCol}>
                   {lot.company.annuaires.map((annuaire) => (
-                    <Text style={styles.tableCell}>{annuaire.nom}</Text>
+                    <Text key={annuaire.id} style={styles.tableCell}>{annuaire.nom}</Text>
                   ))}
                 </View>
                 <View style={styles.tableColEmail}>
                   {lot.company.annuaires.map((annuaire) => (
-                    <Text style={styles.tableCell}>{annuaire.email}</Text>
+                    <Text key={annuaire.id} style={styles.tableCell}>{annuaire.email}</Text>
                   ))}
                 </View>
                 <View style={styles.tableColTelephone}>
                   {lot.company.annuaires.map((annuaire) => (
-                    <Text style={styles.tableCell}>{annuaire.telephone}</Text>
+                    <Text key={annuaire.id} style={styles.tableCell}>{annuaire.telephone}</Text>
                   ))}
                 </View>
               </View>
@@ -307,7 +307,7 @@ const ReportPdfComponent = ({ report, project, photos }) => {
               <View style={styles.listEffectifs}>
                 <Text>Imputations : </Text>
                 {report.securityCommentImputations.map((security) => (
-                  <View style={styles.listEffectifs}>
+                  <View key = {security.id} style={styles.listEffectifs}>
                     {security.commentaire !== "" && (
                       <View>
                         <Text style={styles.textEffectifsNomEntreprise}>
@@ -362,7 +362,7 @@ const ReportPdfComponent = ({ report, project, photos }) => {
               <View style={styles.listEffectifs}>
                 <Text>Imputations : </Text>
                 {report.propreteAccessImputation.map((proprete) => (
-                  <View style={styles.listEffectifs}>
+                  <View key={proprete.id} style={styles.listEffectifs}>
                     <Text
                       style={[
                         styles.textEffectifsNomEntreprise,
@@ -415,7 +415,7 @@ const ReportPdfComponent = ({ report, project, photos }) => {
               <View style={styles.listEffectifs}>
                 <Text>Imputations : </Text>
                 {report.propreteCommuneImputations.map((proprete) => (
-                  <View style={styles.listEffectifs}>
+                  <View key ={proprete.id} style={styles.listEffectifs}>
                     <Text style={styles.textEffectifsNomEntreprise}>
                       {proprete.company.nom + " :" + proprete.percent + " %"}
                     </Text>
@@ -455,7 +455,7 @@ const ReportPdfComponent = ({ report, project, photos }) => {
           />
         </View>
         {project.lots.map((lot) => (
-          <View>
+          <View key={lot.id}>
             {lot.echeances.length !== 0 &&
               lot.echeances.some((echeance) =>
                 echeance.report.includes("/api/reports/" + report.id)
@@ -499,7 +499,7 @@ const ReportPdfComponent = ({ report, project, photos }) => {
                       </View>
                     </View>
                     {lot.echeances.map((echeance) => (
-                      <View>
+                      <View key = {echeance.id}>
                         {echeance.report.includes(
                           "/api/reports/" + report.id
                         ) && (
