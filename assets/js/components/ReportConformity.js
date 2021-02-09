@@ -9,7 +9,6 @@ const ReportConformity = () => {
     try {
       report.Project = "/api/projects/" + urlParams.id;
       if (currentTarget.name == "conformity") {
-        console.log(conforme);
         report.propreteAccessConformity = conforme;
       }
       report.securityCommentImputations = report.securityCommentImputations.map(

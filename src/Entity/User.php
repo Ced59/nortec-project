@@ -75,6 +75,11 @@ class User implements UserInterface
      */
     private $active;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $resetPasswordCode;
+
     public function __construct()
     {
         $this->project = new ArrayCollection();
@@ -215,6 +220,18 @@ class User implements UserInterface
     public function setActive(bool $active): self
     {
         $this->active = $active;
+
+        return $this;
+    }
+
+    public function getResetPasswordCode(): ?string
+    {
+        return $this->resetPasswordCode;
+    }
+
+    public function setResetPasswordCode(?string $resetPasswordCode): self
+    {
+        $this->resetPasswordCode = $resetPasswordCode;
 
         return $this;
     }

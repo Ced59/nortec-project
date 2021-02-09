@@ -75,7 +75,6 @@ const AdminUserPage = ({ history, match, props }) => {
   const fetchProjects = async () => {
     try {
       let result = await ProjectsAPI.findAll();
-      // console.log(result);
       setProjects(result);
       setLoadingProjects(false);
     } catch (error) {
@@ -205,7 +204,6 @@ const AdminUserPage = ({ history, match, props }) => {
     try {
       userModify.roles.splice(0, 1, roleChange.role);
       setUserToModifyRole(userModify);
-      console.log(userToModifyRole);
       await UsersAPI.update(id, userToModifyRole);
       toast.success("Le rôle de l'utilisateur a bien été modifié !");
     } catch ({ response }) {
@@ -340,30 +338,18 @@ const AdminUserPage = ({ history, match, props }) => {
                     <>
                       {!loading ? (
                         <>
-                          {user.active ? (
-                            <p className="col-8">
-                              Le compte de l'utilisateur est bien activé
-                            </p>
-                          ) : (
-                            <p className="col-8">
-                              Le compte de l'utilisateur n'est pas activé
-                            </p>
-                          )}
-                          {user.active ? (
-                            <button
+                          <p className="col-8">
+                            {user.active
+                              ? "Le compte de l'utilisateur est bien activé"
+                              : "Le compte de l'utilisateur n'est pas activé"}
+                          </p>
+                          <button
                               onClick={() => handleShowModal(user)}
                               className="btn btn-danger col-3"
                             >
-                              Désactiver
+                              {user.active ? "Désactiver":"Activer"}
                             </button>
-                          ) : (
-                            <button
-                              onClick={() => handleShowModal(user)}
-                              className="btn btn-danger col-3"
-                            >
-                              Activer
-                            </button>
-                          )}
+                          
                         </>
                       ) : (
                         <div id="loading-icon" />
@@ -476,15 +462,14 @@ const AdminUserPage = ({ history, match, props }) => {
           <Modal.Title>Attention!!!</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Vous êtes sur le point{" "}
-          {userToModifyActive.active ? <>de désactiver </> : <>d'activer </>}
-          l'utilisateur {userToModifyActive.firstName}{" "}
+          Vous êtes sur le point {userToModifyActive.active ? "de désactiver" : "d'activer"}
+          l'utilisateur {userToModifyActive.firstName}
           {userToModifyActive.lastName}! <br />
           {userToModifyActive.active ? (
             <>
               Tous les projets auquel il est affecté seront supprimé et vous
-              devrez les réattribuer plus tard si vous réactivez le compte.{" "}
-              <br />{" "}
+              devrez les réattribuer plus tard si vous réactivez le compte.
+              <br />
             </>
           ) : (
             <>

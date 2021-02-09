@@ -28,13 +28,11 @@ const ReportSecuritePage = ({ match }) => {
     try {
       const data = await ReportsAPI.findReport(id);
       setReport(data);
-      console.log(data);
       setLoading(false);
       setConforme(data.securityConformity);
       // --------------set imputations-------------
       if (data.securityCommentImputations == 0) {
         setEditImput(false);
-        console.log("new");
         data.Project.lots.map((imput) =>
           tempImputations.push({
             companyName: imput.company.nom,
@@ -44,10 +42,8 @@ const ReportSecuritePage = ({ match }) => {
           })
         );
         setImputations(tempImputations);
-        console.log(imputations);
       } else {
         setEditImput(true);
-        console.log("edit");
         data.securityCommentImputations.map((imput) =>
           tempImputations.push({
             idImput: imput.id,
@@ -58,7 +54,6 @@ const ReportSecuritePage = ({ match }) => {
           })
         );
         setImputations(tempImputations);
-        console.log(imputations);
       }
       // ---------------------------------------------
     } catch (error) {
@@ -72,6 +67,7 @@ const ReportSecuritePage = ({ match }) => {
   }, [urlParams.id, urlParams.idReport]);
 
   //--------------------------------------------------gestion des photos------------------------------------------------------
+
 
   // -------------------------------------------------gestion conformité/commentaire------------------------------------------
 
@@ -155,6 +151,7 @@ const ReportSecuritePage = ({ match }) => {
                   <ReportImputation
                     setLoading={setLoading}
                     setImputations={setImputations}
+                    setTempImputations={setTempImputations}
                     imputations={imputations}
                     editImput={editImput}
                     setEditImput={setEditImput}

@@ -87,7 +87,6 @@ const AdminProjectPage = ({ history, match, props }) => {
       const data = await ProjectsAPI.find(id);
       setProject(data);
       setLoadingProject(false);
-      // console.log(data);
     } catch (error) {
       console.log(error.response);
     }
@@ -170,14 +169,11 @@ const AdminProjectPage = ({ history, match, props }) => {
 
     try {
       if (edit) {
-        console.log(project);
         await MediaUploadAPI.upload(data)
           .then((response) => {
-            console.log(response.data);
             project.photo = response.data.contentUrl;
           })
           .catch(function () {
-            console.log("FAILURE");
           });
         project.users = project.users.map(
           (userInProject) => "/api/users/" + userInProject.id
@@ -186,7 +182,6 @@ const AdminProjectPage = ({ history, match, props }) => {
           (dateInProject) => "/api/project_date_fin_prevues/" + dateInProject.id
         );
         project.lots = project.lots.map((lot) => "/api/lots/" + lot.id);
-        // console.log(project.dateFinPrevues);
         await ProjectsAPI.update(id, project);
         toast.success("Le projet a bien été modifié !");
         await fetchProject(id);
@@ -194,10 +189,8 @@ const AdminProjectPage = ({ history, match, props }) => {
       } else {
         await ProjectsAPI.create(project).then((response)=>{
           const projectID = response.data["@id"].split('/')[response.data["@id"].split('/').length - 1];
-          console.log(projectID);
           MediaUploadAPI.upload(data)
           .then((response) => {
-            console.log(response.data);
             project.photo = response.data.contentUrl;
             ProjectsAPI.update(projectID, project)
           })
@@ -206,7 +199,6 @@ const AdminProjectPage = ({ history, match, props }) => {
           });
         });
         toast.success("Le projet a bien été crée !");
-        console.log(project);
         history.replace("/admin/project");
       }
     } catch ({ response }) {
@@ -227,7 +219,6 @@ const AdminProjectPage = ({ history, match, props }) => {
 
   const onDrop = (picture) => {
     setPicture([...picture, picture]);
-    console.log(picture);
   };
 
   //--------------------------------------------Template  --------------------------------------------------------
@@ -355,13 +346,6 @@ const AdminProjectPage = ({ history, match, props }) => {
                   >
                     Ajouter des utilisateurs
                   </button>
-                  {/* <AddUserToProjectModal
-                    id={id}
-                    project={project}
-                    setProject={setProject}
-                    users={users}
-                    handleSubmit={handleSubmit}
-                  ></AddUserToProjectModal> */}
                   {paginationConfigRemUser.paginatedItems.filter(
                     (User) => UsersAPI.determineRole(User) == "Administrateur"
                   ).length !== 0 && (
