@@ -12,6 +12,7 @@ import {
   statusEcheanceClasses,
 } from "../components/ProjectStatus";
 import PhotoAPI from "../services/PhotoAPI";
+import ImgGallery from "../components/images/ImgGallery";
 
 const ReportValidatePage = ({ match }) => {
   const urlParams = match.params;
@@ -19,7 +20,7 @@ const ReportValidatePage = ({ match }) => {
   const [project, setProject] = useState({});
   const [loading, setLoading] = useState(true);
   const [reportLoading, setReportLoading] = useState(true);
-  const [photoLoading, setPhotoLoading]= useState(true);
+  const [photoLoading, setPhotoLoading] = useState(true);
   const [photos, setPhotos] = useState([]);
 
   const NavbarLeftWithRouter = withRouter(NavbarLeft);
@@ -191,15 +192,7 @@ const ReportValidatePage = ({ match }) => {
                 </h6>
                 <p className="ml-3">{report.propreteSecurityCommentIntern}</p>
                 <h6>Photos : </h6>
-                <div className="d-flex flex-wrap justify-content-around">
-                  {photos.map((photo) => (
-                    <React.Fragment key={photo.id}>
-                      {photo.type === "security" && (
-                        <img className="col-5 mb-2" src={photo.link} alt="" />
-                      )}
-                    </React.Fragment>
-                  ))}
-                </div>
+                <ImgGallery photos={photos} typePhoto="security"></ImgGallery>
               </>
             )}
           </div>
@@ -236,15 +229,7 @@ const ReportValidatePage = ({ match }) => {
                 </h6>
                 <p className="ml-3">{report.propreteAccessCommentIntern}</p>
                 <h6>Photos : </h6>
-                <div className="d-flex flex-wrap justify-content-around">
-                  {photos.map((photo) => (
-                    <React.Fragment key={photo.id}>
-                      {photo.type === "access" && (
-                        <img className="col-5 mb-2" src={photo.link} alt="" />
-                      )}
-                    </React.Fragment>
-                  ))}
-                </div>
+                <ImgGallery photos={photos} typePhoto="access"></ImgGallery>
               </>
             )}
           </div>
@@ -286,15 +271,7 @@ const ReportValidatePage = ({ match }) => {
                 </h6>
                 <p className="ml-3">{report.propreteCommuneCommentIntern}</p>
                 <h6>Photos : </h6>
-                <div className="d-flex flex-wrap justify-content-around">
-                  {photos.map((photo) => (
-                    <React.Fragment key={photo.id}>
-                      {photo.type === "commune" && (
-                        <img className="col-5 mb-2" src={photo.link} alt="" />
-                      )}
-                    </React.Fragment>
-                  ))}
-                </div>
+                <ImgGallery photos={photos} typePhoto="commune"></ImgGallery>
               </>
             )}
           </div>
@@ -380,35 +357,43 @@ const ReportValidatePage = ({ match }) => {
           </div>
           {!reportLoading && !photoLoading && (
             <>
-            <div>
-              <PDFDownloadLink
-                className="offset-2 col-8"
-                document={
-                  <ReportPdfComponent report={report} project={project} photos={photos} />
-                }
-                fileName={
-                  report.Project.name +
-                  "_rapport_" +
-                  report.chrono +
-                  "_au_" +
-                  DateAPI.formatDate(DateAPI.now()) +
-                  ".pdf"
-                }
-              >
-                {({ loading }) =>
-                  loading
-                    ? "PDF en préparation pour téléchargement..."
-                    : "Télécharger le PDF"
-                }
-              </PDFDownloadLink>
-            </div>
-          <div>
-            <PDFViewer className="offset-2 col-8" height="1000">
-              <ReportPdfComponent report={report} project={project} photos={photos} />
-            </PDFViewer>
-          </div>
-          </>
-            )}
+              <div>
+                <PDFDownloadLink
+                  className="offset-2 col-8"
+                  document={
+                    <ReportPdfComponent
+                      report={report}
+                      project={project}
+                      photos={photos}
+                    />
+                  }
+                  fileName={
+                    report.Project.name +
+                    "_rapport_" +
+                    report.chrono +
+                    "_au_" +
+                    DateAPI.formatDate(DateAPI.now()) +
+                    ".pdf"
+                  }
+                >
+                  {({ loading }) =>
+                    loading
+                      ? "PDF en préparation pour téléchargement..."
+                      : "Télécharger le PDF"
+                  }
+                </PDFDownloadLink>
+              </div>
+              <div>
+                <PDFViewer className="offset-2 col-8" height="1000">
+                  <ReportPdfComponent
+                    report={report}
+                    project={project}
+                    photos={photos}
+                  />
+                </PDFViewer>
+              </div>
+            </>
+          )}
 
           <div className="row ml-2 mt-4 d-flex justify-content-between mb-3">
             <Button
@@ -437,7 +422,7 @@ const ReportValidatePage = ({ match }) => {
           </div>
         </div>
       )}
-      {loading && reportLoading && <div id="loading-icon"/>}
+      {loading && reportLoading && <div id="loading-icon" />}
     </main>
   );
 };

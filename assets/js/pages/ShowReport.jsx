@@ -1,6 +1,7 @@
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import ImgGallery from "../components/images/ImgGallery";
 import ReportPdfComponent from "../components/pdf/ReportPdfComponent";
 import {
   statusEcheanceClasses,
@@ -185,15 +186,7 @@ const ShowReport = ({ match }) => {
                 </h6>
                 <p className="ml-3">{report.propreteAccessCommentIntern}</p>
                 <h6>Photos : </h6>
-                <div className="d-flex flex-wrap justify-content-around">
-                  {photos.map((photo) => (
-                    <React.Fragment key={photo.id}>
-                      {photo.type === "security" && (
-                        <img className="col-5 mb-2" src={photo.link} alt="" />
-                      )}
-                    </React.Fragment>
-                  ))}
-                </div>
+                <ImgGallery photos={photos} typePhoto="security"></ImgGallery>
               </>
             )}
           </div>
@@ -230,15 +223,7 @@ const ShowReport = ({ match }) => {
                 </h6>
                 <p className="ml-3">{report.propreteAccessCommentIntern}</p>
                 <h6>Photos : </h6>
-                <div className="d-flex flex-wrap justify-content-around">
-                  {photos.map((photo) => (
-                    <React.Fragment key={photo.id}>
-                      {photo.type === "access" && (
-                        <img className="col-5 mb-2" src={photo.link} alt="" />
-                      )}
-                    </React.Fragment>
-                  ))}
-                </div>
+                <ImgGallery photos={photos} typePhoto="access"></ImgGallery>
               </>
             )}
           </div>
@@ -280,15 +265,7 @@ const ShowReport = ({ match }) => {
                 </h6>
                 <p className="ml-3">{report.propreteAccessCommentIntern}</p>
                 <h6>Photos : </h6>
-                <div className="d-flex flex-wrap justify-content-around">
-                  {photos.map((photo) => (
-                    <React.Fragment key={photo.id}>
-                      {photo.type === "commune" && (
-                        <img className="col-5 mb-2" src={photo.link} alt="" />
-                      )}
-                    </React.Fragment>
-                  ))}
-                </div>
+                <ImgGallery photos={photos} typePhoto="commune"></ImgGallery>
               </>
             )}
           </div>
