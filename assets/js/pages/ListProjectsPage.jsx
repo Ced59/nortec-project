@@ -23,10 +23,6 @@ const ListProjectsPage = () => {
     const [searchValue, setSearchValue] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
 
-    const handleSearch = ({currentTarget}) => {
-        setSearchValue(currentTarget.value);
-    };
-
     // --------------------------- Récupérer tous les projets de l'utilisateur -----------------------------------------
     
     const fetchProjects = async () => {
@@ -46,20 +42,15 @@ const ListProjectsPage = () => {
 
     // ----------------------------- FILTRAGE ARCHIVES ----------------------------------------
 
-    const filteredArchivedProjects = projects.filter(
-        archivedProjects
-            ?
-            p =>
-                DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'archived' ||
-                DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'no_start' ||
-                DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'in_progress' ||
-                DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'finished'
-            :
-            p =>
-                DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'no_start' ||
-                DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'in_progress' ||
-                DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'finished'
-    );  //TODO Trouver façon de refactoriser cette condition... C'est moche...
+   const filteredArchivedProjects = projects.filter(
+        p =>
+            DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'no_start' ||
+            DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'in_progress' ||
+            DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'finished' ||
+            (archivedProjects && (
+            DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'archived'
+            ))
+    );
 
     // ----------------------------- FILTRAGE RECHERCHE ----------------------------------------
 
@@ -69,12 +60,6 @@ const ListProjectsPage = () => {
             determineStatusLabel(p.dateDebut, projects.dateFinReelle).toLowerCase().includes(searchValue.toLowerCase()) || //filtre par statut
             p.ville.toLowerCase().includes(searchValue.toLowerCase()) //filtre par ville
     );
-
-    const onChangeArchivedShow = () => {
-        setArchivedProjects(!archivedProjects);
-        //TODO: Optimisation voir si on charge tout et on change l'affichage ou si l'on charge uniquement le nécessaire. Si chargement ou pas quand on affiche archivés...
-    };
-
 
     // ----------------------------- Mise en place de la pagination ------------------------------------------
 
@@ -100,12 +85,12 @@ const ListProjectsPage = () => {
                             type="text"
                             placeholder="Rechercher un projet"
                             aria-label="Search"
-                            onChange={handleSearch}
+                            onChange={e => setSearchValue(e.target.value)}
                             value={searchValue}
                         />
                     </form>
                     <Button
-                        onClick={onChangeArchivedShow}
+                        onClick={()=>setArchivedProjects(!archivedProjects)}
                         text={archivedProjects ? "Cacher les projets archivés" : "Montrer les projets archivés"}
                         className="btn btn-secondary text-right"
                         type="button"

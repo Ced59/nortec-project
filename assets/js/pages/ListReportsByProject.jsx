@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import ReportsAPI from "../services/ReportsAPI";
-import '../../css/app.css';
-import DateAPI from '../services/DateAPI';
+import "../../css/app.css";
+import DateAPI from "../services/DateAPI";
+import { Link } from "react-router-dom";
 
 const STATUS_REPORT_LABELS = {
   clotured: "Clôturé non envoyé",
@@ -21,43 +22,30 @@ const ListReportsByProject = ({ match, history }) => {
       const idProject = parseInt(id.id, 10);
       const reportsByProject = data.filter((r) => r.Project.id === idProject);
       setListReport(reportsByProject);
-      setLoading(false)
+      setLoading(false);
     } catch (error) {
       console.log(error.response);
     }
   };
 
-  const formatDate = (str) => moment(str).format("LLLL");
-
   useEffect(() => {
     fetchReports(id);
   }, [id]);
 
-  const handleShow = (id) => {
-    history.push("/showReport/" + id);
-  };
-
-  const handleEdit = (idReport) => {
-    history.push("/project/" + id.id + "/" + idReport + "/echeances");
-    //TODO Envoi sur même route que création des rapports prévoir mode edition
-  };
-
-  const handleReturn = () => {
-    history.push("/project/" + id.id);
-  };
+  // ------------------------------------------------------TEMPLATE--------------------------------------------------------
 
   return (
     <main className="container">
-      {!loading && (
+      {!loading ? (
+        <div id="loading-icon" />
+      ) : (
         <>
-          {listReport.length !== 0 ? (
-            <h2 className="mb-4">
-              Liste des rapports pour le projet {listReport[0].Project.name}
-            </h2>
-          ) : (
-            <h2>Il n'y a pas de rapport pour ce projet</h2>
-          )}
-
+          <h2 className="mb-4">
+            {listReport.length !== 0
+              ? "Liste des rapports pour le projet " +
+                listReport[0].Project.name
+              : "Il n'y a pas de rapport pour ce projet"}
+          </h2>
           <table className="table table-hover table-striped">
             <thead>
               <tr>
@@ -79,36 +67,32 @@ const ListReportsByProject = ({ match, history }) => {
                   <td>{STATUS_REPORT_LABELS[report.status]}</td>
 
                   <td>
-                    <button
-                      onClick={() => handleEdit(report.id)}
+                    <Link
+                      to={"/project/" + id.id + "/" + idReport + "/echeances"}
                       className="btn btn-sm btn-info"
                     >
                       Editer
-                    </button>
+                    </Link>
                   </td>
 
                   <td>
-                    <button
-                      onClick={() => handleShow(report.id)}
+                    <Link
+                      to={"/showReport/" + id}
                       className="btn btn-sm btn-success"
                     >
                       Voir
-                    </button>
+                    </Link>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
 
-          <button
-            onClick={() => handleReturn()}
-            className="btn btn-sm btn-success"
-          >
+          <Link to={"/project/" + id.id} className="btn btn-sm btn-success">
             Revenir au projet
-          </button>
+          </Link>
         </>
       )}
-      {loading && <div id="loading-icon"> </div>}
     </main>
   );
 };

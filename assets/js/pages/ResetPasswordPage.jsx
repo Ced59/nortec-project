@@ -10,10 +10,7 @@ import MailAPI from "../services/MailAPI";
 const ResetPasswordPage = () => {
   const [enableSubmit, setEnableSubmit] = useState(false);
   const [email, setEmail] = useState("");
-
-  const handleChange = ({ currentTarget }) => {
-    setEmail(currentTarget.value);
-  };
+  
   useEffect(() => {
     setEnableSubmit(email.length !== 0);
   }, [email]);
@@ -55,7 +52,7 @@ const ResetPasswordPage = () => {
               value={email}
               placeholder="Entrez votre adresse email"
               type="email"
-              onChange={handleChange}
+              onChange={e=>setEmail(e.target.value)}
             />
 
             <div className="d-flex justify-content-between">

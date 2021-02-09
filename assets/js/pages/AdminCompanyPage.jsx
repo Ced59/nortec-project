@@ -188,9 +188,7 @@ const AdminCompanyPage = ({ history, match, props }) => {
 
   return (
     <main className="container">
-      {(!edit && <h1>Ajouter une entreprise</h1>) || (
-        <h1>Modifier l'entreprise</h1>
-      )}
+      <h1>{edit ? "Modifier l'entreprise" : "Ajouter une entreprise"}</h1>
       {!loading && (
         <form onSubmit={handleSubmit}>
           <Field
@@ -235,19 +233,19 @@ const AdminCompanyPage = ({ history, match, props }) => {
           <h3>Contacts dans l'entreprise</h3>
           {edit && (
             <>
-              <table className="table table-hover table-striped">
-                <thead>
-                  <tr>
-                    <th className="border-0">Nom</th>
-                    <th className="border-0">Email</th>
-                    <th className="border-0">N° téléphone</th>
-                    <th />
-                  </tr>
-                </thead>
-                <tbody>
-                  {company.annuaires.length !== 0 ? (
-                    company.annuaires.map((contact) => (
-                      <tr key={contact.id}>
+              {company.annuaires.length !== 0 ? (
+                <table className="table table-hover table-striped">
+                  <thead>
+                    <tr>
+                      <th className="border-0">Nom</th>
+                      <th className="border-0">Email</th>
+                      <th className="border-0">N° téléphone</th>
+                      <th />
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {company.annuaires.map((contact, k) => (
+                      <tr key={k}>
                         <td className="w-35">{contact.nom}</td>
                         <td className="w-35">{contact.email}</td>
                         <td className="w-35">{contact.telephone}</td>
@@ -261,12 +259,12 @@ const AdminCompanyPage = ({ history, match, props }) => {
                           </button>
                         </td>
                       </tr>
-                    ))
-                  ) : (
-                    <p>Aucun contact dans cette entreprise</p>
-                  )}
-                </tbody>
-              </table>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p>Aucun contact dans cette entreprise</p>
+              )}
               <table className="table">
                 <thead>
                   <tr>

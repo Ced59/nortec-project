@@ -11,7 +11,6 @@ const ProfilPage = ({ match }) => {
   const [lastNameUser] = useState(AuthAPI.getUserLastName());
   const [mailUser] = useState(AuthAPI.getUsername());
   const [edit, setEdit] = useState(false);
-  //   const [password, setPassword] = useState("");
   const [user, setUser] = useState({
     password: "",
     passwordConfirm: "",

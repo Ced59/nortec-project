@@ -241,6 +241,7 @@ const AdminProjectPage = ({ history, match, props }) => {
                 onChange={handleChange}
                 value={project.name}
                 error={error.name}
+                required={true}
               />
               <FieldTextArea
                 name="description"
@@ -250,6 +251,7 @@ const AdminProjectPage = ({ history, match, props }) => {
                 onChange={handleChange}
                 value={project.description}
                 error={error.description}
+                required={true}
               />
               <Field
                 name="adresse1"
@@ -258,6 +260,7 @@ const AdminProjectPage = ({ history, match, props }) => {
                 onChange={handleChange}
                 value={project.adresse1}
                 error={error.adresse1}
+                required={true}
               />
               <Field
                 name="adresse2"
@@ -275,6 +278,7 @@ const AdminProjectPage = ({ history, match, props }) => {
                   onChange={handleChange}
                   value={project.codePostal}
                   error={error.codePostal}
+                  required={true}
                 />
                 <Field
                   name="ville"
@@ -283,6 +287,7 @@ const AdminProjectPage = ({ history, match, props }) => {
                   onChange={handleChange}
                   value={project.ville}
                   error={error.ville}
+                  required={true}
                 />
               </div>
               <ImageUpload singleImg={true} onChange={onDrop}></ImageUpload>
@@ -296,6 +301,7 @@ const AdminProjectPage = ({ history, match, props }) => {
                 onChange={handleChange}
                 value={DateAPI.formatDateForm(project.dateDebut)}
                 error={error.dateDebut}
+                required={true}
               />
             </fieldset>
             <fieldset className="border-fieldset col-xl-6 col-12 center">
@@ -306,6 +312,7 @@ const AdminProjectPage = ({ history, match, props }) => {
                 onChange={handleChange}
                 value={project.nomMOEX}
                 error={error.nomMOEX}
+                required={true}
               />
               <Field
                 name="nomOPC"
@@ -313,6 +320,7 @@ const AdminProjectPage = ({ history, match, props }) => {
                 onChange={handleChange}
                 value={project.nomOPC}
                 error={error.nomOPC}
+                required={true}
               />
               <Field
                 name="contactClient"
@@ -321,6 +329,7 @@ const AdminProjectPage = ({ history, match, props }) => {
                 onChange={handleChange}
                 value={project.contactClient}
                 error={error.contactClient}
+                required={true}
               />
 
               {edit && (

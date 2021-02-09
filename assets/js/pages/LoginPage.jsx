@@ -26,15 +26,11 @@ const LoginPage = ({ history }) => {
 
   const [error, setError] = useState("");
 
-  // Gestion des champs
-  const handleChange = (e) => {
-    const value = e.currentTarget.value;
-    const name = e.currentTarget.name;
-
+  const handleChange = ({ currentTarget }) => {
+    const { name, value } = currentTarget;
     setCredentials({ ...credentials, [name]: value });
   };
 
-  // Gestion du Submit
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -64,6 +60,8 @@ const LoginPage = ({ history }) => {
       toast.error("Les informations de login/mot de passe sont incorrects!");
     }
   };
+
+  // -----------------------------------------------------------TEMPLATE-------------------------------------------------------
 
   return (
     <main className="container">
