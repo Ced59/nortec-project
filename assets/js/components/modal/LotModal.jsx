@@ -119,9 +119,9 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
         onHide={handleShowLotModal}
       >
         <Modal.Header closeButton>
-          {!showLotDetail ? (
-            <Modal.Title>Liste des lots</Modal.Title>
-          ) : (<Modal.Title>Détails</Modal.Title>)}
+        <Modal.Title>
+          {!showLotDetail ? "Liste des lot" : "Détails"}
+        </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {!showLotDetail && (

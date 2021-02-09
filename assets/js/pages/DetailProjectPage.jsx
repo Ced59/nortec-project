@@ -140,7 +140,6 @@ const DetailProjectPage = ({ history, match, props }) => {
     fetchReports();
   }, [id]);
 
-
   const handleBackClick = () => {
     history.replace("/projects");
   };
@@ -171,11 +170,6 @@ const DetailProjectPage = ({ history, match, props }) => {
   const handleChange = ({ currentTarget }) => {
     const { name, value } = currentTarget;
     setProject({ ...project, [name]: value });
-  };
-
-  const handleChangeDateFinPrevue = ({ currentTarget }) => {
-    const { value } = currentTarget;
-    setDateFinPrevue(value);
   };
 
   const addFinPrevue = async (e) => {
@@ -309,23 +303,16 @@ const DetailProjectPage = ({ history, match, props }) => {
                       </>
                     )}
 
-                    {DateAPI.verifyDateExist(project.dateFinReelle) === "" ? (
-                      <div className="row no-space">
-                        <h6 className="offset-sm-1 col-4">
-                          Date de fin réélle :
-                        </h6>
-                        <p className="col-7">Aucune</p>
-                      </div>
-                    ) : (
-                      <div className="row no-space">
-                        <h6 className="offset-sm-1 col-4">
-                          Date de fin réélle :
-                        </h6>
-                        <p className="col-7">
-                          {DateAPI.formatDate(project.dateFinReelle)}
-                        </p>
-                      </div>
-                    )}
+                    <div className="row no-space">
+                      <h6 className="offset-sm-1 col-4">
+                        Date de fin réélle :
+                      </h6>
+                      <p className="col-7">
+                        {DateAPI.verifyDateExist(project.dateFinReelle) === ""
+                          ? "Aucune"
+                          : DateAPI.formatDate(project.dateFinReelle)}
+                      </p>
+                    </div>
 
                     <div className="row no-space">
                       <h6 className="offset-sm-1 col-4">Nom MOEX :</h6>
@@ -481,7 +468,7 @@ const DetailProjectPage = ({ history, match, props }) => {
                         <Field
                           name="dateFinPrevue"
                           type="date"
-                          onChange={handleChangeDateFinPrevue}
+                          onChange={(e) => setDateFinPrevue(e.target.value)}
                           value={DateAPI.formatDateForm(dateFinPrevue)}
                           noLabel={true}
                           error={errorDate}
@@ -494,56 +481,34 @@ const DetailProjectPage = ({ history, match, props }) => {
                         </button>
                       </div>
 
-                      {DateAPI.verifyDateExist(project.dateFinReelle) === "" ? (
-                        <>
-                          <div className="row no-space">
-                            <h6 className="offset-sm-1 col-4">
-                              Date de fin réélle :
-                            </h6>
-                            <p className="col-7">Aucune</p>
-                          </div>
-                          <div className="row no-space">
-                            <h6 className="offset-sm-1 col-4">
-                              Ajouter la date de fin réélle :
-                            </h6>
-                            <Field
-                              name="dateFinReelle"
-                              type="date"
-                              onChange={handleChangeFinReelle}
-                              value={DateAPI.formatDateForm(DateAPI.now())}
-                              noLabel={true}
-                              error={errorDateFinReelle}
-                            />
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <div className="row no-space">
-                            <h6 className="offset-sm-1 col-4">
-                              Date de fin réélle :
-                            </h6>
-                            <p className="col-7">
-                              {DateAPI.formatDate(project.dateFinReelle)}
-                            </p>
-                          </div>
-                          <div className="row no-space">
-                            <h6 className="offset-sm-1 col-4">
-                              Modifier la date de fin réélle :
-                            </h6>
-
-                            <Field
-                              name="dateFinReelle"
-                              type="date"
-                              onChange={handleChangeFinReelle}
-                              value={DateAPI.formatDateForm(
-                                project.dateFinReelle
-                              )}
-                              noLabel={true}
-                              error={errorDateFinReelle}
-                            />
-                          </div>
-                        </>
-                      )}
+                      <div className="row no-space">
+                        <h6 className="offset-sm-1 col-4">
+                          Date de fin réélle :
+                        </h6>
+                        <p className="col-7">
+                          {DateAPI.verifyDateExist(project.dateFinReelle) === ""
+                            ? "Aucune"
+                            : DateAPI.formatDate(project.dateFinReelle)}
+                        </p>
+                      </div>
+                      <div className="row no-space">
+                        <h6 className="offset-sm-1 col-4">
+                          Ajouter la date de fin réélle :
+                        </h6>
+                        <Field
+                          name="dateFinReelle"
+                          type="date"
+                          onChange={handleChangeFinReelle}
+                          value={
+                            DateAPI.verifyDateExist(project.dateFinReelle) ===
+                            ""
+                              ? DateAPI.formatDateForm(DateAPI.now())
+                              : DateAPI.formatDateForm(project.dateFinReelle)
+                          }
+                          noLabel={true}
+                          error={errorDateFinReelle}
+                        />
+                      </div>
 
                       <div className="row no-space">
                         <h6 className="offset-sm-1 col-4">Nom MOEX :</h6>
@@ -628,23 +593,18 @@ const DetailProjectPage = ({ history, match, props }) => {
               <EcheanceModal project={project}></EcheanceModal>
 
               {AuthAPI.isAdmin() && (
-                <>
-                  {!edit ? (
-                    <Button
-                      text="Modifier le projet"
-                      className="btn btn-primary mx-2 mb-3"
-                      type="button"
-                      onClick={handleEditClick}
-                    />
-                  ) : (
-                    <Button
-                      text="Revenir aux détails du projet"
-                      className="btn btn-info mx-2 mb-3"
-                      type="button"
-                      onClick={handleEditClick}
-                    />
-                  )}
-                </>
+                <Button
+                  text={
+                    !edit
+                      ? "Modifier le projet"
+                      : "Revenir aux détails du projet"
+                  }
+                  className={
+                    "btn btn-" + (!edit ? "primary" : "info") + " mx-2 mb-3"
+                  }
+                  type="button"
+                  onClick={handleEditClick}
+                />
               )}
 
               <Button
