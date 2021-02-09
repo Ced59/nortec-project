@@ -46,7 +46,7 @@ const NavbarTop = ({history}) => {
                         <div className="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
                             <NavLink className="dropdown-item" to={"/profil/" + userId}>Votre profil</NavLink>
                             {AuthAPI.isAdmin() &&
-                            <NavLink className="dropdown-item" to={"/admin/" + userId}>Panneau Administration</NavLink>
+                            <NavLink className="dropdown-item" to={"/admin"}>Panneau Administration</NavLink>
                             }
                         </div>
                     </li>
