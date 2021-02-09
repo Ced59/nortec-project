@@ -33,6 +33,8 @@ import ShowReport from './pages/ShowReport';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import NewPasswordPage from './pages/NewPasswordPage';
 import NotFoundPage from './pages/NotFoundPage';
+import AdminRoute from "./components/AdminRoute";
+import Redirect from "react-router-dom/es/Redirect";
 
 
 AuthAPI.setup();
@@ -70,15 +72,16 @@ const App = () => {
                         <PrivateRoute exact path="/project/:id/listReports" component={ListReportsByProject}/>
                         <PrivateRoute exact path="/project/:id" component={DetailProjectPage}/>
 
-                        <PrivateRoute exact path="/admin/userslist" component={AdminUsersPage}/>
-                        <PrivateRoute exact path="/admin/user/:id" component={AdminUserPage}/>
-                        <PrivateRoute exact path="/admin/project/:id" component={AdminProjectPage}/>
-                        <PrivateRoute exact path="/admin/project" component={AdminProjectsPage}/>
-                        <PrivateRoute exact path="/admin/company/:id" component={AdminCompanyPage}/>
-                        <PrivateRoute exact path="/admin/company" component={AdminCompaniesPage}/>
-                        <PrivateRoute exact path="/admin/:id" component={AdminPage}/>
+                        <AdminRoute exact path="/admin/userslist" component={AdminUsersPage}/>
+                        <AdminRoute exact path="/admin/user/:id" component={AdminUserPage}/>
+                        <AdminRoute exact path="/admin/project/:id" component={AdminProjectPage}/>
+                        <AdminRoute exact path="/admin/project" component={AdminProjectsPage}/>
+                        <AdminRoute exact path="/admin/company/:id" component={AdminCompanyPage}/>
+                        <AdminRoute exact path="/admin/company" component={AdminCompaniesPage}/>
+                        <AdminRoute exact path="/admin" component={AdminPage}/>
                         <PrivateRoute exact path="/showReport/:id" component={ShowReport}/>
-                        <PrivateRoute exact path={["/projects","/"]} component={ListProjectsPage}/>
+                        <PrivateRoute exact path="/projects" component={ListProjectsPage}/>
+                        {isAuthenticated && <Route exact path="/"> <Redirect to="/projects"/> </Route>}
                         <Route component={NotFoundPage}/>
 
                     </Switch>
