@@ -1,12 +1,10 @@
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import ImgGallery from "../components/images/ImgGallery";
 import ReportPdfComponent from "../components/pdf/ReportPdfComponent";
-import {
-  statusEcheanceClasses,
-  statusEcheanceLabel,
-} from "../components/ProjectStatus";
+import SpanStatusEcheance from "../components/SpanStatusEcheance";
 import DateAPI from "../services/DateAPI";
 import PhotoAPI from "../services/PhotoAPI";
 import ProjectsAPI from "../services/ProjectsAPI";
@@ -25,34 +23,30 @@ const ShowReport = ({ match }) => {
   const fetchReport = async (id) => {
     try {
       const data = await ReportsAPI.findReport(id);
-      console.log(data);
       setReport(data);
       fetchPhotos();
       fetchProject(data.Project.id).then(() => {
         setLoading(false);
       });
     } catch (error) {
-      console.log(error);
+      toast.error("Une erreur dans le chargement du rapport")
     }
   };
   const fetchProject = async (id) => {
     try {
       const data = await ProjectsAPI.find(id);
-      console.log(data);
       setProject(data);
-
       setReportLoading(false);
     } catch (error) {
-      console.log(error);
+      toast.error("Une erreur dans le chargement du rapport")
     }
   };
   const fetchPhotos = async () => {
     try {
       const data = await PhotoAPI.findByReport(reportId);
-      console.log(data);
       setPhotos(data);
     } catch (error) {
-      console.log(error);
+      toast.error("Une erreur dans le chargement du rapport")
     }
   };
 
@@ -318,22 +312,9 @@ const ShowReport = ({ match }) => {
                                     {DateAPI.formatDate(echeance.dateFinPrevue)}
                                   </td>
                                   <td>
-                                    <span
-                                      className={
-                                        "badge badge-" +
-                                        statusEcheanceClasses(
-                                          echeance.dateDebut,
-                                          echeance.dateCloture,
-                                          echeance.dateFinPrevue
-                                        )
-                                      }
-                                    >
-                                      {statusEcheanceLabel(
-                                        echeance.dateDebut,
-                                        echeance.dateCloture,
-                                        echeance.dateFinPrevue
-                                      )}
-                                    </span>
+                                  <SpanStatusEcheance
+                                      objet={echeance}
+                                    ></SpanStatusEcheance>
                                   </td>
                                 </tr>
                               )}

@@ -7,12 +7,9 @@ import ReactPDF, { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import ReportPdfComponent from "../components/pdf/ReportPdfComponent";
 import ReportsAPI from "../services/ReportsAPI";
 import ProjectsAPI from "../services/ProjectsAPI";
-import {
-  statusEcheanceLabel,
-  statusEcheanceClasses,
-} from "../components/ProjectStatus";
 import PhotoAPI from "../services/PhotoAPI";
 import ImgGallery from "../components/images/ImgGallery";
+import SpanStatusEcheance from "../components/SpanStatusEcheance";
 
 const ReportValidatePage = ({ match }) => {
   const urlParams = match.params;
@@ -31,7 +28,6 @@ const ReportValidatePage = ({ match }) => {
       setReport(data);
       setReportLoading(false);
     } catch (error) {
-      console.log(error.response);
     }
   };
 
@@ -42,7 +38,6 @@ const ReportValidatePage = ({ match }) => {
 
       setLoading(false);
     } catch (error) {
-      console.log(error);
     }
   };
 
@@ -52,7 +47,6 @@ const ReportValidatePage = ({ match }) => {
       setPhotos(data);
       setPhotoLoading(false);
     } catch (error) {
-      console.log(error);
     }
   };
 
@@ -61,8 +55,6 @@ const ReportValidatePage = ({ match }) => {
     fetchReport(urlParams.idReport);
     fetchPhotos();
   }, [urlParams.id, urlParams.idReport]);
-
-  console.log(match);
 
   //TODO à mettre dans un script node?
   const handleSavePDF = async () => {
@@ -326,22 +318,9 @@ const ReportValidatePage = ({ match }) => {
                                     {DateAPI.formatDate(echeance.dateFinPrevue)}
                                   </td>
                                   <td>
-                                    <span
-                                      className={
-                                        "badge badge-" +
-                                        statusEcheanceClasses(
-                                          echeance.dateDebut,
-                                          echeance.dateCloture,
-                                          echeance.dateFinPrevue
-                                        )
-                                      }
-                                    >
-                                      {statusEcheanceLabel(
-                                        echeance.dateDebut,
-                                        echeance.dateCloture,
-                                        echeance.dateFinPrevue
-                                      )}
-                                    </span>
+                                    <SpanStatusEcheance
+                                      objet={echeance}
+                                    ></SpanStatusEcheance>
                                   </td>
                                 </tr>
                               )}

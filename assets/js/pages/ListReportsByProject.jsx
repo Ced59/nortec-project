@@ -36,7 +36,7 @@ const ListReportsByProject = ({ match, history }) => {
 
   return (
     <main className="container">
-      {!loading ? (
+      {loading ? (
         <div id="loading-icon" />
       ) : (
         <>
@@ -68,7 +68,7 @@ const ListReportsByProject = ({ match, history }) => {
 
                   <td>
                     <Link
-                      to={"/project/" + id.id + "/" + idReport + "/echeances"}
+                      to={"/project/" + id.id + "/" + report.id + "/echeances"}
                       className="btn btn-sm btn-info"
                     >
                       Editer
@@ -77,7 +77,7 @@ const ListReportsByProject = ({ match, history }) => {
 
                   <td>
                     <Link
-                      to={"/showReport/" + id}
+                      to={"/showReport/" + report.id}
                       className="btn btn-sm btn-success"
                     >
                       Voir
