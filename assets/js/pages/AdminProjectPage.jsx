@@ -16,7 +16,7 @@ import Pagination from "@material-ui/lab/Pagination";
 import Modal from "react-bootstrap/Modal";
 import LotModal from "../components/modal/LotModal";
 import EcheanceModal from "../components/modal/EcheanceModal";
-// import AddUserToProjectModal from "../components/modal/AddUserToProjectModal";
+import SearchInput from "../components/forms/SearchInput";
 
 const AdminProjectPage = ({ history, match, props }) => {
   const { id = "new" } = match.params;
@@ -62,11 +62,11 @@ const AdminProjectPage = ({ history, match, props }) => {
   const [users, setUsers] = useState([]);
 
   const [loadingProject, setLoadingProject] = useState(true);
-  const [loadingUsers, setLoadingUsers] = useState(true);
 
   const [currentPageAddUser, setCurrentPageAddUser] = useState(1);
   const [currentPageRemUser, setCurrentPageRemUser] = useState(1);
   const [showUsersModal, setShowUsersModal] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
 
   const [edit, setEdit] = useState(false);
 
@@ -76,7 +76,6 @@ const AdminProjectPage = ({ history, match, props }) => {
     try {
       const data = await UsersAPI.findAll();
       setUsers(data);
-      setLoadingUsers(false);
     } catch (error) {
       console.log(error.response);
     }
@@ -116,8 +115,15 @@ const AdminProjectPage = ({ history, match, props }) => {
     setCurrentPageRemUser(page);
   };
 
-  const usersInProject = users.filter(
-    (User) => User.project.indexOf("/api/projects/" + id) !== -1
+  const filteredUsers = users.filter(
+    (p) =>
+      p.firstName.toLowerCase().includes(searchValue.toLowerCase()) ||
+      p.lastName.toLowerCase().includes(searchValue.toLowerCase()) ||
+      p.email.includes(searchValue.toLowerCase())
+  );
+
+  const usersInProject = filteredUsers.filter(
+    (user) => user.project.indexOf("/api/projects/" + id) !== -1
   );
   const paginationConfigRemUser = pagination_configs.determinePaginationConfig(
     usersInProject,
@@ -125,7 +131,7 @@ const AdminProjectPage = ({ history, match, props }) => {
     currentPageRemUser
   );
 
-  const usersNotInProject = users.filter(
+  const usersNotInProject = filteredUsers.filter(
     (User) => User.project.indexOf("/api/projects/" + id) === -1
   );
   const paginationConfigAddUser = pagination_configs.determinePaginationConfig(
@@ -157,6 +163,8 @@ const AdminProjectPage = ({ history, match, props }) => {
     setShowUsersModal(!showUsersModal);
   };
 
+  //------------------------------------------- gestion du submit----------------------------------------------
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -173,8 +181,7 @@ const AdminProjectPage = ({ history, match, props }) => {
           .then((response) => {
             project.photo = response.data.contentUrl;
           })
-          .catch(function () {
-          });
+          .catch(function () {});
         project.users = project.users.map(
           (userInProject) => "/api/users/" + userInProject.id
         );
@@ -187,16 +194,18 @@ const AdminProjectPage = ({ history, match, props }) => {
         await fetchProject(id);
         fetchUsers();
       } else {
-        await ProjectsAPI.create(project).then((response)=>{
-          const projectID = response.data["@id"].split('/')[response.data["@id"].split('/').length - 1];
+        await ProjectsAPI.create(project).then((response) => {
+          const projectID = response.data["@id"].split("/")[
+            response.data["@id"].split("/").length - 1
+          ];
           MediaUploadAPI.upload(data)
-          .then((response) => {
-            project.photo = response.data.contentUrl;
-            ProjectsAPI.update(projectID, project)
-          })
-          .catch(function () {
-            console.log("FAILURE");
-          });
+            .then((response) => {
+              project.photo = response.data.contentUrl;
+              ProjectsAPI.update(projectID, project);
+            })
+            .catch(function () {
+              console.log("FAILURE");
+            });
         });
         toast.success("Le projet a bien été crée !");
         history.replace("/admin/project");
@@ -355,6 +364,13 @@ const AdminProjectPage = ({ history, match, props }) => {
                   >
                     Ajouter des utilisateurs
                   </button>
+                  <SearchInput
+                    formClassName="form-inline"
+                    InputClassName="form-control ml-auto"
+                    placeholder="Rechercher un utilisateur"
+                    onChange={(e) => setSearchValue(e.target.value)}
+                    value={searchValue}
+                  />
                   {paginationConfigRemUser.paginatedItems.filter(
                     (User) => UsersAPI.determineRole(User) == "Administrateur"
                   ).length !== 0 && (
@@ -475,6 +491,13 @@ const AdminProjectPage = ({ history, match, props }) => {
           <Modal.Title>Liste des utilisateur</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <SearchInput
+            formClassName="form-inline"
+            InputClassName="form-control ml-auto"
+            placeholder="Rechercher un utilisateur"
+            onChange={(e) => setSearchValue(e.target.value)}
+            value={searchValue}
+          />
           <form onSubmit={handleSubmit}>
             {paginationConfigAddUser.paginatedItems.filter(
               (User) => UsersAPI.determineRole(User) == "Administrateur"
