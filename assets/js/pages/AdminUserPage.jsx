@@ -120,16 +120,24 @@ const AdminUserPage = ({ history, match, props }) => {
     setRoleChange({ ...roleChange, [name]: value });
   };
 
-  const handleDeleteUserProject = ({ id }) => {
-    if (edit) {
-      // const newFilteredUserProject = filteredUserProject.filter(item => item.id !== id);
-      // console.log(newFilteredUserProject);
+  // ---------------------------------------GESTION USERS PROJECTS----------------------------------------
 
-      console.log(user);
-      // const updatedProjects = [...user.project];
-      // const index = updatedProjects.findIndex((project) => project.id === "/api/projects/" + id);
-      // updatedProjects.splice(index, 1);
-      // setProject({...project, users: updatedProjects });
+  const handleDeleteUserProject = async (idProject) => {
+    if (edit) {
+      const newUserProjects = user.project.filter(
+        (p) => p !== `/api/projects/${idProject}`
+      );
+      setUser({ ...user, project: newUserProjects });
+      const userProjects = { project: newUserProjects };
+      try {
+        await UsersAPI.update(id, userProjects);
+        toast.success("Liste des projects de l'utilisateur mise à jour");
+        setLoadingProjects(true);
+        fetchProjects();
+      } catch (error) {
+        console.log(error.response);
+        toast.error("Une erreur est survenue");
+      }
     }
   };
 
@@ -344,12 +352,11 @@ const AdminUserPage = ({ history, match, props }) => {
                               : "Le compte de l'utilisateur n'est pas activé"}
                           </p>
                           <button
-                              onClick={() => handleShowModal(user)}
-                              className="btn btn-danger col-3"
-                            >
-                              {user.active ? "Désactiver":"Activer"}
-                            </button>
-                          
+                            onClick={() => handleShowModal(user)}
+                            className="btn btn-danger col-3"
+                          >
+                            {user.active ? "Désactiver" : "Activer"}
+                          </button>
                         </>
                       ) : (
                         <div id="loading-icon" />
@@ -415,7 +422,7 @@ const AdminUserPage = ({ history, match, props }) => {
                                 <button
                                   className="btn btn-danger btn-sm"
                                   onClick={() =>
-                                    handleDeleteUserProject(project)
+                                    handleDeleteUserProject(project.id)
                                   }
                                 >
                                   Retirer le projet
@@ -462,7 +469,8 @@ const AdminUserPage = ({ history, match, props }) => {
           <Modal.Title>Attention!!!</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Vous êtes sur le point {userToModifyActive.active ? "de désactiver" : "d'activer"}
+          Vous êtes sur le point
+          {userToModifyActive.active ? "de désactiver" : "d'activer"}
           l'utilisateur {userToModifyActive.firstName}
           {userToModifyActive.lastName}! <br />
           {userToModifyActive.active ? (

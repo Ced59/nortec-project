@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ImgWithStyleComponent from "../components/images/ImgWithStyleComponent";
 import '../../css/listProjectsPage.css';
 import '../../css/app.css';
@@ -14,6 +14,7 @@ import Pagination from "@material-ui/lab/Pagination";
 import pagination_configs, {
   LIST_PROJECTS_PAGE_PAGINATION_ITEMS_PER_PAGE,
 } from "../components/configs/pagination_configs";
+import SearchInput from "../components/forms/SearchInput";
 
 const ListProjectsPage = () => {
 
@@ -79,16 +80,13 @@ const ListProjectsPage = () => {
             <div className="row justify-content-between mb-2">
                 <h2>Liste des projets : </h2>
                 <div className="d-flex">
-                    <form className="form-inline mr-2">
-                        <input
-                            className="form-control"
-                            type="text"
-                            placeholder="Rechercher un projet"
-                            aria-label="Search"
-                            onChange={e => setSearchValue(e.target.value)}
-                            value={searchValue}
-                        />
-                    </form>
+                    <SearchInput
+                        formClassName="form-inline mr-2"
+                        InputClassName="form-control"
+                        placeholder="Rechercher un projet"
+                        onChange={(e) => setSearchValue(e.target.value)}
+                        value={searchValue}
+                    />
                     <Button
                         onClick={()=>setArchivedProjects(!archivedProjects)}
                         text={archivedProjects ? "Cacher les projets archivés" : "Montrer les projets archivés"}
