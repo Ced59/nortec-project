@@ -1,5 +1,5 @@
 import React from 'react';
-import { statusEcheanceClasses, statusEcheanceLabel } from './ProjectStatus';
+import { statusEcheanceClasses, statusEcheanceLabel } from '../ProjectStatus';
 
 
 

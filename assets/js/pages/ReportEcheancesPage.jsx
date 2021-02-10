@@ -12,7 +12,7 @@ import ReportsAPI from "../services/ReportsAPI";
 import EcheanceAPI from "../services/EcheanceAPI";
 import { toast } from "react-toastify";
 import AddEcheanceModal from "../components/modal/AddEcheanceModal";
-import SpanStatusEcheance from "../components/SpanStatusEcheance";
+import SpanStatusEcheance from "../components/span/SpanStatusEcheance";
 
 const ReportEcheancesPage = ({ match }) => {
   const NavbarLeftWithRouter = withRouter(NavbarLeft);
