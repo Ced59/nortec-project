@@ -1,8 +1,10 @@
 import React from "react";
 import DateAPI from "../services/DateAPI";
-import ImgGallery from "./images/ImgGallery";
+import LiImputation from "./imputations/LiImputation";
+import ReportCard from "./ReportCard";
 import SpanBold from "./span/SpanBold";
 import SpanStatusEcheance from "./span/SpanStatusEcheance";
+import ReportContainer from "./wrapper/ReportContainer";
 
 const ReportResume = ({ report, project, photos, reportLoading, reportId }) => {
   return (
@@ -11,7 +13,7 @@ const ReportResume = ({ report, project, photos, reportLoading, reportId }) => {
         Résumé du rapport du {DateAPI.formatDateHours(report.dateRedaction)} :
       </h3>
 
-      <div className="card m-4 p-2">
+      <ReportContainer>
         <h5 className="mt-3">
           <SpanBold text="Projet : " />
           {project.name}
@@ -38,9 +40,9 @@ const ReportResume = ({ report, project, photos, reportLoading, reportId }) => {
           <SpanBold text="Ville : " />
           {project.ville}
         </p>
-      </div>
+      </ReportContainer>
 
-      <div className="card m-4 p-2">
+      <ReportContainer>
         <h4 className="mb-3">Liste des Lots</h4>
 
         <table className="table table-hover table-striped">
@@ -68,60 +70,56 @@ const ReportResume = ({ report, project, photos, reportLoading, reportId }) => {
                   <p>{lot.libelleLot}</p>
                 </td>
                 <td>
-                  <p>{lot.company.adresse1}</p>{" "}
+                  <p>{lot.company.adresse1}</p>
                   <p>
                     {lot.company.codePostal} {lot.company.ville}
                   </p>
                 </td>
                 <td>
-                  {lot.company.annuaires.map((annuaire, i) => (
-                    <p key={i}>{annuaire.nom}</p>
+                  {lot.company.annuaires.map((annuaire) => (
+                    <p key={annuaire.id}>{annuaire.nom}</p>
                   ))}
                 </td>
                 <td>
-                  {lot.company.annuaires.map((annuaire, i) => (
-                    <p key={i}> {annuaire.email}</p>
+                  {lot.company.annuaires.map((annuaire) => (
+                    <p key={annuaire.id}> {annuaire.email}</p>
                   ))}
                 </td>
                 <td>
-                  {lot.company.annuaires.map((annuaire, i) => (
-                    <p key={i}>{annuaire.telephone}</p>
+                  {lot.company.annuaires.map((annuaire) => (
+                    <p key={annuaire.id}>{annuaire.telephone}</p>
                   ))}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-      </div>
+      </ReportContainer>
 
-      <div className="card m-4 p-2">
+      <ReportContainer>
         {report.securityConformity ? (
           <h4>Sécurité conforme</h4>
         ) : (
-          <>
-            <h4 className="mb-3">Sécurité non conforme</h4>
+          <ReportCard
+            category="Sécurité"
+            comment={report.propreteSecurityComment}
+            commentItern={report.propreteSecurityCommentIntern}
+            photos={photos}
+            typePhoto="security"
+          >
             <ul>
               {report.securityCommentImputations.map((imputation) => (
-                <div key={imputation.id}>
-                  {imputation.commentaire && (
-                    <li>
-                      <h6>Entreprise : {imputation.company.nom}</h6>
-                      <p className="ml-2">{imputation.commentaire}</p>
-                    </li>
-                  )}
-                </div>
+                <LiImputation
+                  key={imputation.id}
+                  imputation={imputation}
+                  condition={imputation.commentaire}
+                ></LiImputation>
               ))}
             </ul>
-            <h6>Commentaire : </h6>
-            <p className="ml-3">{report.propreteSecurityComment}</p>
-            <h6>Commentaire interne (non visible sur le rapport final): </h6>
-            <p className="ml-3">{report.propreteSecurityCommentIntern}</p>
-            <h6>Photos : </h6>
-            <ImgGallery photos={photos} typePhoto="security"></ImgGallery>
-          </>
+          </ReportCard>
         )}
-      </div>
-      <div className="card m-4 p-2">
+      </ReportContainer>
+      <ReportContainer>
         {report.propreteAccessConformity === "conform" && (
           <h4>Propreté des accès conforme</h4>
         )}
@@ -129,72 +127,53 @@ const ReportResume = ({ report, project, photos, reportLoading, reportId }) => {
           <h4>Propreté des accès au prorata</h4>
         )}
         {report.propreteAccessConformity === "noconform" && (
-          <>
-            <h4 className="mb-3">Propreté des accès non conforme</h4>
+          <ReportCard
+            category="Propreté des accès"
+            comment={report.propreteAccessComment}
+            commentItern={report.propreteAccessCommentIntern}
+            photos={photos}
+            typePhoto="access"
+          >
             <ul>
               {report.propreteAccessImputation.map((imputation) => (
-                <div key={imputation.id}>
-                  {imputation.pourcent !== 0 && (
-                    <li>
-                      <h6>Entreprise : {imputation.company.nom}</h6>
-                      <p className="ml-2">
-                        {"Pourcentage imputation : " +
-                          imputation.pourcent +
-                          " %"}
-                      </p>
-                    </li>
-                  )}
-                </div>
+                <LiImputation
+                  key={imputation.id}
+                  imputation={imputation}
+                  condition={imputation.pourcent !== 0}
+                ></LiImputation>
               ))}
             </ul>
-            <h6>Commentaire : </h6>
-            <p className="ml-3">{report.propreteAccessComment}</p>
-            <h6>Commentaire interne (non visible sur le rapport final): </h6>
-            <p className="ml-3">{report.propreteAccessCommentIntern}</p>
-            <h6>Photos : </h6>
-            <ImgGallery photos={photos} typePhoto="access"></ImgGallery>
-          </>
+          </ReportCard>
         )}
-      </div>
-      <div className="card m-4 p-2">
+      </ReportContainer>
+      <ReportContainer>
         {report.propreteCommuneConformity && (
           <h4>Propreté des parties communes conforme</h4>
         )}
 
         {!report.propreteCommuneConformity && (
-          <>
-            <h4 className="mb-3">Propreté des parties communes non conforme</h4>
+          <ReportCard
+            category="Propreté des parties communes"
+            comment={report.propreteCommuneComment}
+            commentItern={report.propreteCommuneCommentIntern}
+            photos={photos}
+            typePhoto="commune"
+          >
             {!reportLoading && (
               <ul>
                 {report.propreteCommuneImputations.map((imputation) => (
-                  <div key={imputation.id}>
-                    {imputation.commentaire !== "" && (
-                      <li>
-                        <h6>Entreprise : {imputation.company.nom}</h6>
-                        <p className="ml-2">
-                          {"Pourcentage imputation : " +
-                            imputation.percent +
-                            " %"}
-                        </p>
-                        <p className="ml-2 mt-0">
-                          {"Commentaire : " + imputation.commentaire}
-                        </p>
-                      </li>
-                    )}
-                  </div>
+                  <LiImputation
+                    key={imputation.id}
+                    imputation={imputation}
+                    condition={imputation.commentaire}
+                  ></LiImputation>
                 ))}
               </ul>
             )}
-            <h6>Commentaire : </h6>
-            <p className="ml-3">{report.propreteCommuneComment}</p>
-            <h6>Commentaire interne (non visible sur le rapport final): </h6>
-            <p className="ml-3">{report.propreteCommuneCommentIntern}</p>
-            <h6>Photos : </h6>
-            <ImgGallery photos={photos} typePhoto="commune"></ImgGallery>
-          </>
+          </ReportCard>
         )}
-      </div>
-      <div className="card m-4 p-2">
+      </ReportContainer>
+      <ReportContainer>
         <h4 className="mb-3">Liste des echeances</h4>
         {project.lots.map((lot) => (
           <React.Fragment key={lot.id}>
@@ -256,7 +235,7 @@ const ReportResume = ({ report, project, photos, reportLoading, reportId }) => {
               )}
           </React.Fragment>
         ))}
-      </div>
+      </ReportContainer>
     </>
   );
 };
