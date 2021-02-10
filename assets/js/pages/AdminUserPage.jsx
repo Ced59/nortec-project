@@ -247,13 +247,13 @@ const AdminUserPage = ({ history, match, props }) => {
 
   return (
     <>
-      <main className="container">
+      <main className="container px-0">
         {(!edit && <h1>Création d'un Utilisateur</h1>) || (
           <h1>Modification de l'utilisateur</h1>
         )}
 
-        <div className="row">
-          <form onSubmit={handleSubmit} className="col-md-6 col-12 mt-3">
+        <div className='col-12 d-flex flex-lg-row flex-column p-0'>
+          <form onSubmit={handleSubmit} className="col-12 col-lg-6 mt-3">
             <fieldset className="border-fieldset">
               <legend>Informations générales</legend>
               {!loading ? (
@@ -305,8 +305,8 @@ const AdminUserPage = ({ history, match, props }) => {
             </fieldset>
           </form>
 
-          <div className="row col-md-6">
-            <form className="col-12 mt-3">
+          <div className="col-12 col-lg-6 mt-3">
+            <form className="col-12 p-0">
               <fieldset className="border-fieldset">
                 <legend>Rôle de l'utilisateur</legend>
 
@@ -338,7 +338,7 @@ const AdminUserPage = ({ history, match, props }) => {
               </fieldset>
             </form>
 
-            <div className="col-12 mt-1">
+            <div className="col-12 p-0 mt-4">
               <fieldset className="border-fieldset">
                 <legend>Utilisateur actif</legend>
                 <div className="row">
