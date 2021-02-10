@@ -1,137 +1,11 @@
 import React from "react";
-import {
-  Document,
-  Page,
-  Text,
-  View,
-  StyleSheet,
-  Image,
-} from "@react-pdf/renderer";
+import { Document, Page, Text, View, Image } from "@react-pdf/renderer";
 import DateAPI from "../../services/DateAPI";
-import { statusEcheanceLabel, statusEcheanceClasses } from "../ProjectStatus";
+import { statusEcheanceLabel } from "../ProjectStatus";
+import PdfPhotoGallery from "./PdfPhotoGallery";
+import styles from "./PdfStyle";
 
-const styles = StyleSheet.create({
-  page: {
-    backgroundColor: "white",
-  },
-  section: {
-    margin: 10,
-    padding: 10,
-  },
-  image: {
-    width: 50,
-    marginLeft: "auto",
-    marginRight: "auto",
-    marginTop: "15",
-  },
-  title: {
-    textAlign: "center",
-    fontWeight: "bold",
-    marginBottom: 5,
-    fontSize: "20pt",
-  },
-  sectionBorder: {
-    border: "1pt solid #005274",
-    marginLeft: 10,
-    marginRight: 10,
-    padding: 7,
-    backgroundColor: "#F5F5F5",
-    borderTopLeftRadius: "5",
-    borderTopRightRadius: "5",
-    borderBottomRightRadius: "5",
-    borderBottomLeftRadius: "5",
-    fontSize: "14pt",
-  },
-  text: {
-    margin: "5pt",
-  },
-  textEffectifsNomEntreprise: {
-    margin: "2pt",
-    fontWeight: "bold",
-  },
-  textEffectifsInfos: {
-    marginLeft: "40pt",
-  },
-  listEffectifs: {
-    marginTop: "15pt",
-  },
-  table: {
-    display: "table",
-    border: "1pt solid #005274",
-    margin: 10,
-    textAlign: "center",
-  },
-  tableRowHead: {
-    flexDirection: "row",
-  },
-  tableRow: {
-    flexDirection: "row",
-    margin: "auto",
-    borderTop: "1pt solid #005274",
-  },
-  tableColHead: {
-    width: "20%",
-    borderLeft: "1pt solid #005274",
-    fontSize: 10,
-    padding: 5,
-  },
-  tableCol1Head: {
-    width: "20%",
-    fontSize: 10,
-    padding: 5,
-  },
-  tableColHeadInterlocuteur: {
-    width: "60%",
-    borderLeft: "1pt solid #005274",
-    fontSize: 10,
-    padding: 5,
-  },
-  tableCol: {
-    width: "20%",
-    borderLeft: "1pt solid #005274",
-    padding: 8,
-  },
-  tableColTelephone: {
-    width: "15%",
-    borderLeft: "1pt solid #005274",
-    padding: 8,
-  },
-  tableColEmail: {
-    width: "25%",
-    borderLeft: "1pt solid #005274",
-    padding: 8,
-  },
-  tableCol1: {
-    width: "20%",
-    padding: 5,
-  },
-  tableCell: {
-    fontSize: 8,
-  },
-  flexAlignBetween: {
-    height: "70%",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-around",
-  },
-  projectImage: {
-    width: "80%",
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
-
-  pageNumber: {
-    position: "absolute",
-    fontSize: 12,
-    fontSize: 10,
-    bottom: 30,
-    left: 0,
-    right: 0,
-    textAlign: "center",
-  },
-});
-
-const ReportPdfComponent = ({ report, project }) => {
+const ReportPdfComponent = ({ report, project, photos }) => {
   const statusColor = (dateDebut, dateCloture, dateFinPrevue) => {
     if (
       statusEcheanceLabel(dateDebut, dateCloture, dateFinPrevue) === "En cours"
@@ -145,9 +19,9 @@ const ReportPdfComponent = ({ report, project }) => {
       statusEcheanceLabel(dateDebut, dateCloture, dateFinPrevue) === "Fini"
     ) {
       return "#28a745";
-    }
-    else if (
-      statusEcheanceLabel(dateDebut, dateCloture, dateFinPrevue) === "Pas démarré"
+    } else if (
+      statusEcheanceLabel(dateDebut, dateCloture, dateFinPrevue) ===
+      "Pas démarré"
     ) {
       return "#17a2b8";
     }
@@ -157,8 +31,8 @@ const ReportPdfComponent = ({ report, project }) => {
       title={report.Project.name}
       subject={"Rapport du " + DateAPI.formatDate(report.dateRedaction)}
     >
-      <Page size="A4" style={styles.page}>
-        <View style={styles.section}>
+      <Page size="A4" style={styles.page} wrap>
+        <View style={styles.section} fixed>
           <Image
             source="../img/logo-company/logo-nortec.png"
             style={styles.image}
@@ -202,24 +76,7 @@ const ReportPdfComponent = ({ report, project }) => {
             </Text>
           </View>
         </View>
-        <Text
-          style={styles.pageNumber}
-          render={({ pageNumber, totalPages }) =>
-            `${report.Project.name} - ${report.Project.ville} - Page: ${pageNumber} / ${totalPages}`
-          }
-          fixed
-        />
-      </Page>
-
-      <Page size="A4" style={styles.page}>
-        <View style={styles.section}>
-          <Image
-            source="../img/logo-company/logo-nortec.png"
-            style={styles.image}
-          />
-        </View>
-
-        <View style={styles.sectionBorder}>
+        <View style={styles.sectionBorder} break>
           <Text style={styles.title}>Liste des Entreprises</Text>
           <View style={styles.table}>
             <View style={styles.tableRowHead}>
@@ -235,7 +92,7 @@ const ReportPdfComponent = ({ report, project }) => {
               </View>
             </View>
             {project.lots.map((lot) => (
-              <View style={styles.tableRow}>
+              <View key={lot.id} style={styles.tableRow}>
                 <View style={styles.tableCol1}>
                   <Text style={styles.tableCell}>{lot.company.nom}</Text>
                   <Text style={styles.tableCell}>{lot.libelleLot}</Text>
@@ -250,41 +107,30 @@ const ReportPdfComponent = ({ report, project }) => {
                 </View>
                 <View style={styles.tableCol}>
                   {lot.company.annuaires.map((annuaire) => (
-                    <Text style={styles.tableCell}>{annuaire.nom}</Text>
+                    <Text key={annuaire.id} style={styles.tableCell}>
+                      {annuaire.nom}
+                    </Text>
                   ))}
                 </View>
                 <View style={styles.tableColEmail}>
                   {lot.company.annuaires.map((annuaire) => (
-                    <Text style={styles.tableCell}>{annuaire.email}</Text>
+                    <Text key={annuaire.id} style={styles.tableCell}>
+                      {annuaire.email}
+                    </Text>
                   ))}
                 </View>
                 <View style={styles.tableColTelephone}>
                   {lot.company.annuaires.map((annuaire) => (
-                    <Text style={styles.tableCell}>{annuaire.telephone}</Text>
+                    <Text key={annuaire.id} style={styles.tableCell}>
+                      {annuaire.telephone}
+                    </Text>
                   ))}
                 </View>
               </View>
             ))}
           </View>
         </View>
-        <Text
-          style={styles.pageNumber}
-          render={({ pageNumber, totalPages }) =>
-            `${report.Project.name} - ${report.Project.ville} - Page: ${pageNumber} / ${totalPages}`
-          }
-          fixed
-        />
-      </Page>
-
-      <Page size="A4" style={styles.page}>
-        <View style={styles.section}>
-          <Image
-            source="../img/logo-company/logo-nortec.png"
-            style={styles.image}
-          />
-        </View>
-
-        <View style={styles.sectionBorder}>
+        <View style={styles.sectionBorder} break>
           <Text style={styles.title}>Sécurité</Text>
           {report.securityConformity ? (
             <Text style={styles.title}>Conforme</Text>
@@ -294,7 +140,7 @@ const ReportPdfComponent = ({ report, project }) => {
               <View style={styles.listEffectifs}>
                 <Text>Imputations : </Text>
                 {report.securityCommentImputations.map((security) => (
-                  <View style={styles.listEffectifs}>
+                  <View key={security.id} style={styles.listEffectifs}>
                     {security.commentaire !== "" && (
                       <View>
                         <Text style={styles.textEffectifsNomEntreprise}>
@@ -308,27 +154,17 @@ const ReportPdfComponent = ({ report, project }) => {
                   </View>
                 ))}
               </View>
+              <Text style={styles.listEffectifs}> Photos : </Text>
+              <PdfPhotoGallery
+                photos={photos}
+                viewStyle={styles.flexAround}
+                imageStyle={styles.photosImputation}
+                typePhoto="security"
+              ></PdfPhotoGallery>
             </View>
           )}
         </View>
-        <Text
-          style={styles.pageNumber}
-          render={({ pageNumber, totalPages }) =>
-            `${report.Project.name} - ${report.Project.ville} - Page: ${pageNumber} / ${totalPages}`
-          }
-          fixed
-        />
-      </Page>
-
-      <Page size="A4" style={styles.page}>
-        <View style={styles.section}>
-          <Image
-            source="../img/logo-company/logo-nortec.png"
-            style={styles.image}
-          />
-        </View>
-
-        <View style={styles.sectionBorder}>
+        <View style={styles.sectionBorder} break>
           <Text style={styles.title}>Propreté des accès</Text>
           {report.propreteAccessConformity === "conform" && (
             <Text style={styles.title}>Conforme</Text>
@@ -342,36 +178,34 @@ const ReportPdfComponent = ({ report, project }) => {
               <View style={styles.listEffectifs}>
                 <Text>Imputations : </Text>
                 {report.propreteAccessImputation.map((proprete) => (
-                  <View style={styles.listEffectifs}>
-                    <Text style={[styles.textEffectifsNomEntreprise, {fontSize:10}]}>
+                  <View key={proprete.id} style={styles.listEffectifs}>
+                    <Text
+                      style={[
+                        styles.textEffectifsNomEntreprise,
+                        { fontSize: 10 },
+                      ]}
+                    >
                       {proprete.company.nom + " :  " + proprete.pourcent + " %"}
                     </Text>
                   </View>
                 ))}
               </View>
-              <Text style={{marginVertical:10}}>Commentaire : </Text>
-              <Text style={{fontSize:10}}>{report.propreteAccessComment}</Text>
+              <Text style={{ marginVertical: 10 }}>Commentaire : </Text>
+              <Text style={{ fontSize: 10 }}>
+                {report.propreteAccessComment}
+              </Text>
+              <Text style={styles.listEffectifs}> Photos : </Text>
+              <PdfPhotoGallery
+                photos={photos}
+                viewStyle={styles.flexAround}
+                imageStyle={styles.photosImputation}
+                typePhoto="access"
+              ></PdfPhotoGallery>
             </View>
           )}
         </View>
-        <Text
-          style={styles.pageNumber}
-          render={({ pageNumber, totalPages }) =>
-            `${report.Project.name} - ${report.Project.ville} - Page: ${pageNumber} / ${totalPages}`
-          }
-          fixed
-        />
-      </Page>
 
-      <Page size="A4" style={styles.page}>
-        <View style={styles.section}>
-          <Image
-            source="../img/logo-company/logo-nortec.png"
-            style={styles.image}
-          />
-        </View>
-
-        <View style={styles.sectionBorder}>
+        <View style={styles.sectionBorder} break>
           <Text style={styles.title}>Propreté des parties communes</Text>
           {report.propreteCommuneConformity ? (
             <Text style={styles.title}>Conforme</Text>
@@ -381,7 +215,7 @@ const ReportPdfComponent = ({ report, project }) => {
               <View style={styles.listEffectifs}>
                 <Text>Imputations : </Text>
                 {report.propreteCommuneImputations.map((proprete) => (
-                  <View style={styles.listEffectifs}>
+                  <View key={proprete.id} style={styles.listEffectifs}>
                     <Text style={styles.textEffectifsNomEntreprise}>
                       {proprete.company.nom + " :" + proprete.percent + " %"}
                     </Text>
@@ -391,121 +225,120 @@ const ReportPdfComponent = ({ report, project }) => {
                   </View>
                 ))}
               </View>
-              <Text style={{marginVertical:10}}>Commentaire : </Text>
-              <Text style={{fontSize:10}}>{report.propreteCommuneComment}</Text>
+              <Text style={{ marginVertical: 10 }}>Commentaire : </Text>
+              <Text style={{ fontSize: 10 }}>
+                {report.propreteCommuneComment}
+              </Text>
+              <Text style={styles.listEffectifs}> Photos : </Text>
+              <PdfPhotoGallery
+                photos={photos}
+                viewStyle={styles.flexAround}
+                imageStyle={styles.photosImputation}
+                typePhoto="commune"
+              ></PdfPhotoGallery>
             </View>
           )}
         </View>
-        <Text
-          style={styles.pageNumber}
-          render={({ pageNumber, totalPages }) =>
-            `${report.Project.name} - ${report.Project.ville} - Page: ${pageNumber} / ${totalPages}`
-          }
-          fixed
-        />
-      </Page>
-      <Page size="A4" style={styles.page}>
-        <View style={styles.section} fixed>
-          <Image
-            source="../img/logo-company/logo-nortec.png"
-            style={styles.image}
-          />
-        </View>
         {project.lots.map((lot) => (
-          <View>
-            {lot.echeances.length !== 0 && lot.echeances.some((echeance) =>
-                    echeance.report.includes(
-                      "/api/reports/" + report.id
-                    )
-                  ) &&  (
-              <View break>
-                <View
-                  style={[
-                    styles.table,
-                    { width: "90%" },
-                    { marginLeft: "5%" },
-                    { marginRight: "5%" },
-                  ]}
-                >
-                  <Text style={[styles.tableCell, { fontSize: 10 }]}>
-                    Entreprise: {lot.company.nom}
-                  </Text>
-                </View>
-                <View
-                  style={[
-                    styles.table,
-                    { width: "90%" },
-                    { marginLeft: "5%" },
-                    { marginRight: "5%" },
-                  ]}
-                >
-                  <View style={styles.tableRowHead}>
-                    <View style={[styles.tableCol1Head, { width: "10%" }]}>
-                      <Text style={styles.tableCell}>Date</Text>
-                    </View>
-                    <View style={styles.tableColHead}>
-                      <Text style={styles.tableCell}>Zone</Text>
-                    </View>
-                    <View style={[styles.tableColHead, { width: "40%" }]}>
-                      <Text style={styles.tableCell}>Désignation</Text>
-                    </View>
-                    <View style={[styles.tableColHead, { width: "10%" }]}>
-                      <Text style={styles.tableCell}>Pour le</Text>
-                    </View>
-                    <View style={styles.tableColHead}>
-                      <Text style={styles.tableCell}>Planning</Text>
-                    </View>
+          <View key={lot.id} break>
+            {lot.echeances.length !== 0 &&
+              lot.echeances.some((echeance) =>
+                echeance.report.includes("/api/reports/" + report.id)
+              ) && (
+                <View break>
+                  <View
+                    style={[
+                      styles.table,
+                      { width: "90%" },
+                      { marginLeft: "5%" },
+                      { marginRight: "5%" },
+                    ]}
+                  >
+                    <Text style={[styles.tableCell, { fontSize: 10 }]}>
+                      Entreprise: {lot.company.nom}
+                    </Text>
                   </View>
-                  {lot.echeances.map((echeance) => (
-                    <View>
-                      {echeance.report.includes(
-                                "/api/reports/" + report.id
-                              ) && (
-                    <View style={styles.tableRow}>
-                      <View style={[styles.tableCol1, { width: "10%" }]}>
-                        <Text style={styles.tableCell}>
-                          {DateAPI.formatDate(echeance.dateDebut)}
-                        </Text>
+                  <View
+                    style={[
+                      styles.table,
+                      { width: "90%" },
+                      { marginLeft: "5%" },
+                      { marginRight: "5%" },
+                    ]}
+                  >
+                    <View style={styles.tableRowHead}>
+                      <View style={[styles.tableCol1Head, { width: "10%" }]}>
+                        <Text style={styles.tableCell}>Date</Text>
                       </View>
-                      <View style={styles.tableCol}>
-                        <Text style={styles.tableCell}>{echeance.zone}</Text>
+                      <View style={styles.tableColHead}>
+                        <Text style={styles.tableCell}>Zone</Text>
                       </View>
-                      <View style={[styles.tableCol, { width: "40%" }]}>
-                        <Text style={styles.tableCell}>{echeance.sujet}</Text>
-                        <Text style={styles.tableCell}>{echeance.comment}</Text>
+                      <View style={[styles.tableColHead, { width: "40%" }]}>
+                        <Text style={styles.tableCell}>Désignation</Text>
                       </View>
-                      <View style={[styles.tableCol, { width: "10%" }]}>
-                        <Text style={styles.tableCell}>
-                          {DateAPI.formatDate(echeance.dateFinPrevue)}
-                        </Text>
+                      <View style={[styles.tableColHead, { width: "10%" }]}>
+                        <Text style={styles.tableCell}>Pour le</Text>
                       </View>
-                      <View
-                        style={[
-                          styles.tableCol,
-                          {
-                            backgroundColor: statusColor(
-                              echeance.dateDebut,
-                              echeance.dateCloture,
-                              echeance.dateFinPrevue
-                            ),
-                          },
-                        ]}
-                      >
-                        <Text style={styles.tableCell}>
-                          {statusEcheanceLabel(
-                            echeance.dateDebut,
-                            echeance.dateCloture,
-                            echeance.dateFinPrevue
-                          )}
-                        </Text>
+                      <View style={styles.tableColHead}>
+                        <Text style={styles.tableCell}>Planning</Text>
                       </View>
+                    </View>
+                    {lot.echeances.map((echeance) => (
+                      <View key={echeance.id}>
+                        {echeance.report.includes(
+                          "/api/reports/" + report.id
+                        ) && (
+                          <View style={styles.tableRow}>
+                            <View style={[styles.tableCol1, { width: "10%" }]}>
+                              <Text style={styles.tableCell}>
+                                {DateAPI.formatDate(echeance.dateDebut)}
+                              </Text>
+                            </View>
+                            <View style={styles.tableCol}>
+                              <Text style={styles.tableCell}>
+                                {echeance.zone}
+                              </Text>
+                            </View>
+                            <View style={[styles.tableCol, { width: "40%" }]}>
+                              <Text style={styles.tableCell}>
+                                {echeance.sujet}
+                              </Text>
+                              <Text style={styles.tableCell}>
+                                {echeance.comment}
+                              </Text>
+                            </View>
+                            <View style={[styles.tableCol, { width: "10%" }]}>
+                              <Text style={styles.tableCell}>
+                                {DateAPI.formatDate(echeance.dateFinPrevue)}
+                              </Text>
+                            </View>
+                            <View
+                              style={[
+                                styles.tableCol,
+                                {
+                                  backgroundColor: statusColor(
+                                    echeance.dateDebut,
+                                    echeance.dateCloture,
+                                    echeance.dateFinPrevue
+                                  ),
+                                },
+                              ]}
+                            >
+                              <Text style={styles.tableCell}>
+                                {statusEcheanceLabel(
+                                  echeance.dateDebut,
+                                  echeance.dateCloture,
+                                  echeance.dateFinPrevue
+                                )}
+                              </Text>
+                            </View>
+                          </View>
+                        )}
                       </View>
-                      )}
-                      </View>
-                  ))}
+                    ))}
+                  </View>
                 </View>
-              </View>
-            )}
+              )}
           </View>
         ))}
 

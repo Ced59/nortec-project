@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ImgWithStyleComponent from "../components/images/ImgWithStyleComponent";
 import '../../css/listProjectsPage.css';
 import '../../css/app.css';
@@ -14,6 +14,7 @@ import Pagination from "@material-ui/lab/Pagination";
 import pagination_configs, {
   LIST_PROJECTS_PAGE_PAGINATION_ITEMS_PER_PAGE,
 } from "../components/configs/pagination_configs";
+import SearchInput from "../components/forms/SearchInput";
 
 const ListProjectsPage = () => {
 
@@ -22,10 +23,6 @@ const ListProjectsPage = () => {
     const [loading, setLoading] = useState(true);
     const [searchValue, setSearchValue] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-
-    const handleSearch = ({currentTarget}) => {
-        setSearchValue(currentTarget.value);
-    };
 
     // --------------------------- Récupérer tous les projets de l'utilisateur -----------------------------------------
     
@@ -46,20 +43,15 @@ const ListProjectsPage = () => {
 
     // ----------------------------- FILTRAGE ARCHIVES ----------------------------------------
 
-    const filteredArchivedProjects = projects.filter(
-        archivedProjects
-            ?
-            p =>
-                DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'archived' ||
-                DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'no_start' ||
-                DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'in_progress' ||
-                DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'finished'
-            :
-            p =>
-                DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'no_start' ||
-                DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'in_progress' ||
-                DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'finished'
-    );  //TODO Trouver façon de refactoriser cette condition... C'est moche...
+   const filteredArchivedProjects = projects.filter(
+        p =>
+            DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'no_start' ||
+            DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'in_progress' ||
+            DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'finished' ||
+            (archivedProjects && (
+            DateAPI.determineStatus(p.dateDebut, DateAPI.verifyDateExist(p.dateFinReelle)) === 'archived'
+            ))
+    );
 
     // ----------------------------- FILTRAGE RECHERCHE ----------------------------------------
 
@@ -69,12 +61,6 @@ const ListProjectsPage = () => {
             determineStatusLabel(p.dateDebut, projects.dateFinReelle).toLowerCase().includes(searchValue.toLowerCase()) || //filtre par statut
             p.ville.toLowerCase().includes(searchValue.toLowerCase()) //filtre par ville
     );
-
-    const onChangeArchivedShow = () => {
-        setArchivedProjects(!archivedProjects);
-        //TODO: Optimisation voir si on charge tout et on change l'affichage ou si l'on charge uniquement le nécessaire. Si chargement ou pas quand on affiche archivés...
-    };
-
 
     // ----------------------------- Mise en place de la pagination ------------------------------------------
 
@@ -94,18 +80,15 @@ const ListProjectsPage = () => {
             <div className="row justify-content-between mb-2">
                 <h2>Liste des projets : </h2>
                 <div className="d-flex">
-                    <form className="form-inline mr-2">
-                        <input
-                            className="form-control"
-                            type="text"
-                            placeholder="Rechercher un projet"
-                            aria-label="Search"
-                            onChange={handleSearch}
-                            value={searchValue}
-                        />
-                    </form>
+                    <SearchInput
+                        formClassName="form-inline mr-2"
+                        InputClassName="form-control"
+                        placeholder="Rechercher un projet"
+                        onChange={(e) => setSearchValue(e.target.value)}
+                        value={searchValue}
+                    />
                     <Button
-                        onClick={onChangeArchivedShow}
+                        onClick={()=>setArchivedProjects(!archivedProjects)}
                         text={archivedProjects ? "Cacher les projets archivés" : "Montrer les projets archivés"}
                         className="btn btn-secondary text-right"
                         type="button"
