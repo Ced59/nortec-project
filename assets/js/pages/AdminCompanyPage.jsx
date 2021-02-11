@@ -67,7 +67,7 @@ const AdminCompanyPage = ({ history, match, props }) => {
       const data = await AnnuaireAPI.find(id);
       setContact(data);
     } catch (error) {
-      console.log(error.response);
+      console.log(error.message);
     }
   };
 
@@ -245,8 +245,8 @@ const AdminCompanyPage = ({ history, match, props }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {company.annuaires.map((contact, k) => (
-                      <tr key={k}>
+                    {company.annuaires.map(contact => (
+                      <tr key={contact.id}>
                         <td className="w-35">{contact.nom}</td>
                         <td className="w-35">{contact.email}</td>
                         <td className="w-35">{contact.telephone}</td>
