@@ -43,8 +43,8 @@ security:
     access_control:
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/users, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/api/annuaire, roles: ['ROLE_ADMIN'] }
-        - { path: ^/api/company, roles: ['ROLE_ADMIN'] }
+        - { path: ^/api/annuaire, roles: ROLE_ADMIN }
+        - { path: ^/api/company, roles: ROLE_ADMIN }
         - { path: ^/api/echeances, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/effectifs, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/lots, roles: IS_AUTHENTICATED_FULLY }
