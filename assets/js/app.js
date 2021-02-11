@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import ReactDOM from "react-dom";
-import {BrowserRouter, Route, Switch, withRouter} from "react-router-dom";
+import {HashRouter, Route, Switch, withRouter} from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import AuthContext from "./contexts/AuthContext";
 import AuthAPI from "./services/AuthAPI"
@@ -51,7 +51,7 @@ const App = () => {
         <AuthContext.Provider value={{isAuthenticated, setIsAuthenticated}}>
 
 
-            <BrowserRouter>
+            <HashRouter>
 
                 {isAuthenticated && <NavbarTopWithRouter/>}
 
@@ -87,7 +87,7 @@ const App = () => {
 
                 </Switch>
 
-            </BrowserRouter>
+            </HashRouter>
 
             < ToastContainer
                 position={toast.POSITION.BOTTOM_LEFT}
