@@ -54,7 +54,7 @@ const AdminProjectsPage = () => {
   return (
     <main className="container">
       <div className="mb-4 d-flex justify-content-between align-items-center">
-        <Link className="btn btn-danger" type="button" to={"/admin"}>
+        <Link className="btn btn-danger" to={"/admin"}>
           {" "}
           Retour{" "}
         </Link>
@@ -62,7 +62,6 @@ const AdminProjectsPage = () => {
 
         <Link
           className="btn btn-primary"
-          type="button"
           to={"/admin/project/new"}
         >
           {" "}
@@ -73,7 +72,7 @@ const AdminProjectsPage = () => {
         <thead>
           <tr>
             <th className="text-center">Numéro Projet</th>
-            <th>Admin en Charge</th>
+            <th>MOEX</th>
             <th className="text-center">Statut</th>
             <th>Nom Projet</th>
             <th className="text-center">Date début</th>
@@ -87,7 +86,7 @@ const AdminProjectsPage = () => {
             {paginationConfig.paginatedItems.map((project) => (
               <tr key={project.id}>
                 <td className="text-center">{project.id}</td>
-                <td>Florent</td>
+                <td>{project.nomMOEX}</td>
                 <td className="text-center">
                   <span
                     className={

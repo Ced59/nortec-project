@@ -5,6 +5,7 @@ import AnnuaireAPI from "../services/AnnuaireAPI";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Modal from "react-bootstrap/Modal";
+import Button from "../components/forms/Button";
 
 const AdminCompanyPage = ({ history, match, props }) => {
   const { id = "new" } = match.params;
@@ -66,7 +67,7 @@ const AdminCompanyPage = ({ history, match, props }) => {
       const data = await AnnuaireAPI.find(id);
       setContact(data);
     } catch (error) {
-      console.log(error.response);
+      console.log(error.message);
     }
   };
 
@@ -244,19 +245,18 @@ const AdminCompanyPage = ({ history, match, props }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {company.annuaires.map((contact, k) => (
-                      <tr key={k}>
+                    {company.annuaires.map(contact => (
+                      <tr key={contact.id}>
                         <td className="w-35">{contact.nom}</td>
                         <td className="w-35">{contact.email}</td>
                         <td className="w-35">{contact.telephone}</td>
                         <td className="text-center">
-                          <button
+                          <Button
+                              text="Modifier"
                             type="button"
                             onClick={() => handleShowContactModal(contact.id)}
                             className="btn btn-primary btn-sm"
-                          >
-                            Modifier
-                          </button>
+                          />
                         </td>
                       </tr>
                     ))}
@@ -308,13 +308,12 @@ const AdminCompanyPage = ({ history, match, props }) => {
                       />
                     </td>
                     <td>
-                      <button
+                      <Button
                         type="button"
+                        text="Ajouter"
                         onClick={() => handleSubmitAddContact()}
                         className="btn btn-primary btn-sm"
-                      >
-                        Ajouter
-                      </button>
+                      />
                     </td>
                   </tr>
                 </tbody>
@@ -330,9 +329,7 @@ const AdminCompanyPage = ({ history, match, props }) => {
             <Link to="/admin/company" className="btn btn-danger">
               Retour à la liste
             </Link>
-            <button type="submit" className="btn btn-success">
-              Valider
-            </button>
+            <Button text="Valider" className="btn btn-success"/>
           </div>
         </form>
       )}
@@ -381,20 +378,18 @@ const AdminCompanyPage = ({ history, match, props }) => {
             />
           </Modal.Body>
           <Modal.Footer>
-            <button
+            <Button
+                text="Supprimer"
               type="button"
               onClick={() => handleSubmitDeleteContact(contact.id)}
               className="btn btn-danger btn-sm"
-            >
-              Supprimer
-            </button>
-            <button
+            />
+            <Button
               type="button"
+              text="Confirmer"
               onClick={() => handleSubmitUpdateContact()}
               className="btn btn-primary btn-sm"
-            >
-              Confirmer
-            </button>
+            />
           </Modal.Footer>
         </form>
       </Modal>

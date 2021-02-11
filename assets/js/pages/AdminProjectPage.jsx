@@ -17,6 +17,7 @@ import Modal from "react-bootstrap/Modal";
 import LotModal from "../components/modal/LotModal";
 import EcheanceModal from "../components/modal/EcheanceModal";
 import SearchInput from "../components/forms/SearchInput";
+import Button from "../components/forms/Button";
 
 const AdminProjectPage = ({ history, match, props }) => {
   const { id = "new" } = match.params;
@@ -301,7 +302,7 @@ const AdminProjectPage = ({ history, match, props }) => {
               </div>
               <ImageUpload singleImg={true} onChange={onDrop}></ImageUpload>
             </fieldset>
-            <fieldset className="border-fieldset col-xl-5 col-125">
+            <fieldset className="border-fieldset col-xl-5 col-12">
               <legend>Dates</legend>
               <Field
                 name="dateDebut"
@@ -524,12 +525,12 @@ const AdminProjectPage = ({ history, match, props }) => {
                         <td className="w-35">{user.firstName}</td>
                         <td className="w-35">{user.lastName}</td>
                         <td className="text-center">
-                          <button
+                          <Button
+                              type="button"
+                              text="Ajouter"
                             className="btn btn-primary btn-sm"
                             onClick={() => handleAddUser(user)}
-                          >
-                            Ajouter
-                          </button>
+                          />
                         </td>
                       </tr>
                     ))}
@@ -561,12 +562,12 @@ const AdminProjectPage = ({ history, match, props }) => {
                         <td className="w-35">{user.firstName}</td>
                         <td className="w-35">{user.lastName}</td>
                         <td className="text-center">
-                          <button
+                          <Button
+                              type="button"
+                              text="Ajouter"
                             className="btn btn-primary btn-sm"
                             onClick={() => handleAddUser(user)}
-                          >
-                            Ajouter
-                          </button>
+                          />
                         </td>
                       </tr>
                     ))}

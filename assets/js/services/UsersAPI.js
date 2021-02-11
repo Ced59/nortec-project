@@ -20,6 +20,10 @@ function create(user){
     return axios.post(USERS_API, user);
 }
 
+// ------------------------SUBRESOURCES-----------------------
+function getProjects(id){
+    return axios.get(USERS_API + "/" + id + "/projects").then(response => response.data['hydra:member']);
+}
 
 
 function determineRole(user) {
@@ -40,5 +44,6 @@ export default {
     update,
     create,
     findAll,
-    determineRole
+    determineRole,
+    getProjects
 }

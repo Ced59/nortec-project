@@ -7,8 +7,8 @@ import { toast } from "react-toastify";
 import ReportsAPI from "../services/ReportsAPI";
 import ReportImputation from "../components/ReportImputation";
 import ReportComment from "../components/ReportComment";
-
 import ReportAddPhoto from "../components/ReportAddPhoto";
+import CardConformity from "../components/CardConformity";
 
 const ReportSecuritePage = ({ match }) => {
   const NavbarLeftWithRouter = withRouter(NavbarLeft);
@@ -66,14 +66,7 @@ const ReportSecuritePage = ({ match }) => {
     fetchReport(urlParams.idReport);
   }, [urlParams.id, urlParams.idReport]);
 
-  //--------------------------------------------------gestion des photos------------------------------------------------------
-
-
   // -------------------------------------------------gestion conformité/commentaire------------------------------------------
-
-  const handleCheckConformity = (etat) => {
-    setConforme(etat);
-  };
 
   const handleSubmitReport = async ({ currentTarget }) => {
     try {
@@ -113,16 +106,16 @@ const ReportSecuritePage = ({ match }) => {
       {!loading && (
         <>
           <div className="page-content">
-            <div className="ml-2 mt-4 d-flex justify-content-between mb-3">
+            <div className="row ml-2 mt-4 d-flex justify-content-between mb-3">
               <h2 className="mb-4">Sécurité :</h2>
               <Button
-                onClick={() => handleCheckConformity(true)}
+                onClick={() => setConforme(true)}
                 className="btn btn-success mb-4"
                 text="Conforme"
                 type="button"
               />
               <Button
-                onClick={() => handleCheckConformity(false)}
+                onClick={() => setConforme(false)}
                 className="btn btn-danger ml-5 mb-4"
                 text="Non Conforme"
                 type="button"
@@ -130,24 +123,13 @@ const ReportSecuritePage = ({ match }) => {
             </div>
 
             {conforme && (
-              <div className="card mt-3">
-                <div className="row ml-2 d-flex justify-content-center mt-3">
-                  <h4 className="mb-4">Sécurité conforme ?</h4>
-                </div>
-                <div className="row ml-2 d-flex justify-content-center">
-                  <Button
-                    onClick={handleSubmitReport}
-                    className="btn btn-primary mb-4 row"
-                    text="Confirmer"
-                    type="button"
-                    name="conformity"
-                  />
-                </div>
-              </div>
+              <CardConformity
+                titre="Sécurité conforme ?"
+                submit={handleSubmitReport}
+              />
             )}
             {conforme === false && (
               <>
-                <div className="row col-12">
                   <ReportImputation
                     setLoading={setLoading}
                     setImputations={setImputations}
@@ -158,13 +140,12 @@ const ReportSecuritePage = ({ match }) => {
                     fetchReport={fetchReport}
                     urlParams={urlParams}
                     api={"securite"}
-                  ></ReportImputation>
-                </div>
+                  />
                 <div className="ml-auto">
                   <ReportAddPhoto
                     reportID={urlParams.idReport}
                     typePhoto="security"
-                  ></ReportAddPhoto>
+                  />
                 </div>
                 <ReportComment
                   setReport={setReport}
@@ -174,7 +155,7 @@ const ReportSecuritePage = ({ match }) => {
                   valueCommentIntern={report.securityConmmentIntern}
                   nameCommentIntern="securityConmmentIntern"
                   handleSubmitComment={handleSubmitReport}
-                ></ReportComment>
+                />
                 <div className="d-flex justify-content-center">
                   <Button
                     onClick={handleSubmitReport}
@@ -189,7 +170,7 @@ const ReportSecuritePage = ({ match }) => {
           </div>
         </>
       )}
-      {loading && <div id="loading-icon"> </div>}
+      {loading && <div id="loading-icon"/>}
     </main>
   );
 };

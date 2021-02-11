@@ -15,6 +15,8 @@ import pagination_configs, {
   LIST_PROJECTS_PAGE_PAGINATION_ITEMS_PER_PAGE,
 } from "../components/configs/pagination_configs";
 import SearchInput from "../components/forms/SearchInput";
+import AuthAPI from "../services/AuthAPI";
+import UsersAPI from "../services/UsersAPI";
 
 const ListProjectsPage = () => {
 
@@ -28,7 +30,9 @@ const ListProjectsPage = () => {
     
     const fetchProjects = async () => {
         try {
-            const data = await ProjectsAPI.findAll();
+            const data = AuthAPI.isAdmin()?
+            await ProjectsAPI.findAll():
+            await UsersAPI.getProjects(AuthAPI.getUserId());
             setProjects(data);
             setLoading(false);
         } catch (error) {
@@ -73,12 +77,12 @@ const ListProjectsPage = () => {
     // ----------------------------- Template ------------------------------------------
 
     return (
-        <main className="container">
+        <main className="justify-content-around">
             <Helmet>
                 <style>{'body { background-color: white; }'}</style>
             </Helmet>
-            <div className="row justify-content-between mb-2">
-                <h2>Liste des projets : </h2>
+            <div className="row justify-content-around mb-2">
+                <h2> Liste des projets : </h2>
                 <div className="d-flex">
                     <SearchInput
                         formClassName="form-inline mr-2"

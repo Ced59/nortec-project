@@ -18,7 +18,7 @@ function findByLot(id) {
 }
 
 function find(id) {
-  return axios.get(ANNUAIRE_API + "/" + id, id).then((response) => response.data);
+  return axios.get(ANNUAIRE_API + "/" + id).then((response) => response.data);
 }
 
 function create(contact) {

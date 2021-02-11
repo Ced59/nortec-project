@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import "../../css/loginPage.css";
 import { Helmet } from "react-helmet";
 import MailAPI from "../services/MailAPI";
+import Button from "../components/forms/Button";
 
 const NewPasswordPage = ({ match }) => {
   const [enableSubmit, setEnableSubmit] = useState(false);
@@ -72,13 +73,11 @@ const NewPasswordPage = ({ match }) => {
               <Link to="/" className="btn btn-danger">
                 Retour à la connexion
               </Link>
-              <button
-                type="submit"
+              <Button
+                  text="Envoyer"
                 className="btn btn-login"
                 disabled={!enableSubmit}
-              >
-                Envoyer
-              </button>
+              />
             </div>
           </div>
         </form>

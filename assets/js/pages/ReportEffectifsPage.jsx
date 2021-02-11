@@ -117,7 +117,7 @@ const ReportEffectifsPage = ({ match }) => {
                               "/api/reports/" + urlParams.idReport
                             ) && (
                               <tr key={echeance.id}>
-                                <td>{echeance.numeroEcheance}</td>
+                                <td>{echeance.id}</td>
                                 <td>{lot.company.nom}</td>
                                 <td>{lot.numeroLot}</td>
                                 <td>{echeance.sujet}</td>
@@ -129,10 +129,11 @@ const ReportEffectifsPage = ({ match }) => {
                                 </td>
                                 <td>
                                   <Button
+                                      type="button"
                                     className="btn btn-danger"
                                     text="Modifer"
                                     onClick={() => handleShowModal(echeance.id)}
-                                  ></Button>
+                                  />
                                 </td>
                               </tr>
                             )}
@@ -167,17 +168,17 @@ const ReportEffectifsPage = ({ match }) => {
               label="Effectif Prévu"
               onChange={handleChange}
               value={echeance.effectifPrevu}
-            ></Field>
+            />
             <Field
               name="effectifConstate"
               label="Effectif constaté"
               onChange={handleChange}
               value={echeance.effectifConstate}
-            ></Field>
+            />
             <Button
               className="btn btn-success align-self-end"
               text="valider"
-            ></Button>
+            />
           </form>
         </Modal.Body>
       </Modal>

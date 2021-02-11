@@ -1,17 +1,17 @@
 import React from "react";
 import ImgGallery from "./images/ImgGallery";
 
-const ReportCard = (props) => {
+const ReportCard = ({category, children, comment, commentIntern, photos, typePhoto}) => {
   return (
     <>
-      <h4 className="mb-3">{props.category} non conforme</h4>
-      {props.children}
+      <h4 className="mb-3">{category} non conforme</h4>
+      {children}
       <h6>Commentaire : </h6>
-      <p className="ml-3">{props.comment}</p>
+      <p className="ml-3">{comment}</p>
       <h6>Commentaire interne (non visible sur le rapport final): </h6>
-      <p className="ml-3">{props.commentIntern}</p>
+      <p className="ml-3">{commentIntern}</p>
       <h6>Photos : </h6>
-      <ImgGallery photos={props.photos} typePhoto={props.typePhoto}></ImgGallery>
+      <ImgGallery photos={photos} typePhoto={typePhoto}></ImgGallery>
     </>
   );
 };

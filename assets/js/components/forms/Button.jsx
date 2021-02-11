@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Button = ({type, className, text, onClick, name=""}) => {
+const Button = ({type="submit", className, text, onClick, name=""}) => {
     return (
         <button
             type={type}

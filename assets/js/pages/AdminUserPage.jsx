@@ -6,8 +6,7 @@ import UsersAPI from "../services/UsersAPI";
 import "../../css/fieldset.css";
 import "../../css/loading-icon.css";
 import Modal from "react-bootstrap/Modal";
-import { Button } from "react-bootstrap";
-import ProjectsAPI from "../services/ProjectsAPI";
+import Button from "../components/forms/Button";
 import {
   determineStatusClasses,
   determineStatusLabel,
@@ -39,7 +38,6 @@ const AdminUserPage = ({ history, match, props }) => {
   });
 
   const [projects, setProjects] = useState("");
-  const filteredUserProject = [];
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -74,27 +72,13 @@ const AdminUserPage = ({ history, match, props }) => {
 
   const fetchProjects = async () => {
     try {
-      let result = await ProjectsAPI.findAll();
+      let result = await UsersAPI.getProjects(id);
       setProjects(result);
       setLoadingProjects(false);
     } catch (error) {
       toast.error("Le chargement des projets a rencontré un problème !");
       setLoadingProjects(false);
       history.replace("/admin/user/" + id);
-    }
-  };
-
-  const filteredUserProjects = () => {
-    if (!loadingProjects) {
-      projects.map((project) => {
-        project.users.map((user) => {
-          if (user.id === parseInt(id, 10)) {
-            filteredUserProject.push(project);
-          }
-        });
-      });
-
-      return filteredUserProject;
     }
   };
 
@@ -232,7 +216,7 @@ const AdminUserPage = ({ history, match, props }) => {
   const paginationConfigCalc = () => {
     if (!loadingProjects) {
       return pagination_configs.determinePaginationConfig(
-        filteredUserProjects(),
+        projects,
         ADMIN_USER_PAGE_PAGINATION_ITEMS_PER_PAGE,
         currentPage
       );
@@ -247,13 +231,13 @@ const AdminUserPage = ({ history, match, props }) => {
 
   return (
     <>
-      <main className="container">
+      <main className="container px-0">
         {(!edit && <h1>Création d'un Utilisateur</h1>) || (
           <h1>Modification de l'utilisateur</h1>
         )}
 
-        <div className="row">
-          <form onSubmit={handleSubmit} className="col-md-6 col-12 mt-3">
+        <div className="col-12 d-flex flex-lg-row flex-column p-0">
+          <form onSubmit={handleSubmit} className="col-12 col-lg-6 mt-3">
             <fieldset className="border-fieldset">
               <legend>Informations générales</legend>
               {!loading ? (
@@ -294,9 +278,7 @@ const AdminUserPage = ({ history, match, props }) => {
                   />
 
                   <div className="form-group text-right mt-4">
-                    <button type="submit" className="btn btn-primary">
-                      Valider
-                    </button>
+                    <Button text="Valider" className="btn btn-primary"/>
                   </div>
                 </>
               ) : (
@@ -305,8 +287,8 @@ const AdminUserPage = ({ history, match, props }) => {
             </fieldset>
           </form>
 
-          <div className="row col-md-6">
-            <form className="col-12 mt-3">
+          <div className="col-12 col-lg-6 mt-3">
+            <form className="col-12 p-0">
               <fieldset className="border-fieldset">
                 <legend>Rôle de l'utilisateur</legend>
 
@@ -318,12 +300,11 @@ const AdminUserPage = ({ history, match, props }) => {
                           <p className="col-8">
                             {UsersAPI.determineRole(user)}
                           </p>
-                          <button
+                          <Button type="button"
+                                  text="Changer"
                             onClick={() => handleShowModalRole(user)}
                             className="btn btn-danger col-3"
-                          >
-                            Changer
-                          </button>
+                          />
                         </>
                       ) : (
                         <div id="loading-icon" />
@@ -338,7 +319,7 @@ const AdminUserPage = ({ history, match, props }) => {
               </fieldset>
             </form>
 
-            <div className="col-12 mt-1">
+            <div className="col-12 p-0 mt-4">
               <fieldset className="border-fieldset">
                 <legend>Utilisateur actif</legend>
                 <div className="row">
@@ -352,6 +333,7 @@ const AdminUserPage = ({ history, match, props }) => {
                               : "Le compte de l'utilisateur n'est pas activé"}
                           </p>
                           <button
+                              type="button"
                             onClick={() => handleShowModal(user)}
                             className="btn btn-danger col-3"
                           >
@@ -383,55 +365,59 @@ const AdminUserPage = ({ history, match, props }) => {
                 <>
                   {edit && (
                     <>
-                      <table className="table table-hover table-striped">
-                        <thead>
-                          <tr>
-                            <th className="p-2">Nom</th>
-                            <th className="p-2">Ville</th>
-                            <th className="p-2 text-center">Date début</th>
-                            <th className="p-2 text-center">Statut</th>
-                            <th />
-                          </tr>
-                        </thead>
+                      {projects.length === 0 ? (
+                        <p className="text-center">L'utilisateur n'est affecté à aucun projet</p>
+                      ) : (
+                        <table className="table table-hover table-striped">
+                          <thead>
+                            <tr>
+                              <th className="p-2">Nom</th>
+                              <th className="p-2">Ville</th>
+                              <th className="p-2 text-center">Date début</th>
+                              <th className="p-2 text-center">Statut</th>
+                              <th />
+                            </tr>
+                          </thead>
 
-                        <tbody>
-                          {paginationConfig.paginatedItems.map((project) => (
-                            <tr key={project.id}>
-                              <td className="p-2">{project.name}</td>
-                              <td className="p-2">{project.ville}</td>
-                              <td className="p-2 text-center">
-                                {DateAPI.formatDate(project.dateDebut)}
-                              </td>
-                              <td className="p-2 text-center">
-                                <span
-                                  className={
-                                    "pl-2 pr-2 pt-1 pb-1 badge badge-" +
-                                    determineStatusClasses(
+                          <tbody>
+                            {projects.map((project) => (
+                              <tr key={project.id}>
+                                <td className="p-2">{project.name}</td>
+                                <td className="p-2">{project.ville}</td>
+                                <td className="p-2 text-center">
+                                  {DateAPI.formatDate(project.dateDebut)}
+                                </td>
+                                <td className="p-2 text-center">
+                                  <span
+                                    className={
+                                      "pl-2 pr-2 pt-1 pb-1 badge badge-" +
+                                      determineStatusClasses(
+                                        project.dateDebut,
+                                        project.dateFinReelle
+                                      )
+                                    }
+                                  >
+                                    {determineStatusLabel(
                                       project.dateDebut,
                                       project.dateFinReelle
-                                    )
-                                  }
-                                >
-                                  {determineStatusLabel(
-                                    project.dateDebut,
-                                    project.dateFinReelle
-                                  )}
-                                </span>
-                              </td>
-                              <td className="p-2 text-center">
-                                <button
-                                  className="btn btn-danger btn-sm"
-                                  onClick={() =>
-                                    handleDeleteUserProject(project.id)
-                                  }
-                                >
-                                  Retirer le projet
-                                </button>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                                    )}
+                                  </span>
+                                </td>
+                                <td className="p-2 text-center">
+                                  <Button
+                                      text="Retirer le projet"
+                                      type="button"
+                                    className="btn btn-danger btn-sm"
+                                    onClick={() =>
+                                      handleDeleteUserProject(project.id)
+                                    }
+                                  />
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      )}
 
                       <div className="mt-2 d-flex justify-content-center">
                         <Pagination
@@ -488,15 +474,13 @@ const AdminUserPage = ({ history, match, props }) => {
           Êtes vous sûr de vouloir continuer?
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleCloseModal}>
-            Fermer
-          </Button>
+          <Button type="button" text="Fermer" className="btn btn-primary" onClick={handleCloseModal}/>
           <Button
-            variant="danger"
+              text="Confirmer"
+              type="button"
+            className="btn btn-danger"
             onClick={() => handleActiveUser(userToModifyActive)}
-          >
-            Confirmer
-          </Button>
+          />
         </Modal.Footer>
       </Modal>
 
@@ -524,12 +508,8 @@ const AdminUserPage = ({ history, match, props }) => {
             </select>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={handleCloseModalRole}>
-              Fermer
-            </Button>
-            <Button variant="danger" type="submit">
-              Confirmer
-            </Button>
+            <Button className="btn btn-primary" text="Fermer" type="button" onClick={handleCloseModalRole}/>
+            <Button className="btn btn-danger" text="Confirmer"/>
           </Modal.Footer>
         </form>
       </Modal>
