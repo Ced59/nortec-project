@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../../css/loading-icon.css';
 import CompanyAPI from '../services/CompanyAPI';
-import AuthAPI from "../services/AuthAPI";
 
 const AdminCompaniesPage = (props) => {
 
     const [companies, setCompanies] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [userId] = useState(AuthAPI.getUserId());
 
+    // Function to load all company
     const fetchCompanies = async () => {
         try {
             const data = await CompanyAPI.findAll();
@@ -21,6 +20,7 @@ const AdminCompaniesPage = (props) => {
         }
     }
 
+    // Loading Company during loading page
     useEffect(() => {
         fetchCompanies().then(r => "");
     }, []);
