@@ -2,11 +2,16 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ *@ApiResource(
+ *     normalizationContext={"groups"={"lot"}}
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\LotRepository")
  */
 class Lot
@@ -15,16 +20,19 @@ class Lot
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"lot", "project","report","echeance"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=500)
+     * @Groups({"lot", "project","report","echeance"})
      */
     private $numeroLot;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"lot", "project","report"})
      */
     private $libelleLot;
 
@@ -39,14 +47,22 @@ class Lot
     private $project;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="lots")
+     * @ORM\JoinColumn(nullable=false)
+     * @Groups({"lot", "project","report","echeance"})
      */
-    private $DateDebutEcheance;
+    private $company;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\OneToMany(targetEntity="App\Entity\Echeance", mappedBy="lot")
+     * @Groups({"lot", "project","report"})
      */
-    private $dateFinEcheance;
+    private $echeances;
+
+    public function __construct()
+    {
+        $this->echeances = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -101,26 +117,45 @@ class Lot
         return $this;
     }
 
-    public function getDateDebutEcheance(): ?\DateTimeInterface
+    public function getCompany(): ?Company
     {
-        return $this->DateDebutEcheance;
+        return $this->company;
     }
 
-    public function setDateDebutEcheance(\DateTimeInterface $DateDebutEcheance): self
+    public function setCompany(?Company $company): self
     {
-        $this->DateDebutEcheance = $DateDebutEcheance;
+        $this->company = $company;
 
         return $this;
     }
 
-    public function getDateFinEcheance(): ?\DateTimeInterface
+    /**
+     * @return Collection|Echeance[]
+     */
+    public function getEcheances(): Collection
     {
-        return $this->dateFinEcheance;
+        return $this->echeances;
     }
 
-    public function setDateFinEcheance(\DateTimeInterface $dateFinEcheance): self
+    public function addEcheance(Echeance $echeance): self
     {
-        $this->dateFinEcheance = $dateFinEcheance;
+        if (!$this->echeances->contains($echeance)) {
+            $this->echeances[] = $echeance;
+            $echeance->setLot($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEcheance(Echeance $echeance): self
+    {
+        if ($this->echeances->contains($echeance)) {
+            $this->echeances->removeElement($echeance);
+            // set the owning side to null (unless already changed)
+            if ($echeance->getLot() === $this) {
+                $echeance->setLot(null);
+            }
+        }
 
         return $this;
     }

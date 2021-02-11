@@ -22,20 +22,20 @@ class Project
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"project"})
+     * @Groups({"project","report"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"project"})
+     * @Groups({"project","report"})
      * @Assert\NotBlank(message="Le nom du projet est obligatoire !")
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"project"})
+     * @Groups({"project","report"})
      * @Assert\NotBlank(message="La descrpition du projet est obligatoire !")
      */
     private $description;
@@ -54,20 +54,20 @@ class Project
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"project"})
+     * @Groups({"project","report"})
      * @Assert\NotBlank(message="L'adresse du projet est obligatoire !")
      */
     private $adresse1;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"project"})
+     * @Groups({"project","report"})
      */
     private $adresse2;
 
     /**
      * @ORM\Column(type="string", length=8)
-     * @Groups({"project"})
+     * @Groups({"project","report"})
      * @Assert\NotBlank(message="Le code postal est obligatoire !")
      */
     private $codePostal;
@@ -87,14 +87,14 @@ class Project
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"project"})
+     * @Groups({"project","report"})
      * @Assert\NotBlank(message="Le nom du MOEX est obligatoire !")
      */
     private $nomMOEX;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"project"})
+     * @Groups({"project","report"})
      * @Assert\NotBlank(message="Le nom de l'OPC est obligatoire !")
      */
     private $nomOPC;
@@ -108,13 +108,14 @@ class Project
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"project"})
+     * @Groups({"project","report"})
      * @Assert\NotBlank(message="Le nom da la ville est obligatoire !")
      */
     private $ville;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ProjectDateFinPrevue", mappedBy="Project", orphanRemoval=true)
+     * @Groups({"project"})
      */
     private $dateFinPrevues;
 
@@ -131,11 +132,13 @@ class Project
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Lot", mappedBy="project")
+     * @Groups({"project","report"})
      */
     private $lots;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Company", inversedBy="projects")
+     * @Groups({"project"})
      */
     private $companies;
 

@@ -42,6 +42,20 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/users, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/users, roles: ['ROLE_ADMIN'] }
+        - { path: ^/api/annuaire, roles: ['ROLE_ADMIN'] }
+        - { path: ^/api/company, roles: ['ROLE_ADMIN'] }
+        - { path: ^/api/echeances, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/effectifs, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/lots, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/media_objects, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/photos, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/project_date_fin_prevues, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/projects, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/proprete_access_imputations, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/proprete_commune_imputations, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/security_comment_imputations, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/reports, roles: IS_AUTHENTICATED_FULLY }
+
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

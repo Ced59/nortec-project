@@ -2,13 +2,17 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ * normalizationContext={"groups"={"report"}}
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\ReportRepository")
  */
 class Report
@@ -17,112 +21,146 @@ class Report
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"report"})
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="reports")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"report"})
      */
     private $Project;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"report"})
      */
     private $redacteur;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"report"})
      */
     private $dateRedaction;
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Groups({"report"})
      */
     private $status;
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Groups({"report"})
      */
     private $propreteAccessConformity;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"report"})
      */
     private $propreteAccessComment;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"report"})
      */
     private $propreteAccessCommentIntern;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"report"})
      */
     private $propreteCommuneConformity;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"report"})
      */
     private $propreteCommuneComment;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"report"})
      */
     private $propreteCommuneCommentIntern;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"report"})
      */
     private $securityConformity;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"report"})
      */
     private $securityConmment;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"report"})
      */
     private $securityConmmentIntern;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"report"})
      */
     private $installations;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\PropreteAccessImputation", mappedBy="report", orphanRemoval=true)
+     * @Groups({"report"})
      */
-    private $propreteIccessImputation;
+    private $propreteAccessImputation;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\PropreteCommuneImputation", mappedBy="report")
+     * @Groups({"report"})
      */
     private $propreteCommuneImputations;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\SecurityCommentImputation", mappedBy="report")
+     * @Groups({"report"})
      */
     private $securityCommentImputations;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Photo", mappedBy="Report")
+     * @Groups({"report"})
+     * @ApiSubresource
      */
     private $photos;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Lot", mappedBy="report")
+     * @Groups({"lot","report"})
      */
     private $lots;
 
+    /**
+     * @ORM\Column(type="integer")
+     * @Groups({"lot","report"})
+     */
+    private $chrono;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Echeance", mappedBy="report")
+     * @ApiSubresource
+     */
+    private $echeances;
+
     public function __construct()
     {
-        $this->propreteIccessImputation = new ArrayCollection();
+        $this->propreteAccessImputation = new ArrayCollection();
         $this->propreteCommuneImputations = new ArrayCollection();
         $this->securityCommentImputations = new ArrayCollection();
         $this->photos = new ArrayCollection();
         $this->lots = new ArrayCollection();
+        $this->echeances = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -262,24 +300,24 @@ class Report
         return $this;
     }
 
-    public function getSecurityComment(): ?string
+    public function getSecurityConmment(): ?string
     {
         return $this->securityConmment;
     }
 
-    public function setSecurityComment(string $securityConmment): self
+    public function setSecurityConmment(string $securityConmment): self
     {
         $this->securityConmment = $securityConmment;
 
         return $this;
     }
 
-    public function getSecurityCommentIntern(): ?string
+    public function getSecurityConmmentIntern(): ?string
     {
         return $this->securityConmmentIntern;
     }
 
-    public function setSecurityCommentIntern(string $securityConmmentIntern): self
+    public function setSecurityConmmentIntern(string $securityConmmentIntern): self
     {
         $this->securityConmmentIntern = $securityConmmentIntern;
 
@@ -303,13 +341,13 @@ class Report
      */
     public function getPropreteAccessImputation(): Collection
     {
-        return $this->propreteIccessImputation;
+        return $this->propreteAccessImputation;
     }
 
     public function addPropreteAccessImputation(PropreteAccessImputation $propreteAccessImputation): self
     {
-        if (!$this->propreteIccessImputation->contains($propreteAccessImputation)) {
-            $this->propreteIccessImputation[] = $propreteAccessImputation;
+        if (!$this->propreteAccessImputation->contains($propreteAccessImputation)) {
+            $this->propreteAccessImputation[] = $propreteAccessImputation;
             $propreteAccessImputation->setReport($this);
         }
 
@@ -318,8 +356,8 @@ class Report
 
     public function removePropreteAccessImputation(PropreteAccessImputation $propreteAccessImputation): self
     {
-        if ($this->propreteIccessImputation->contains($propreteAccessImputation)) {
-            $this->propreteIccessImputation->removeElement($propreteAccessImputation);
+        if ($this->propreteAccessImputation->contains($propreteAccessImputation)) {
+            $this->propreteAccessImputation->removeElement($propreteAccessImputation);
             // set the owning side to null (unless already changed)
             if ($propreteAccessImputation->getReport() === $this) {
                 $propreteAccessImputation->setReport(null);
@@ -448,6 +486,46 @@ class Report
             if ($lot->getReport() === $this) {
                 $lot->setReport(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getChrono(): ?int
+    {
+        return $this->chrono;
+    }
+
+    public function setChrono(int $chrono): self
+    {
+        $this->chrono = $chrono;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Echeance[]
+     */
+    public function getEcheances(): Collection
+    {
+        return $this->echeances;
+    }
+
+    public function addEcheance(Echeance $echeance): self
+    {
+        if (!$this->echeances->contains($echeance)) {
+            $this->echeances[] = $echeance;
+            $echeance->addReport($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEcheance(Echeance $echeance): self
+    {
+        if ($this->echeances->contains($echeance)) {
+            $this->echeances->removeElement($echeance);
+            $echeance->removeReport($this);
         }
 
         return $this;

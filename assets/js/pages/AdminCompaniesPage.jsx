@@ -8,10 +8,10 @@ const AdminCompaniesPage = (props) => {
     const [companies, setCompanies] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    // Function to load all company
     const fetchCompanies = async () => {
         try {
             const data = await CompanyAPI.findAll();
-            console.log(data)
             setCompanies(data);
             setLoading(false);
         } catch (error) {
@@ -20,12 +20,20 @@ const AdminCompaniesPage = (props) => {
         }
     }
 
+    // Loading Company during loading page
     useEffect(() => {
         fetchCompanies().then(r => "");
     }, []);
 
     return <main className="container">
         <div className="mb-4 d-flex justify-content-between align-items-center">
+            <Link
+
+                className='btn btn-danger'
+                type='button'
+                to={'/admin'}
+
+            > Retour </Link>
             <h2> Entreprises : </h2>
             <Link
                 className='btn btn-primary'
@@ -36,14 +44,10 @@ const AdminCompaniesPage = (props) => {
         <table className="table table-hover">
             <thead>
             <tr>
-                <th className="text-center">Numéro Entreprise</th>
                 <th className="text-center">Nom Entreprise</th>
                 <th className="text-center">Adresse</th>
-                <th className="text-center">Complement d'adresse</th>
                 <th className="text-center">Code Postal</th>
                 <th className="text-center">Ville</th>
-                <th className="text-center">Mail</th>
-                <th className="text-center">Mail Secondaire</th>
                 <th/>
             </tr>
             </thead>
@@ -51,15 +55,10 @@ const AdminCompaniesPage = (props) => {
             <tbody>
             {companies.map(company => 
                 <tr key={company.id}>
-                    <td className="text-center">{company.id}</td>
                     <td className="text-center">{company.nom}</td>
-                    <td className="text-center">{company.adresse1}</td>
-                    <td className="text-center">{company.adresse2}</td>
+                    <td className="text-center">{company.adresse1}<br/>{company.adresse2}</td>
                     <td className="text-center">{company.codePostal}</td>
                     <td className="text-center">{company.ville}</td>
-                    <td className="text-center">{company.mail1}</td>
-                    <td className="text-center">{company.mail2}</td>
-
                     <td>
                         <Link className="btn btn-primary" to={'/admin/company/' + company.id}> Modifier </Link>
                     </td>

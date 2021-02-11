@@ -1,76 +1,188 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from "react";
 import NavbarLeft from "../components/navbars/NavbarLeft";
-import '../../css/report.css'
-import {withRouter} from "react-router-dom";
-import fakeData from "../components/fakeDataForDev/fakeData";
-import '../../css/app.css';
+import "../../css/report.css";
+import { withRouter } from "react-router-dom";
+import "../../css/app.css";
+import ReportsAPI from "../services/ReportsAPI";
+import DateAPI from "../services/DateAPI";
+import ProjectsAPI from "../services/ProjectsAPI";
+import Button from "../components/forms/Button";
+import { Modal } from "react-bootstrap";
+import Field from "../components/forms/Field";
+import EcheanceAPI from "../services/EcheanceAPI";
+import { toast } from "react-toastify";
 
-const ReportEffectifsPage = ({match}) => {
+const ReportEffectifsPage = ({ match }) => {
+  const NavbarLeftWithRouter = withRouter(NavbarLeft);
+  const urlParams = match.params;
 
-    const urlParams = match.params;
+  const [report, setReport] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [project, setProject] = useState({});
+  const [showModal, setShowModal] = useState(false);
+  const [echeance, setEcheance] = useState({});
 
-    const reportById = fakeData.reportById(parseInt(urlParams.idReport, 10));
+  const fetchReport = async (id) => {
+    try {
+      const data = await ReportsAPI.findReport(id);
+      setReport(data);
+    } catch (error) {
+      toast.error("Erreur lors du chargement du raport");
+      console.log(error.response);
+    }
+  };
 
-    const [report, setReport] = useState(reportById);
+  const fetchProject = async (id) => {
+    try {
+      const data = await ProjectsAPI.find(id);
+      setProject(data);
+      setLoading(false);
+    } catch (error) {
+      toast.error("Erreur lors du chargement du projet");
+      console.log(error.respose);
+    }
+  };
 
-    const NavbarLeftWithRouter = withRouter(NavbarLeft);
+  const fetchEcheance = async (id) => {
+    try {
+      const data = await EcheanceAPI.findEcheance(id);
+      setEcheance(data);
+    } catch (error) {
+      toast.error("Erreur lors du chargement de l'échéance");
+      console.log(error.repose);
+    }
+  };
 
+  const handleShowModal = async (id) => {
+    await fetchEcheance(id);
+    setShowModal(true);
+  };
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
-    const fetchReport = () => {
+  const handleChange = ({ currentTarget }) => {
+    const { name, value } = currentTarget;
+    setEcheance({ ...echeance, [name]: value });
+  };
 
-        setReport(reportById);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      echeance.lot = "/api/lots/" + echeance.lot.id;
+      await EcheanceAPI.update(echeance.id, echeance);
+      toast.success("L'effectif est bien modifié !");
+      handleCloseModal();
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
 
-    };
+  // Chargement du raport si besoin au cahrgement du composant ou au changement de l'identifiant
+  useEffect(() => {
+    fetchReport(urlParams.idReport);
+    fetchProject(urlParams.id);
+  }, [urlParams.idReport, urlParams.id]);
 
-    useEffect(() => {
-        //TODO Normalement charge le projet à chaque fois que l'id change. Attention plus tard vérifier que tout fonctionne avec axios
-        fetchReport();
+  return (
+    <>
+      <main>
+        <NavbarLeftWithRouter selected="effectifs" />
 
-    }, []);
-
-    return (
-        <main>
-            <NavbarLeftWithRouter selected='effectifs'/>
-
-            <div className='page-content'>
-                <h2>Effectifs : </h2>
-                <h4>Rédacteur : {report.redacteur}</h4>
-                <p>Date : {report.dateRedaction}</p>
-                <table className="table table-hover table-striped">
-                    <thead>
-                    <tr>
-                        <th>N°</th>
-                        <th>Entreprise</th>
-                        <th>N°Lot</th>
-                        <th>Nom Lot</th>
-                        <th className="text-center">Effectif Prévu</th>
-                        <th className="text-center">Effectif Constaté</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    {report ?
-                        report.lots.map(lot =>
-                            <tr key={lot.id}>
-                                <td>{lot.id}</td>
-                                <td>{lot.entreprise.nom}</td>
+        {!loading && (
+          <>
+            <div className="page-content">
+              <h2>Effectifs : </h2>
+              <h4>Rédacteur : {report.redacteur}</h4>
+              <p>Date : {DateAPI.formatDate(report.dateRedaction)}</p>
+              <table className="table table-hover table-striped">
+                <thead>
+                  <tr>
+                    <th>N° Echéance</th>
+                    <th>Entreprise</th>
+                    <th>N°Lot</th>
+                    <th>Sujet</th>
+                    <th className="text-center">Effectif Prévu</th>
+                    <th className="text-center">Effectif Constaté</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {project &&
+                    project.lots.length !== 0 &&
+                    project.lots.map((lot) => (
+                      <React.Fragment key={lot.id}>
+                        {lot.echeances.map((echeance) => (
+                          <React.Fragment key={echeance.id}>
+                            {echeance.report.includes(
+                              "/api/reports/" + urlParams.idReport
+                            ) && (
+                              <tr key={echeance.id}>
+                                <td>{echeance.numeroEcheance}</td>
+                                <td>{lot.company.nom}</td>
                                 <td>{lot.numeroLot}</td>
-                                <td>{lot.libelleLot}</td>
-                                <td className="text-center">{lot.effectifPrevu}</td>
-                                <td className="text-center">{lot.effectifConstate}</td>
-                            </tr>
-                        )
-                        :
-                        <p>Il n'y a pas d'effectif défini pour ce rapport</p>
-                    }
-
-                    </tbody>
-                </table>
-
+                                <td>{echeance.sujet}</td>
+                                <td className="text-center">
+                                  {echeance.effectifPrevu}
+                                </td>
+                                <td className="text-center">
+                                  {echeance.effectifConstate}
+                                </td>
+                                <td>
+                                  <Button
+                                    className="btn btn-danger"
+                                    text="Modifer"
+                                    onClick={() => handleShowModal(echeance.id)}
+                                  ></Button>
+                                </td>
+                              </tr>
+                            )}
+                          </React.Fragment>
+                        ))}
+                      </React.Fragment>
+                    ))}
+                </tbody>
+              </table>
+              {project && project.lots.length === 0 && (
+                <p>Il n'y a pas d'effectif défini pour ce rapport</p>
+              )}
             </div>
-
-        </main>
-    );
+          </>
+        )}
+        {loading && <div id="loading-icon"> </div>}
+      </main>
+      <Modal
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        show={showModal}
+        onHide={handleCloseModal}
+      >
+        <Modal.Header closeButton>
+          <h2>Modifications des effectifs</h2>
+        </Modal.Header>
+        <Modal.Body>
+          <form className="d-flex flex-column" onSubmit={handleSubmit}>
+            <Field
+              name="effectifPrevu"
+              label="Effectif Prévu"
+              onChange={handleChange}
+              value={echeance.effectifPrevu}
+            ></Field>
+            <Field
+              name="effectifConstate"
+              label="Effectif constaté"
+              onChange={handleChange}
+              value={echeance.effectifConstate}
+            ></Field>
+            <Button
+              className="btn btn-success align-self-end"
+              text="valider"
+            ></Button>
+          </form>
+        </Modal.Body>
+      </Modal>
+    </>
+  );
 };
 
 export default ReportEffectifsPage;

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -15,16 +16,19 @@ class Effectif
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"echeance"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"echeance"})
      */
     private $effectifPrevu;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"echeance"})
      */
     private $effectifConstate;
 
@@ -33,6 +37,11 @@ class Effectif
      * @ORM\JoinColumn(nullable=false)
      */
     private $company;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Echeance", inversedBy="effectif", cascade={"persist", "remove"})
+     */
+    private $echeance;
 
     public function getId(): ?int
     {
@@ -71,6 +80,18 @@ class Effectif
     public function setCompany(?Company $company): self
     {
         $this->company = $company;
+
+        return $this;
+    }
+
+    public function getEcheance(): ?Echeance
+    {
+        return $this->echeance;
+    }
+
+    public function setEcheance(?Echeance $echeance): self
+    {
+        $this->echeance = $echeance;
 
         return $this;
     }
