@@ -76,7 +76,6 @@ const ReportImputation = ({
 
   return (
     <form className="col-8">
-      <div className="col-12">
         {imputations &&
           imputations.map((imputation, i) => (
             <React.Fragment key={i}>
@@ -136,7 +135,6 @@ const ReportImputation = ({
           text="Valider les imputations"
           type="button"
         />
-      </div>
     </form>
   );
 };

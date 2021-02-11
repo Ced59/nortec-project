@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import NavbarLeft from "../components/navbars/NavbarLeft";
 import Button from "../components/forms/Button";
-import ImageUpload from "../components/forms/ImageUpload";
 import "../../css/app.css";
 import { toast } from "react-toastify";
 import ReportsAPI from "../services/ReportsAPI";
@@ -70,10 +69,6 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
 
   // -------------------------------------------------gestion conformité/commentaire------------------------------------------
 
-  const handleCheckConformity = (etat) => {
-    setConforme(etat);
-  };
-
   const handleSubmitReport = async ({ currentTarget }) => {
     try {
       report.Project = "/api/projects/" + urlParams.id;
@@ -114,13 +109,13 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
           <div className="row ml-2 mt-4 d-flex justify-content-between mb-3">
             <h2 className="mb-4">Propreté parties communes :</h2>
             <Button
-              onClick={() => handleCheckConformity(true)}
+              onClick={() => setConforme(true)}
               className="btn btn-success mb-4"
               text="Conforme"
               type="button"
             />
             <Button
-              onClick={() => handleCheckConformity(false)}
+              onClick={() => setConforme(false)}
               className="btn btn-danger ml-5 mb-4"
               text="Non Conforme"
               type="button"
@@ -147,7 +142,6 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
           )}
           {conforme === false && (
             <>
-              <div className="row">
                 <ReportImputation
                   setLoading={setLoading}
                   setImputations={setImputations}
@@ -158,8 +152,7 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
                   fetchReport={fetchReport}
                   urlParams={urlParams}
                   api={"propreteCommun"}
-                ></ReportImputation>
-              </div>
+                />
               <ReportAddPhoto
                 reportID={urlParams.idReport}
                 typePhoto="commune"
@@ -172,7 +165,7 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
                 valueCommentIntern={report.propreteCommuneCommentIntern}
                 nameCommentIntern="propreteCommuneCommentIntern"
                 handleSubmitComment={handleSubmitReport}
-              ></ReportComment>
+              />
               <div className="d-flex justify-content-center">
                 <Button
                   onClick={handleSubmitReport}
@@ -186,7 +179,7 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
           )}
         </div>
       )}
-      {loading && <div id="loading-icon"> </div>}
+      {loading && <div id="loading-icon"/>}
     </main>
   );
 };
