@@ -175,6 +175,7 @@ const ReportEcheancesPage = ({ match }) => {
                               <td>{lot.company.nom}</td>
                               <td>
                                 <Button
+                                    type="button"
                                   className="btn btn-primary"
                                   text="Détails"
                                   onClick={() =>
@@ -339,7 +340,7 @@ const ReportEcheancesPage = ({ match }) => {
                 </fieldset>
                 <div className="col-12 mt-3 d-flex justify-content-end">
                   {edit && (
-                    <Button className="btn btn-success" text="Valider"></Button>
+                    <Button className="btn btn-success" text="Valider"/>
                   )}
                 </div>
               </div>
@@ -348,17 +349,19 @@ const ReportEcheancesPage = ({ match }) => {
           <Modal.Footer>
             {!edit ? (
               <Button
+                  type="button"
                 className="btn btn-primary"
                 text="Modifier"
                 onClick={handleEdit}
-              ></Button>
+              />
             ) : (
               <>
                 <Button
+                    type="button"
                   className="btn btn-danger"
                   text="Annuler"
                   onClick={handleEdit}
-                ></Button>
+                />
               </>
             )}
           </Modal.Footer>

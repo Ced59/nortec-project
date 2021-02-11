@@ -60,7 +60,6 @@ const ShowReport = ({ match }) => {
         <div>
           <Link
             className="btn btn-danger"
-            type="button"
             to={"/project/" + report.Project.id + "/listReports"}
           >
             {" "}
