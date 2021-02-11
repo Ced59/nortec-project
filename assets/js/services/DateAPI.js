@@ -43,7 +43,7 @@ function now() {
 }
 
 function verifyDateExist(date) {
-  if (dayjs(date).isSame("1900-01-01T00:00:00+00:00") || !date) {
+  if (dayjs(date).isSame("1900-01-01", 'year') || !date) {
     return "";
   } else {
     return date;
