@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../../css/loading-icon.css';
 import CompanyAPI from '../services/CompanyAPI';
-import AuthAPI from "../services/AuthAPI";
 
-const AdminCompaniesPage = (props) => {
+const AdminCompaniesPage = () => {
 
     const [companies, setCompanies] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [userId] = useState(AuthAPI.getUserId());
 
     const fetchCompanies = async () => {
         try {
@@ -28,11 +26,9 @@ const AdminCompaniesPage = (props) => {
     return <main className="container">
         <div className="mb-4 d-flex justify-content-between align-items-center">
             <Link
-
                 className='btn btn-danger'
                 type='button'
                 to={'/admin'}
-
             > Retour </Link>
             <h2> Entreprises : </h2>
             <Link

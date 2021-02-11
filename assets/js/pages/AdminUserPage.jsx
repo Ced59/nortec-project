@@ -7,7 +7,6 @@ import "../../css/fieldset.css";
 import "../../css/loading-icon.css";
 import Modal from "react-bootstrap/Modal";
 import { Button } from "react-bootstrap";
-import ProjectsAPI from "../services/ProjectsAPI";
 import {
   determineStatusClasses,
   determineStatusLabel,
@@ -39,7 +38,6 @@ const AdminUserPage = ({ history, match, props }) => {
   });
 
   const [projects, setProjects] = useState("");
-  const filteredUserProject = [];
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -74,27 +72,13 @@ const AdminUserPage = ({ history, match, props }) => {
 
   const fetchProjects = async () => {
     try {
-      let result = await ProjectsAPI.findAll();
+      let result = await UsersAPI.getProjects(id);
       setProjects(result);
       setLoadingProjects(false);
     } catch (error) {
       toast.error("Le chargement des projets a rencontré un problème !");
       setLoadingProjects(false);
       history.replace("/admin/user/" + id);
-    }
-  };
-
-  const filteredUserProjects = () => {
-    if (!loadingProjects) {
-      projects.map((project) => {
-        project.users.map((user) => {
-          if (user.id === parseInt(id, 10)) {
-            filteredUserProject.push(project);
-          }
-        });
-      });
-
-      return filteredUserProject;
     }
   };
 
@@ -232,7 +216,7 @@ const AdminUserPage = ({ history, match, props }) => {
   const paginationConfigCalc = () => {
     if (!loadingProjects) {
       return pagination_configs.determinePaginationConfig(
-        filteredUserProjects(),
+        projects,
         ADMIN_USER_PAGE_PAGINATION_ITEMS_PER_PAGE,
         currentPage
       );
@@ -252,7 +236,7 @@ const AdminUserPage = ({ history, match, props }) => {
           <h1>Modification de l'utilisateur</h1>
         )}
 
-        <div className='col-12 d-flex flex-lg-row flex-column p-0'>
+        <div className="col-12 d-flex flex-lg-row flex-column p-0">
           <form onSubmit={handleSubmit} className="col-12 col-lg-6 mt-3">
             <fieldset className="border-fieldset">
               <legend>Informations générales</legend>
@@ -383,55 +367,59 @@ const AdminUserPage = ({ history, match, props }) => {
                 <>
                   {edit && (
                     <>
-                      <table className="table table-hover table-striped">
-                        <thead>
-                          <tr>
-                            <th className="p-2">Nom</th>
-                            <th className="p-2">Ville</th>
-                            <th className="p-2 text-center">Date début</th>
-                            <th className="p-2 text-center">Statut</th>
-                            <th />
-                          </tr>
-                        </thead>
+                      {projects.length === 0 ? (
+                        <p className="text-center">L'utilisateur n'est affecté à aucun projet</p>
+                      ) : (
+                        <table className="table table-hover table-striped">
+                          <thead>
+                            <tr>
+                              <th className="p-2">Nom</th>
+                              <th className="p-2">Ville</th>
+                              <th className="p-2 text-center">Date début</th>
+                              <th className="p-2 text-center">Statut</th>
+                              <th />
+                            </tr>
+                          </thead>
 
-                        <tbody>
-                          {paginationConfig.paginatedItems.map((project) => (
-                            <tr key={project.id}>
-                              <td className="p-2">{project.name}</td>
-                              <td className="p-2">{project.ville}</td>
-                              <td className="p-2 text-center">
-                                {DateAPI.formatDate(project.dateDebut)}
-                              </td>
-                              <td className="p-2 text-center">
-                                <span
-                                  className={
-                                    "pl-2 pr-2 pt-1 pb-1 badge badge-" +
-                                    determineStatusClasses(
+                          <tbody>
+                            {projects.map((project) => (
+                              <tr key={project.id}>
+                                <td className="p-2">{project.name}</td>
+                                <td className="p-2">{project.ville}</td>
+                                <td className="p-2 text-center">
+                                  {DateAPI.formatDate(project.dateDebut)}
+                                </td>
+                                <td className="p-2 text-center">
+                                  <span
+                                    className={
+                                      "pl-2 pr-2 pt-1 pb-1 badge badge-" +
+                                      determineStatusClasses(
+                                        project.dateDebut,
+                                        project.dateFinReelle
+                                      )
+                                    }
+                                  >
+                                    {determineStatusLabel(
                                       project.dateDebut,
                                       project.dateFinReelle
-                                    )
-                                  }
-                                >
-                                  {determineStatusLabel(
-                                    project.dateDebut,
-                                    project.dateFinReelle
-                                  )}
-                                </span>
-                              </td>
-                              <td className="p-2 text-center">
-                                <button
-                                  className="btn btn-danger btn-sm"
-                                  onClick={() =>
-                                    handleDeleteUserProject(project.id)
-                                  }
-                                >
-                                  Retirer le projet
-                                </button>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                                    )}
+                                  </span>
+                                </td>
+                                <td className="p-2 text-center">
+                                  <button
+                                    className="btn btn-danger btn-sm"
+                                    onClick={() =>
+                                      handleDeleteUserProject(project.id)
+                                    }
+                                  >
+                                    Retirer le projet
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      )}
 
                       <div className="mt-2 d-flex justify-content-center">
                         <Pagination
