@@ -8,6 +8,7 @@ import ReportsAPI from "../services/ReportsAPI";
 import ReportImputation from "../components/ReportImputation";
 import ReportComment from "../components/ReportComment";
 import ReportAddPhoto from "../components/ReportAddPhoto";
+import CardConformity from "../components/CardConformity";
 
 const ReportPropretePartiesCommunesPage = ({ match }) => {
   const [conforme, setConforme] = useState(false);
@@ -123,22 +124,10 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
           </div>
 
           {conforme && (
-            <div className="card mt-3">
-              <div className="row ml-2 d-flex justify-content-center mt-3">
-                <h4 className="mb-4">
-                  Propreté des parties communes conforme ?
-                </h4>
-              </div>
-              <div className="row ml-2 d-flex justify-content-center">
-                <Button
-                  onClick={handleSubmitReport}
-                  className="btn btn-primary mb-4 row"
-                  text="Confirmer"
-                  type="button"
-                  name="conformity"
-                />
-              </div>
-            </div>
+            <CardConformity
+              titre="Propreté des parties communes conforme ?"
+              submit={handleSubmitReport}
+            />
           )}
           {conforme === false && (
             <>
