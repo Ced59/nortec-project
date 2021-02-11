@@ -77,7 +77,7 @@ const ListProjectsPage = () => {
     // ----------------------------- Template ------------------------------------------
 
     return (
-        <main className="justify-content-around">
+        <main className="container-fluid col-12">
             <Helmet>
                 <style>{'body { background-color: white; }'}</style>
             </Helmet>
@@ -101,7 +101,7 @@ const ListProjectsPage = () => {
                 </div>
             </div>
 
-            <div className="card-group">
+            <div className="d-flex justify-content-around flex-wrap">
 
                 {!loading && <>
 
