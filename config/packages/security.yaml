@@ -42,7 +42,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/users, roles: ['ROLE_ADMIN'] }
+        - { path: ^/api/users, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/annuaire, roles: ['ROLE_ADMIN'] }
         - { path: ^/api/company, roles: ['ROLE_ADMIN'] }
         - { path: ^/api/echeances, roles: IS_AUTHENTICATED_FULLY }

@@ -8,7 +8,6 @@ import Field from "../components/forms/Field";
 import FieldTextArea from "../components/forms/FieldTextArea";
 import DateAPI from "../services/DateAPI";
 import ProjectsAPI from "../services/ProjectsAPI";
-import ReportsAPI from "../services/ReportsAPI";
 import EcheanceAPI from "../services/EcheanceAPI";
 import { toast } from "react-toastify";
 import AddEcheanceModal from "../components/modal/AddEcheanceModal";
@@ -30,23 +29,12 @@ const ReportEcheancesPage = ({ match }) => {
   });
 
   const echeanceErrorModel = useState(echeanceError);
-  const [report, setReport] = useState({});
   const [project, setProject] = useState({});
   const [edit, setEdit] = useState(false);
   const [loading, setLoading] = useState(true);
   const [echeanceDetail, setEcheanceDetail] = useState({});
 
   const urlParams = match.params;
-
-  const fetchReport = async (id) => {
-    try {
-      const data = await ReportsAPI.findReport(id);
-      setReport(data);
-    } catch (error) {
-      toast.error("Erreur lors du chargement du raport");
-      console.log(error.response);
-    }
-  };
 
   const fetchProject = async (id) => {
     try {
@@ -71,7 +59,6 @@ const ReportEcheancesPage = ({ match }) => {
 
   // Chargement du raport si besoin au chargement du composant ou au changement de l'identifiant
   useEffect(() => {
-    fetchReport(urlParams.idReport);
     fetchProject(urlParams.id);
   }, [urlParams.idReport, urlParams.id]);
 

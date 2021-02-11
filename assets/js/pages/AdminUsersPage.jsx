@@ -3,7 +3,6 @@ import {Link} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import UserApi from '../services/UsersAPI';
 import UsersAPI from '../services/UsersAPI';
-import AuthAPI from "../services/AuthAPI";
 import '../../css/loading-icon.css';
 import StatusConstAPI from "../services/StatusConstAPI";
 import Pagination from '@material-ui/lab/Pagination';
@@ -12,12 +11,11 @@ import pagination_configs, {
 } from "../components/configs/pagination_configs";
 
 
-const AdminUsersPage = ({history, props}) => {
+const AdminUsersPage = () => {
 
     const [users, setUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(true);
-    const [userId] = useState(AuthAPI.getUserId());
 
 
     useEffect(() => {
