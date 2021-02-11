@@ -8,7 +8,7 @@ const ImageUpload = ({withIcon=true, onChange, singleImg, buttonType}) => {
             withPreview={true}
             buttonText='Choisissez une image'
             onChange={onChange}
-            imgExtension={['.jpg', '.gif', '.png']}
+            imgExtension={['.jpg', '.gif', '.png', '.jpeg']}
             maxFileSize={5242880}
             fileTypeError="Le type de fichier n'est pas supporté"
             fileSizeError="Le fichier sélectionné est trop volumineux"

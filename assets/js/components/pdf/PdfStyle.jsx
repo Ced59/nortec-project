@@ -23,8 +23,7 @@ const styles = StyleSheet.create({
     },
     sectionBorder: {
       border: "1pt solid #005274",
-      marginLeft: 10,
-      marginRight: 10,
+      margin:10,
       padding: 7,
       backgroundColor: "#F5F5F5",
       borderTopLeftRadius: "5",
@@ -106,7 +105,8 @@ const styles = StyleSheet.create({
       justifyContent: "space-around",
     },
     projectImage: {
-      width: "80%",
+      heigth: "40%",
+      width: "60%",
       marginLeft: "auto",
       marginRight: "auto",
     },

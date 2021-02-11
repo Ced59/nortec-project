@@ -55,7 +55,6 @@ const ListReportsByProject = ({ match, history }) => {
                 <th>Statut</th>
                 <th></th>
                 <th></th>
-                <th />
               </tr>
             </thead>
             <tbody>

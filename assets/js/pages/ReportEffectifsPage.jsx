@@ -117,7 +117,7 @@ const ReportEffectifsPage = ({ match }) => {
                               "/api/reports/" + urlParams.idReport
                             ) && (
                               <tr key={echeance.id}>
-                                <td>{echeance.numeroEcheance}</td>
+                                <td>{echeance.id}</td>
                                 <td>{lot.company.nom}</td>
                                 <td>{lot.numeroLot}</td>
                                 <td>{echeance.sujet}</td>

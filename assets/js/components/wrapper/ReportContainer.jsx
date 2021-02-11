@@ -1,7 +1,7 @@
 import React from "react";
 
-const ReportContainer = (props) => {
-  return <div className="card m-4 p-2">{props.children}</div>;
+const ReportContainer = ({children}) => {
+  return <div className="card m-4 p-2 overflow-auto">{children}</div>;
 };
 
 export default ReportContainer;
