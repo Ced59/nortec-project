@@ -81,7 +81,7 @@ const ListProjectsPage = () => {
             <Helmet>
                 <style>{'body { background-color: white; }'}</style>
             </Helmet>
-            <div className="row justify-content-around mb-2">
+            <div className="row justify-content-around mb-4">
                 <h2> Liste des projets : </h2>
                 <div className="d-flex">
                     <SearchInput
