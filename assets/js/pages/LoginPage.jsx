@@ -156,9 +156,7 @@ const LoginPage = ({ history }) => {
             {/* ----------------------------------DEV------------------------------ */}
 
             <div className="text-right mt-3 mb-3">
-              <button type="submit" className="btn btn-login">
-                Connexion
-              </button>
+              <Button text="Connexion" className="btn btn-login"/>
             </div>
           </div>
         </form>

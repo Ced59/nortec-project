@@ -6,7 +6,7 @@ import UsersAPI from "../services/UsersAPI";
 import "../../css/fieldset.css";
 import "../../css/loading-icon.css";
 import Modal from "react-bootstrap/Modal";
-import { Button } from "react-bootstrap";
+import Button from "../components/forms/Button";
 import {
   determineStatusClasses,
   determineStatusLabel,
@@ -278,9 +278,7 @@ const AdminUserPage = ({ history, match, props }) => {
                   />
 
                   <div className="form-group text-right mt-4">
-                    <button type="submit" className="btn btn-primary">
-                      Valider
-                    </button>
+                    <Button text="Valider" className="btn btn-primary"/>
                   </div>
                 </>
               ) : (
@@ -302,12 +300,11 @@ const AdminUserPage = ({ history, match, props }) => {
                           <p className="col-8">
                             {UsersAPI.determineRole(user)}
                           </p>
-                          <button
+                          <Button type="button"
+                                  text="Changer"
                             onClick={() => handleShowModalRole(user)}
                             className="btn btn-danger col-3"
-                          >
-                            Changer
-                          </button>
+                          />
                         </>
                       ) : (
                         <div id="loading-icon" />
@@ -336,6 +333,7 @@ const AdminUserPage = ({ history, match, props }) => {
                               : "Le compte de l'utilisateur n'est pas activé"}
                           </p>
                           <button
+                              type="button"
                             onClick={() => handleShowModal(user)}
                             className="btn btn-danger col-3"
                           >
@@ -406,14 +404,14 @@ const AdminUserPage = ({ history, match, props }) => {
                                   </span>
                                 </td>
                                 <td className="p-2 text-center">
-                                  <button
+                                  <Button
+                                      text="Retirer le projet"
+                                      type="button"
                                     className="btn btn-danger btn-sm"
                                     onClick={() =>
                                       handleDeleteUserProject(project.id)
                                     }
-                                  >
-                                    Retirer le projet
-                                  </button>
+                                  />
                                 </td>
                               </tr>
                             ))}
@@ -476,15 +474,13 @@ const AdminUserPage = ({ history, match, props }) => {
           Êtes vous sûr de vouloir continuer?
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleCloseModal}>
-            Fermer
-          </Button>
+          <Button type="button" text="Fermer" className="btn btn-primary" onClick={handleCloseModal}/>
           <Button
-            variant="danger"
+              text="Confirmer"
+              type="button"
+            className="btn btn-danger"
             onClick={() => handleActiveUser(userToModifyActive)}
-          >
-            Confirmer
-          </Button>
+          />
         </Modal.Footer>
       </Modal>
 
@@ -512,12 +508,8 @@ const AdminUserPage = ({ history, match, props }) => {
             </select>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={handleCloseModalRole}>
-              Fermer
-            </Button>
-            <Button variant="danger" type="submit">
-              Confirmer
-            </Button>
+            <Button className="btn btn-primary" text="Fermer" type="button" onClick={handleCloseModalRole}/>
+            <Button className="btn btn-danger" text="Confirmer"/>
           </Modal.Footer>
         </form>
       </Modal>

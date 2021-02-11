@@ -77,12 +77,12 @@ const ListProjectsPage = () => {
     // ----------------------------- Template ------------------------------------------
 
     return (
-        <main className="container">
+        <main className="justify-content-around">
             <Helmet>
                 <style>{'body { background-color: white; }'}</style>
             </Helmet>
-            <div className="row justify-content-between mb-2">
-                <h2>Liste des projets : </h2>
+            <div className="row justify-content-around mb-2">
+                <h2> Liste des projets : </h2>
                 <div className="d-flex">
                     <SearchInput
                         formClassName="form-inline mr-2"

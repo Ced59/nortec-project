@@ -5,6 +5,7 @@ import Pagination from "@material-ui/lab/Pagination";
 import pagination_configs, {
   ADMIN_PROJECT_PAGE_PAGINATION_ITEMS_PER_PAGE,
 } from "../configs/pagination_configs";
+import Button from "../forms/Button";
 
 const AddUserToProjectModal = ({ id, users, handleSubmit, project, setProject }) => {
   const [showUsersModal, setShowUsersModal] = useState(false);
@@ -75,12 +76,14 @@ const AddUserToProjectModal = ({ id, users, handleSubmit, project, setProject })
                         <td className="w-35">{user.firstName}</td>
                         <td className="w-35">{user.lastName}</td>
                         <td className="text-center">
-                          <button
+                          <Button
+                              type="button"
+
                             className="btn btn-primary btn-sm"
                             onClick={() => handleAddUser(user)}
                           >
                             Ajouter
-                          </button>
+                          </Button>
                         </td>
                       </tr>
                     ))}
@@ -112,12 +115,12 @@ const AddUserToProjectModal = ({ id, users, handleSubmit, project, setProject })
                         <td className="w-35">{user.firstName}</td>
                         <td className="w-35">{user.lastName}</td>
                         <td className="text-center">
-                          <button
+                          <Button
+                              type="button"
                             className="btn btn-primary btn-sm"
                             onClick={() => handleAddUser(user)}
-                          >
-                            Ajouter
-                          </button>
+                              text="Ajouter"
+                          />
                         </td>
                       </tr>
                     ))}
@@ -135,13 +138,12 @@ const AddUserToProjectModal = ({ id, users, handleSubmit, project, setProject })
           </form>
         </Modal.Body>
       </Modal>
-      <button
+      <Button
+          text="Ajouter des utilisateurs"
         type="button"
         onClick={() => handleShowUsersModal()}
         className="btn btn-primary btn-sm mb-4"
-      >
-        Ajouter des utilisateurs
-      </button>
+      />
     </>
   );
 };

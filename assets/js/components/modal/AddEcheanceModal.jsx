@@ -157,7 +157,7 @@ const AddEcheanceModal = ({
                   value={echeance.effectifPrevu}
                 ></Field>
                 <Modal.Footer>
-                  <Button className="btn btn-primary" text="Ajouter"></Button>
+                  <Button className="btn btn-primary" text="Ajouter"/>
                 </Modal.Footer>
               </form>
             </Modal.Body>
@@ -165,6 +165,7 @@ const AddEcheanceModal = ({
         )}
       </Modal>
       <Button
+          type="button"
         className="btn btn-primary"
         text="Ajouter une échéance"
         onClick={() => handleShowModalEcheance()}

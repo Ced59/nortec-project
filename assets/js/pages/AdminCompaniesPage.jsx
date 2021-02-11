@@ -29,13 +29,11 @@ const AdminCompaniesPage = () => {
         <div className="mb-4 d-flex justify-content-between align-items-center">
             <Link
                 className='btn btn-danger'
-                type='button'
                 to={'/admin'}
             > Retour </Link>
             <h2> Entreprises : </h2>
             <Link
                 className='btn btn-primary'
-                type='button'
                 to={"/admin/company/new"}
             > Ajouter une Entreprise </Link>
         </div>
