@@ -56,5 +56,6 @@ security:
         - { path: ^/api/proprete_commune_imputations, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/security_comment_imputations, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/reports, roles: IS_AUTHENTICATED_FULLY }
+
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

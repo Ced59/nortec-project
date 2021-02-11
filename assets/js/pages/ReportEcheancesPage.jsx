@@ -8,13 +8,10 @@ import Field from "../components/forms/Field";
 import FieldTextArea from "../components/forms/FieldTextArea";
 import DateAPI from "../services/DateAPI";
 import ProjectsAPI from "../services/ProjectsAPI";
-import {
-  statusEcheanceClasses,
-  statusEcheanceLabel,
-} from "../components/ProjectStatus";
 import EcheanceAPI from "../services/EcheanceAPI";
 import { toast } from "react-toastify";
 import AddEcheanceModal from "../components/modal/AddEcheanceModal";
+import SpanStatusEcheance from "../components/span/SpanStatusEcheance";
 
 const ReportEcheancesPage = ({ match }) => {
   const NavbarLeftWithRouter = withRouter(NavbarLeft);
@@ -156,22 +153,7 @@ const ReportEcheancesPage = ({ match }) => {
                               <td>{echeance.zone}</td>
                               <td>{echeance.sujet}</td>
                               <td>
-                                <span
-                                  className={
-                                    "badge badge-" +
-                                    statusEcheanceClasses(
-                                      echeance.dateDebut,
-                                      echeance.dateCloture,
-                                      echeance.dateFinPrevue
-                                    )
-                                  }
-                                >
-                                  {statusEcheanceLabel(
-                                    echeance.dateDebut,
-                                    echeance.dateCloture,
-                                    echeance.dateFinPrevue
-                                  )}
-                                </span>
+                                <SpanStatusEcheance objet= {echeance} ></SpanStatusEcheance>
                               </td>
                               <td>{DateAPI.formatDate(echeance.dateDebut)}</td>
                               <td>
@@ -273,22 +255,7 @@ const ReportEcheancesPage = ({ match }) => {
                   )}
                   <p>
                     Statut:{" "}
-                    <span
-                      className={
-                        "badge badge-" +
-                        statusEcheanceClasses(
-                          echeanceDetail.dateDebut,
-                          echeanceDetail.dateCloture,
-                          echeanceDetail.dateFinPrevue
-                        )
-                      }
-                    >
-                      {statusEcheanceLabel(
-                        echeanceDetail.dateDebut,
-                        echeanceDetail.dateCloture,
-                        echeanceDetail.dateFinPrevue
-                      )}
-                    </span>
+                    <SpanStatusEcheance objet= {echeanceDetail} ></SpanStatusEcheance>
                   </p>
                 </div>
                 {edit ? (

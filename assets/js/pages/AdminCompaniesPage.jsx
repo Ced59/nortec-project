@@ -8,6 +8,7 @@ const AdminCompaniesPage = () => {
     const [companies, setCompanies] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    // Function to load all company
     const fetchCompanies = async () => {
         try {
             const data = await CompanyAPI.findAll();
@@ -19,6 +20,7 @@ const AdminCompaniesPage = () => {
         }
     }
 
+    // Loading Company during loading page
     useEffect(() => {
         fetchCompanies().then(r => "");
     }, []);
