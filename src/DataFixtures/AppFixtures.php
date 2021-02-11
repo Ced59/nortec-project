@@ -116,7 +116,7 @@ class AppFixtures extends Fixture
 
         $manager->persist($user);
 
-        for ($u = 0; $u < 100; $u++) {
+        for ($u = 0; $u < 15; $u++) {
             $user = new User();
 
             $hash = $this->encoder->encodePassword($user, "password");
