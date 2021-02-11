@@ -67,10 +67,6 @@ const ReportPropreteAccesPage = ({ match }) => {
 
   // -------------------------------------------------gestion conformité/commentaire------------------------------------------
 
-  const handleCheckConformity = (etat) => {
-    setConforme(etat);
-  };
-
   const handleSubmitReport = async ({ currentTarget }) => {
     try {
       report.Project = "/api/projects/" + urlParams.id;
@@ -111,14 +107,14 @@ const ReportPropreteAccesPage = ({ match }) => {
           <div className="row ml-2 mt-4 d-flex justify-content-between mb-3">
             <h2 className="mb-4">Propreté des accès :</h2>
             <Button
-              onClick={() => handleCheckConformity("conform")}
+              onClick={() => setConforme("conform")}
               className="btn btn-success mb-4"
               text="Conforme"
               type="button"
             />
 
             <Button
-              onClick={() => handleCheckConformity("noconform")}
+              onClick={() => setConforme("noconform")}
               className="btn btn-danger ml-5 mb-4"
               text="Non Conforme"
               type="button"
@@ -160,12 +156,11 @@ const ReportPropreteAccesPage = ({ match }) => {
           {conforme === "noconform" && (
             <>
               <Button
-                onClick={() => handleCheckConformity("prorata")}
+                onClick={() => setConforme("prorata")}
                 className="btn btn-warning ml-5 mb-4"
                 text="Prorata"
                 type="button"
               />
-              <div className="row">
                 <ReportImputation
                   setLoading={setLoading}
                   setImputations={setImputations}
@@ -177,7 +172,6 @@ const ReportPropreteAccesPage = ({ match }) => {
                   urlParams={urlParams}
                   api={"propreteAcces"}
                 />
-              </div>
               <ReportAddPhoto
                 reportID={urlParams.idReport}
                 typePhoto="access"
@@ -204,7 +198,7 @@ const ReportPropreteAccesPage = ({ match }) => {
           )}
         </div>
       )}
-      {loading && <div id="loading-icon"> </div>}
+      {loading && <div id="loading-icon"/>}
     </main>
   );
 };
