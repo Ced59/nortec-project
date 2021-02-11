@@ -301,7 +301,7 @@ const AdminProjectPage = ({ history, match, props }) => {
               </div>
               <ImageUpload singleImg={true} onChange={onDrop}></ImageUpload>
             </fieldset>
-            <fieldset className="border-fieldset col-xl-5 col-125">
+            <fieldset className="border-fieldset col-xl-5 col-12">
               <legend>Dates</legend>
               <Field
                 name="dateDebut"

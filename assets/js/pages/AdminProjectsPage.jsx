@@ -73,7 +73,7 @@ const AdminProjectsPage = () => {
         <thead>
           <tr>
             <th className="text-center">Numéro Projet</th>
-            <th>Admin en Charge</th>
+            <th>MOEX</th>
             <th className="text-center">Statut</th>
             <th>Nom Projet</th>
             <th className="text-center">Date début</th>
@@ -87,7 +87,7 @@ const AdminProjectsPage = () => {
             {paginationConfig.paginatedItems.map((project) => (
               <tr key={project.id}>
                 <td className="text-center">{project.id}</td>
-                <td>Florent</td>
+                <td>{project.nomMOEX}</td>
                 <td className="text-center">
                   <span
                     className={
