@@ -58,14 +58,12 @@ const AdminUsersPage = () => {
 
                 <Link
                     className='btn btn-danger'
-                    type='button'
                     to={'/admin'}
                 > Retour </Link>
 
                 <h2> Utilisateurs : </h2>
                 <Link
                     className='btn btn-primary'
-                    type='button'
                     to={'/admin/user/new'}
                 > Nouvel Utilisateur </Link>
             </div>

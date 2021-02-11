@@ -2,13 +2,11 @@ import React, { useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import NavbarLeft from "../components/navbars/NavbarLeft";
 import Button from "../components/forms/Button";
-import ImageUpload from "../components/forms/ImageUpload";
 import "../../css/app.css";
 import { toast } from "react-toastify";
 import ReportsAPI from "../services/ReportsAPI";
 import ReportImputation from "../components/ReportImputation";
 import ReportComment from "../components/ReportComment";
-import ReportConformity from "../components/ReportConformity";
 import ReportAddPhoto from "../components/ReportAddPhoto";
 
 const ReportPropreteAccesPage = ({ match }) => {
@@ -178,7 +176,7 @@ const ReportPropreteAccesPage = ({ match }) => {
                   fetchReport={fetchReport}
                   urlParams={urlParams}
                   api={"propreteAcces"}
-                ></ReportImputation>
+                />
               </div>
               <ReportAddPhoto
                 reportID={urlParams.idReport}
@@ -192,7 +190,7 @@ const ReportPropreteAccesPage = ({ match }) => {
                 valueCommentIntern={report.propreteAccessCommentIntern}
                 nameCommentIntern="propreteAccessCommentIntern"
                 handleSubmitComment={handleSubmitReport}
-              ></ReportComment>
+              />
               <div className="d-flex justify-content-center">
                 <Button
                   onClick={handleSubmitReport}

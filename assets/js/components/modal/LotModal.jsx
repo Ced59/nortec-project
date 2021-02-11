@@ -127,13 +127,12 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
           {!showLotDetail && (
             <>
               {AuthAPI.isAdmin() && !addLot && (
-                <button
+                <Button
                   type="button"
                   className="btn btn-primary"
                   onClick={() => handleShowAddLot()}
-                >
-                  Ajouter un lot
-                </button>
+                  text="Ajouter un lot"
+                />
               )}
               {!addLot && (
                 <table className="table table-hover table-striped">
@@ -154,6 +153,7 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
                           <td>{lot.company && lot.company.nom}</td>
                           <td>
                             <Button
+                                type="button"
                               className="btn btn-primary"
                               text="Détails"
                               onClick={() => handleShowLotDetail(lot)}
@@ -228,31 +228,27 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
                 ))}
               </Select>
               <div className="d-flex justify-content-between">
-                <button
+                <Button
                   type="button"
                   onClick={handleShowAddLot}
                   className="btn btn-danger"
-                >
-                  Annuler
-                </button>
-                <button
+                  text="Annuler"
+                />
+                <Button
                   type="button"
+                  text="Valider"
                   onClick={handleSubmitLot}
                   className="btn btn-success"
-                >
-                  Valider
-                </button>
+                />
               </div>
             </form>
           )}
         </Modal.Body>
         <Modal.Footer>
           {!showLotDetail ? (
-            <button className="btn btn-danger" onClick={handleShowLotModal}>
-              Fermer
-            </button>
+            <Button text="Fermer" type="button" className="btn btn-danger" onClick={handleShowLotModal}/>
           ) :
-            <Button
+            <Button type="button"
               className="btn btn-primary"
               text="Retour"
               onClick={() => handleShowLotDetail()}

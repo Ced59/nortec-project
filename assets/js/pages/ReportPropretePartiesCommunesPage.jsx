@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import NavbarLeft from "../components/navbars/NavbarLeft";
 import Button from "../components/forms/Button";
-import ImageUpload from "../components/forms/ImageUpload";
 import "../../css/app.css";
 import { toast } from "react-toastify";
 import ReportsAPI from "../services/ReportsAPI";
