@@ -15,6 +15,8 @@ import pagination_configs, {
   LIST_PROJECTS_PAGE_PAGINATION_ITEMS_PER_PAGE,
 } from "../components/configs/pagination_configs";
 import SearchInput from "../components/forms/SearchInput";
+import AuthAPI from "../services/AuthAPI";
+import UsersAPI from "../services/UsersAPI";
 
 const ListProjectsPage = () => {
 
@@ -28,7 +30,9 @@ const ListProjectsPage = () => {
     
     const fetchProjects = async () => {
         try {
-            const data = await ProjectsAPI.findAll();
+            const data = AuthAPI.isAdmin()?
+            await ProjectsAPI.findAll():
+            await UsersAPI.getProjects(AuthAPI.getUserId());
             setProjects(data);
             setLoading(false);
         } catch (error) {
