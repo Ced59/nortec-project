@@ -170,6 +170,7 @@ const DetailProjectPage = ({history, match, props}) => {
     const handleChange = ({currentTarget}) => {
         const {name, value} = currentTarget;
         setProject({...project, [name]: value});
+        console.log(value);
     };
 
     const addFinPrevue = async (e) => {
@@ -209,7 +210,7 @@ const DetailProjectPage = ({history, match, props}) => {
         const {name, value} = currentTarget;
         setProject({...project, [name]: value});
 
-        DateAPI.dateIsAfterDebut(project.dateFinReelle, project.dateDebut)
+        DateAPI.dateIsAfterDebut(value, project.dateDebut)
             ? setErrorDateFinRelle("")
             : setErrorDateFinRelle(
             "La date de fin réélle doit être postérieure à la date de début!"
@@ -230,7 +231,6 @@ const DetailProjectPage = ({history, match, props}) => {
             await ProjectsAPI.update(id, project);
             toast.success("Le projet a bien été mis à jour !");
             await fetchProject(id);
-            // fetchUsers();
             setEdit(false);
         } catch ({response}) {
             toast.error("Un problème est survenu pendant la mise à jour du projet.");
@@ -469,7 +469,7 @@ const DetailProjectPage = ({history, match, props}) => {
                                                     name="dateFinPrevue"
                                                     type="date"
                                                     onChange={(e) => setDateFinPrevue(e.target.value)}
-                                                    value={DateAPI.formatDateForm(dateFinPrevue)}
+                                                    value={dateFinPrevue}
                                                     noLabel={true}
                                                     error={errorDate}
                                                 />

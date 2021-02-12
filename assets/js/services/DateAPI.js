@@ -1,4 +1,6 @@
 import dayjs from "dayjs";
+var customParseFormat = require('dayjs/plugin/customParseFormat');
+dayjs.extend(customParseFormat);
 
 function determineStatus(dateDebut, dateFinReelle, dateFinPrevue) {
   let status = "";
@@ -43,7 +45,7 @@ function now() {
 }
 
 function verifyDateExist(date) {
-  if (dayjs(date).isSame("1900-01-01", 'year') || !date) {
+  if (!dayjs(date).isAfter("1901-01-01") || !date) {
     return "";
   } else {
     return date;
