@@ -1,30 +1,20 @@
 import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "../forms/Button";
-import {
-  statusEcheanceClasses,
-  statusEcheanceLabel,
-} from "../ProjectStatus";
+import { statusEcheanceClasses, statusEcheanceLabel } from "../ProjectStatus";
 import DateAPI from "../../services/DateAPI";
 
 const EcheanceModal = ({ project }) => {
   const [showEcheanceModal, setShowEcheanceModal] = useState(false);
 
-  //   --------------------------------------------------FUNCTION-------------------------------------------
-
-  const handleShowEcheanceModal = () => {
-    setShowEcheanceModal(!showEcheanceModal);
-  };
-
   return (
-    //   -----------------------------------------------TEMPLATE-----------------------------------------------
     <>
       <Modal
         size="xl"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         show={showEcheanceModal}
-        onHide={handleShowEcheanceModal}
+        onHide={() => setShowEcheanceModal(!showEcheanceModal)}
       >
         <Modal.Header closeButton>
           <Modal.Title>Liste des Échéances</Modal.Title>
@@ -48,7 +38,6 @@ const EcheanceModal = ({ project }) => {
                   <table className="table table-hover">
                     <thead>
                       <tr>
-                        {/* <th>Numéro</th> */}
                         <th>Rédacteur</th>
                         <th>Statut</th>
                         <th>Sujet</th>
@@ -61,7 +50,6 @@ const EcheanceModal = ({ project }) => {
                     <tbody>
                       {lot.echeances.map((echeance) => (
                         <tr key={echeance.id}>
-                          {/* <td>{echeance.numeroEcheance}</td> */}
                           <td>{echeance.redacteur}</td>
                           <td>
                             <span
@@ -110,7 +98,7 @@ const EcheanceModal = ({ project }) => {
         text="Voir les échéances"
         className="btn btn-primary mx-2 mb-3"
         type="button"
-        onClick={handleShowEcheanceModal}
+        onClick={() => setShowEcheanceModal(!showEcheanceModal)}
       />
     </>
   );

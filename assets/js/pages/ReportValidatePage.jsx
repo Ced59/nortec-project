@@ -9,6 +9,7 @@ import ReportsAPI from "../services/ReportsAPI";
 import ProjectsAPI from "../services/ProjectsAPI";
 import PhotoAPI from "../services/PhotoAPI";
 import ReportResume from "../components/ReportResume";
+import SendPdfToAnnuaireModal from "../components/modal/SendPdfToAnnuaireModal";
 
 const ReportValidatePage = ({ match }) => {
   const urlParams = match.params;
@@ -56,7 +57,7 @@ const ReportValidatePage = ({ match }) => {
   const handleSavePDF = async () => {
     await ReactPDF.render(
       <ReportPdfComponent report={report} />,
-      "../reportPDF/projet" + report.project.id + "rapport" + report.id + ".pdf"
+      "../reportPDF/projet" + report.Project.id + "rapport" + report.id + ".pdf"
     );
   };
 
@@ -119,11 +120,12 @@ const ReportValidatePage = ({ match }) => {
               type="button"
               onClick={handleSavePDF}
             />
-            <Button
+            <SendPdfToAnnuaireModal lots={report.Project.lots} />
+            {/* <Button
               text="Clôturer et envoyer"
               className="btn btn-primary mr-4"
               type="button"
-            />
+            /> */}
             <Button
               text="Faire valider par Admin"
               className="btn btn-primary mr-4"
