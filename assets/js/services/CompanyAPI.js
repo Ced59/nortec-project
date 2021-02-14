@@ -22,9 +22,15 @@ function create(company){
     return axios.post(COMPANY_API, company);
 }
 
+// -----------------------subressources
+function getAnnuaire(id){
+    return axios.get(COMPANY_API + "/" + id +"/annuaires").then(response => response.data['hydra:member']);
+}
+
 export default {
     findAll,
     find,
     update,
-    create
+    create,
+    getAnnuaire
 }

@@ -115,7 +115,7 @@ const AddEcheanceModal = ({
                   {project.lots &&
                     project.lots.map((lot) => (
                       <option key={lot.id} value={"/api/lots/" + lot.id}>
-                        {lot.company.nom}
+                        {lot.company.nom} ({lot.libelleLot})
                       </option>
                     ))}
                 </Select>
