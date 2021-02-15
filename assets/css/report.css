@@ -10,3 +10,11 @@
     padding: 0.5em;
     border-radius: 10px;
 }
+
+@media (max-width: 768px) {
+
+    .page-content{
+        width: 100%;
+        margin-left: 0px;
+    }
+}

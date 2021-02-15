@@ -121,6 +121,7 @@ class Project
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Report", mappedBy="Project", orphanRemoval=true)
+     * @Groups({"project"})
      */
     private $reports;
 
