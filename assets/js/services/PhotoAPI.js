@@ -9,7 +9,12 @@ function create (photo){
     return axios.post(PHOTO_API, photo);
 }
 
+function remove (id){
+    return axios.delete(PHOTO_API + "/"+ id)
+}
+
 export default {
     findByReport,
-    create
+    create,
+    remove
 }
