@@ -8,22 +8,14 @@ const EcheanceModal = ({ project }) => {
   const [showEcheanceModal, setShowEcheanceModal] = useState(false);
   const lastReport = project.reports[project.reports.length - 1];
 
-  //   --------------------------------------------------FUNCTION-------------------------------------------
-
-  const handleShowEcheanceModal = () => {
-    setShowEcheanceModal(!showEcheanceModal);
-  };
-
-
   return (
-    //   -----------------------------------------------TEMPLATE-----------------------------------------------
     <>
       <Modal
         size="xl"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         show={showEcheanceModal}
-        onHide={handleShowEcheanceModal}
+        onHide={() => setShowEcheanceModal(!showEcheanceModal)}
       >
         <Modal.Header closeButton>
           <Modal.Title>Liste des Échéances</Modal.Title>
@@ -50,7 +42,6 @@ const EcheanceModal = ({ project }) => {
                     <table className="table table-hover">
                       <thead>
                         <tr>
-                          {/* <th>Numéro</th> */}
                           <th>Rédacteur</th>
                           <th>Statut</th>
                           <th>Sujet</th>
@@ -58,6 +49,7 @@ const EcheanceModal = ({ project }) => {
                           <th>Echéance</th>
                           <th>Clotûre</th>
                           <th>Retard</th>
+
                         </tr>
                       </thead>
                       <tbody>
@@ -67,7 +59,6 @@ const EcheanceModal = ({ project }) => {
                               lastReport
                             ) && (
                               <tr key={echeance.id}>
-                                {/* <td>{echeance.numeroEcheance}</td> */}
                                 <td>{echeance.redacteur}</td>
                                 <td>
                                   <span
@@ -124,7 +115,7 @@ const EcheanceModal = ({ project }) => {
         text="Voir les échéances"
         className="btn btn-primary mx-2 mb-3"
         type="button"
-        onClick={handleShowEcheanceModal}
+        onClick={() => setShowEcheanceModal(!showEcheanceModal)}
       />
     </>
   );

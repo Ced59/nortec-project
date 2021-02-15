@@ -32,7 +32,7 @@ class Lot
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"lot", "project","report"})
+     * @Groups({"lot", "project","report","echeance"})
      */
     private $libelleLot;
 

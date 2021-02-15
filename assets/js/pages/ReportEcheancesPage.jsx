@@ -12,7 +12,6 @@ import EcheanceAPI from "../services/EcheanceAPI";
 import { toast } from "react-toastify";
 import AddEcheanceModal from "../components/modal/AddEcheanceModal";
 import SpanStatusEcheance from "../components/span/SpanStatusEcheance";
-
 const ReportEcheancesPage = ({ match }) => {
   const NavbarLeftWithRouter = withRouter(NavbarLeft);
 
@@ -229,7 +228,7 @@ const ReportEcheancesPage = ({ match }) => {
                 </div>
                 <div className="col-5 mt-3 border-detail d-flex flex-column justify-content-center">
                   <p>
-                    Lot: {echeanceDetail.lot && echeanceDetail.lot.company.nom}{" "}
+                    Libellé: {echeanceDetail.lot && echeanceDetail.lot.libelleLot}
                   </p>
                   {!edit ? (
                     <>
