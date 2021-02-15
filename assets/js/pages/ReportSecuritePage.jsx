@@ -130,17 +130,17 @@ const ReportSecuritePage = ({ match }) => {
             )}
             {conforme === false && (
               <>
-                  <ReportImputation
-                    setLoading={setLoading}
-                    setImputations={setImputations}
-                    setTempImputations={setTempImputations}
-                    imputations={imputations}
-                    editImput={editImput}
-                    setEditImput={setEditImput}
-                    fetchReport={fetchReport}
-                    urlParams={urlParams}
-                    api={"securite"}
-                  />
+                <ReportImputation
+                  setLoading={setLoading}
+                  setImputations={setImputations}
+                  setTempImputations={setTempImputations}
+                  imputations={imputations}
+                  editImput={editImput}
+                  setEditImput={setEditImput}
+                  fetchReport={fetchReport}
+                  urlParams={urlParams}
+                  api={"securite"}
+                />
                 <div className="ml-auto">
                   <ReportAddPhoto
                     reportID={urlParams.idReport}
@@ -170,7 +170,7 @@ const ReportSecuritePage = ({ match }) => {
           </div>
         </>
       )}
-      {loading && <div id="loading-icon"/>}
+      {loading && <div id="loading-icon" />}
     </main>
   );
 };
