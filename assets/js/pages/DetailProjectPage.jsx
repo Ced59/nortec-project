@@ -8,7 +8,6 @@ import DateAPI from "../services/DateAPI";
 import ProjectsAPI from "../services/ProjectsAPI";
 import AuthAPI from "../services/AuthAPI";
 import Field from "../components/forms/Field";
-import FieldTextArea from "../components/forms/FieldTextArea";
 import {toast} from "react-toastify";
 import {
     determineStatusClasses,
@@ -248,326 +247,150 @@ const DetailProjectPage = ({history, match, props}) => {
             <div className="card m-4 p-2">
                 {!loadingProject ? (
                     <>
-                        {!edit ? (
-                            <>
-                                <h2 className="mb-4">{project.name}</h2>
-                                <p className="description-style">{project.description}</p>
-                                <div className="d-flex flex-lg-row flex-column mt-2">
-                                    <ImgComponent
-                                        alt={project.name}
-                                        src={project.photo}
-                                        className="col-12 col-lg-6 mx-auto img-fluid rounded img-style"
-                                    />
+                        <h2 className="mb-4">{project.name}</h2>
+                        <p className="description-style">{project.description}</p>
+                        <div className="d-flex flex-lg-row flex-column mt-2">
+                            <ImgComponent
+                                alt={project.name}
+                                src={project.photo}
+                                className="col-12 col-lg-6 mx-auto img-fluid rounded img-style"
+                            />
 
-                                    <div className="col-12 col-lg-6">
-                                        <h5 className="text-center text-sm-left mb-3">Détails:</h5>
-                                        <div className="row no-space">
-                                            <h6 className="offset-sm-1 col-4">Adresse :</h6>
-                                            <p className="col-7">{project.adresse1}</p>
-                                        </div>
-                                        {project.adresse2 && (
-                                            <div className="row no-space">
-                                                <h6 className="offset-sm-1 col-4">Complément :</h6>
-                                                <p className="col-7">{project.adresse2}</p>
-                                            </div>
-                                        )}
-
-                                        <div className="row no-space">
-                                            <h6 className="offset-sm-1 col-4">Code Postal :</h6>
-                                            <p className="col-7">{project.codePostal}</p>
-                                        </div>
-                                        <div className="row no-space">
-                                            <h6 className="offset-sm-1 col-4">Ville :</h6>
-                                            <p className="col-7">{project.ville}</p>
-                                        </div>
-                                        <div className="row no-space">
-                                            <h6 className="offset-sm-1 col-4">Date de début :</h6>
-                                            <p className="col-7">
-                                                {DateAPI.formatDate(project.dateDebut)}
-                                            </p>
-                                        </div>
-
-                                        {project.dateFinPrevues.length !== 0 && (
-                                            <>
-                                                {project.dateFinPrevues.map((date) => (
-                                                    <div className="row no-space" key={date.id}>
-                                                        <h6 className="offset-sm-1 col-4">
-                                                            Fin prévue{" "}
-                                                            {project.dateFinPrevues.indexOf(date) + 1} :
-                                                        </h6>
-                                                        <p className="col-7">
-                                                            {DateAPI.formatDate(date.date)}
-                                                        </p>
-                                                    </div>
-                                                ))}
-                                            </>
-                                        )}
-
-                                        <div className="row no-space">
-                                            <h6 className="offset-sm-1 col-4">
-                                                Date de fin réélle :
-                                            </h6>
-                                            <p className="col-7">
-                                                {DateAPI.verifyDateExist(project.dateFinReelle) === ""
-                                                    ? "Aucune"
-                                                    : DateAPI.formatDate(project.dateFinReelle)}
-                                            </p>
-                                        </div>
-
-                                        <div className="row no-space">
-                                            <h6 className="offset-sm-1 col-4">Nom MOEX :</h6>
-                                            <p className="col-7">{project.nomMOEX}</p>
-                                        </div>
-
-                                        <div className="row no-space">
-                                            <h6 className="offset-sm-1 col-4">Nom OPC :</h6>
-                                            <p className="col-7">{project.nomOPC}</p>
-                                        </div>
-
-                                        <div className="row no-space">
-                                            <h6 className="offset-sm-1 col-4">Contact client :</h6>
-                                            <a
-                                                className="col-7"
-                                                href={"mailto:" + project.contactClient}
-                                            >
-                                                {project.contactClient}
-                                            </a>
-                                        </div>
-
-                                        <div className="row mt-5">
-                                            <h6 className="offset-sm-1 col-4">Statut :</h6>
-                                            <p
-                                                className={
-                                                    "col-2 badge badge-" +
-                                                    determineStatusClasses(
-                                                        project.dateDebut,
-                                                        project.dateFinReelle
-                                                    )
-                                                }
-                                            >
-                                                {determineStatusLabel(
-                                                    project.dateDebut,
-                                                    project.dateFinReelle
-                                                )}
-                                            </p>
-                                        </div>
-                                    </div>
+                            <div className="col-12 col-lg-6">
+                                <h5 className="text-center text-sm-left mb-3">Détails:</h5>
+                                <div className="row no-space">
+                                    <h6 className="offset-sm-1 col-4">Adresse :</h6>
+                                    <p className="col-7">{project.adresse1}</p>
                                 </div>
-                            </>
-                        ) : (
-                            <>
-                                <form onSubmit={handleSubmit} encType="multipart/form-data">
-                                    <Field
-                                        name="name"
-                                        label="Nom du projet"
-                                        placeholder="Entrez le nom du projet"
-                                        onChange={handleChange}
-                                        value={project.name}
-                                        error={error.name}
-                                    />
+                                {project.adresse2 && (
+                                    <div className="row no-space">
+                                        <h6 className="offset-sm-1 col-4">Complément :</h6>
+                                        <p className="col-7">{project.adresse2}</p>
+                                    </div>
+                                )}
 
-                                    <FieldTextArea
-                                        name="description"
-                                        label="Decription du projet"
-                                        rows="3"
-                                        placeholder="Entrez la description du projet"
-                                        onChange={handleChange}
-                                        value={project.description}
-                                        error={error.description}
-                                    />
+                                <div className="row no-space">
+                                    <h6 className="offset-sm-1 col-4">Code Postal :</h6>
+                                    <p className="col-7">{project.codePostal}</p>
+                                </div>
+                                <div className="row no-space">
+                                    <h6 className="offset-sm-1 col-4">Ville :</h6>
+                                    <p className="col-7">{project.ville}</p>
+                                </div>
+                                <div className="row no-space">
+                                    <h6 className="offset-sm-1 col-4">Date de début :</h6>
+                                    <p className="col-7">
+                                        {DateAPI.formatDate(project.dateDebut)}
+                                    </p>
+                                </div>
 
-                                    <div className="d-flex flex-lg-row flex-column mt-2">
-                                        <ImgComponent
-                                            alt={project.name}
-                                            src={project.photo}
-                                            className="col-12 col-lg-6 mx-auto img-fluid rounded img-style"
-                                        />
-
-                                        <div className="col-12 col-lg-6">
-                                            <h5 className="mb-3">Détails:</h5>
-                                            <div className="row no-space">
-                                                <h6 className="offset-sm-1 col-4">Adresse :</h6>
-                                                <Field
-                                                    className="col-7"
-                                                    name="adresse1"
-                                                    placeholder="Entrez le numéro et la rue"
-                                                    onChange={handleChange}
-                                                    value={project.adresse1}
-                                                    error={error.adresse1}
-                                                    noLabel={true}
-                                                />
-                                            </div>
-                                            <div className="row no-space">
-                                                <h6 className="offset-sm-1 col-4">Complément :</h6>
-                                                <Field
-                                                    className="col-7"
-                                                    name="adresse2"
-                                                    placeholder="Complément"
-                                                    onChange={handleChange}
-                                                    value={project.adresse2}
-                                                    error={error.adresse2}
-                                                    noLabel={true}
-                                                />
-                                            </div>
-
-                                            <div className="row no-space">
-                                                <h6 className="offset-sm-1 col-4">Code Postal :</h6>
-                                                <Field
-                                                    className="col-7"
-                                                    name="codePostal"
-                                                    placeholder="Complément"
-                                                    onChange={handleChange}
-                                                    value={project.codePostal}
-                                                    error={error.codePostal}
-                                                    noLabel={true}
-                                                />
-                                            </div>
-                                            <div className="row no-space">
-                                                <h6 className="offset-sm-1 col-4">Ville :</h6>
-                                                <Field
-                                                    className="col-7"
-                                                    name="ville"
-                                                    placeholder="Complément"
-                                                    onChange={handleChange}
-                                                    value={project.ville}
-                                                    error={error.ville}
-                                                    noLabel={true}
-                                                />
-                                            </div>
-                                            <div className="row no-space">
-                                                <h6 className="offset-sm-1 col-4">Date de début :</h6>
-                                                <Field
-                                                    name="dateDebut"
-                                                    type="date"
-                                                    onChange={handleChange}
-                                                    value={DateAPI.formatDateForm(project.dateDebut)}
-                                                    error={error.dateDebut}
-                                                    noLabel={true}
-                                                />
-                                            </div>
-
-                                            {project.dateFinPrevues.length !== 0 && (
-                                                <>
-                                                    {project.dateFinPrevues.map((date) => (
-                                                        <div className="row no-space" key={date.id}>
-                                                            <h6 className="offset-sm-1 col-4">
-                                                                Fin prévue{" "}
-                                                                {project.dateFinPrevues.indexOf(date) + 1} :
-                                                            </h6>
-                                                            <p className="col-7">
-                                                                {DateAPI.formatDate(date.date)}
-                                                            </p>
-                                                        </div>
-                                                    ))}
-                                                </>
-                                            )}
-                                            <div className="row no-space">
+                                {project.dateFinPrevues.length !== 0 && (
+                                    <>
+                                        {project.dateFinPrevues.map((date) => (
+                                            <div className="row no-space" key={date.id}>
                                                 <h6 className="offset-sm-1 col-4">
-                                                    Ajouter une date de fin prévue :
-                                                </h6>
-                                                <Field
-                                                    name="dateFinPrevue"
-                                                    type="date"
-                                                    onChange={(e) => setDateFinPrevue(e.target.value)}
-                                                    value={dateFinPrevue}
-                                                    noLabel={true}
-                                                    error={errorDate}
-                                                />
-                                                <Button text="Valider"
-                                                        type="button"
-                                                        className="btn btn-danger btn-sm m-2"
-                                                        onClick={addFinPrevue}
-                                                />
-                                            </div>
-
-                                            <div className="row no-space">
-                                                <h6 className="offset-sm-1 col-4">
-                                                    Date de fin réélle :
+                                                    Fin prévue{" "}
+                                                    {project.dateFinPrevues.indexOf(date) + 1} :
                                                 </h6>
                                                 <p className="col-7">
-                                                    {DateAPI.verifyDateExist(project.dateFinReelle) === ""
-                                                        ? "Aucune"
-                                                        : DateAPI.formatDate(project.dateFinReelle)}
+                                                    {DateAPI.formatDate(date.date)}
                                                 </p>
                                             </div>
-                                            <div className="row no-space">
-                                                <h6 className="offset-sm-1 col-4">
-                                                    Ajouter la date de fin réélle :
-                                                </h6>
-                                                <Field
-                                                    name="dateFinReelle"
-                                                    type="date"
-                                                    onChange={handleChangeFinReelle}
-                                                    value={
-                                                        DateAPI.verifyDateExist(project.dateFinReelle) ===
-                                                        ""
-                                                            ? DateAPI.formatDateForm(DateAPI.now())
-                                                            : DateAPI.formatDateForm(project.dateFinReelle)
-                                                    }
-                                                    noLabel={true}
-                                                    error={errorDateFinReelle}
-                                                />
-                                            </div>
-
-                                            <div className="row no-space">
-                                                <h6 className="offset-sm-1 col-4">Nom MOEX :</h6>
-                                                <Field
-                                                    name="nomMOEX"
-                                                    onChange={handleChange}
-                                                    value={project.nomMOEX}
-                                                    noLabel={true}
-                                                />
-                                            </div>
-
-                                            <div className="row no-space">
-                                                <h6 className="offset-sm-1 col-4">Nom OPC :</h6>
-                                                <Field
-                                                    name="nomOPC"
-                                                    onChange={handleChange}
-                                                    value={project.nomOPC}
-                                                    noLabel={true}
-                                                />
-                                            </div>
-
-                                            <div className="row no-space">
-                                                <h6 className="offset-sm-1 col-4">Contact client :</h6>
-                                                <Field
-                                                    name="contactClient"
-                                                    onChange={handleChange}
-                                                    value={project.contactClient}
-                                                    noLabel={true}
-                                                />
-                                            </div>
-
-                                            <div className="row mt-5">
-                                                <h6 className="offset-sm-1 col-4">Statut :</h6>
-                                                <p
-                                                    className={
-                                                        "col-2 badge badge-" +
-                                                        determineStatusClasses(
-                                                            project.dateDebut,
-                                                            project.dateFinReelle
-                                                        )
-                                                    }
-                                                >
-                                                    {determineStatusLabel(
-                                                        project.dateDebut,
-                                                        project.dateFinReelle
-                                                    )}
-                                                </p>
-                                            </div>
-                                            <div className="row mt-4 d-flex justify-content-end mb-3">
-                                                <Button
-                                                    text="Valider les changements"
-                                                    onSubmit={handleSubmit}
-                                                    className="btn btn-danger"
-                                                />
-                                            </div>
-                                        </div>
+                                        ))}
+                                    </>
+                                )}
+                                {edit && (
+                                    <div className="row no-space">
+                                        <h6 className="offset-sm-1 col-4">
+                                            Ajouter une date de fin prévue :
+                                        </h6>
+                                        <Field
+                                            name="dateFinPrevue"
+                                            type="date"
+                                            onChange={(e) => setDateFinPrevue(e.target.value)}
+                                            value={dateFinPrevue}
+                                            noLabel={true}
+                                            error={errorDate}
+                                        />
+                                        <Button text="Valider"
+                                                type="button"
+                                                className="btn btn-danger btn-sm ml-2 mb-3"
+                                                onClick={addFinPrevue}
+                                        />
                                     </div>
-                                </form>
-                            </>
-                        )}
+                                )}
+                                <div className="row no-space">
+                                    <h6 className="offset-sm-1 col-4">
+                                        Date de fin réélle :
+                                    </h6>
+                                    <p className="col-7">
+                                        {DateAPI.verifyDateExist(project.dateFinReelle) === ""
+                                            ? "Aucune"
+                                            : DateAPI.formatDate(project.dateFinReelle)}
+                                    </p>
+                                </div>
+                                {edit && (
+                                    <form onSubmit={handleSubmit} encType="multipart/form-data">
+                                        <div className="row no-space">
+                                            <h6 className="offset-sm-1 col-4">
+                                                Ajouter la date de fin réélle :
+                                            </h6>
+                                            <Field
+                                                name="dateFinReelle"
+                                                type="date"
+                                                onChange={handleChangeFinReelle}
+                                                value={
+                                                DateAPI.verifyDateExist(project.dateFinReelle) === ""
+                                                    ? DateAPI.formatDateForm(DateAPI.now())
+                                                    : DateAPI.formatDateForm(project.dateFinReelle)
+                                                }
+                                                noLabel={true}
+                                                error={errorDateFinReelle}
+                                                />
+                                            <Button
+                                            text="Valider"
+                                            className="btn btn-danger btn-sm ml-2 mb-3"
+                                            onSubmit={handleSubmit}
+                                            />
+                                        </div>
+                                    </form>
+                                )}
+                                <div className="row no-space">
+                                    <h6 className="offset-sm-1 col-4">Nom MOEX :</h6>
+                                    <p className="col-7">{project.nomMOEX}</p>
+                                </div>
+                                <div className="row no-space">
+                                    <h6 className="offset-sm-1 col-4">Nom OPC :</h6>
+                                    <p className="col-7">{project.nomOPC}</p>
+                                </div>
+                                <div className="row no-space">
+                                    <h6 className="offset-sm-1 col-4">Contact client :</h6>
+                                    <a
+                                        className="col-7"
+                                        href={"mailto:" + project.contactClient}
+                                    >
+                                        {project.contactClient}
+                                    </a>
+                                </div>
+                                <div className="row mt-5">
+                                    <h6 className="offset-sm-1 col-4">Statut :</h6>
+                                    <p
+                                        className={
+                                            "col-2 badge badge-" +
+                                            determineStatusClasses(
+                                                project.dateDebut,
+                                                project.dateFinReelle
+                                            )
+                                        }
+                                    >
+                                        {determineStatusLabel(
+                                            project.dateDebut,
+                                            project.dateFinReelle
+                                        )}
+                                    </p>
+                                </div>
+                            </div>
+                        </div> 
                         <div className="mt-4 d-flex justify-content-center justify-content-lg-between flex-wrap mb-3">
                             <Button
                                 text="Nouveau Rapport"
