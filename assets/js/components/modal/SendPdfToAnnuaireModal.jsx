@@ -4,11 +4,12 @@ import { toast } from "react-toastify";
 import CompanyAPI from "../../services/CompanyAPI";
 import Button from "../forms/Button";
 
-const SendPdfToAnnuaireModal = ({ lots }) => {
+const SendPdfToAnnuaireModal = ({ lots, users }) => {
   const [showModal, setShowModal] = useState(false);
-  const [showValidate, setShowValidate] = useState(false);
+  const [modalStep, setModalStep] = useState(1);
   const [companys, setCompanys] = useState([]);
   const [destinataires, setDestinataires] = useState([]);
+  const [usersContact, setUsersContact] = useState([]);
 
   //   -----------------------------------------------FUNCTIONS----------------------------------------
 
@@ -17,11 +18,15 @@ const SendPdfToAnnuaireModal = ({ lots }) => {
     const tempFilteredCompanys = [...new Set(unFilteredCompanys)];
     const filteredCompanys = tempFilteredCompanys.map((c) => JSON.parse(c));
     const compagnies = [];
+    // const tempDestinataires = [];
 
     filteredCompanys.map((c) => {
       try {
         CompanyAPI.getAnnuaire(c.id).then((r) => {
           compagnies.push({ id: c.id, nom: c.nom, annuaire: r });
+          // r.forEach((d) => {
+          //   tempDestinataires.push(d.email);
+          // });
         });
       } catch (e) {
         console.log(e);
@@ -29,19 +34,20 @@ const SendPdfToAnnuaireModal = ({ lots }) => {
       }
     });
     setCompanys(compagnies);
-    setTimeout(() => {
-      const tempDestinataires = [];
-      compagnies.map((c) => {
-        for (let a = 0; a < c.annuaire.length; a++) {
-          tempDestinataires.push(c.annuaire[a].email);
-        }
-      });
-      setDestinataires(tempDestinataires);
-    }, filteredCompanys.length * 1000);
+    // setDestinataires(tempDestinataires);
+  };
+
+  const fetchUsersEmail = () => {
+    const tempUsers = [];
+    users.forEach((u) => {
+      tempUsers.push(u);
+    });
+    setUsersContact(tempUsers);
   };
 
   useEffect(() => {
     fetchAnnuaires();
+    fetchUsersEmail();
   }, []);
 
   const handleCheck = ({ currentTarget }) => {
@@ -78,16 +84,22 @@ const SendPdfToAnnuaireModal = ({ lots }) => {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         show={showModal}
-        onHide={() => setShowModal(!showModal)}
+        onHide={() => {
+          setShowModal(!showModal);
+          setModalStep(1);
+        }}
       >
         <Modal.Header closeButton>
           <Modal.Title>
-            {showValidate ? "Aperçu avant envoi" : "Choix des destinataires"}
+            {modalStep == 3
+              ? "Liste des destinataires"
+              : "Choix des destinataires"}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {!showValidate ? (
+          {modalStep == 1 && ( // CHOIX CONTACTS ENTREPRISES
             <>
+              <h4 className="text-center">Contacts d'entreprise</h4>
               {companys.map((company) => (
                 <React.Fragment key={company.id}>
                   <h5 className="ml-5">{company.nom}</h5>
@@ -96,7 +108,6 @@ const SendPdfToAnnuaireModal = ({ lots }) => {
                       {company.annuaire &&
                         company.annuaire.map((contact) => (
                           <tr
-                            // className="table-success"
                             className={
                               destinataires.includes(contact.email)
                                 ? "table-success"
@@ -127,11 +138,85 @@ const SendPdfToAnnuaireModal = ({ lots }) => {
                 </React.Fragment>
               ))}
             </>
-          ) : (
+          )}
+          {modalStep == 2 && ( // CHOIX CONTACTS UTILISATEUR
             <>
-              <h5 className="ml-5">
-                Destinataires du mail
-              </h5>
+              <h4 className="text-center">Contacts utilisateurs</h4>
+              <h5 className="ml-5">Administrateurs</h5>
+              <table className="table table-hover col-8 mx-auto">
+                <tbody>
+                  {usersContact.map((contact) => (
+                    <React.Fragment key={contact.id}>
+                    {contact.roles[0] == "ROLE_ADMIN" && (
+                      <tr
+                        className={
+                          destinataires.includes(contact.email)
+                            ? "table-success"
+                            : ""
+                        }
+                        id={contact.email}
+                        onClick={handleCheck}
+                      >
+                        <td className="w-25">
+                          {contact.lastName} {contact.firstName}
+                        </td>
+                        <td className="w-25">{contact.email}</td>
+                        <td className="d-flex justify-content-end">
+                          <div className="custom-control custom-checkbox">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              readOnly
+                              checked={destinataires.includes(contact.email)}
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
+                  ))}
+                </tbody>
+              </table>
+              <h5 className="ml-5">Utilisateurs</h5>
+              <table className="table table-hover col-8 mx-auto">
+                <tbody>
+                  {usersContact.map((contact) => (
+                    <React.Fragment key={contact.id}>
+                      {contact.roles[0] == "ROLE_USER" && (
+                        <tr
+                          className={
+                            destinataires.includes(contact.email)
+                              ? "table-success"
+                              : ""
+                          }
+                          id={contact.email}
+                          onClick={handleCheck}
+                        >
+                          <td className="w-25">
+                            {contact.lastName} {contact.firstName}
+                          </td>
+                          <td className="w-25">{contact.email}</td>
+                          <td className="d-flex justify-content-end">
+                            <div className="custom-control custom-checkbox">
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                readOnly
+                                checked={destinataires.includes(contact.email)}
+                              />
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </tbody>
+              </table>
+            </>
+          )}
+          {modalStep == 3 && ( // AFFICHAGE DE TOUT LES CONTACTS SELECTIONNES
+            <>
+              <h5 className="ml-5">Destinataires du mail</h5>
               <div className=" d-flex justify-content-center">
                 {destinataires.length === 0 ? (
                   <div>Vous n'avez selectionnez aucun destinataire</div>
@@ -149,21 +234,31 @@ const SendPdfToAnnuaireModal = ({ lots }) => {
           )}
           <div
             className={
-              "d-flex justify-content-" + (showValidate ? "between" : "end")
+              "d-flex justify-content-" + (modalStep == 1 ? "end" : "between")
             }
           >
-            <Button
-              type="button"
-              className={"btn btn-" + (showValidate ? "danger" : "primary")}
-              onClick={() => setShowValidate(!showValidate)}
-              text={showValidate ? "Retour" : "Valider"}
-            />
-            {showValidate && (
+            {modalStep > 1 && (
+              <Button
+                type="button"
+                className="btn btn-danger"
+                onClick={() => setModalStep(modalStep - 1)}
+                text="Retour"
+              />
+            )}
+            {modalStep < 3 && (
+              <Button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => setModalStep(modalStep + 1)}
+                text="Suivant"
+              />
+            )}
+            {modalStep == 3 && (
               <Button
                 type="button"
                 className="btn btn-success"
                 onClick={handleSubmit}
-                text="Envoyer"
+                text="Valider"
               />
             )}
           </div>

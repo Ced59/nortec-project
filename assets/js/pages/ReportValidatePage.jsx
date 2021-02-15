@@ -120,12 +120,10 @@ const ReportValidatePage = ({ match }) => {
               type="button"
               onClick={handleSavePDF}
             />
-            <SendPdfToAnnuaireModal lots={report.Project.lots} />
-            {/* <Button
-              text="Clôturer et envoyer"
-              className="btn btn-primary mr-4"
-              type="button"
-            /> */}
+            <SendPdfToAnnuaireModal
+              lots={report.Project.lots}
+              users={project.users}
+            />
             <Button
               text="Faire valider par Admin"
               className="btn btn-primary mr-4"
