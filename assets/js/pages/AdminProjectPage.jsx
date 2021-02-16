@@ -526,8 +526,8 @@ const AdminProjectPage = ({ history, match, props }) => {
                         <td className="w-35">{user.lastName}</td>
                         <td className="text-center">
                           <Button
-                              type="button"
-                              text="Ajouter"
+                            type="submit"
+                            text="Ajouter"
                             className="btn btn-primary btn-sm"
                             onClick={() => handleAddUser(user)}
                           />
@@ -563,8 +563,8 @@ const AdminProjectPage = ({ history, match, props }) => {
                         <td className="w-35">{user.lastName}</td>
                         <td className="text-center">
                           <Button
-                              type="button"
-                              text="Ajouter"
+                            type="button"
+                            text="Ajouter"
                             className="btn btn-primary btn-sm"
                             onClick={() => handleAddUser(user)}
                           />
