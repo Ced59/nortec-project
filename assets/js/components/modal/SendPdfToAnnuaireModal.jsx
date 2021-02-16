@@ -1,10 +1,21 @@
+import { pdf } from "@react-pdf/renderer";
 import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
 import CompanyAPI from "../../services/CompanyAPI";
+import MailAPI from "../../services/MailAPI";
 import Button from "../forms/Button";
+import ReportPdfComponent from "../pdf/ReportPdfComponent";
 
-const SendPdfToAnnuaireModal = ({ lots, users }) => {
+const SendPdfToAnnuaireModal = ({
+  lots,
+  users,
+  reportChrono,
+  projectName,
+  project,
+  report,
+  photos,
+}) => {
   const [showModal, setShowModal] = useState(false);
   const [modalStep, setModalStep] = useState(1);
   const [companys, setCompanys] = useState([]);
@@ -62,16 +73,31 @@ const SendPdfToAnnuaireModal = ({ lots, users }) => {
     }
   };
 
-  const handleSubmit = () => {
-    if (destinataires.length === 0) {
-      toast.info("Vous devez selectionner des destinataires");
-    } else {
+  const handleSubmit = async () => {
+    if (destinataires.length !== 0) {
+      const pdfToBlob = pdf(
+        <ReportPdfComponent report={report} project={project} photos={photos} />
+      );
+      const blob = await pdfToBlob.toBlob();
+
+      const formData = new FormData();
+      formData.append("pdf", blob);
+      formData.append("projectName", projectName);
+      formData.append("reportChrono", reportChrono);
+      formData.append("destinataires", destinataires);
+
       try {
-        toast.success("Emails envoyés");
+        const data = formData;
+        MailAPI.sendPDF(data).then((r) => {
+          toast.success("Emails envoyés");
+        });
       } catch (e) {
-        toast.error("Une erreur èst survenue, merci de reessayer plus tard");
+        toast.error("Une erreur est survenue, merci de reessayer plus tard");
         console.log(e);
+        console.log(e.response);
       }
+    } else {
+      toast.info("Vous devez selectionner des destinataires");
     }
   };
 
@@ -147,33 +173,33 @@ const SendPdfToAnnuaireModal = ({ lots, users }) => {
                 <tbody>
                   {usersContact.map((contact) => (
                     <React.Fragment key={contact.id}>
-                    {contact.roles[0] == "ROLE_ADMIN" && (
-                      <tr
-                        className={
-                          destinataires.includes(contact.email)
-                            ? "table-success"
-                            : ""
-                        }
-                        id={contact.email}
-                        onClick={handleCheck}
-                      >
-                        <td className="w-25">
-                          {contact.lastName} {contact.firstName}
-                        </td>
-                        <td className="w-25">{contact.email}</td>
-                        <td className="d-flex justify-content-end">
-                          <div className="custom-control custom-checkbox">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              readOnly
-                              checked={destinataires.includes(contact.email)}
-                            />
-                          </div>
-                        </td>
-                      </tr>
-                    )}
-                  </React.Fragment>
+                      {contact.roles[0] == "ROLE_ADMIN" && (
+                        <tr
+                          className={
+                            destinataires.includes(contact.email)
+                              ? "table-success"
+                              : ""
+                          }
+                          id={contact.email}
+                          onClick={handleCheck}
+                        >
+                          <td className="w-25">
+                            {contact.lastName} {contact.firstName}
+                          </td>
+                          <td className="w-25">{contact.email}</td>
+                          <td className="d-flex justify-content-end">
+                            <div className="custom-control custom-checkbox">
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                readOnly
+                                checked={destinataires.includes(contact.email)}
+                              />
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
                   ))}
                 </tbody>
               </table>

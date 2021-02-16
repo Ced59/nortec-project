@@ -3,7 +3,7 @@ import { Link, withRouter } from "react-router-dom";
 import NavbarLeft from "../components/navbars/NavbarLeft";
 import DateAPI from "../services/DateAPI";
 import Button from "../components/forms/Button";
-import ReactPDF, { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import ReactPDF, { PDFDownloadLink, PDFViewer, pdf } from "@react-pdf/renderer";
 import ReportPdfComponent from "../components/pdf/ReportPdfComponent";
 import ReportsAPI from "../services/ReportsAPI";
 import ProjectsAPI from "../services/ProjectsAPI";
@@ -123,6 +123,11 @@ const ReportValidatePage = ({ match }) => {
             <SendPdfToAnnuaireModal
               lots={report.Project.lots}
               users={project.users}
+              projectName={project.name}
+              reportChrono={report.chrono}
+              project={project}
+              report={report}
+              photos={photos}
             />
             <Button
               text="Faire valider par Admin"
