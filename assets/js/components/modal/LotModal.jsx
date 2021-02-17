@@ -8,8 +8,10 @@ import Field from "../forms/Field";
 import Select from "../forms/Select";
 import { toast } from "react-toastify";
 import useClippy from "use-clippy";
+import useIsMountedRef from "../UseIsMountedRef";
 
 const LotModal = ({ loadingProject, project, fetchProject }) => {
+  const isMountedRef = useIsMountedRef();
   const [lotsModel] = useState({
     numeroLot: "",
     libelleLot: "",
@@ -45,7 +47,7 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
   const fetchCompany = async () => {
     try {
       const data = await ProjectsAPI.findAllCompany();
-      setCompanies(data);
+      isMountedRef.current && setCompanies(data);
     } catch (error) {
       console.log(error.response);
     }

@@ -6,8 +6,10 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Modal from "react-bootstrap/Modal";
 import Button from "../components/forms/Button";
+import useIsMountedRef from "../components/UseIsMountedRef";
 
 const AdminCompanyPage = ({ history, match, props }) => {
+  const isMountedRef = useIsMountedRef();
   const { id = "new" } = match.params;
 
   const [company, setCompany] = useState({
@@ -55,17 +57,21 @@ const AdminCompanyPage = ({ history, match, props }) => {
   const fetchCompany = async (id) => {
     try {
       const data = await CompanyAPI.find(id);
-      setCompany(data);
-      setLoading(false);
+      if (isMountedRef.current) {
+        setCompany(data);
+        setLoading(false);
+      }
     } catch (error) {
       console.log(error.response);
     }
   };
-
+  
   const fetchContact = async (id) => {
     try {
       const data = await AnnuaireAPI.find(id);
-      setContact(data);
+      if (isMountedRef.current) {
+        setContact(data);
+      }
     } catch (error) {
       console.log(error.message);
     }
