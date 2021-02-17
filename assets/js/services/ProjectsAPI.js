@@ -26,8 +26,6 @@ function update(id, project){
 
 function create(project){
 
-    project.dateFinReelle = "1900-01-01";
-
     return axios.post(PROJECTS_API, project);
 }
 

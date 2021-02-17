@@ -30,7 +30,6 @@ const AdminProjectPage = ({ history, match, props }) => {
     adresse2: "",
     codePostal: "",
     dateDebut: "",
-    dateFinReelle: "1900-01-01",
     nomMOEX: "",
     nomOPC: "",
     contactClient: "",
@@ -563,7 +562,7 @@ const AdminProjectPage = ({ history, match, props }) => {
                         <td className="w-35">{user.lastName}</td>
                         <td className="text-center">
                           <Button
-                            type="button"
+                            type="submit"
                             text="Ajouter"
                             className="btn btn-primary btn-sm"
                             onClick={() => handleAddUser(user)}
