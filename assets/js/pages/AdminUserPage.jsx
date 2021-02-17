@@ -16,9 +16,11 @@ import Pagination from "@material-ui/lab/Pagination";
 import pagination_configs, {
   ADMIN_USER_PAGE_PAGINATION_ITEMS_PER_PAGE,
 } from "../components/configs/pagination_configs";
+import useIsMountedRef from "../components/UseIsMountedRef";
 
 const AdminUserPage = ({ history, match, props }) => {
   //------------------------------- Récupération de l'id si il y en a un --------------------------------
+  const isMountedRef = useIsMountedRef();
   const { id = "new" } = match.params;
 
   const [user, setUser] = useState({
@@ -59,22 +61,26 @@ const AdminUserPage = ({ history, match, props }) => {
   const fetchUser = async (id) => {
     try {
       const result = await UsersAPI.find(id);
-      setUser(result);
-      setLoading(false);
+      if (isMountedRef.current) {
+        setUser(result);
+        setLoading(false);
+      }
     } catch (error) {
       toast.error("Le chargement de l'utilisateur a rencontré un problème !");
       setLoading(false);
       history.replace("/admin/user/" + id);
     }
   };
-
+  
   //---------------------------------------- Récupérer les projets de l'utilisateur ------------------------------------
-
+  
   const fetchProjects = async () => {
     try {
       let result = await UsersAPI.getProjects(id);
-      setProjects(result);
-      setLoadingProjects(false);
+      if (isMountedRef.current) {
+        setProjects(result);
+        setLoadingProjects(false);
+      }
     } catch (error) {
       toast.error("Le chargement des projets a rencontré un problème !");
       setLoadingProjects(false);
@@ -83,11 +89,12 @@ const AdminUserPage = ({ history, match, props }) => {
   };
 
   //--------------------------- Chargement de l'utilisateur au changement d'identifiant ------------------
+
   useEffect(() => {
     if (id !== "new") {
       setEdit(true);
-      fetchUser(id).then((r) => "");
-      fetchProjects().then((r) => "");
+      fetchUser(id);
+      fetchProjects();
     } else {
       setLoading(false);
     }

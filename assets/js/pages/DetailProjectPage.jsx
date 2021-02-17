@@ -17,8 +17,10 @@ import ReportsAPI from "../services/ReportsAPI";
 import LotModal from "../components/modal/LotModal";
 import EcheanceModal from "../components/modal/EcheanceModal";
 import EcheanceAPI from "../services/EcheanceAPI";
+import useIsMountedRef from "../components/UseIsMountedRef";
 
 const DetailProjectPage = ({history, match, props}) => {
+    const isMountedRef = useIsMountedRef();
     const {id} = match.params;
 
     const [error, setError] = useState({
@@ -88,8 +90,10 @@ const DetailProjectPage = ({history, match, props}) => {
     const fetchProject = async (id) => {
         try {
             const data = await ProjectsAPI.find(id);
+        if (isMountedRef.currentTarget) {
             setProject(data);
             setLoadingProject(false);
+        }
         } catch (error) {
             console.log(error.response);
         }
@@ -98,9 +102,11 @@ const DetailProjectPage = ({history, match, props}) => {
     const fetchReports = async () => {
         try {
             const data = await ReportsAPI.findAll();
-
-            setReports(data);
+            if (isMountedRef.currentTarget) {
+                setReports(data);            
+            }
         } catch (error) {
+            console.log(error);
             console.log(error.response);
         }
     };
@@ -164,12 +170,6 @@ const DetailProjectPage = ({history, match, props}) => {
         } catch (error) {
             console.log(error);
         }
-    };
-
-    const handleChange = ({currentTarget}) => {
-        const {name, value} = currentTarget;
-        setProject({...project, [name]: value});
-        console.log(value);
     };
 
     const addFinPrevue = async (e) => {
