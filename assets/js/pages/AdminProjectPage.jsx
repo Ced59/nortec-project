@@ -25,7 +25,6 @@ const AdminProjectPage = ({ history, match, props }) => {
     adresse2: "",
     codePostal: "",
     dateDebut: "",
-    dateFinReelle: "1900-01-01",
     nomMOEX: "",
     nomOPC: "",
     contactClient: "",

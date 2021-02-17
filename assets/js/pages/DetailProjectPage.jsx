@@ -85,7 +85,7 @@ const DetailProjectPage = ({history, match, props}) => {
         installations: "",
         lots: [],
     });
-
+ 
     //----------------------------------------Récupération d'un projet----------------------------
     const fetchProject = async (id) => {
         try {
@@ -324,7 +324,7 @@ const DetailProjectPage = ({history, match, props}) => {
                                         Date de fin réélle :
                                     </h6>
                                     <p className="col-7">
-                                        {DateAPI.verifyDateExist(project.dateFinReelle) === ""
+                                        {!project.dateFinReelle
                                             ? "Aucune"
                                             : DateAPI.formatDate(project.dateFinReelle)}
                                     </p>
@@ -340,8 +340,8 @@ const DetailProjectPage = ({history, match, props}) => {
                                                 type="date"
                                                 onChange={handleChangeFinReelle}
                                                 value={
-                                                DateAPI.verifyDateExist(project.dateFinReelle) === ""
-                                                    ? DateAPI.formatDateForm(DateAPI.now())
+                                                !project.dateFinReelle
+                                                    ? DateAPI.formatDateFormConst(DateAPI.now())
                                                     : DateAPI.formatDateForm(project.dateFinReelle)
                                                 }
                                                 noLabel={true}
