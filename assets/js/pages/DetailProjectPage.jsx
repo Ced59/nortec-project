@@ -23,36 +23,13 @@ import DivRowTitle from "../components/wrapper/DivRowTitle";
 const DetailProjectPage = ({history, match, props}) => {
     const isMountedRef = useIsMountedRef();
     const {id} = match.params;
-
-    const [error, setError] = useState({
-        name: "",
-        description: "",
-        photo: "",
-        adresse1: "",
-        adresse2: "",
-        codePostal: "",
-        dateDebut: "",
-        dateFinReelle: "",
-        dateFinPrevues: "",
-        nomMOEX: "",
-        nomOPC: "",
-        contactClient: "",
-        ville: "",
-        reports: "",
-        users: "",
-        lots: "",
-        companies: "",
-    });
-
     const [project, setProject] = useState({});
-
     const [dateFinPrevue, setDateFinPrevue] = useState("");
     const [edit, setEdit] = useState(false);
     const [loadingProject, setLoadingProject] = useState(true);
     const [errorDate, setErrorDate] = useState("");
     const [errorDateFinReelle, setErrorDateFinRelle] = useState("");
-    const [reports, setReports] = useState([]);
-    const [report, setReport] = useState({
+    const report = {
         Project: "/api/projects/" + id,
         redacteur: AuthAPI.getUserFirstNameLastName(),
         dateRedaction: DateAPI.now(),
@@ -68,7 +45,7 @@ const DetailProjectPage = ({history, match, props}) => {
         securityConmmentIntern: "",
         installations: "",
         lots: [],
-    });
+    };
  
     //----------------------------------------Récupération d'un projet----------------------------
     const fetchProject = async (id) => {
@@ -83,81 +60,61 @@ const DetailProjectPage = ({history, match, props}) => {
         }
     };
 
-    const fetchReports = async () => {
-        try {
-            const data = await ReportsAPI.findAll();
-            if (isMountedRef.current) {
-                setReports(data);            
-            }
-        } catch (error) {
-            toast.error("Une erreur est survenue lors du chargement des rapports")
-        }
-    };
+    //--------------------------------------- Copie des echeances d'un rapport------------------
 
-    //Récupération du bon projet à chaque chargement du composant
-
-    //--------------------------------------- Copie des echeances d'un raport------------------
-
-    const copyEcheance = (idNewReport) => {
-        EcheanceAPI.findByReport(idNewReport - 1).then((response) => {
-            response.forEach((r) => {
-                r.report = ["api/reports/" + idNewReport];
-                r.lot = "/api/lots/" + r.lot.id;
-
-                EcheanceAPI.create({
-                    numeroEcheance: r.numeroEcheance,
-                    sujet: r.sujet,
-                    dateDebut: r.dateDebut,
-                    dateFinPrevue: r.dateFinPrevue,
-                    lot: r.lot,
-                    redacteur: r.redacteur,
-                    report: r.report,
-                    zone: r.zone,
-                    effectifPrevu: r.effectifPrevu,
-                    effectifConstate: r.effectifConstate,
-                    comment: r.comment,
-                    dateCloture: r.dateCloture,
-                });
-            });
+    const copyEcheance = (idLastReport,idNewReport) => {
+        ReportsAPI.getEcheances(idLastReport).then((response) => {
+            Promise.all(
+                response.map(r => 
+                    EcheanceAPI.create({
+                        numeroEcheance: r.numeroEcheance,
+                        sujet: r.sujet,
+                        dateDebut: r.dateDebut,
+                        dateFinPrevue: r.dateFinPrevue,
+                        lot: "/api/lots/" + r.lot.id,
+                        redacteur: r.redacteur,
+                        report: ["api/reports/" + idNewReport],
+                        zone: r.zone,
+                        effectifPrevu: r.effectifPrevu,
+                        effectifConstate: r.effectifConstate,
+                        comment: r.comment,
+                        dateCloture: r.dateCloture,
+                    })
+                )
+            ).then(newReportCreated(idNewReport));
         });
     };
 
     //---------------------------------------- Chargement de projet au changement de l'id --------
     useEffect(() => {
-        fetchProject(id).then((r) => "");
-        fetchReports();
+        fetchProject(id);
     }, [id]);
 
-    const handleBackClick = () => {
-        history.replace("/projects");
-    };
+    const newReportCreated = (idNewReport) => {
+        toast.success("Nouveau rapport créé");
+        history.replace("/project/" + id + "/" + idNewReport + "/echeances");
+    }
 
-    const handleEditClick = () => {
-        setEdit(!edit);
-    };
-
-    const newReportClick = async () => {
-        let idMax;
-        let idNewReport;
-        if (reports.length !== 0) {
-            idMax = reports[reports.length - 1].id;
-            idNewReport = idMax + 1;
-        } else {
-            idNewReport = 1;
-        }
+    const newReportClick = async (e) => {
+        const btn = e.target;
+        btn.disabled = true;
         try {
-            copyEcheance(idNewReport);
-            await ReportsAPI.create(report);
-            history.replace("/project/" + id + "/" + idNewReport + "/echeances");
-            toast.success("Nouveau rapport créé");
+            await ReportsAPI.create(report).then(r=>{
+                const idNewReport = r.data.id;
+                const projectReports = project.reports;
+                const lastReport = projectReports[projectReports.length - 1];
+                if (lastReport) {
+                    const idLastReport = Number(lastReport.split("/")[3]);
+                    copyEcheance(idLastReport, idNewReport);
+                } else newReportCreated(idNewReport);
+            });
         } catch (error) {
-            toast.error("Une erreur est survenue lors de la création du rapport")
+            toast.error("Une erreur est survenue lors de la création du rapport");
+            btn.disabled = false;
         }
     };
 
-    const addFinPrevue = async (e) => {
-        e.preventDefault();
-
+    const addFinPrevue = async () => {
         if (
             DateAPI.dateIsAfter(
                 dateFinPrevue,
@@ -171,12 +128,10 @@ const DetailProjectPage = ({history, match, props}) => {
                     date: dateFinPrevue,
                     Project: "/api/projects/" + project.id,
                 };
-
                 await ProjectsAPI.addFinPrevueProject(dateToCreate).then((r) => {
                     project.dateFinPrevues.push(dateToCreate);
                     setProject(project);
                 });
-
                 toast.success("La date a bien été ajoutée.");
                 setEdit(false);
             } catch (error) {
@@ -198,18 +153,10 @@ const DetailProjectPage = ({history, match, props}) => {
             );
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
+    const handleSubmitDateFinReelle = async () => {
+        const dateFinReelleProject = { dateFinReelle : project.dateFinReelle }
         try {
-            project.users = project.users.map(
-                (userInProject) => "/api/users/" + userInProject.id
-            );
-            project.dateFinPrevues = project.dateFinPrevues.map(
-                (dateInProject) => "/api/project_date_fin_prevues/" + dateInProject.id
-            );
-            project.lots = project.lots.map((lot) => "/api/lots/" + lot.id);
-            await ProjectsAPI.update(id, project);
+            await ProjectsAPI.update(id, dateFinReelleProject);
             toast.success("Le projet a bien été mis à jour !");
             await fetchProject(id);
             setEdit(false);
@@ -293,7 +240,6 @@ const DetailProjectPage = ({history, match, props}) => {
                                     </p>
                                 </DivRowTitle>
                                 {edit && (
-                                    <form onSubmit={handleSubmit} encType="multipart/form-data">
                                         <DivRowTitle title={"Ajouter la date de fin réélle :"}>
                                             <Field
                                                 name="dateFinReelle"
@@ -308,12 +254,12 @@ const DetailProjectPage = ({history, match, props}) => {
                                                 error={errorDateFinReelle}
                                             />
                                             <Button
+                                            type="button"
                                             text="Valider"
                                             className="btn btn-danger btn-sm ml-2 mb-3"
-                                            onSubmit={handleSubmit}
+                                            onClick={handleSubmitDateFinReelle}
                                             />
                                         </DivRowTitle>
-                                    </form>
                                 )}
                                 <DivRowTitle title={"Nom MOEX :"}>
                                     <p className="col-7">{project.nomMOEX}</p>
@@ -381,16 +327,13 @@ const DetailProjectPage = ({history, match, props}) => {
                                         "btn btn-" + (!edit ? "primary" : "info") + " mx-2 mb-3"
                                     }
                                     type="button"
-                                    onClick={handleEditClick}
+                                    onClick={()=>setEdit(!edit)}
                                 />
                             )}
 
-                            <Button
-                                text="Revenir à la liste"
-                                className="btn btn-danger md-mt-2 mx-2 mb-3"
-                                type="button"
-                                onClick={handleBackClick}
-                            />
+                            <Link className="btn btn-danger md-mt-2 mx-2 mb-3" to="/projects">
+                                Revenir à la liste
+                            </Link>
                         </div>
                     </>
                 ) : (
