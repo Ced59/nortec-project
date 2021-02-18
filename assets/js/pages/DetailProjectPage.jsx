@@ -18,6 +18,7 @@ import LotModal from "../components/modal/LotModal";
 import EcheanceModal from "../components/modal/EcheanceModal";
 import EcheanceAPI from "../services/EcheanceAPI";
 import useIsMountedRef from "../components/UseIsMountedRef";
+import DivRowTitle from "../components/wrapper/DivRowTitle";
 
 const DetailProjectPage = ({history, match, props}) => {
     const isMountedRef = useIsMountedRef();
@@ -106,12 +107,7 @@ const DetailProjectPage = ({history, match, props}) => {
                 setReports(data);            
             }
         } catch (error) {
-<<<<<<< HEAD
             toast.error("Une erreur est survenue lors du chargement des rapports")
-=======
-            console.log(error);
-            console.log(error.response);
->>>>>>> c081d6daff4b9aa9bbd29f5fde81ffc213393e31
         }
     };
 
@@ -257,52 +253,40 @@ const DetailProjectPage = ({history, match, props}) => {
 
                             <div className="col-12 col-lg-6">
                                 <h5 className="text-center text-sm-left mb-3">Détails:</h5>
-                                <div className="row no-space">
-                                    <h6 className="offset-sm-1 col-4">Adresse :</h6>
+                                <DivRowTitle title={"Adresse :"}>
                                     <p className="col-7">{project.adresse1}</p>
-                                </div>
+                                </DivRowTitle>
                                 {project.adresse2 && (
-                                    <div className="row no-space">
-                                        <h6 className="offset-sm-1 col-4">Complément :</h6>
+                                    <DivRowTitle title={"Complément :"}>
                                         <p className="col-7">{project.adresse2}</p>
-                                    </div>
+                                    </DivRowTitle>
                                 )}
 
-                                <div className="row no-space">
-                                    <h6 className="offset-sm-1 col-4">Code Postal :</h6>
+                                <DivRowTitle title={"Code Postal :"}>
                                     <p className="col-7">{project.codePostal}</p>
-                                </div>
-                                <div className="row no-space">
-                                    <h6 className="offset-sm-1 col-4">Ville :</h6>
+                                </DivRowTitle>
+                                <DivRowTitle title={"Ville :"}>
                                     <p className="col-7">{project.ville}</p>
-                                </div>
-                                <div className="row no-space">
-                                    <h6 className="offset-sm-1 col-4">Date de début :</h6>
+                                </DivRowTitle>
+                                <DivRowTitle title={"Date de début :"}>
                                     <p className="col-7">
                                         {DateAPI.formatDate(project.dateDebut)}
                                     </p>
-                                </div>
+                                </DivRowTitle>
 
                                 {project.dateFinPrevues.length !== 0 && (
                                     <>
-                                        {project.dateFinPrevues.map((date) => (
-                                            <div className="row no-space" key={date.id}>
-                                                <h6 className="offset-sm-1 col-4">
-                                                    Fin prévue{" "}
-                                                    {project.dateFinPrevues.indexOf(date) + 1} :
-                                                </h6>
+                                        {project.dateFinPrevues.map((date,i) => (
+                                            <DivRowTitle title={"Fin prévue "+Number(i+1)+" :"} key={date.id}>
                                                 <p className="col-7">
                                                     {DateAPI.formatDate(date.date)}
                                                 </p>
-                                            </div>
+                                            </DivRowTitle>
                                         ))}
                                     </>
                                 )}
                                 {edit && (
-                                    <div className="row no-space">
-                                        <h6 className="offset-sm-1 col-4">
-                                            Ajouter une date de fin prévue :
-                                        </h6>
+                                    <DivRowTitle title={"Ajouter une date de fin prévue :"}>
                                         <Field
                                             name="dateFinPrevue"
                                             type="date"
@@ -316,24 +300,18 @@ const DetailProjectPage = ({history, match, props}) => {
                                                 className="btn btn-danger btn-sm ml-2 mb-3"
                                                 onClick={addFinPrevue}
                                         />
-                                    </div>
+                                    </DivRowTitle>
                                 )}
-                                <div className="row no-space">
-                                    <h6 className="offset-sm-1 col-4">
-                                        Date de fin réélle :
-                                    </h6>
+                                <DivRowTitle title={"Date de fin réélle :"}>
                                     <p className="col-7">
                                         {!project.dateFinReelle
                                             ? "Aucune"
                                             : DateAPI.formatDate(project.dateFinReelle)}
                                     </p>
-                                </div>
+                                </DivRowTitle>
                                 {edit && (
                                     <form onSubmit={handleSubmit} encType="multipart/form-data">
-                                        <div className="row no-space">
-                                            <h6 className="offset-sm-1 col-4">
-                                                Ajouter la date de fin réélle :
-                                            </h6>
+                                        <DivRowTitle title={"Ajouter la date de fin réélle :"}>
                                             <Field
                                                 name="dateFinReelle"
                                                 type="date"
@@ -345,32 +323,30 @@ const DetailProjectPage = ({history, match, props}) => {
                                                 }
                                                 noLabel={true}
                                                 error={errorDateFinReelle}
-                                                />
+                                            />
                                             <Button
                                             text="Valider"
                                             className="btn btn-danger btn-sm ml-2 mb-3"
                                             onSubmit={handleSubmit}
                                             />
-                                        </div>
+                                        </DivRowTitle>
                                     </form>
                                 )}
-                                <div className="row no-space">
-                                    <h6 className="offset-sm-1 col-4">Nom MOEX :</h6>
+                                <DivRowTitle title={"Nom MOEX :"}>
                                     <p className="col-7">{project.nomMOEX}</p>
-                                </div>
-                                <div className="row no-space">
-                                    <h6 className="offset-sm-1 col-4">Nom OPC :</h6>
+                                </DivRowTitle>
+                                <DivRowTitle title={"Nom OPC :"}>
                                     <p className="col-7">{project.nomOPC}</p>
-                                </div>
-                                <div className="row no-space">
-                                    <h6 className="offset-sm-1 col-4">Contact client :</h6>
-                                    <a
-                                        className="col-7"
-                                        href={"mailto:" + project.contactClient}
-                                    >
-                                        {project.contactClient}
-                                    </a>
-                                </div>
+                                </DivRowTitle>
+                                <DivRowTitle title={"Contact client :"}>
+                                    <div className="col-7">
+                                        <a 
+                                            href={"mailto:" + project.contactClient}
+                                            >
+                                            {project.contactClient}
+                                        </a>
+                                    </div>
+                                </DivRowTitle>
                                 <div className="row mt-5">
                                     <h6 className="offset-sm-1 col-4">Statut :</h6>
                                     <p

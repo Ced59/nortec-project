@@ -9,6 +9,7 @@ import ReportImputation from "../components/ReportImputation";
 import ReportComment from "../components/ReportComment";
 import ReportAddPhoto from "../components/ReportAddPhoto";
 import CardConformity from "../components/CardConformity";
+import ImputationTitle from "../components/wrapper/ImputationTitle";
 
 const ReportPropretePartiesCommunesPage = ({ match }) => {
   const [conforme, setConforme] = useState(false);
@@ -107,8 +108,7 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
       <NavbarLeftWithRouter selected="propetepartiecommune" />
       {!loading && (
         <div className="page-content">
-          <div className="row ml-2 mt-4 d-flex justify-content-between mb-3">
-            <h2 className="mb-4">Propreté parties communes :</h2>
+          <ImputationTitle title={"Propreté parties communes :"}>
             <Button
               onClick={() => setConforme(true)}
               className="btn btn-success mb-4"
@@ -121,7 +121,7 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
               text="Non Conforme"
               type="button"
             />
-          </div>
+          </ImputationTitle>
 
           {conforme && (
             <CardConformity
@@ -131,17 +131,17 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
           )}
           {conforme === false && (
             <>
-                <ReportImputation
-                  setLoading={setLoading}
-                  setImputations={setImputations}
-                  setTempImputations={setTempImputations}
-                  imputations={imputations}
-                  editImput={editImput}
-                  setEditImput={setEditImput}
-                  fetchReport={fetchReport}
-                  urlParams={urlParams}
-                  api={"propreteCommun"}
-                />
+              <ReportImputation
+                setLoading={setLoading}
+                setImputations={setImputations}
+                setTempImputations={setTempImputations}
+                imputations={imputations}
+                editImput={editImput}
+                setEditImput={setEditImput}
+                fetchReport={fetchReport}
+                urlParams={urlParams}
+                api={"propreteCommun"}
+              />
               <ReportAddPhoto
                 reportID={urlParams.idReport}
                 typePhoto="commune"
@@ -168,7 +168,7 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
           )}
         </div>
       )}
-      {loading && <div id="loading-icon"/>}
+      {loading && <div id="loading-icon" />}
     </main>
   );
 };
