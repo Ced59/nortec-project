@@ -9,6 +9,7 @@ import ReportImputation from "../components/ReportImputation";
 import ReportComment from "../components/ReportComment";
 import ReportAddPhoto from "../components/ReportAddPhoto";
 import CardConformity from "../components/CardConformity";
+import ImputationTitle from "../components/wrapper/ImputationTitle";
 
 const ReportSecuritePage = ({ match }) => {
   const NavbarLeftWithRouter = withRouter(NavbarLeft);
@@ -106,8 +107,7 @@ const ReportSecuritePage = ({ match }) => {
       {!loading && (
         <>
           <div className="page-content">
-            <div className="row ml-2 mt-4 d-flex justify-content-between mb-3">
-              <h2 className="mb-4">Sécurité :</h2>
+            <ImputationTitle title={"Sécurité :"}>
               <Button
                 onClick={() => setConforme(true)}
                 className="btn btn-success mb-4"
@@ -120,7 +120,7 @@ const ReportSecuritePage = ({ match }) => {
                 text="Non Conforme"
                 type="button"
               />
-            </div>
+            </ImputationTitle>
 
             {conforme && (
               <CardConformity

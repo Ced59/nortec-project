@@ -178,15 +178,21 @@ const ReportPdfComponent = ({ report, project, photos }) => {
               <View style={styles.listEffectifs}>
                 <Text>Imputations : </Text>
                 {report.propreteAccessImputation.map((proprete) => (
-                  <View key={proprete.id} style={styles.listEffectifs}>
-                    <Text
-                      style={[
-                        styles.textEffectifsNomEntreprise,
-                        { fontSize: 10 },
-                      ]}
-                    >
-                      {proprete.company.nom + " :  " + proprete.pourcent + " %"}
-                    </Text>
+                  <View key={proprete.id}>
+                    {proprete.pourcent != 0 && (
+                      <View style={styles.listEffectifs}>
+                        <Text
+                          style={[
+                            styles.textEffectifsNomEntreprise
+                          ]}
+                        >
+                          {proprete.company.nom +
+                            " :  " +
+                            proprete.pourcent +
+                            " %"}
+                        </Text>
+                      </View>
+                    )}
                   </View>
                 ))}
               </View>
@@ -215,13 +221,20 @@ const ReportPdfComponent = ({ report, project, photos }) => {
               <View style={styles.listEffectifs}>
                 <Text>Imputations : </Text>
                 {report.propreteCommuneImputations.map((proprete) => (
-                  <View key={proprete.id} style={styles.listEffectifs}>
-                    <Text style={styles.textEffectifsNomEntreprise}>
-                      {proprete.company.nom + " :" + proprete.percent + " %"}
-                    </Text>
-                    <Text style={styles.textEffectifsInfos}>
-                      {"Commentaire :" + proprete.commentaire}
-                    </Text>
+                  <View key={proprete.id}>
+                    {proprete.commentaire == "" && (
+                      <View style={styles.listEffectifs}>
+                        <Text style={styles.textEffectifsNomEntreprise}>
+                          {proprete.company.nom +
+                            " :" +
+                            proprete.percent +
+                            " %"}
+                        </Text>
+                        <Text style={styles.textEffectifsInfos}>
+                          {"Commentaire :" + proprete.commentaire}
+                        </Text>
+                      </View>
+                    )}
                   </View>
                 ))}
               </View>
@@ -239,108 +252,112 @@ const ReportPdfComponent = ({ report, project, photos }) => {
             </View>
           )}
         </View>
-        {project.lots.map((lot) => (
-          <View key={lot.id} break>
-            {lot.echeances.length !== 0 &&
-              lot.echeances.some((echeance) =>
-                echeance.report.includes("/api/reports/" + report.id)
-              ) && (
-                <View break>
-                  <View
-                    style={[
-                      styles.table,
-                      { width: "90%" },
-                      { marginLeft: "5%" },
-                      { marginRight: "5%" },
-                    ]}
-                  >
-                    <Text style={[styles.tableCell, { fontSize: 10 }]}>
-                      Entreprise: {lot.company.nom}
-                    </Text>
-                  </View>
-                  <View
-                    style={[
-                      styles.table,
-                      { width: "90%" },
-                      { marginLeft: "5%" },
-                      { marginRight: "5%" },
-                    ]}
-                  >
-                    <View style={styles.tableRowHead}>
-                      <View style={[styles.tableCol1Head, { width: "10%" }]}>
-                        <Text style={styles.tableCell}>Date</Text>
-                      </View>
-                      <View style={styles.tableColHead}>
-                        <Text style={styles.tableCell}>Zone</Text>
-                      </View>
-                      <View style={[styles.tableColHead, { width: "40%" }]}>
-                        <Text style={styles.tableCell}>Désignation</Text>
-                      </View>
-                      <View style={[styles.tableColHead, { width: "10%" }]}>
-                        <Text style={styles.tableCell}>Pour le</Text>
-                      </View>
-                      <View style={styles.tableColHead}>
-                        <Text style={styles.tableCell}>Planning</Text>
-                      </View>
+        <View break>
+          {project.lots.map((lot) => (
+            <View key={lot.id}>
+              {lot.echeances.length !== 0 &&
+                lot.echeances.some((echeance) =>
+                  echeance.report.includes("/api/reports/" + report.id)
+                ) && (
+                  <View break>
+                    <View
+                      style={[
+                        styles.table,
+                        { width: "90%" },
+                        { marginLeft: "5%" },
+                        { marginRight: "5%" },
+                      ]}
+                    >
+                      <Text style={[styles.tableCell, { fontSize: 10 }]}>
+                        Entreprise: {lot.company.nom}
+                      </Text>
                     </View>
-                    {lot.echeances.map((echeance) => (
-                      <View key={echeance.id}>
-                        {echeance.report.includes(
-                          "/api/reports/" + report.id
-                        ) && (
-                          <View style={styles.tableRow}>
-                            <View style={[styles.tableCol1, { width: "10%" }]}>
-                              <Text style={styles.tableCell}>
-                                {DateAPI.formatDate(echeance.dateDebut)}
-                              </Text>
-                            </View>
-                            <View style={styles.tableCol}>
-                              <Text style={styles.tableCell}>
-                                {echeance.zone}
-                              </Text>
-                            </View>
-                            <View style={[styles.tableCol, { width: "40%" }]}>
-                              <Text style={styles.tableCell}>
-                                {echeance.sujet}
-                              </Text>
-                              <Text style={styles.tableCell}>
-                                {echeance.comment}
-                              </Text>
-                            </View>
-                            <View style={[styles.tableCol, { width: "10%" }]}>
-                              <Text style={styles.tableCell}>
-                                {DateAPI.formatDate(echeance.dateFinPrevue)}
-                              </Text>
-                            </View>
-                            <View
-                              style={[
-                                styles.tableCol,
-                                {
-                                  backgroundColor: statusColor(
+                    <View
+                      style={[
+                        styles.table,
+                        { width: "90%" },
+                        { marginLeft: "5%" },
+                        { marginRight: "5%" },
+                      ]}
+                    >
+                      <View style={styles.tableRowHead}>
+                        <View style={[styles.tableCol1Head, { width: "10%" }]}>
+                          <Text style={styles.tableCell}>Date</Text>
+                        </View>
+                        <View style={styles.tableColHead}>
+                          <Text style={styles.tableCell}>Zone</Text>
+                        </View>
+                        <View style={[styles.tableColHead, { width: "40%" }]}>
+                          <Text style={styles.tableCell}>Désignation</Text>
+                        </View>
+                        <View style={[styles.tableColHead, { width: "10%" }]}>
+                          <Text style={styles.tableCell}>Pour le</Text>
+                        </View>
+                        <View style={styles.tableColHead}>
+                          <Text style={styles.tableCell}>Planning</Text>
+                        </View>
+                      </View>
+                      {lot.echeances.map((echeance) => (
+                        <View key={echeance.id}>
+                          {echeance.report.includes(
+                            "/api/reports/" + report.id
+                          ) && (
+                            <View style={styles.tableRow}>
+                              <View
+                                style={[styles.tableCol1, { width: "10%" }]}
+                              >
+                                <Text style={styles.tableCell}>
+                                  {DateAPI.formatDate(echeance.dateDebut)}
+                                </Text>
+                              </View>
+                              <View style={styles.tableCol}>
+                                <Text style={styles.tableCell}>
+                                  {echeance.zone}
+                                </Text>
+                              </View>
+                              <View style={[styles.tableCol, { width: "40%" }]}>
+                                <Text style={styles.tableCell}>
+                                  {echeance.sujet}
+                                </Text>
+                                <Text style={styles.tableCell}>
+                                  {echeance.comment}
+                                </Text>
+                              </View>
+                              <View style={[styles.tableCol, { width: "10%" }]}>
+                                <Text style={styles.tableCell}>
+                                  {DateAPI.formatDate(echeance.dateFinPrevue)}
+                                </Text>
+                              </View>
+                              <View
+                                style={[
+                                  styles.tableCol,
+                                  {
+                                    backgroundColor: statusColor(
+                                      echeance.dateDebut,
+                                      echeance.dateCloture,
+                                      echeance.dateFinPrevue
+                                    ),
+                                  },
+                                ]}
+                              >
+                                <Text style={styles.tableCell}>
+                                  {statusEcheanceLabel(
                                     echeance.dateDebut,
                                     echeance.dateCloture,
                                     echeance.dateFinPrevue
-                                  ),
-                                },
-                              ]}
-                            >
-                              <Text style={styles.tableCell}>
-                                {statusEcheanceLabel(
-                                  echeance.dateDebut,
-                                  echeance.dateCloture,
-                                  echeance.dateFinPrevue
-                                )}
-                              </Text>
+                                  )}
+                                </Text>
+                              </View>
                             </View>
-                          </View>
-                        )}
-                      </View>
-                    ))}
+                          )}
+                        </View>
+                      ))}
+                    </View>
                   </View>
-                </View>
-              )}
-          </View>
-        ))}
+                )}
+            </View>
+          ))}
+        </View>
 
         <Text
           style={styles.pageNumber}

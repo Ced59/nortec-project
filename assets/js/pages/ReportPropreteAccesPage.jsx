@@ -9,6 +9,7 @@ import ReportImputation from "../components/ReportImputation";
 import ReportComment from "../components/ReportComment";
 import ReportAddPhoto from "../components/ReportAddPhoto";
 import CardConformity from "../components/CardConformity";
+import ImputationTitle from "../components/wrapper/ImputationTitle";
 
 const ReportPropreteAccesPage = ({ match }) => {
   const urlParams = match.params;
@@ -105,8 +106,7 @@ const ReportPropreteAccesPage = ({ match }) => {
       <NavbarLeftWithRouter selected="proprete" />
       {!loading && (
         <div className="page-content">
-          <div className="row ml-2 mt-4 d-flex justify-content-between mb-3">
-            <h2 className="mb-4">Propreté des accès :</h2>
+          <ImputationTitle title={"Propreté des accès :"}>
             <Button
               onClick={() => setConforme("conform")}
               className="btn btn-success mb-4"
@@ -120,7 +120,7 @@ const ReportPropreteAccesPage = ({ match }) => {
               text="Non Conforme"
               type="button"
             />
-          </div>
+          </ImputationTitle>
 
           {conforme === "conform" && (
             <CardConformity
@@ -142,17 +142,17 @@ const ReportPropreteAccesPage = ({ match }) => {
                 text="Prorata"
                 type="button"
               />
-                <ReportImputation
-                  setLoading={setLoading}
-                  setImputations={setImputations}
-                  setTempImputations={setTempImputations}
-                  imputations={imputations}
-                  editImput={editImput}
-                  setEditImput={setEditImput}
-                  fetchReport={fetchReport}
-                  urlParams={urlParams}
-                  api={"propreteAcces"}
-                />
+              <ReportImputation
+                setLoading={setLoading}
+                setImputations={setImputations}
+                setTempImputations={setTempImputations}
+                imputations={imputations}
+                editImput={editImput}
+                setEditImput={setEditImput}
+                fetchReport={fetchReport}
+                urlParams={urlParams}
+                api={"propreteAcces"}
+              />
               <ReportAddPhoto
                 reportID={urlParams.idReport}
                 typePhoto="access"
@@ -179,7 +179,7 @@ const ReportPropreteAccesPage = ({ match }) => {
           )}
         </div>
       )}
-      {loading && <div id="loading-icon"/>}
+      {loading && <div id="loading-icon" />}
     </main>
   );
 };
