@@ -68,34 +68,17 @@ const ReportPropreteAccesPage = ({ match }) => {
 
   // -------------------------------------------------gestion conformité/commentaire------------------------------------------
 
-  const handleSubmitReport = async ({ currentTarget }) => {
+  const handleSubmitConformity = async () => {
+    const reportConformity = { propreteAccessConformity: conforme };
     try {
-      report.Project = "/api/projects/" + urlParams.id;
-      if (currentTarget.name == "conformity") {
-        report.propreteAccessConformity = conforme;
-      }
-      report.securityCommentImputations = report.securityCommentImputations.map(
-        (imput) => "/api/security_comment_imputations/" + imput.id
-      );
-      report.propreteAccessImputation = report.propreteAccessImputation.map(
-        (imput) => "/api/proprete_access_imputations/" + imput.id
-      );
-      report.propreteCommuneImputations = report.propreteCommuneImputations.map(
-        (imput) => "/api/proprete_commune_imputations/" + imput.id
-      );
-
-      await ReportsAPI.update(urlParams.idReport, report);
-      if (currentTarget.name == "conformity") {
-        toast.success(
-          "Statut de la propreté des accès enregistré avec succès!"
-        );
-      } else {
-        toast.success("Commentaires enregistré avec succès!");
-      }
-    } catch (error) {
-      console.log(error.response);
+      await ReportsAPI.update(urlParams.idReport, reportConformity);
+      toast.success("Statut de la propreté des accès enregistrée avec succès!");
+      fetchReport(urlParams.idReport);
+    } catch (e) {
+      console.log(e);
+      console.log(e.response);
+      toast.error("Une erreur est survenue lors de la mise à jour de la conformité");
     }
-    fetchReport(urlParams.idReport);
   };
 
   // ----------------------------------------------------template-------------------------------------------------------------
@@ -125,13 +108,13 @@ const ReportPropreteAccesPage = ({ match }) => {
           {conforme === "conform" && (
             <CardConformity
               titre="Propreté des accès conforme ?"
-              submit={handleSubmitReport}
+              submit={handleSubmitConformity}
             />
           )}
           {conforme === "prorata" && (
             <CardConformity
               titre="Propreté des accès au prorata ?"
-              submit={handleSubmitReport}
+              submit={handleSubmitConformity}
             />
           )}
           {conforme === "noconform" && (
@@ -164,11 +147,12 @@ const ReportPropreteAccesPage = ({ match }) => {
                 nameComment="propreteAccessComment"
                 valueCommentIntern={report.propreteAccessCommentIntern}
                 nameCommentIntern="propreteAccessCommentIntern"
-                handleSubmitComment={handleSubmitReport}
+                fetchReport={fetchReport}
+                idReport={urlParams.idReport}
               />
               <div className="d-flex justify-content-center">
                 <Button
-                  onClick={handleSubmitReport}
+                  onClick={handleSubmitConformity}
                   className="btn btn-primary"
                   text="Confirmer"
                   type="button"

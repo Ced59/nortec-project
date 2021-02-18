@@ -59,7 +59,7 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
       }
       // ---------------------------------------------
     } catch (error) {
-      toast.error("Erreur lors du chargement du raport");
+      toast.error("Erreur lors du chargement du rapport");
       console.log(error.response);
     }
   };
@@ -70,34 +70,21 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
 
   // -------------------------------------------------gestion conformité/commentaire------------------------------------------
 
-  const handleSubmitReport = async ({ currentTarget }) => {
+  const handleSubmitConformity = async () => {
+    const reportConformity = { propreteCommuneConformity: conforme };
     try {
-      report.Project = "/api/projects/" + urlParams.id;
-      if (currentTarget.name == "conformity") {
-        report.propreteCommuneConformity = conforme;
-      }
-      report.securityCommentImputations = report.securityCommentImputations.map(
-        (imput) => "/api/security_comment_imputations/" + imput.id
+      await ReportsAPI.update(urlParams.idReport, reportConformity);
+      toast.success(
+        "Statut de la propreté des parties communes enregistrée avec succès!"
       );
-      report.propreteAccessImputation = report.propreteAccessImputation.map(
-        (imput) => "/api/proprete_access_imputations/" + imput.id
+      fetchReport(urlParams.idReport);
+    } catch (e) {
+      console.log(e);
+      console.log(e.response);
+      toast.error(
+        "Une erreur est survenue lors de la mise à jour de la conformité"
       );
-      report.propreteCommuneImputations = report.propreteCommuneImputations.map(
-        (imput) => "/api/proprete_commune_imputations/" + imput.id
-      );
-
-      await ReportsAPI.update(urlParams.idReport, report);
-      if (currentTarget.name == "conformity") {
-        toast.success(
-          "Statut de la propreté des accès enregistré avec succès!"
-        );
-      } else {
-        toast.success("Commentaires enregistré avec succès!");
-      }
-    } catch (error) {
-      console.log(error.response);
     }
-    fetchReport(urlParams.idReport);
   };
 
   // --------------------------------------------------template--------------------------------------------
@@ -126,7 +113,7 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
           {conforme && (
             <CardConformity
               titre="Propreté des parties communes conforme ?"
-              submit={handleSubmitReport}
+              submit={handleSubmitConformity}
             />
           )}
           {conforme === false && (
@@ -153,11 +140,12 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
                 nameComment="propreteCommuneComment"
                 valueCommentIntern={report.propreteCommuneCommentIntern}
                 nameCommentIntern="propreteCommuneCommentIntern"
-                handleSubmitComment={handleSubmitReport}
+                fetchReport={fetchReport}
+                idReport={urlParams.idReport}
               />
               <div className="d-flex justify-content-center">
                 <Button
-                  onClick={handleSubmitReport}
+                  onClick={handleSubmitConformity}
                   className="btn btn-primary"
                   text="Confirmer"
                   type="button"

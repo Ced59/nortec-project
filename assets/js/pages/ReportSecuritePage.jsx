@@ -68,34 +68,19 @@ const ReportSecuritePage = ({ match }) => {
 
   // -------------------------------------------------gestion conformité/commentaire------------------------------------------
 
-  const handleSubmitReport = async ({ currentTarget }) => {
+  const handleSubmitConformity = async () => {
+    const reportConformity = { securityConformity: conforme };
     try {
-      report.Project = "/api/projects/" + urlParams.id;
-      if (currentTarget.name == "conformity") {
-        report.securityConformity = conforme;
-      }
-      report.securityCommentImputations = report.securityCommentImputations.map(
-        (imput) => "/api/security_comment_imputations/" + imput.id
+      await ReportsAPI.update(urlParams.idReport, reportConformity);
+      toast.success("Statut de la sécurité enregistrée avec succès!");
+      fetchReport(urlParams.idReport);
+    } catch (e) {
+      console.log(e);
+      console.log(e.response);
+      toast.error(
+        "Une erreur est survenue lors de la mise à jour de la conformité"
       );
-      report.propreteAccessImputation = report.propreteAccessImputation.map(
-        (imput) => "/api/proprete_access_imputations/" + imput.id
-      );
-      report.propreteCommuneImputations = report.propreteCommuneImputations.map(
-        (imput) => "/api/proprete_commune_imputations/" + imput.id
-      );
-
-      await ReportsAPI.update(urlParams.idReport, report);
-      if (currentTarget.name == "conformity") {
-        toast.success(
-          "Statut de la propreté des accès enregistré avec succès!"
-        );
-      } else {
-        toast.success("Commentaires enregistré avec succès!");
-      }
-    } catch (error) {
-      console.log(error);
     }
-    fetchReport(urlParams.idReport);
   };
 
   // --------------------------------------------------template--------------------------------------------
@@ -125,7 +110,7 @@ const ReportSecuritePage = ({ match }) => {
             {conforme && (
               <CardConformity
                 titre="Sécurité conforme ?"
-                submit={handleSubmitReport}
+                submit={handleSubmitConformity}
               />
             )}
             {conforme === false && (
@@ -154,11 +139,12 @@ const ReportSecuritePage = ({ match }) => {
                   nameComment="securityConmment"
                   valueCommentIntern={report.securityConmmentIntern}
                   nameCommentIntern="securityConmmentIntern"
-                  handleSubmitComment={handleSubmitReport}
+                  fetchReport={fetchReport}
+                  idReport={urlParams.idReport}
                 />
                 <div className="d-flex justify-content-center">
                   <Button
-                    onClick={handleSubmitReport}
+                    onClick={handleSubmitConformity}
                     className="btn btn-primary"
                     text="Confirmer"
                     type="button"
