@@ -44,24 +44,7 @@ const DetailProjectPage = ({history, match, props}) => {
         companies: "",
     });
 
-    const [project, setProject] = useState({
-        name: "",
-        description: "",
-        photo: "../img/projects-img/projects-general-img/no-photo-project-img.jpg",
-        adresse1: "",
-        adresse2: "",
-        codePostal: "",
-        dateDebut: "",
-        dateFinReelle: "",
-        nomMOEX: "",
-        nomOPC: "",
-        contactClient: "",
-        ville: "",
-        reports: [],
-        users: [],
-        lots: [],
-        companies: [],
-    });
+    const [project, setProject] = useState({});
 
     const [dateFinPrevue, setDateFinPrevue] = useState("");
     const [edit, setEdit] = useState(false);

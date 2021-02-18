@@ -36,11 +36,14 @@ const styles = StyleSheet.create({
       margin: "5pt",
     },
     textEffectifsNomEntreprise: {
+      
       margin: "2pt",
       fontWeight: "bold",
+      fontSize:10
     },
     textEffectifsInfos: {
       marginLeft: "40pt",
+      fontSize:10
     },
     listEffectifs: {
       marginTop: "15pt",
