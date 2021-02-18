@@ -31,6 +31,7 @@ class Annuaire
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"lot","company", "project"})
+     * @Assert\NotBlank(message="Une adresse email doit être renseignée")
      * @Assert\Email(message="Le format de l'adresse email n'est pas valide")
      */
     private $email;

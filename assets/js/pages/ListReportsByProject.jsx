@@ -3,6 +3,7 @@ import ReportsAPI from "../services/ReportsAPI";
 import "../../css/app.css";
 import DateAPI from "../services/DateAPI";
 import { Link } from "react-router-dom";
+import useIsMountedRef from "../components/UseIsMountedRef";
 
 const STATUS_REPORT_LABELS = {
   clotured: "Clôturé non envoyé",
@@ -12,6 +13,7 @@ const STATUS_REPORT_LABELS = {
 };
 
 const ListReportsByProject = ({ match, history }) => {
+  const isMountedRef = useIsMountedRef();
   const id = match.params;
   const [listReport, setListReport] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,8 +23,10 @@ const ListReportsByProject = ({ match, history }) => {
       const data = await ReportsAPI.findAll();
       const idProject = parseInt(id.id, 10);
       const reportsByProject = data.filter((r) => r.Project.id === idProject);
-      setListReport(reportsByProject);
-      setLoading(false);
+      if (isMountedRef.current) {
+        setListReport(reportsByProject);
+        setLoading(false);
+      }
     } catch (error) {
       console.log(error.response);
     }

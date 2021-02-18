@@ -1,6 +1,8 @@
 import React from "react";
+import { toast } from "react-toastify";
 import Button from "../components/forms/Button";
 import FieldTextArea from "../components/forms/FieldTextArea";
+import ReportsAPI from "../services/ReportsAPI";
 
 const ReportComment = ({
   report,
@@ -9,11 +11,32 @@ const ReportComment = ({
   valueCommentIntern,
   nameComment,
   nameCommentIntern,
-  handleSubmitComment,
+  fetchReport,
+  idReport,
 }) => {
   const handleChangeComment = ({ currentTarget }) => {
     const { name, value } = currentTarget;
     setReport({ ...report, [name]: value });
+  };
+
+  const handleSubmitComments = async () => {
+    const reportComments = {
+      [nameComment]: valueComment,
+      [nameCommentIntern]: valueCommentIntern,
+    };
+    try {
+      await ReportsAPI.update(idReport, reportComments);
+      toast.success(
+        "Commentaires mis à jour"
+      );
+      fetchReport(idReport);
+    } catch (e) {
+      console.log(e);
+      console.log(e.response);
+      toast.error(
+        "Une erreur est survenue lors de la mise à jour des commentaires"
+      );
+    }
   };
 
   return (
@@ -40,7 +63,7 @@ const ReportComment = ({
           </div>
         </div>
         <Button
-          onClick={handleSubmitComment}
+          onClick={handleSubmitComments}
           className="btn btn-info offset-10 col-2 mb-4 mt-3"
           text="Valider les commentaires"
           type="button"
