@@ -90,7 +90,7 @@ const DetailProjectPage = ({history, match, props}) => {
     const fetchProject = async (id) => {
         try {
             const data = await ProjectsAPI.find(id);
-        if (isMountedRef.currentTarget) {
+        if (isMountedRef.current) {
             setProject(data);
             setLoadingProject(false);
         }
@@ -102,7 +102,7 @@ const DetailProjectPage = ({history, match, props}) => {
     const fetchReports = async () => {
         try {
             const data = await ReportsAPI.findAll();
-            if (isMountedRef.currentTarget) {
+            if (isMountedRef.current) {
                 setReports(data);            
             }
         } catch (error) {
