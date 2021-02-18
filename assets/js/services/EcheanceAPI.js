@@ -17,12 +17,6 @@ function findEcheance(id) {
   return echeance;
 }
 
-function findByReport(idReport) {
-  return axios
-    .get(REPORT_API+"/"+idReport+"/echeances")
-    .then((response) => response.data["hydra:member"]);
-}
-
 function create(echeance) {
   return axios.post(ECHEANCE_API, echeance);
 }
@@ -34,7 +28,6 @@ function update(id, echeance) {
 export default {
   create,
   findAll,
-  findByReport,
   findEcheance,
   update,
 };
