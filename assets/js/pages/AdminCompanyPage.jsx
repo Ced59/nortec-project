@@ -58,7 +58,7 @@ const AdminCompanyPage = ({ history, match, props }) => {
       setCompany(data);
       setLoading(false);
     } catch (error) {
-      console.log(error.response);
+      toast.error("Une erreur dans le chargement de l'entreprise")
     }
   };
 
@@ -67,7 +67,7 @@ const AdminCompanyPage = ({ history, match, props }) => {
       const data = await AnnuaireAPI.find(id);
       setContact(data);
     } catch (error) {
-      console.log(error.message);
+      toast.error("Une erreur lors du chargement des contacts")
     }
   };
 
@@ -105,7 +105,6 @@ const AdminCompanyPage = ({ history, match, props }) => {
       setContact(contactModel);
       setContactError(contactErrorModel);
     } catch ({ response }) {
-      console.log(response);
       const { violations } = response.data;
       if (violations) {
         const apiErrors = {};
@@ -127,7 +126,6 @@ const AdminCompanyPage = ({ history, match, props }) => {
       setContactError(contactErrorModel);
       setShowContactModal(false);
     } catch ({ response }) {
-      console.log(response);
       const { violations } = response.data;
       if (violations) {
         const apiErrors = {};
@@ -148,7 +146,7 @@ const AdminCompanyPage = ({ history, match, props }) => {
       toast.success("Le contact a bien été supprimé");
       setShowContactModal(false);
     } catch ({ response }) {
-      console.log(response);
+      toast.error("Le contact n'a pas été supprimé")
     }
   };
 
@@ -181,7 +179,6 @@ const AdminCompanyPage = ({ history, match, props }) => {
 
         setError(apiErrors);
       }
-      console.log(response);
     }
   };
 

@@ -49,7 +49,7 @@ const DetailProjectPage = ({history, match, props}) => {
         adresse2: "",
         codePostal: "",
         dateDebut: "",
-        dateFinReelle: "1900-01-01",
+        dateFinReelle: "",
         nomMOEX: "",
         nomOPC: "",
         contactClient: "",
@@ -91,7 +91,7 @@ const DetailProjectPage = ({history, match, props}) => {
             setProject(data);
             setLoadingProject(false);
         } catch (error) {
-            console.log(error.response);
+            toast.error("Une erreur est survenue lors du chargement du projet")
         }
     };
 
@@ -101,7 +101,7 @@ const DetailProjectPage = ({history, match, props}) => {
 
             setReports(data);
         } catch (error) {
-            console.log(error.response);
+            toast.error("Une erreur est survenue lors du chargement des rapports")
         }
     };
 
@@ -162,7 +162,7 @@ const DetailProjectPage = ({history, match, props}) => {
             history.replace("/project/" + id + "/" + idNewReport + "/echeances");
             toast.success("Nouveau rapport créé");
         } catch (error) {
-            console.log(error);
+            toast.error("Une erreur est survenue lors de la création du rapport")
         }
     };
 
@@ -197,7 +197,6 @@ const DetailProjectPage = ({history, match, props}) => {
                 toast.success("La date a bien été ajoutée.");
                 setEdit(false);
             } catch (error) {
-                console.log(error);
                 toast.error("Une erreur est survenue pendant l'ajout de la date.");
             }
         } else {
@@ -233,10 +232,6 @@ const DetailProjectPage = ({history, match, props}) => {
             setEdit(false);
         } catch ({response}) {
             toast.error("Un problème est survenu pendant la mise à jour du projet.");
-            console.log(id);
-            console.log(project);
-            console.log(error);
-            console.log(response);
         }
     };
 
