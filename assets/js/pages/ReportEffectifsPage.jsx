@@ -11,8 +11,10 @@ import { Modal } from "react-bootstrap";
 import Field from "../components/forms/Field";
 import EcheanceAPI from "../services/EcheanceAPI";
 import { toast } from "react-toastify";
+import useIsMountedRef from "../components/UseIsMountedRef";
 
 const ReportEffectifsPage = ({ match }) => {
+  const isMountedRef = useIsMountedRef();
   const NavbarLeftWithRouter = withRouter(NavbarLeft);
   const urlParams = match.params;
 
@@ -25,7 +27,9 @@ const ReportEffectifsPage = ({ match }) => {
   const fetchReport = async (id) => {
     try {
       const data = await ReportsAPI.findReport(id);
-      setReport(data);
+      if (isMountedRef.current) {
+        setReport(data);
+      }
     } catch (error) {
       toast.error("Erreur lors du chargement du raport");
       console.log(error.response);
@@ -35,8 +39,10 @@ const ReportEffectifsPage = ({ match }) => {
   const fetchProject = async (id) => {
     try {
       const data = await ProjectsAPI.find(id);
-      setProject(data);
-      setLoading(false);
+      if (isMountedRef.current) {
+        setProject(data);
+        setLoading(false);
+      }
     } catch (error) {
       toast.error("Erreur lors du chargement du projet");
       console.log(error.respose);
@@ -46,7 +52,9 @@ const ReportEffectifsPage = ({ match }) => {
   const fetchEcheance = async (id) => {
     try {
       const data = await EcheanceAPI.findEcheance(id);
-      setEcheance(data);
+      if (isMountedRef.current) {
+        setEcheance(data);
+      }
     } catch (error) {
       toast.error("Erreur lors du chargement de l'échéance");
       console.log(error.repose);
@@ -90,7 +98,6 @@ const ReportEffectifsPage = ({ match }) => {
         <NavbarLeftWithRouter selected="effectifs" />
 
         {!loading && (
-          <>
             <div className="page-content">
               <h2>Effectifs : </h2>
               <h4>Rédacteur : {report.redacteur}</h4>
@@ -147,7 +154,6 @@ const ReportEffectifsPage = ({ match }) => {
                 <p>Il n'y a pas d'effectif défini pour ce rapport</p>
               )}
             </div>
-          </>
         )}
         {loading && <div id="loading-icon"> </div>}
       </main>

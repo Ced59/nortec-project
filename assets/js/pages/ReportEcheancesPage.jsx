@@ -12,7 +12,10 @@ import EcheanceAPI from "../services/EcheanceAPI";
 import { toast } from "react-toastify";
 import AddEcheanceModal from "../components/modal/AddEcheanceModal";
 import SpanStatusEcheance from "../components/span/SpanStatusEcheance";
+import useIsMountedRef from "../components/UseIsMountedRef";
+
 const ReportEcheancesPage = ({ match }) => {
+  const isMountedRef = useIsMountedRef();
   const NavbarLeftWithRouter = withRouter(NavbarLeft);
 
   const [showModalDetail, setShowModalDetail] = useState(false);
@@ -38,8 +41,10 @@ const ReportEcheancesPage = ({ match }) => {
   const fetchProject = async (id) => {
     try {
       const data = await ProjectsAPI.find(id);
-      setProject(data);
-      setLoading(false);
+      if (isMountedRef.current) {
+        setProject(data);
+        setLoading(false);
+      }
     } catch (error) {
       toast.error("Erreur lors du chargement du projet");
       console.log(error.response);
@@ -49,7 +54,9 @@ const ReportEcheancesPage = ({ match }) => {
   const fetchEcheance = async (id) => {
     try {
       const data = await EcheanceAPI.findEcheance(id);
-      setEcheanceDetail(data);
+      if (isMountedRef.current) {
+        setEcheanceDetail(data);
+      }
     } catch (error) {
       toast.error("Erreur lors du chargement de l'échéance");
       console.log(error.response);

@@ -10,8 +10,10 @@ import ProjectsAPI from "../services/ProjectsAPI";
 import PhotoAPI from "../services/PhotoAPI";
 import ReportResume from "../components/ReportResume";
 import SendPdfToAnnuaireModal from "../components/modal/SendPdfToAnnuaireModal";
+import useIsMountedRef from "../components/UseIsMountedRef";
 
 const ReportValidatePage = ({ match }) => {
+  const isMountedRef = useIsMountedRef();
   const urlParams = match.params;
   const [report, setReport] = useState({});
   const [project, setProject] = useState({});
@@ -25,25 +27,30 @@ const ReportValidatePage = ({ match }) => {
   const fetchReport = async (id) => {
     try {
       const data = await ReportsAPI.findReport(id);
-      setReport(data);
-      setReportLoading(false);
+      if (isMountedRef.current) {
+        setReport(data);
+        setReportLoading(false);
+      }
     } catch (error) {}
   };
 
   const fetchProject = async (id) => {
     try {
       const data = await ProjectsAPI.find(id);
-      setProject(data);
-
-      setLoading(false);
+      if (isMountedRef.current) {
+        setProject(data);
+        setLoading(false);
+      }
     } catch (error) {}
   };
 
   const fetchPhotos = async () => {
     try {
       const data = await PhotoAPI.findByReport(urlParams.idReport);
-      setPhotos(data);
-      setPhotoLoading(false);
+      if (isMountedRef.current) {
+        setPhotos(data);
+        setPhotoLoading(false);
+      }
     } catch (error) {}
   };
 
