@@ -9,17 +9,18 @@ import Pagination from '@material-ui/lab/Pagination';
 import pagination_configs, {
     ADMIN_USERS_PAGE_PAGINATION_ITEMS_PER_PAGE
 } from "../components/configs/pagination_configs";
+import useIsMountedRef from '../components/UseIsMountedRef';
 
 
 const AdminUsersPage = () => {
-
+    const isMountedRef = useIsMountedRef();
     const [users, setUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(true);
 
 
     useEffect(() => {
-        fetchUsers().then(r => "");
+        fetchUsers();
     }, []);
 
 
@@ -28,8 +29,10 @@ const AdminUsersPage = () => {
     const fetchUsers = async () => {
         try {
             const data = await UserApi.findAll();
-            setUsers(data);
-            setLoading(false);
+            if (isMountedRef.current) {
+                setUsers(data);
+                setLoading(false);
+            }
         } catch (error) {
             toast.error("Erreur lors du chargement de la liste des utilisateurs");
         }

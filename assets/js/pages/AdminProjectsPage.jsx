@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import DateAPI from "../services/DateAPI";
-import AuthAPI from "../services/AuthAPI";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import ProjectsAPI from "../services/ProjectsAPI";
@@ -12,30 +11,33 @@ import "../../css/loading-icon.css";
 import Pagination from "@material-ui/lab/Pagination";
 import pagination_configs, {
   ADMIN_PROJECTS_PAGE_PAGINATION_ITEMS_PER_PAGE,
-  ADMIN_USERS_PAGE_PAGINATION_ITEMS_PER_PAGE,
 } from "../components/configs/pagination_configs";
+import useIsMountedRef from "../components/UseIsMountedRef";
 const AdminProjectsPage = () => {
+  const isMountedReF = useIsMountedRef();
   const [projects, setProjects] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [userId] = useState(AuthAPI.getUserId());
-
-  useEffect(() => {
-    fetchProjects().then((r) => "");
-  }, []);
 
   // --------------------------- Récupérer tout les Utilisateurs -----------------------------------------
 
   const fetchProjects = async () => {
     try {
       const data = await ProjectsAPI.findAll();
-      setProjects(data);
-      setLoading(false);
+      if (isMountedReF.current) {
+        setProjects(data);
+        setLoading(false);
+      }
     } catch (error) {
       toast.error("Erreur lors du chargement de la liste des projets");
+      console.log(error);
       console.log(error.response);
     }
   };
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
 
   // ----------------------------- Mise en place de la pagination ------------------------------------------
 
@@ -55,24 +57,17 @@ const AdminProjectsPage = () => {
     <main className="container">
       <div className="mb-4 d-flex justify-content-between align-items-center">
         <Link className="btn btn-danger" to={"/admin"}>
-          {" "}
-          Retour{" "}
+          Retour
         </Link>
         <h2> Projets : </h2>
-
-        <Link
-          className="btn btn-primary"
-          to={"/admin/project/new"}
-        >
-          {" "}
-          Nouveau Projet{" "}
+        <Link className="btn btn-primary" to={"/admin/project/new"}>
+          Nouveau Projet
         </Link>
       </div>
       <table className="table table-hover">
         <thead>
           <tr>
             <th className="text-center">Numéro Projet</th>
-            <th>MOEX</th>
             <th className="text-center">Statut</th>
             <th>Nom Projet</th>
             <th className="text-center">Date début</th>
@@ -86,7 +81,6 @@ const AdminProjectsPage = () => {
             {paginationConfig.paginatedItems.map((project) => (
               <tr key={project.id}>
                 <td className="text-center">{project.id}</td>
-                <td>{project.nomMOEX}</td>
                 <td className="text-center">
                   <span
                     className={
@@ -127,8 +121,7 @@ const AdminProjectsPage = () => {
                     className="btn btn-primary"
                     to={"/admin/project/" + project.id}
                   >
-                    {" "}
-                    Modifier{" "}
+                    Modifier
                   </Link>
                 </td>
               </tr>

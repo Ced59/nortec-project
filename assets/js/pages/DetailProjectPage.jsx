@@ -17,8 +17,10 @@ import ReportsAPI from "../services/ReportsAPI";
 import LotModal from "../components/modal/LotModal";
 import EcheanceModal from "../components/modal/EcheanceModal";
 import EcheanceAPI from "../services/EcheanceAPI";
+import useIsMountedRef from "../components/UseIsMountedRef";
 
 const DetailProjectPage = ({history, match, props}) => {
+    const isMountedRef = useIsMountedRef();
     const {id} = match.params;
 
     const [error, setError] = useState({
@@ -88,8 +90,10 @@ const DetailProjectPage = ({history, match, props}) => {
     const fetchProject = async (id) => {
         try {
             const data = await ProjectsAPI.find(id);
+        if (isMountedRef.current) {
             setProject(data);
             setLoadingProject(false);
+        }
         } catch (error) {
             toast.error("Une erreur est survenue lors du chargement du projet")
         }
@@ -98,10 +102,16 @@ const DetailProjectPage = ({history, match, props}) => {
     const fetchReports = async () => {
         try {
             const data = await ReportsAPI.findAll();
-
-            setReports(data);
+            if (isMountedRef.current) {
+                setReports(data);            
+            }
         } catch (error) {
+<<<<<<< HEAD
             toast.error("Une erreur est survenue lors du chargement des rapports")
+=======
+            console.log(error);
+            console.log(error.response);
+>>>>>>> c081d6daff4b9aa9bbd29f5fde81ffc213393e31
         }
     };
 
@@ -164,12 +174,6 @@ const DetailProjectPage = ({history, match, props}) => {
         } catch (error) {
             toast.error("Une erreur est survenue lors de la création du rapport")
         }
-    };
-
-    const handleChange = ({currentTarget}) => {
-        const {name, value} = currentTarget;
-        setProject({...project, [name]: value});
-        console.log(value);
     };
 
     const addFinPrevue = async (e) => {
