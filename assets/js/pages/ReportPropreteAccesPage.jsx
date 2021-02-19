@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { withRouter } from "react-router-dom";
 import NavbarLeft from "../components/navbars/NavbarLeft";
 import Button from "../components/forms/Button";
@@ -10,51 +10,59 @@ import ReportComment from "../components/ReportComment";
 import ReportAddPhoto from "../components/ReportAddPhoto";
 import CardConformity from "../components/CardConformity";
 import ImputationTitle from "../components/wrapper/ImputationTitle";
+import useIsMountedRef from "../components/UseIsMountedRef";
 
 const ReportPropreteAccesPage = ({ match }) => {
-  const urlParams = match.params;
   const [conforme, setConforme] = useState("noconform");
-  const [tempImputations, setTempImputations] = useState([]);
+  const NavbarLeftWithRouter = withRouter(NavbarLeft);
   const [imputations, setImputations] = useState([]);
-  const [report, setReport] = useState({});
   const [loading, setLoading] = useState(true);
   const [editImput, setEditImput] = useState();
-  const NavbarLeftWithRouter = withRouter(NavbarLeft);
+  const [report, setReport] = useState({});
+  const isMountedRef = useIsMountedRef();
+  const imputationsRef = useRef([]);
+  const urlParams = match.params;
 
   // -------------------------------------------------------function------------------------------------------------
 
   const fetchReport = async (id) => {
+    imputationsRef.current = [];
     try {
       const data = await ReportsAPI.findReport(id);
-      setReport(data);
-      setLoading(false);
-      setTempImputations([]);
-      setImputations([]);
-      setConforme(data.propreteAccessConformity);
-      // --------------set imputations-------------
-      if (data.propreteAccessImputation == 0) {
-        setEditImput(false);
-        data.Project.lots.map((imput) =>
-          tempImputations.push({
-            companyName: imput.company.nom,
-            company: "/api/companies/" + imput.company.id,
-            report: "/api/reports/" + urlParams.idReport,
-            pourcent: 0,
-          })
-        );
-        setImputations(tempImputations);
-      } else {
-        setEditImput(true);
-        data.propreteAccessImputation.map((imput) =>
-          tempImputations.push({
-            idImput: imput.id,
-            companyName: imput.company.nom,
-            company: "/api/companies/" + imput.company.id,
-            report: "/api/reports/" + urlParams.idReport,
-            pourcent: imput.pourcent,
-          })
-        );
-        setImputations(tempImputations);
+      if (isMountedRef.current) {
+        setReport(data);
+        setLoading(false);
+        setConforme(data.propreteAccessConformity);
+        // ----------------------------------------------create new imputations-------------
+        if (data.propreteAccessImputation == 0) {
+          setEditImput(false);
+          imputationsRef.current = data.Project.lots.map((imput) =>
+            JSON.stringify({
+              companyName: imput.company.nom,
+              company: "/api/companies/" + imput.company.id,
+              report: "/api/reports/" + urlParams.idReport,
+              pourcent: 0,
+            })
+          );
+          imputationsRef.current = [...new Set(imputationsRef.current)];
+          imputationsRef.current = imputationsRef.current.map((imputation) =>
+            JSON.parse(imputation)
+          );
+          setImputations(imputationsRef.current);
+          // ----------------------------------------------format existing imputations-------------
+        } else {
+          setEditImput(true);
+          imputationsRef.current = data.propreteAccessImputation.map(
+            (imput) => ({
+              idImput: imput.id,
+              companyName: imput.company.nom,
+              company: "/api/companies/" + imput.company.id,
+              report: "/api/reports/" + urlParams.idReport,
+              pourcent: imput.pourcent,
+            })
+          );
+          setImputations(imputationsRef.current);
+        }
       }
       // ---------------------------------------------
     } catch (error) {
@@ -78,7 +86,9 @@ const ReportPropreteAccesPage = ({ match }) => {
     } catch (e) {
       console.log(e);
       console.log(e.response);
-      toast.error("Une erreur est survenue lors de la mise à jour de la conformité");
+      toast.error(
+        "Une erreur est survenue lors de la mise à jour de la conformité"
+      );
     }
   };
 
@@ -128,10 +138,8 @@ const ReportPropreteAccesPage = ({ match }) => {
               <ReportImputation
                 setLoading={setLoading}
                 setImputations={setImputations}
-                setTempImputations={setTempImputations}
                 imputations={imputations}
                 editImput={editImput}
-                setEditImput={setEditImput}
                 fetchReport={fetchReport}
                 urlParams={urlParams}
                 api={"propreteAcces"}

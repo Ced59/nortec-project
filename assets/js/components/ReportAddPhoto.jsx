@@ -4,21 +4,23 @@ import MediaUploadAPI from "../services/MediaUploadAPI";
 import PhotoAPI from "../services/PhotoAPI";
 import Button from "../components/forms/Button";
 import { toast } from "react-toastify";
+import useIsMountedRef from "../components/UseIsMountedRef";
 
 const ReportAddPhoto = ({ reportID, typePhoto }) => {
+  const isMountedRef = useIsMountedRef();
   const [picture, setPicture] = useState([]);
   const [photos, setPhotos] = useState([]);
 
-  const [photo, setPhoto] = useState({
+  const photo = {
     Report: "",
     link: "",
     type: typePhoto,
-  });
+  };
 
   const fetchPhotos = async () => {
     try {
       const data = await PhotoAPI.findByReport(reportID);
-      setPhotos(data);
+      isMountedRef.current && setPhotos(data);
     } catch (error) {
       console.log(error);
     }
