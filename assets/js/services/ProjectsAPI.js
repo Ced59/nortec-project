@@ -1,14 +1,9 @@
 import axios from "axios";
-import {DATE_FIN_PREVUE_API, PROJECTS_API, COMPANY_API, LOT_API} from "../components/configs/api_links_config";
+import {DATE_FIN_PREVUE_API, PROJECTS_API, LOT_API} from "../components/configs/api_links_config";
 
 function findAll() {
 
     return axios.get(PROJECTS_API).then(response => response.data['hydra:member'])
-}
-
-function findAllCompany() {
-
-    return axios.get(COMPANY_API).then(response => response.data['hydra:member'])
 }
 
 function find(id) {
@@ -39,6 +34,11 @@ function addLotProject(lotToAdd) {
     return axios.post(LOT_API, lotToAdd);
 }
 
+// -----------------------subressources
+function getReports(id){
+    return axios.get(PROJECTS_API + "/" + id +"/reports").then(response => response.data['hydra:member']);
+}
+
 export default {
     find,
     update,
@@ -46,5 +46,5 @@ export default {
     findAll,
     addFinPrevueProject,
     addLotProject,
-    findAllCompany
+    getReports
 }

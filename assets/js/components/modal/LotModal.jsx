@@ -9,6 +9,7 @@ import Select from "../forms/Select";
 import { toast } from "react-toastify";
 import useClippy from "use-clippy";
 import useIsMountedRef from "../UseIsMountedRef";
+import CompanyAPI from "../../services/CompanyAPI";
 
 const LotModal = ({ loadingProject, project, fetchProject }) => {
   const isMountedRef = useIsMountedRef();
@@ -46,7 +47,7 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
 
   const fetchCompany = async () => {
     try {
-      const data = await ProjectsAPI.findAllCompany();
+      const data = await CompanyAPI.findAll();
       isMountedRef.current && setCompanies(data);
     } catch (error) {
       console.log(error.response);
@@ -58,7 +59,7 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
     setAddLot(false);
     setShowLotDetail(false);
     if (showLotModal) {
-      fetchCompany().then((r) => "");
+      fetchCompany();
     } else {
       setLots(lotsModel);
     }
