@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { withRouter } from "react-router-dom";
 import NavbarLeft from "../components/navbars/NavbarLeft";
 import Button from "../components/forms/Button";
@@ -10,57 +10,66 @@ import ReportComment from "../components/ReportComment";
 import ReportAddPhoto from "../components/ReportAddPhoto";
 import CardConformity from "../components/CardConformity";
 import ImputationTitle from "../components/wrapper/ImputationTitle";
+import useIsMountedRef from "../components/UseIsMountedRef";
 
 const ReportPropretePartiesCommunesPage = ({ match }) => {
   const [conforme, setConforme] = useState(false);
-  const [report, setReport] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [imputations, setImputations] = useState("");
-  const [tempImputations, setTempImputations] = useState([]);
-  const [editImput, setEditImput] = useState();
-  const urlParams = match.params;
   const NavbarLeftWithRouter = withRouter(NavbarLeft);
+  const [imputations, setImputations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [editImput, setEditImput] = useState();
+  const [report, setReport] = useState({});
+  const isMountedRef = useIsMountedRef();
+  const imputationsRef = useRef([]);
+  const urlParams = match.params;
 
   // -------------------------------------------------function-------------------------------------------------------
 
   const fetchReport = async (id) => {
+    imputationsRef.current = [];
     try {
       const data = await ReportsAPI.findReport(id);
-      setReport(data);
-      setLoading(false);
-      setTempImputations([]);
-      setImputations([]);
-      setConforme(data.propreteCommuneConformity);
-      // --------------set imputations-------------
-      if (data.propreteCommuneImputations == 0) {
-        setEditImput(false);
-        data.Project.lots.map((imput) =>
-          tempImputations.push({
-            companyName: imput.company.nom,
-            company: "/api/companies/" + imput.company.id,
-            report: "/api/reports/" + urlParams.idReport,
-            commentaire: "",
-            percent: 0,
-          })
-        );
-        setImputations(tempImputations);
-      } else {
-        setEditImput(true);
-        data.propreteCommuneImputations.map((imput) =>
-          tempImputations.push({
-            idImput: imput.id,
-            companyName: imput.company.nom,
-            company: "/api/companies/" + imput.company.id,
-            report: "/api/reports/" + urlParams.idReport,
-            commentaire: imput.commentaire,
-            percent: imput.percent,
-          })
-        );
-        setImputations(tempImputations);
+      if (isMountedRef.current) {
+        setReport(data);
+        setLoading(false);
+        setConforme(data.propreteCommuneConformity);
+        // ----------------------------------------------create new imputations-------------
+        if (data.propreteCommuneImputations == 0) {
+          setEditImput(false);
+          imputationsRef.current = data.Project.lots.map((imput) =>
+            JSON.stringify({
+              companyName: imput.company.nom,
+              company: "/api/companies/" + imput.company.id,
+              report: "/api/reports/" + urlParams.idReport,
+              commentaire: "",
+              percent: 0,
+            })
+          );
+          imputationsRef.current = [...new Set(imputationsRef.current)];
+          imputationsRef.current = imputationsRef.current.map((imputation) =>
+            JSON.parse(imputation)
+          );
+          setImputations(imputationsRef.current);
+          // ----------------------------------------------format existing imputations-------------
+        } else {
+          setEditImput(true);
+          imputationsRef.current = data.propreteCommuneImputations.map(
+            (imput) => ({
+              idImput: imput.id,
+              companyName: imput.company.nom,
+              company: "/api/companies/" + imput.company.id,
+              report: "/api/reports/" + urlParams.idReport,
+              commentaire: imput.commentaire,
+              percent: imput.percent,
+            })
+          );
+          setImputations(imputationsRef.current);
+        }
       }
       // ---------------------------------------------
     } catch (error) {
       toast.error("Erreur lors du chargement du rapport");
+      console.log(error);
       console.log(error.response);
     }
   };
@@ -121,10 +130,8 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
               <ReportImputation
                 setLoading={setLoading}
                 setImputations={setImputations}
-                setTempImputations={setTempImputations}
                 imputations={imputations}
                 editImput={editImput}
-                setEditImput={setEditImput}
                 fetchReport={fetchReport}
                 urlParams={urlParams}
                 api={"propreteCommun"}

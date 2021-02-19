@@ -9,9 +9,7 @@ import { toast } from "react-toastify";
 const ReportImputation = ({
   setLoading,
   editImput,
-  setEditImput,
   setImputations,
-  setTempImputations,
   imputations,
   fetchReport,
   urlParams,
@@ -44,32 +42,29 @@ const ReportImputation = ({
     setImputations(copyImputations);
   };
 
+  const imputationsSent = () => {
+          toast.success(!editImput?"Imputations créées":"Imputations misent à jour");
+          fetchReport(urlParams.idReport);
+  };
+
   const handleSubmitImput = () => {
+    console.log(imputations);
     setLoading(true);
     try {
-      imputations.map(async (imput) => {
-        if (!editImput) {
-          try {
-            await create[api](imput);
-            setEditImput(true);
-            setTempImputations([]);
-            toast.success("Imputation créée");
-          } catch (error) {
-            console.log(error.response);
-          }
-        } else {
-          try {
-            await update[api](imput, imput.idImput);
-            toast.success("Imputation mit à jour");
-          } catch (error) {
-            console.log(error.response);
-          }
-        }
-      });
-    } catch (error) {
-      console.log(error);
+      if (!editImput) {
+        Promise.all(
+          imputations.map(async (imput) => await create[api](imput))
+        ).then(imputationsSent());
+      } else {
+        Promise.all(
+          imputations.map(
+            async (imput) => await update[api](imput, imput.idImput))
+        ).then(imputationsSent());
+      }
+    } catch (e) {
+      console.log(e);
+      console.log(e.response);
     }
-    fetchReport(urlParams.idReport);
   };
 
   // -------------------------------------------------template------------------------------------------

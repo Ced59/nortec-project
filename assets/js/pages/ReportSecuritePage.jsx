@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { withRouter } from "react-router-dom";
 import NavbarLeft from "../components/navbars/NavbarLeft";
 import Button from "../components/forms/Button";
@@ -10,56 +10,65 @@ import ReportComment from "../components/ReportComment";
 import ReportAddPhoto from "../components/ReportAddPhoto";
 import CardConformity from "../components/CardConformity";
 import ImputationTitle from "../components/wrapper/ImputationTitle";
+import useIsMountedRef from "../components/UseIsMountedRef";
 
 const ReportSecuritePage = ({ match }) => {
-  const NavbarLeftWithRouter = withRouter(NavbarLeft);
   const [conforme, setConforme] = useState(false);
+  const NavbarLeftWithRouter = withRouter(NavbarLeft);
   const [imputations, setImputations] = useState([]);
-  const [tempImputations, setTempImputations] = useState([]);
-  const [editImput, setEditImput] = useState();
-  const urlParams = match.params;
-  const [report, setReport] = useState({});
   const [loading, setLoading] = useState(true);
+  const [editImput, setEditImput] = useState();
+  const [report, setReport] = useState({});
+  const isMountedRef = useIsMountedRef();
+  const imputationsRef = useRef([]);
+  const urlParams = match.params;
 
   // ------------------------------------------------------function------------------------------------------------------
 
   const fetchReport = async (id) => {
-    setTempImputations([]);
-    setImputations([]);
+    imputationsRef.current = [];
     try {
       const data = await ReportsAPI.findReport(id);
-      setReport(data);
-      setLoading(false);
-      setConforme(data.securityConformity);
-      // --------------set imputations-------------
-      if (data.securityCommentImputations == 0) {
-        setEditImput(false);
-        data.Project.lots.map((imput) =>
-          tempImputations.push({
-            companyName: imput.company.nom,
-            company: "/api/companies/" + imput.company.id,
-            report: "/api/reports/" + urlParams.idReport,
-            commentaire: "",
-          })
-        );
-        setImputations(tempImputations);
-      } else {
-        setEditImput(true);
-        data.securityCommentImputations.map((imput) =>
-          tempImputations.push({
-            idImput: imput.id,
-            companyName: imput.company.nom,
-            company: "/api/companies/" + imput.company.id,
-            report: "/api/reports/" + urlParams.idReport,
-            commentaire: imput.commentaire,
-          })
-        );
-        setImputations(tempImputations);
+      if (isMountedRef.current) {
+        setReport(data);
+        setLoading(false);
+        setConforme(data.securityConformity);
+        // ----------------------------------------------create new imputations-------------
+        if (data.securityCommentImputations == 0) {
+          setEditImput(false);
+          imputationsRef.current = data.Project.lots.map((imput) =>
+            JSON.stringify({
+              companyName: imput.company.nom,
+              company: "/api/companies/" + imput.company.id,
+              report: "/api/reports/" + urlParams.idReport,
+              commentaire: "",
+            })
+          );
+          imputationsRef.current = [...new Set(imputationsRef.current)];
+          imputationsRef.current = imputationsRef.current.map((imputation) =>
+            JSON.parse(imputation)
+          );
+          setImputations(imputationsRef.current);
+          // ----------------------------------------------format existing imputations-------------
+        } else {
+          setEditImput(true);
+          imputationsRef.current = data.securityCommentImputations.map(
+            (imput) => ({
+              idImput: imput.id,
+              companyName: imput.company.nom,
+              company: "/api/companies/" + imput.company.id,
+              report: "/api/reports/" + urlParams.idReport,
+              commentaire: imput.commentaire,
+            })
+          );
+          setImputations(imputationsRef.current);
+        }
       }
-      // ---------------------------------------------
+      // ----------------------------------------------end imputations-------------
     } catch (error) {
       toast.error("Erreur lors du chargement du rapport");
       console.log(error);
+      console.log(error.response);
     }
   };
 
@@ -118,10 +127,8 @@ const ReportSecuritePage = ({ match }) => {
                 <ReportImputation
                   setLoading={setLoading}
                   setImputations={setImputations}
-                  setTempImputations={setTempImputations}
                   imputations={imputations}
                   editImput={editImput}
-                  setEditImput={setEditImput}
                   fetchReport={fetchReport}
                   urlParams={urlParams}
                   api={"securite"}
