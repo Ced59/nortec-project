@@ -4,13 +4,8 @@ import DateAPI from "../services/DateAPI";
 import { Link } from "react-router-dom";
 import useIsMountedRef from "../components/UseIsMountedRef";
 import ProjectsAPI from "../services/ProjectsAPI";
+import { STATUS_REPORT_LABELS } from "../components/ReportStatus";
 
-const STATUS_REPORT_LABELS = {
-  clotured: "Clôturé non envoyé",
-  in_progress: "En cours de rédaction",
-  sent: "Clôturé envoyé",
-  validating: "En attente de validation",
-};
 
 const ListReportsByProject = ({ match }) => {
   const isMountedRef = useIsMountedRef();

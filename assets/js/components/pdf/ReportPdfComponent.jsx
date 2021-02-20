@@ -65,7 +65,9 @@ const ReportPdfComponent = ({ report, project, photos }) => {
             </Text>
             <Text style={styles.text}>{"Ville : " + report.Project.ville}</Text>
           </View>
-          <Image style={styles.projectImage} src={project.photo}></Image>
+          <View>
+            <Image style={styles.projectImage} src={project.photo}></Image>
+          </View>
           <View style={styles.sectionBorder}>
             <Text style={styles.text}>{"Maitre d'ouvrage : "}</Text>
             <Text style={styles.text}>
@@ -181,11 +183,7 @@ const ReportPdfComponent = ({ report, project, photos }) => {
                   <View key={proprete.id}>
                     {proprete.pourcent != 0 && (
                       <View style={styles.listEffectifs}>
-                        <Text
-                          style={[
-                            styles.textEffectifsNomEntreprise
-                          ]}
-                        >
+                        <Text style={[styles.textEffectifsNomEntreprise]}>
                           {proprete.company.nom +
                             " :  " +
                             proprete.pourcent +

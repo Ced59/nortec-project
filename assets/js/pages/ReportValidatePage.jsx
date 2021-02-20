@@ -11,6 +11,7 @@ import PhotoAPI from "../services/PhotoAPI";
 import ReportResume from "../components/ReportResume";
 import SendPdfToAnnuaireModal from "../components/modal/SendPdfToAnnuaireModal";
 import useIsMountedRef from "../components/UseIsMountedRef";
+import { toast } from "react-toastify";
 
 const ReportValidatePage = ({ match }) => {
   const isMountedRef = useIsMountedRef();
@@ -31,7 +32,10 @@ const ReportValidatePage = ({ match }) => {
         setReport(data);
         setReportLoading(false);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+      console.log(error.respose);
+    }
   };
 
   const fetchProject = async (id) => {
@@ -66,6 +70,22 @@ const ReportValidatePage = ({ match }) => {
       <ReportPdfComponent report={report} />,
       "../reportPDF/projet" + report.Project.id + "rapport" + report.id + ".pdf"
     );
+  };
+
+  const handleChangeStatus = async ({ currentTarget }) => {
+    const reportStatus = { status: currentTarget.name };
+    console.log(reportStatus);
+    try {
+      await ReportsAPI.update(report.id, reportStatus);
+      toast.success("Le satus du rapport à bien été modifié");
+      fetchReport(urlParams.idReport);
+    } catch (error) {
+      console.log(error);
+      console.log(error.respose);
+      toast.error(
+        "Une erreur est survenue lors du changement de status du rapport"
+      );
+    }
   };
 
   return (
@@ -121,12 +141,15 @@ const ReportValidatePage = ({ match }) => {
           )}
 
           <div className="row ml-2 mt-4 d-flex justify-content-between mb-3">
-            <Button
-              text="Valider"
-              className="btn btn-primary mr-4"
-              type="button"
-              onClick={handleSavePDF}
-            />
+            {report.status !== "clotured" && (
+              <Button
+                text="Valider"
+                className="btn btn-primary mr-4"
+                type="button"
+                name="clotured"
+                onClick={handleChangeStatus}
+              />
+            )}
             <SendPdfToAnnuaireModal
               lots={report.Project.lots}
               users={project.users}
@@ -135,11 +158,14 @@ const ReportValidatePage = ({ match }) => {
               project={project}
               report={report}
               photos={photos}
+              handleChangeStatus={handleChangeStatus}
             />
             <Button
               text="Faire valider par Admin"
               className="btn btn-primary mr-4"
               type="button"
+              name="validating"
+              onClick={handleChangeStatus}
             />
             <Link
               className="btn btn-primary"
