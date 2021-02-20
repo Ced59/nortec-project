@@ -102,10 +102,7 @@ const styles = StyleSheet.create({
       fontSize: 8,
     },
     flexAlignBetween: {
-      height: 300,
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "space-around",
+      height: 300
     },
     projectImage: {
       width: "60%",

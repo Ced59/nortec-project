@@ -4,6 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
 import CompanyAPI from "../../services/CompanyAPI";
 import MailAPI from "../../services/MailAPI";
+import ReportsAPI from "../../services/ReportsAPI";
 import Button from "../forms/Button";
 import ReportPdfComponent from "../pdf/ReportPdfComponent";
 
@@ -89,6 +90,8 @@ const SendPdfToAnnuaireModal = ({
       try {
         const data = formData;
         MailAPI.sendPDF(data).then((r) => {
+          const reportStatus={status:"sent"};
+          ReportsAPI.update(report.id,reportStatus);
           toast.success("Emails envoyés");
         });
       } catch (e) {
@@ -291,7 +294,7 @@ const SendPdfToAnnuaireModal = ({
         </Modal.Body>
       </Modal>
       <Button
-        text="Clôturer et envoyer"
+        text={report.status !=="sent" ? "Clôturer et envoyer": "Renvoyer"}
         className="btn btn-primary mr-4"
         type="button"
         onClick={() => setShowModal(!showModal)}
