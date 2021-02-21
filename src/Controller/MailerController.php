@@ -111,4 +111,37 @@ class MailerController extends AbstractController
 
         return $this->json(['send'=>$emailEnvoye]);
     }
+
+    /**
+     * @Route("/api/adminValidation")
+     */
+    public function adminValidation (MailerInterface $mailer)
+    {
+        $nomProjet = $_POST['projectName'];
+        $chronoRapport = $_POST['reportChrono'];
+        $reportLink=$_POST['reportLink'];
+        $destinataires = $_POST['destinataires'];
+        $destinataires = explode(',', $destinataires);
+
+        try {
+            for ($i = 0; $i < count($destinataires); $i++) {
+                $email = (new Email())
+                    ->from('notification@deadlines.com')
+                    ->to($destinataires[$i])
+                    ->subject('Deadlines - Rapport n°' . $chronoRapport . ' du project ' . $nomProjet)
+                    ->html('<h1>Project ' . $nomProjet . '</h1>
+                    <p>Le raport n°'.$chronoRapport.' est en attente de validation</p>
+                    <a href='.$reportLink.'>Lien du rapport</a>
+                    ');
+
+                $mailer->send($email);
+            }
+            $emailEnvoye = true;
+        } catch (\Throwable $th) {
+            var_dump(($th));
+            $emailEnvoye = false;
+        }
+
+        return $this->json(['send'=>$emailEnvoye]);
+    }
 }

@@ -12,13 +12,22 @@ function newPassword(data) {
 function sendPDF(data) {
   return axios.post(API_URL + "sendPDF", data, {
     headers: {
-        'Content-Type': 'multipart/form-data'
-    }
-});
+      "Content-Type": "multipart/form-data",
+    },
+  });
+}
+
+function adminValidation(data) {
+  return axios.post(API_URL + "adminValidation", data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 }
 
 export default {
   resetPassword,
   newPassword,
   sendPDF,
+  adminValidation,
 };

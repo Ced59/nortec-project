@@ -12,6 +12,7 @@ import ReportResume from "../components/ReportResume";
 import SendPdfToAnnuaireModal from "../components/modal/SendPdfToAnnuaireModal";
 import useIsMountedRef from "../components/UseIsMountedRef";
 import { toast } from "react-toastify";
+import AdminValidationModal from "../components/modal/AdminValidationModal";
 
 const ReportValidatePage = ({ match }) => {
   const isMountedRef = useIsMountedRef();
@@ -141,7 +142,7 @@ const ReportValidatePage = ({ match }) => {
           )}
 
           <div className="row ml-2 mt-4 d-flex justify-content-between mb-3">
-            {report.status !== "clotured" && (
+            {report.status === "in_progress" && (
               <Button
                 text="Valider"
                 className="btn btn-primary mr-4"
@@ -158,15 +159,22 @@ const ReportValidatePage = ({ match }) => {
               project={project}
               report={report}
               photos={photos}
-              handleChangeStatus={handleChangeStatus}
             />
-            <Button
-              text="Faire valider par Admin"
-              className="btn btn-primary mr-4"
-              type="button"
-              name="validating"
-              onClick={handleChangeStatus}
-            />
+            {report.status !== "sent" && (
+              <AdminValidationModal
+                users={project.users}
+                projectName={project.name}
+                reportChrono={report.chrono}
+                report={report}
+                reportLink={
+                  "https://localhost:8000/#/project/" +
+                  project.id +
+                  "/" +
+                  report.id +
+                  "/validate"
+                }
+              />
+            )}
             <Link
               className="btn btn-primary"
               type="button"
