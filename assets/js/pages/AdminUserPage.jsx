@@ -151,6 +151,7 @@ const AdminUserPage = ({ history, match, props }) => {
       }
     } catch ({ response }) {
       const { violations } = response.data;
+      console.log(response);
       if (violations) {
         const apiErrors = {};
         violations.map(({ propertyPath, message }) => {
