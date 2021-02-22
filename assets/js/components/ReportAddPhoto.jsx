@@ -45,6 +45,7 @@ const ReportAddPhoto = ({ reportID, typePhoto }) => {
           //console.log(report.id.toString());
           photo.Report = "/api/reports/" + reportID;
           photo.link = response.data.contentUrl;
+          photo.image ="/api/media_objects/"+ response.data.id;
           console.log(photo.Report);
           PhotoAPI.create(photo);
           fetchPhotos();
