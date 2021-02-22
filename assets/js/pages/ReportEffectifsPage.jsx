@@ -17,12 +17,13 @@ const ReportEffectifsPage = ({ match }) => {
   const isMountedRef = useIsMountedRef();
   const NavbarLeftWithRouter = withRouter(NavbarLeft);
   const urlParams = match.params;
-
   const [report, setReport] = useState({});
   const [loading, setLoading] = useState(true);
-  const [project, setProject] = useState({});
+  const [lots, setLots] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [echeance, setEcheance] = useState({});
+
+  // ----------------------------------------------------FETCH FUNCTIONS-------------------------------------------------
 
   const fetchReport = async (id) => {
     try {
@@ -31,20 +32,20 @@ const ReportEffectifsPage = ({ match }) => {
         setReport(data);
       }
     } catch (error) {
-      toast.error("Erreur lors du chargement du raport");
+      toast.error("Erreur lors du chargement du rapport");
       console.log(error.response);
     }
   };
 
-  const fetchProject = async (id) => {
+  const fetchLots = async (id) => {
     try {
-      const data = await ProjectsAPI.find(id);
+      const data = await ProjectsAPI.getLots(id);
       if (isMountedRef.current) {
-        setProject(data);
+        setLots(data);
         setLoading(false);
       }
     } catch (error) {
-      toast.error("Erreur lors du chargement du projet");
+      toast.error("Erreur lors du chargement des lots");
       console.log(error.respose);
     }
   };
@@ -61,12 +62,16 @@ const ReportEffectifsPage = ({ match }) => {
     }
   };
 
+  useEffect(() => {
+    fetchReport(urlParams.idReport);
+    fetchLots(urlParams.id);
+  }, [urlParams.idReport, urlParams.id]);
+
+  // ----------------------------------------------------GESTION D'ETAT-------------------------------------------------
+
   const handleShowModal = async (id) => {
     await fetchEcheance(id);
     setShowModal(true);
-  };
-  const handleCloseModal = () => {
-    setShowModal(false);
   };
 
   const handleChange = ({ currentTarget }) => {
@@ -74,23 +79,22 @@ const ReportEffectifsPage = ({ match }) => {
     setEcheance({ ...echeance, [name]: value });
   };
 
+  // ---------------------------------------------------GESTION SUBMIT--------------------------------------------------
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       echeance.lot = "/api/lots/" + echeance.lot.id;
       await EcheanceAPI.update(echeance.id, echeance);
       toast.success("L'effectif est bien modifié !");
-      handleCloseModal();
+      setShowModal(false);
+      fetchLots(urlParams.id);
     } catch (error) {
       console.log(error.response);
     }
   };
 
-  // Chargement du raport si besoin au cahrgement du composant ou au changement de l'identifiant
-  useEffect(() => {
-    fetchReport(urlParams.idReport);
-    fetchProject(urlParams.id);
-  }, [urlParams.idReport, urlParams.id]);
+  // ------------------------------------------------------TEMPLATE-------------------------------------------------------------
 
   return (
     <>
@@ -114,11 +118,9 @@ const ReportEffectifsPage = ({ match }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {project &&
-                    project.lots.length !== 0 &&
-                    project.lots.map((lot) => (
+                  {lots.map((lot) => (
                       <React.Fragment key={lot.id}>
-                        {lot.echeances.map((echeance) => (
+                        {lot.echeances && lot.echeances.map((echeance) => (
                           <React.Fragment key={echeance.id}>
                             {echeance.report.includes(
                               "/api/reports/" + urlParams.idReport
@@ -150,19 +152,20 @@ const ReportEffectifsPage = ({ match }) => {
                     ))}
                 </tbody>
               </table>
-              {project && project.lots.length === 0 && (
+              {lots.length === 0 && (
                 <p>Il n'y a pas d'effectif défini pour ce rapport</p>
               )}
             </div>
         )}
         {loading && <div id="loading-icon"> </div>}
       </main>
+      {/* ---------------------------------------------------MODAL---------------------------------------- */}
       <Modal
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         show={showModal}
-        onHide={handleCloseModal}
+        onHide={()=>setShowModal(false)}
       >
         <Modal.Header closeButton>
           <h2>Modifications des effectifs</h2>

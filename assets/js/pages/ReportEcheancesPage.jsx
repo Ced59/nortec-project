@@ -15,11 +15,15 @@ import SpanStatusEcheance from "../components/span/SpanStatusEcheance";
 import useIsMountedRef from "../components/UseIsMountedRef";
 
 const ReportEcheancesPage = ({ match }) => {
-  const isMountedRef = useIsMountedRef();
   const NavbarLeftWithRouter = withRouter(NavbarLeft);
-
+  const urlParams = match.params;
+  const isMountedRef = useIsMountedRef();
   const [showModalDetail, setShowModalDetail] = useState(false);
-
+  const [lots, setLots] = useState([]);
+  const [edit, setEdit] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [echeanceDetail, setEcheanceDetail] = useState({});
+  const echeanceErrorModel = useState(echeanceError);
   const [echeanceError, setEcheanceError] = useState({
     numeroEcheance: "",
     categorie: "",
@@ -30,23 +34,17 @@ const ReportEcheancesPage = ({ match }) => {
     lot: "",
   });
 
-  const echeanceErrorModel = useState(echeanceError);
-  const [project, setProject] = useState({});
-  const [edit, setEdit] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [echeanceDetail, setEcheanceDetail] = useState({});
+    // ----------------------------------------------------FETCH FUNCTIONS-------------------------------------------------
 
-  const urlParams = match.params;
-
-  const fetchProject = async (id) => {
+  const fetchLots = async (id) => {
     try {
-      const data = await ProjectsAPI.find(id);
+      const data = await ProjectsAPI.getLots(id);
       if (isMountedRef.current) {
-        setProject(data);
+        setLots(data);
         setLoading(false);
       }
     } catch (error) {
-      toast.error("Erreur lors du chargement du projet");
+      toast.error("Erreur lors du chargement des lots");
       console.log(error.response);
     }
   };
@@ -61,14 +59,30 @@ const ReportEcheancesPage = ({ match }) => {
       toast.error("Erreur lors du chargement de l'échéance");
       console.log(error.response);
     }
-  };
+  };  
 
-  // Chargement du raport si besoin au chargement du composant ou au changement de l'identifiant
   useEffect(() => {
-    fetchProject(urlParams.id);
+    fetchLots(urlParams.id);
   }, [urlParams.idReport, urlParams.id]);
 
-  // Gestion de la fenêtre modal Detail Echeance
+    // ----------------------------------------------------GESTION D'ETAT-------------------------------------------------
+
+  const handleShowModalDetail = async (id) => {
+    if (!showModalDetail) {
+      await fetchEcheance(id);
+      setEdit(false);
+    } else {
+      setEcheanceError(echeanceErrorModel);
+    }
+    setShowModalDetail(!showModalDetail);
+  };
+
+  const handleChangeEcheanceDetail = ({ currentTarget }) => {
+    const { name, value } = currentTarget;
+    setEcheanceDetail({ ...echeanceDetail, [name]: value });
+  };
+
+    // ---------------------------------------------------GESTION SUBMIT--------------------------------------------------
 
   const handleSubmitChangeEcheance = async (event) => {
     event.preventDefault();
@@ -84,8 +98,7 @@ const ReportEcheancesPage = ({ match }) => {
         await EcheanceAPI.update(echeanceDetail.id, echeanceDetail);
         toast.success("L'échéance est bien modifiée !");
         setEcheanceDetail({});
-        fetchProject(urlParams.id);
-        // handleCloseModalDetail();
+        fetchLots(urlParams.id);
         setShowModalDetail(!showModalDetail);
       } catch ({ reponse }) {
         const { violations } = response.data;
@@ -106,24 +119,7 @@ const ReportEcheancesPage = ({ match }) => {
     }
   };
 
-  const handleShowModalDetail = async (id) => {
-    if (!showModalDetail) {
-      await fetchEcheance(id);
-      setEdit(false);
-    } else {
-      setEcheanceError(echeanceErrorModel);
-    }
-    setShowModalDetail(!showModalDetail);
-  };
-
-  const handleChangeEcheanceDetail = ({ currentTarget }) => {
-    const { name, value } = currentTarget;
-    setEcheanceDetail({ ...echeanceDetail, [name]: value });
-  };
-
-  const handleEdit = () => {
-    setEdit(!edit);
-  };
+  // --------------------------------------------------------TEMPLATE--------------------------------------------------
 
   return (
     <>
@@ -148,7 +144,7 @@ const ReportEcheancesPage = ({ match }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {project.lots.map((lot) => (
+                  {lots.map((lot) => (
                     <React.Fragment key={lot.id}>
                       {lot.echeances.map((echeance) => (
                         <React.Fragment key={echeance.id}>
@@ -198,12 +194,12 @@ const ReportEcheancesPage = ({ match }) => {
                 </tbody>
               </table>
               <AddEcheanceModal
-                project={project}
+                lots={lots}
                 loading={loading}
                 echeanceError={echeanceError}
                 setEcheanceError={setEcheanceError}
                 echeanceErrorModel={echeanceErrorModel}
-                fetchProject={fetchProject}
+                fetchLots={fetchLots}
                 urlParams={urlParams}
               ></AddEcheanceModal>
             </div>
@@ -358,7 +354,7 @@ const ReportEcheancesPage = ({ match }) => {
                   type="button"
                 className="btn btn-primary"
                 text="Modifier"
-                onClick={handleEdit}
+                onClick={()=>setEdit(!edit)}
               />
             ) : (
               <>
@@ -366,7 +362,7 @@ const ReportEcheancesPage = ({ match }) => {
                     type="button"
                   className="btn btn-danger"
                   text="Annuler"
-                  onClick={handleEdit}
+                  onClick={()=>setEdit(!edit)}
                 />
               </>
             )}
