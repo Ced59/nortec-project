@@ -65,14 +65,6 @@ const ReportValidatePage = ({ match }) => {
     fetchPhotos();
   }, [urlParams.id, urlParams.idReport]);
 
-  //TODO à mettre dans un script node?
-  const handleSavePDF = async () => {
-    await ReactPDF.render(
-      <ReportPdfComponent report={report} />,
-      "../reportPDF/projet" + report.Project.id + "rapport" + report.id + ".pdf"
-    );
-  };
-
   const handleChangeStatus = async ({ currentTarget }) => {
     const reportStatus = { status: currentTarget.name };
     console.log(reportStatus);
@@ -114,7 +106,7 @@ const ReportValidatePage = ({ match }) => {
                     />
                   }
                   fileName={
-                    report.Project.name +
+                    project.name +
                     "_rapport_" +
                     report.chrono +
                     "_au_" +
@@ -152,7 +144,7 @@ const ReportValidatePage = ({ match }) => {
               />
             )}
             <SendPdfToAnnuaireModal
-              lots={report.Project.lots}
+              lots={project.lots}
               users={project.users}
               projectName={project.name}
               reportChrono={report.chrono}

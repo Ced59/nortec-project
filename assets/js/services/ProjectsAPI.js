@@ -39,6 +39,10 @@ function getReports(id){
     return axios.get(PROJECTS_API + "/" + id +"/reports").then(response => response.data['hydra:member']);
 }
 
+function getLots(id){
+    return axios.get(PROJECTS_API+"/"+id+"/lots").then(response=>response.data['hydra:member']);
+}
+
 export default {
     find,
     update,
@@ -46,5 +50,6 @@ export default {
     findAll,
     addFinPrevueProject,
     addLotProject,
-    getReports
+    getReports,
+    getLots
 }

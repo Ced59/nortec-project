@@ -11,6 +11,7 @@ import ReportAddPhoto from "../components/ReportAddPhoto";
 import CardConformity from "../components/CardConformity";
 import ImputationTitle from "../components/wrapper/ImputationTitle";
 import useIsMountedRef from "../components/UseIsMountedRef";
+import ProjectsAPI from "../services/ProjectsAPI";
 
 const ReportPropretePartiesCommunesPage = ({ match }) => {
   const [conforme, setConforme] = useState(false);
@@ -31,12 +32,12 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
       const data = await ReportsAPI.findReport(id);
       if (isMountedRef.current) {
         setReport(data);
-        setLoading(false);
         setConforme(data.propreteCommuneConformity);
         // ----------------------------------------------create new imputations-------------
         if (data.propreteCommuneImputations == 0) {
           setEditImput(false);
-          imputationsRef.current = data.Project.lots.map((imput) =>
+          const lots = await ProjectsAPI.getLots(urlParams.id);
+          imputationsRef.current = lots.map((imput) =>
             JSON.stringify({
               companyName: imput.company.nom,
               company: "/api/companies/" + imput.company.id,
@@ -65,6 +66,7 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
           );
           setImputations(imputationsRef.current);
         }
+        setLoading(false);
       }
       // ---------------------------------------------
     } catch (error) {
