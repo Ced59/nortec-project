@@ -33,6 +33,11 @@ class Photo
      */
     private $type;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\MediaObject", cascade={"persist", "remove"})
+     */
+    private $image;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -70,6 +75,18 @@ class Photo
     public function setType(string $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getImage(): ?MediaObject
+    {
+        return $this->image;
+    }
+
+    public function setImage(?MediaObject $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }
