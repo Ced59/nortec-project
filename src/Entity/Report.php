@@ -106,7 +106,6 @@ class Report
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"report"})
      */
     private $installations;
 
