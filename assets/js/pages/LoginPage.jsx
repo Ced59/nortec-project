@@ -75,7 +75,7 @@ const LoginPage = ({ history }) => {
             <LogoCompanyComponent style={{ width: "150px" }} />
 
             <h1 className="login-style title text-center mb-3">
-              Bienvenue sur le portail Nortec
+              Bienvenue sur le portail Deadlines
             </h1>
           </div>
 

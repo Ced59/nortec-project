@@ -3,8 +3,8 @@ import ImgWithStyleComponent from "./ImgWithStyleComponent";
 
 const LogoCompanyComponent = ({style}) => {
     return (
-        <ImgWithStyleComponent src="../img/logo-company/logo-nortec.png"
-                               alt="Logo Nortec"
+        <ImgWithStyleComponent src="../img/logo-company/logo-company.png"
+                               alt="Logo Deadlines"
                                className="text-left img-fluid"
                                style={style}
         />
