@@ -65,7 +65,7 @@ const ReportPdfComponent = ({ report, project, photos }) => {
             </Text>
             <Text style={styles.text}>{"Ville : " + report.Project.ville}</Text>
           </View>
-          <Image style={styles.projectImage} src={project.photo}></Image>
+          <Image style={styles.projectImage} src={project.photo}/>
           <View style={styles.sectionBorder}>
             <Text style={styles.text}>{"Maitre d'ouvrage : "}</Text>
             <Text style={styles.text}>
@@ -160,7 +160,7 @@ const ReportPdfComponent = ({ report, project, photos }) => {
                 viewStyle={styles.flexAround}
                 imageStyle={styles.photosImputation}
                 typePhoto="security"
-              ></PdfPhotoGallery>
+              />
             </View>
           )}
         </View>
@@ -200,7 +200,7 @@ const ReportPdfComponent = ({ report, project, photos }) => {
                 viewStyle={styles.flexAround}
                 imageStyle={styles.photosImputation}
                 typePhoto="access"
-              ></PdfPhotoGallery>
+              />
             </View>
           )}
         </View>
@@ -235,7 +235,7 @@ const ReportPdfComponent = ({ report, project, photos }) => {
                 viewStyle={styles.flexAround}
                 imageStyle={styles.photosImputation}
                 typePhoto="commune"
-              ></PdfPhotoGallery>
+              />
             </View>
           )}
         </View>
