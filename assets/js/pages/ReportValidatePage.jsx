@@ -13,6 +13,7 @@ import SendPdfToAnnuaireModal from "../components/modal/SendPdfToAnnuaireModal";
 import useIsMountedRef from "../components/UseIsMountedRef";
 import { toast } from "react-toastify";
 import AdminValidationModal from "../components/modal/AdminValidationModal";
+import AuthAPI from "../services/AuthAPI";
 
 const ReportValidatePage = ({ match }) => {
   const isMountedRef = useIsMountedRef();
@@ -134,7 +135,7 @@ const ReportValidatePage = ({ match }) => {
           )}
 
           <div className="row ml-2 mt-4 d-flex justify-content-between mb-3">
-            {report.status === "in_progress" && (
+            {report.status === "in_progress" && AuthAPI.isRole()==="Administrateur" && (
               <Button
                 text="Valider"
                 className="btn btn-primary mr-4"
