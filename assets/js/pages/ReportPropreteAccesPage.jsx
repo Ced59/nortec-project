@@ -11,6 +11,7 @@ import ReportAddPhoto from "../components/ReportAddPhoto";
 import CardConformity from "../components/CardConformity";
 import ImputationTitle from "../components/wrapper/ImputationTitle";
 import useIsMountedRef from "../components/UseIsMountedRef";
+import handleSubmitConformity from "../components/ReportConformity";
 
 const ReportPropreteAccesPage = ({ match }) => {
   const [conforme, setConforme] = useState("noconform");
@@ -75,23 +76,6 @@ const ReportPropreteAccesPage = ({ match }) => {
     fetchReport(urlParams.idReport);
   }, [urlParams.id, urlParams.idReport]);
 
-  // -------------------------------------------------gestion conformité/commentaire------------------------------------------
-
-  const handleSubmitConformity = async () => {
-    const reportConformity = { propreteAccessConformity: conforme };
-    try {
-      await ReportsAPI.update(urlParams.idReport, reportConformity);
-      toast.success("Statut de la propreté des accès enregistrée avec succès!");
-      fetchReport(urlParams.idReport);
-    } catch (e) {
-      console.log(e);
-      console.log(e.response);
-      toast.error(
-        "Une erreur est survenue lors de la mise à jour de la conformité"
-      );
-    }
-  };
-
   // ----------------------------------------------------template-------------------------------------------------------------
 
   return (
@@ -118,13 +102,27 @@ const ReportPropreteAccesPage = ({ match }) => {
           {conforme === "conform" && (
             <CardConformity
               titre="Propreté des accès conforme ?"
-              submit={handleSubmitConformity}
+              submit={() =>
+                handleSubmitConformity(
+                  "propreteAccessConformity",
+                  conforme,
+                  fetchReport,
+                  urlParams.idReport
+                )
+              }
             />
           )}
           {conforme === "prorata" && (
             <CardConformity
               titre="Propreté des accès au prorata ?"
-              submit={handleSubmitConformity}
+              submit={() =>
+                handleSubmitConformity(
+                  "propreteAccessConformity",
+                  conforme,
+                  fetchReport,
+                  urlParams.idReport
+                )
+              }
             />
           )}
           {conforme === "noconform" && (
@@ -160,7 +158,14 @@ const ReportPropreteAccesPage = ({ match }) => {
               />
               <div className="d-flex justify-content-center">
                 <Button
-                  onClick={handleSubmitConformity}
+                  onClick={() =>
+                    handleSubmitConformity(
+                      "propreteAccessConformity",
+                      conforme,
+                      fetchReport,
+                      urlParams.idReport
+                    )
+                  }
                   className="btn btn-primary"
                   text="Confirmer"
                   type="button"

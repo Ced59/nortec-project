@@ -11,6 +11,7 @@ import ReportAddPhoto from "../components/ReportAddPhoto";
 import CardConformity from "../components/CardConformity";
 import ImputationTitle from "../components/wrapper/ImputationTitle";
 import useIsMountedRef from "../components/UseIsMountedRef";
+import handleSubmitConformity from "../components/ReportConformity";
 
 const ReportPropretePartiesCommunesPage = ({ match }) => {
   const [conforme, setConforme] = useState(false);
@@ -78,25 +79,6 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
     fetchReport(urlParams.idReport);
   }, [urlParams.id, urlParams.idReport]);
 
-  // -------------------------------------------------gestion conformité/commentaire------------------------------------------
-
-  const handleSubmitConformity = async () => {
-    const reportConformity = { propreteCommuneConformity: conforme };
-    try {
-      await ReportsAPI.update(urlParams.idReport, reportConformity);
-      toast.success(
-        "Statut de la propreté des parties communes enregistrée avec succès!"
-      );
-      fetchReport(urlParams.idReport);
-    } catch (e) {
-      console.log(e);
-      console.log(e.response);
-      toast.error(
-        "Une erreur est survenue lors de la mise à jour de la conformité"
-      );
-    }
-  };
-
   // --------------------------------------------------template--------------------------------------------
 
   return (
@@ -122,7 +104,12 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
           {conforme && (
             <CardConformity
               titre="Propreté des parties communes conforme ?"
-              submit={handleSubmitConformity}
+              submit={()=>handleSubmitConformity(
+                "propreteCommuneConformity",
+                conforme,
+                fetchReport,
+                urlParams.idReport
+              )}
             />
           )}
           {conforme === false && (
@@ -152,7 +139,12 @@ const ReportPropretePartiesCommunesPage = ({ match }) => {
               />
               <div className="d-flex justify-content-center">
                 <Button
-                  onClick={handleSubmitConformity}
+                  onClick={()=>handleSubmitConformity(
+                    "propreteCommuneConformity",
+                    conforme,
+                    fetchReport,
+                    urlParams.idReport
+                  )}
                   className="btn btn-primary"
                   text="Confirmer"
                   type="button"
