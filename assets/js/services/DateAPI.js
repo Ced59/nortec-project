@@ -1,4 +1,6 @@
 import dayjs from "dayjs";
+var customParseFormat = require('dayjs/plugin/customParseFormat');
+dayjs.extend(customParseFormat);
 
 function determineStatus(dateDebut, dateFinReelle, dateFinPrevue) {
   let status = "";
@@ -30,7 +32,22 @@ function formatDate(date) {
 
 function formatDateForm(date) {
   if (date) {
-    return dayjs(date).format("YYYY-MM-DD");
+    return date.split("T")[0];
+  }
+}
+
+function formatDateFormConst(date){
+  if(date){
+    let year = dayjs(date).year();    
+    let month = dayjs(date).month()+1;
+    if (month<10){
+      month = "0"+month;
+    }
+    let day = dayjs(date).date();
+    if (day<10){
+      day="0"+day;
+    }
+    return year+"-"+month+"-"+day
   }
 }
 
@@ -43,7 +60,7 @@ function now() {
 }
 
 function verifyDateExist(date) {
-  if (dayjs(date).isSame("1900-01-01", 'year') || !date) {
+  if (!dayjs(date).isAfter("1901-01-01") || !date) {
     return "";
   } else {
     return date;
@@ -84,6 +101,7 @@ export default {
   formatDateHours,
   verifyDateExist,
   formatDateForm,
+  formatDateFormConst,
   dateIsAfter,
   dateIsAfterDebut,
   now,

@@ -23,9 +23,18 @@ function update(id, report) {
   return axios.put(REPORT_API + "/" + id, report);
 }
 
+// ------------subressources-------------------
+
+function getEcheances(idReport) {
+  return axios
+    .get(REPORT_API + "/" + idReport + "/echeances")
+    .then((response) => response.data["hydra:member"]);
+}
+
 export default {
   create,
   findAll,
   findReport,
   update,
+  getEcheances,
 };

@@ -1,30 +1,21 @@
 import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "../forms/Button";
-import {
-  statusEcheanceClasses,
-  statusEcheanceLabel,
-} from "../ProjectStatus";
+import { statusEcheanceClasses, statusEcheanceLabel } from "../ProjectStatus";
 import DateAPI from "../../services/DateAPI";
 
 const EcheanceModal = ({ project }) => {
   const [showEcheanceModal, setShowEcheanceModal] = useState(false);
-
-  //   --------------------------------------------------FUNCTION-------------------------------------------
-
-  const handleShowEcheanceModal = () => {
-    setShowEcheanceModal(!showEcheanceModal);
-  };
+  const lastReport = project.reports[project.reports.length - 1];
 
   return (
-    //   -----------------------------------------------TEMPLATE-----------------------------------------------
     <>
       <Modal
         size="xl"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         show={showEcheanceModal}
-        onHide={handleShowEcheanceModal}
+        onHide={() => setShowEcheanceModal(!showEcheanceModal)}
       >
         <Modal.Header closeButton>
           <Modal.Title>Liste des Échéances</Modal.Title>
@@ -32,76 +23,90 @@ const EcheanceModal = ({ project }) => {
         <Modal.Body>
           {project.lots.map((lot) => (
             <React.Fragment key={lot.id}>
-              {lot.echeances.length !== 0 && (
-                <>
-                  <div className="row justify-content-center">
-                    <div className="mx-5">
-                      Lot:{" "}
-                      <h5>
-                        {lot.numeroLot} {lot.libelleLot}
-                      </h5>
+              {lot.echeances.length !== 0 &&
+                lot.echeances.some((echeance) =>
+                  echeance.report.includes(lastReport)
+                ) && (
+                  <>
+                    <div className="row justify-content-center">
+                      <div className="mx-5">
+                        Lot:{" "}
+                        <h5>
+                          {lot.numeroLot} {lot.libelleLot}
+                        </h5>
+                      </div>
+                      <div className="mx-5">
+                        Entreprise: <h5>{lot.company.nom}</h5>
+                      </div>
                     </div>
-                    <div className="mx-5">
-                      Entreprise: <h5>{lot.company.nom}</h5>
-                    </div>
-                  </div>
-                  <table className="table table-hover">
-                    <thead>
-                      <tr>
-                        {/* <th>Numéro</th> */}
-                        <th>Rédacteur</th>
-                        <th>Statut</th>
-                        <th>Sujet</th>
-                        <th>Début</th>
-                        <th>Echéance</th>
-                        <th>Clotûre</th>
-                        <th>Retard</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {lot.echeances.map((echeance) => (
-                        <tr key={echeance.id}>
-                          {/* <td>{echeance.numeroEcheance}</td> */}
-                          <td>{echeance.redacteur}</td>
-                          <td>
-                            <span
-                              className={
-                                "badge badge-" +
-                                statusEcheanceClasses(
-                                  echeance.dateDebut,
-                                  echeance.dateCloture,
-                                  echeance.dateFinPrevue
-                                )
-                              }
-                            >
-                              {statusEcheanceLabel(
-                                echeance.dateDebut,
-                                echeance.dateCloture,
-                                echeance.dateFinPrevue
-                              )}
-                            </span>
-                          </td>
-                          <td>{echeance.sujet}</td>
-                          <td>{DateAPI.formatDate(echeance.dateDebut)}</td>
-                          <td>{DateAPI.formatDate(echeance.dateFinPrevue)}</td>
-                          <td>{DateAPI.formatDate(echeance.dateCloture)}</td>
-                          <td>
-                            {DateAPI.retard(
-                              echeance.dateCloture,
-                              echeance.dateFinPrevue
-                            ) > 0 &&
-                              DateAPI.retard(
-                                echeance.dateCloture,
-                                echeance.dateFinPrevue
-                              )}
-                          </td>
+                    <table className="table table-hover">
+                      <thead>
+                        <tr>
+                          <th>Rédacteur</th>
+                          <th>Statut</th>
+                          <th>Sujet</th>
+                          <th>Début</th>
+                          <th>Echéance</th>
+                          <th>Clotûre</th>
+                          <th>Retard</th>
+
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  <hr />
-                </>
-              )}
+                      </thead>
+                      <tbody>
+                        {lot.echeances.map((echeance) => (
+                          <React.Fragment key={echeance.id}>
+                            {echeance.report.includes(
+                              lastReport
+                            ) && (
+                              <tr key={echeance.id}>
+                                <td>{echeance.redacteur}</td>
+                                <td>
+                                  <span
+                                    className={
+                                      "badge badge-" +
+                                      statusEcheanceClasses(
+                                        echeance.dateDebut,
+                                        echeance.dateCloture,
+                                        echeance.dateFinPrevue
+                                      )
+                                    }
+                                  >
+                                    {statusEcheanceLabel(
+                                      echeance.dateDebut,
+                                      echeance.dateCloture,
+                                      echeance.dateFinPrevue
+                                    )}
+                                  </span>
+                                </td>
+                                <td>{echeance.sujet}</td>
+                                <td>
+                                  {DateAPI.formatDate(echeance.dateDebut)}
+                                </td>
+                                <td>
+                                  {DateAPI.formatDate(echeance.dateFinPrevue)}
+                                </td>
+                                <td>
+                                  {DateAPI.formatDate(echeance.dateCloture)}
+                                </td>
+                                <td>
+                                  {DateAPI.retard(
+                                    echeance.dateCloture,
+                                    echeance.dateFinPrevue
+                                  ) > 0 &&
+                                    DateAPI.retard(
+                                      echeance.dateCloture,
+                                      echeance.dateFinPrevue
+                                    )}
+                                </td>
+                              </tr>
+                            )}
+                          </React.Fragment>
+                        ))}
+                      </tbody>
+                    </table>
+                    <hr />
+                  </>
+                )}
             </React.Fragment>
           ))}
         </Modal.Body>
@@ -110,7 +115,7 @@ const EcheanceModal = ({ project }) => {
         text="Voir les échéances"
         className="btn btn-primary mx-2 mb-3"
         type="button"
-        onClick={handleShowEcheanceModal}
+        onClick={() => setShowEcheanceModal(!showEcheanceModal)}
       />
     </>
   );

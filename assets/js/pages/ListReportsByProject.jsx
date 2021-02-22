@@ -1,28 +1,25 @@
 import React, { useEffect, useState } from "react";
-import ReportsAPI from "../services/ReportsAPI";
 import "../../css/app.css";
 import DateAPI from "../services/DateAPI";
 import { Link } from "react-router-dom";
+import useIsMountedRef from "../components/UseIsMountedRef";
+import ProjectsAPI from "../services/ProjectsAPI";
+import { STATUS_REPORT_LABELS } from "../components/ReportStatus";
 
-const STATUS_REPORT_LABELS = {
-  clotured: "Clôturé non envoyé",
-  in_progress: "En cours de rédaction",
-  sent: "Clôturé envoyé",
-  validating: "En attente de validation",
-};
 
-const ListReportsByProject = ({ match, history }) => {
-  const id = match.params;
+const ListReportsByProject = ({ match }) => {
+  const isMountedRef = useIsMountedRef();
+  const id = match.params.id;
   const [listReport, setListReport] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchReports = async () => {
     try {
-      const data = await ReportsAPI.findAll();
-      const idProject = parseInt(id.id, 10);
-      const reportsByProject = data.filter((r) => r.Project.id === idProject);
-      setListReport(reportsByProject);
-      setLoading(false);
+      const data = await ProjectsAPI.getReports(id);
+      if (isMountedRef.current) {
+        setListReport(data);
+        setLoading(false);
+      }
     } catch (error) {
       console.log(error.response);
     }
@@ -67,7 +64,7 @@ const ListReportsByProject = ({ match, history }) => {
 
                   <td>
                     <Link
-                      to={"/project/" + id.id + "/" + report.id + "/echeances"}
+                      to={"/project/" + id + "/" + report.id + "/echeances"}
                       className="btn btn-sm btn-info"
                     >
                       Editer
@@ -87,7 +84,7 @@ const ListReportsByProject = ({ match, history }) => {
             </tbody>
           </table>
 
-          <Link to={"/project/" + id.id} className="btn btn-sm btn-success">
+          <Link to={"/project/" + id} className="btn btn-sm btn-success">
             Revenir au projet
           </Link>
         </>

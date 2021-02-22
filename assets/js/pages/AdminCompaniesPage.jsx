@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../../css/loading-icon.css';
 import CompanyAPI from '../services/CompanyAPI';
+import useIsMountedRef from "../components/UseIsMountedRef";
 
 const AdminCompaniesPage = () => {
-
+    const isMountedRef = useIsMountedRef();
     const [companies, setCompanies] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -12,8 +13,10 @@ const AdminCompaniesPage = () => {
     const fetchCompanies = async () => {
         try {
             const data = await CompanyAPI.findAll();
-            setCompanies(data);
-            setLoading(false);
+            if (isMountedRef.current) {
+                setCompanies(data);
+                setLoading(false);
+            }
         } catch (error) {
             toast.error("Erreur lors du chargement de la liste des entreprises");
             console.log(error.response);

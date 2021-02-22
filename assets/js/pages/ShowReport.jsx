@@ -8,10 +8,11 @@ import DateAPI from "../services/DateAPI";
 import PhotoAPI from "../services/PhotoAPI";
 import ProjectsAPI from "../services/ProjectsAPI";
 import ReportsAPI from "../services/ReportsAPI";
+import useIsMountedRef from "../components/UseIsMountedRef";
 
 const ShowReport = ({ match }) => {
+  const isMountedRef = useIsMountedRef();
   const reportId = match.params.id;
-
   const [report, setReport] = useState({});
   const [loading, setLoading] = useState(true);
   const [reportLoading, setReportLoading] = useState(true);
@@ -23,10 +24,10 @@ const ShowReport = ({ match }) => {
   const fetchReport = async (id) => {
     try {
       const data = await ReportsAPI.findReport(id);
-      setReport(data);
+      isMountedRef.current && setReport(data);
       fetchPhotos();
       fetchProject(data.Project.id).then(() => {
-        setLoading(false);
+        isMountedRef.current && setLoading(false);
       });
     } catch (error) {
       toast.error("Une erreur dans le chargement du rapport")
@@ -35,8 +36,10 @@ const ShowReport = ({ match }) => {
   const fetchProject = async (id) => {
     try {
       const data = await ProjectsAPI.find(id);
-      setProject(data);
-      setReportLoading(false);
+      if (isMountedRef.current) {
+        setProject(data);
+        setReportLoading(false);
+      }
     } catch (error) {
       toast.error("Une erreur dans le chargement du rapport")
     }
@@ -44,8 +47,10 @@ const ShowReport = ({ match }) => {
   const fetchPhotos = async () => {
     try {
       const data = await PhotoAPI.findByReport(reportId);
-      setPhotos(data);
-      setPhotoLoading(false);
+      if (isMountedRef.current) {
+        setPhotos(data);
+        setPhotoLoading(false);
+      }
     } catch (error) {
       toast.error("Une erreur dans le chargement du rapport")
     }
@@ -60,7 +65,7 @@ const ShowReport = ({ match }) => {
         <div>
           <Link
             className="btn btn-danger"
-            to={"/project/" + report.Project.id + "/listReports"}
+            to={"/project/" + project.id + "/listReports"}
           >
             {" "}
             Retour{" "}
@@ -81,7 +86,7 @@ const ShowReport = ({ match }) => {
                   <ReportPdfComponent report={report} project={project} photos={photos} />
                 }
                 fileName={
-                  report.Project.name +
+                  project.name +
                   "_rapport_" +
                   report.chrono +
                   "_au_" +

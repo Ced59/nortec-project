@@ -16,9 +16,13 @@ import Pagination from "@material-ui/lab/Pagination";
 import pagination_configs, {
   ADMIN_USER_PAGE_PAGINATION_ITEMS_PER_PAGE,
 } from "../components/configs/pagination_configs";
+import useIsMountedRef from "../components/UseIsMountedRef";
+import ChangeUserRoleModal from "../components/modal/ChangeUserRoleModal";
+import ChangeUserStatusModal from "../components/modal/ChangeUserStatusModal";
 
 const AdminUserPage = ({ history, match, props }) => {
   //------------------------------- Récupération de l'id si il y en a un --------------------------------
+  const isMountedRef = useIsMountedRef();
   const { id = "new" } = match.params;
 
   const [user, setUser] = useState({
@@ -59,8 +63,10 @@ const AdminUserPage = ({ history, match, props }) => {
   const fetchUser = async (id) => {
     try {
       const result = await UsersAPI.find(id);
-      setUser(result);
-      setLoading(false);
+      if (isMountedRef.current) {
+        setUser(result);
+        setLoading(false);
+      }
     } catch (error) {
       toast.error("Le chargement de l'utilisateur a rencontré un problème !");
       setLoading(false);
@@ -73,8 +79,10 @@ const AdminUserPage = ({ history, match, props }) => {
   const fetchProjects = async () => {
     try {
       let result = await UsersAPI.getProjects(id);
-      setProjects(result);
-      setLoadingProjects(false);
+      if (isMountedRef.current) {
+        setProjects(result);
+        setLoadingProjects(false);
+      }
     } catch (error) {
       toast.error("Le chargement des projets a rencontré un problème !");
       setLoadingProjects(false);
@@ -83,11 +91,12 @@ const AdminUserPage = ({ history, match, props }) => {
   };
 
   //--------------------------- Chargement de l'utilisateur au changement d'identifiant ------------------
+
   useEffect(() => {
     if (id !== "new") {
       setEdit(true);
-      fetchUser(id).then((r) => "");
-      fetchProjects().then((r) => "");
+      fetchUser(id);
+      fetchProjects();
     } else {
       setLoading(false);
     }
@@ -142,6 +151,7 @@ const AdminUserPage = ({ history, match, props }) => {
       }
     } catch ({ response }) {
       const { violations } = response.data;
+      console.log(response);
       if (violations) {
         const apiErrors = {};
         violations.map(({ propertyPath, message }) => {
@@ -278,7 +288,7 @@ const AdminUserPage = ({ history, match, props }) => {
                   />
 
                   <div className="form-group text-right mt-4">
-                    <Button text="Valider" className="btn btn-primary"/>
+                    <Button text="Valider" className="btn btn-primary" />
                   </div>
                 </>
               ) : (
@@ -300,8 +310,9 @@ const AdminUserPage = ({ history, match, props }) => {
                           <p className="col-8">
                             {UsersAPI.determineRole(user)}
                           </p>
-                          <Button type="button"
-                                  text="Changer"
+                          <Button
+                            type="button"
+                            text="Changer"
                             onClick={() => handleShowModalRole(user)}
                             className="btn btn-danger col-3"
                           />
@@ -333,7 +344,7 @@ const AdminUserPage = ({ history, match, props }) => {
                               : "Le compte de l'utilisateur n'est pas activé"}
                           </p>
                           <button
-                              type="button"
+                            type="button"
                             onClick={() => handleShowModal(user)}
                             className="btn btn-danger col-3"
                           >
@@ -366,7 +377,9 @@ const AdminUserPage = ({ history, match, props }) => {
                   {edit && (
                     <>
                       {projects.length === 0 ? (
-                        <p className="text-center">L'utilisateur n'est affecté à aucun projet</p>
+                        <p className="text-center">
+                          L'utilisateur n'est affecté à aucun projet
+                        </p>
                       ) : (
                         <table className="table table-hover table-striped">
                           <thead>
@@ -405,8 +418,8 @@ const AdminUserPage = ({ history, match, props }) => {
                                 </td>
                                 <td className="p-2 text-center">
                                   <Button
-                                      text="Retirer le projet"
-                                      type="button"
+                                    text="Retirer le projet"
+                                    type="button"
                                     className="btn btn-danger btn-sm"
                                     onClick={() =>
                                       handleDeleteUserProject(project.id)
@@ -443,76 +456,22 @@ const AdminUserPage = ({ history, match, props }) => {
         </div>
       </main>
 
-      <Modal
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        show={showModal}
-        onHide={handleCloseModal}
+      <ChangeUserStatusModal
+        showModal={showModal}
+        handleCloseModal={handleCloseModal}
+        userToModifyActive={userToModifyActive}
+        handleActiveUser={() => handleActiveUser(userToModifyActive)}
       >
-        <Modal.Header closeButton>
-          <Modal.Title>Attention!!!</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          Vous êtes sur le point
-          {userToModifyActive.active ? "de désactiver" : "d'activer"}
-          l'utilisateur {userToModifyActive.firstName}
-          {userToModifyActive.lastName}! <br />
-          {userToModifyActive.active ? (
-            <>
-              Tous les projets auquel il est affecté seront supprimé et vous
-              devrez les réattribuer plus tard si vous réactivez le compte.
-              <br />
-            </>
-          ) : (
-            <>
-              Il vous faudra réassigner manuellement les projets auxquels
-              l'utilisateur pourra avoir accès. <br />
-            </>
-          )}
-          Êtes vous sûr de vouloir continuer?
-        </Modal.Body>
-        <Modal.Footer>
-          <Button type="button" text="Fermer" className="btn btn-primary" onClick={handleCloseModal}/>
-          <Button
-              text="Confirmer"
-              type="button"
-            className="btn btn-danger"
-            onClick={() => handleActiveUser(userToModifyActive)}
-          />
-        </Modal.Footer>
-      </Modal>
 
-      <Modal
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        show={showModalRole}
-        onHide={handleCloseModalRole}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Attention!!!</Modal.Title>
-        </Modal.Header>
-        <form onSubmit={handleChangeRole}>
-          <Modal.Body>
-            Vous êtes sur le point de changer le rôle de l'utilisateur{" "}
-            {userToModifyRole.firstName} {userToModifyRole.lastName}! <br />
-            Êtes vous sûr de vouloir continuer? <br />
-            <br />
-            Nouveau rôle :
-            <select name="role" id="role" onChange={handleChangeRoleSelect}>
-              <option value="ROLE_USER">Utilisateur</option>
-              <option value="ROLE_ADMIN">Administrateur</option>
-            </select>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button className="btn btn-primary" text="Fermer" type="button" onClick={handleCloseModalRole}/>
-            <Button className="btn btn-danger" text="Confirmer"/>
-          </Modal.Footer>
-        </form>
-      </Modal>
+      </ChangeUserStatusModal>
+
+      <ChangeUserRoleModal
+        showModalRole={showModalRole}
+        handleCloseModalRole={handleCloseModalRole}
+        handleChangeRole={handleChangeRole}
+        userToModifyRole={userToModifyRole}
+        handleChangeRoleSelect={handleChangeRoleSelect}
+      />
     </>
   );
 };

@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class MailerController extends AbstractController
 {
     /**
-     * @Route("/resetPassword")
+     * @Route("/api/resetPassword")
      */
     public function resetPassword(MailerInterface $mailer, UserRepository $repo, EntityManagerInterface $manager)
     {
@@ -53,7 +53,7 @@ class MailerController extends AbstractController
     }
 
     /**
-     * @Route("/newPassword")
+     * @Route("/api/newPassword")
      */
     public function newPassword(UserRepository $repo, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder)
     {
@@ -82,27 +82,66 @@ class MailerController extends AbstractController
     }
 
     /**
-     * @Route("/sendPDF")
+     * @Route("/api/sendPDF")
      */
     public function sendPDF(MailerInterface $mailer)
     {
-        // $data = json_decode(file_get_contents("php://input"), true);
-        // var_dump($_POST);
-        // // return $this->json(['username' => 'jane.doe']);
-        // return $this->json('');
+        $file = $_FILES['pdf']['tmp_name'];
+        $nomProjet = $_POST['projectName'];
+        $chronoRapport = $_POST['reportChrono'];
+        $destinataires = $_POST['destinataires'];
+        $destinataires = explode(',', $destinataires);
 
-        // $email = (new Email())
-        //     ->from('aQuoiCaSert@exemple.com')
-        //     // ->to('danyrose1995@gmail.com')
-        //     ->to('danyrose1995@gmail.com')
-        //     //->cc('cc@example.com')
-        //     //->bcc('bcc@example.com')
-        //     //->replyTo('fabien@example.com')
-        //     //->priority(Email::PRIORITY_HIGH)
-        //     ->subject('test deadlines mail')
-        //     // ->text('le text du mail de symfony')
-        //     ->html('<p>contenu test</p>');
+        try {
+            for ($i = 0; $i < count($destinataires); $i++) {
+                $email = (new Email())
+                    ->from('rapport_pdf@deadlines.com')
+                    ->to($destinataires[$i])
+                    ->subject('Deadlines - Rapport n°' . $chronoRapport . ' du project ' . $nomProjet)
+                    ->attach(fopen($file, 'r', './'), 'rapport.pdf')
+                    ->html('<h1>Ci-joint le rapport n°' . $chronoRapport . ' du project ' . $nomProjet . '</h1>');
 
-        // $mailer->send($email);
+                $mailer->send($email);
+            }
+            $emailEnvoye = true;
+        } catch (\Throwable $th) {
+            var_dump(($th));
+            $emailEnvoye = false;
+        }
+
+        return $this->json(['send'=>$emailEnvoye]);
+    }
+
+    /**
+     * @Route("/api/adminValidation")
+     */
+    public function adminValidation (MailerInterface $mailer)
+    {
+        $nomProjet = $_POST['projectName'];
+        $chronoRapport = $_POST['reportChrono'];
+        $reportLink=$_POST['reportLink'];
+        $destinataires = $_POST['destinataires'];
+        $destinataires = explode(',', $destinataires);
+
+        try {
+            for ($i = 0; $i < count($destinataires); $i++) {
+                $email = (new Email())
+                    ->from('notification@deadlines.com')
+                    ->to($destinataires[$i])
+                    ->subject('Deadlines - Rapport n°' . $chronoRapport . ' du project ' . $nomProjet)
+                    ->html('<h1>Project ' . $nomProjet . '</h1>
+                    <p>Le raport n°'.$chronoRapport.' est en attente de validation</p>
+                    <a href='.$reportLink.'>Lien du rapport</a>
+                    ');
+
+                $mailer->send($email);
+            }
+            $emailEnvoye = true;
+        } catch (\Throwable $th) {
+            var_dump(($th));
+            $emailEnvoye = false;
+        }
+
+        return $this->json(['send'=>$emailEnvoye]);
     }
 }

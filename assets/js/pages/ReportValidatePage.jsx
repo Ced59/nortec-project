@@ -3,14 +3,19 @@ import { Link, withRouter } from "react-router-dom";
 import NavbarLeft from "../components/navbars/NavbarLeft";
 import DateAPI from "../services/DateAPI";
 import Button from "../components/forms/Button";
-import ReactPDF, { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import ReactPDF, { PDFDownloadLink, PDFViewer, pdf } from "@react-pdf/renderer";
 import ReportPdfComponent from "../components/pdf/ReportPdfComponent";
 import ReportsAPI from "../services/ReportsAPI";
 import ProjectsAPI from "../services/ProjectsAPI";
 import PhotoAPI from "../services/PhotoAPI";
 import ReportResume from "../components/ReportResume";
+import SendPdfToAnnuaireModal from "../components/modal/SendPdfToAnnuaireModal";
+import useIsMountedRef from "../components/UseIsMountedRef";
+import { toast } from "react-toastify";
+import AdminValidationModal from "../components/modal/AdminValidationModal";
 
 const ReportValidatePage = ({ match }) => {
+  const isMountedRef = useIsMountedRef();
   const urlParams = match.params;
   const [report, setReport] = useState({});
   const [project, setProject] = useState({});
@@ -24,25 +29,33 @@ const ReportValidatePage = ({ match }) => {
   const fetchReport = async (id) => {
     try {
       const data = await ReportsAPI.findReport(id);
-      setReport(data);
-      setReportLoading(false);
-    } catch (error) {}
+      if (isMountedRef.current) {
+        setReport(data);
+        setReportLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      console.log(error.respose);
+    }
   };
 
   const fetchProject = async (id) => {
     try {
       const data = await ProjectsAPI.find(id);
-      setProject(data);
-
-      setLoading(false);
+      if (isMountedRef.current) {
+        setProject(data);
+        setLoading(false);
+      }
     } catch (error) {}
   };
 
   const fetchPhotos = async () => {
     try {
       const data = await PhotoAPI.findByReport(urlParams.idReport);
-      setPhotos(data);
-      setPhotoLoading(false);
+      if (isMountedRef.current) {
+        setPhotos(data);
+        setPhotoLoading(false);
+      }
     } catch (error) {}
   };
 
@@ -52,12 +65,20 @@ const ReportValidatePage = ({ match }) => {
     fetchPhotos();
   }, [urlParams.id, urlParams.idReport]);
 
-  //TODO à mettre dans un script node?
-  const handleSavePDF = async () => {
-    await ReactPDF.render(
-      <ReportPdfComponent report={report} />,
-      "../reportPDF/projet" + report.project.id + "rapport" + report.id + ".pdf"
-    );
+  const handleChangeStatus = async ({ currentTarget }) => {
+    const reportStatus = { status: currentTarget.name };
+    console.log(reportStatus);
+    try {
+      await ReportsAPI.update(report.id, reportStatus);
+      toast.success("Le satus du rapport à bien été modifié");
+      fetchReport(urlParams.idReport);
+    } catch (error) {
+      console.log(error);
+      console.log(error.respose);
+      toast.error(
+        "Une erreur est survenue lors du changement de status du rapport"
+      );
+    }
   };
 
   return (
@@ -85,7 +106,7 @@ const ReportValidatePage = ({ match }) => {
                     />
                   }
                   fileName={
-                    report.Project.name +
+                    project.name +
                     "_rapport_" +
                     report.chrono +
                     "_au_" +
@@ -113,22 +134,39 @@ const ReportValidatePage = ({ match }) => {
           )}
 
           <div className="row ml-2 mt-4 d-flex justify-content-between mb-3">
-            <Button
-              text="Valider"
-              className="btn btn-primary mr-4"
-              type="button"
-              onClick={handleSavePDF}
+            {report.status === "in_progress" && (
+              <Button
+                text="Valider"
+                className="btn btn-primary mr-4"
+                type="button"
+                name="clotured"
+                onClick={handleChangeStatus}
+              />
+            )}
+            <SendPdfToAnnuaireModal
+              lots={project.lots}
+              users={project.users}
+              projectName={project.name}
+              reportChrono={report.chrono}
+              project={project}
+              report={report}
+              photos={photos}
             />
-            <Button
-              text="Clôturer et envoyer"
-              className="btn btn-primary mr-4"
-              type="button"
-            />
-            <Button
-              text="Faire valider par Admin"
-              className="btn btn-primary mr-4"
-              type="button"
-            />
+            {report.status !== "sent" && (
+              <AdminValidationModal
+                users={project.users}
+                projectName={project.name}
+                reportChrono={report.chrono}
+                report={report}
+                reportLink={
+                  "https://localhost:8000/#/project/" +
+                  project.id +
+                  "/" +
+                  report.id +
+                  "/validate"
+                }
+              />
+            )}
             <Link
               className="btn btn-primary"
               type="button"

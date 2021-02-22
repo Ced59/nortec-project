@@ -17,9 +17,10 @@ import pagination_configs, {
 import SearchInput from "../components/forms/SearchInput";
 import AuthAPI from "../services/AuthAPI";
 import UsersAPI from "../services/UsersAPI";
+import useIsMountedRef from "../components/UseIsMountedRef";
 
 const ListProjectsPage = () => {
-
+    const isMountedRef = useIsMountedRef();
     const [projects, setProjects] = useState([]);
     const [archivedProjects, setArchivedProjects] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -33,8 +34,10 @@ const ListProjectsPage = () => {
             const data = AuthAPI.isAdmin()?
             await ProjectsAPI.findAll():
             await UsersAPI.getProjects(AuthAPI.getUserId());
-            setProjects(data);
-            setLoading(false);
+            if (isMountedRef.current) {
+                setProjects(data);
+                setLoading(false);
+            }
         } catch (error) {
             toast.error("Erreur lors du chargement de la liste des projets");
             console.log(error.response);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { withRouter } from "react-router-dom";
 import NavbarLeft from "../components/navbars/NavbarLeft";
 import Button from "../components/forms/Button";
@@ -9,94 +9,75 @@ import ReportImputation from "../components/ReportImputation";
 import ReportComment from "../components/ReportComment";
 import ReportAddPhoto from "../components/ReportAddPhoto";
 import CardConformity from "../components/CardConformity";
+import ImputationTitle from "../components/wrapper/ImputationTitle";
+import useIsMountedRef from "../components/UseIsMountedRef";
+import handleSubmitConformity from "../components/ReportConformity";
+import ProjectsAPI from "../services/ProjectsAPI";
 
 const ReportSecuritePage = ({ match }) => {
-  const NavbarLeftWithRouter = withRouter(NavbarLeft);
   const [conforme, setConforme] = useState(false);
+  const NavbarLeftWithRouter = withRouter(NavbarLeft);
   const [imputations, setImputations] = useState([]);
-  const [tempImputations, setTempImputations] = useState([]);
-  const [editImput, setEditImput] = useState();
-  const urlParams = match.params;
-  const [report, setReport] = useState({});
   const [loading, setLoading] = useState(true);
+  const [editImput, setEditImput] = useState();
+  const [report, setReport] = useState({});
+  const isMountedRef = useIsMountedRef();
+  const imputationsRef = useRef([]);
+  const urlParams = match.params;
 
   // ------------------------------------------------------function------------------------------------------------------
 
   const fetchReport = async (id) => {
-    setTempImputations([]);
-    setImputations([]);
+    imputationsRef.current = [];
     try {
       const data = await ReportsAPI.findReport(id);
-      setReport(data);
-      setLoading(false);
-      setConforme(data.securityConformity);
-      // --------------set imputations-------------
-      if (data.securityCommentImputations == 0) {
-        setEditImput(false);
-        data.Project.lots.map((imput) =>
-          tempImputations.push({
-            companyName: imput.company.nom,
-            company: "/api/companies/" + imput.company.id,
-            report: "/api/reports/" + urlParams.idReport,
-            commentaire: "",
-          })
-        );
-        setImputations(tempImputations);
-      } else {
-        setEditImput(true);
-        data.securityCommentImputations.map((imput) =>
-          tempImputations.push({
-            idImput: imput.id,
-            companyName: imput.company.nom,
-            company: "/api/companies/" + imput.company.id,
-            report: "/api/reports/" + urlParams.idReport,
-            commentaire: imput.commentaire,
-          })
-        );
-        setImputations(tempImputations);
+      if (isMountedRef.current) {
+        setReport(data);
+        setConforme(data.securityConformity);
+        // ----------------------------------------------create new imputations-------------
+        if (data.securityCommentImputations == 0) {
+          setEditImput(false);
+          const lots = await ProjectsAPI.getLots(urlParams.id);
+          imputationsRef.current = lots.map((imput) =>
+            JSON.stringify({
+              companyName: imput.company.nom,
+              company: "/api/companies/" + imput.company.id,
+              report: "/api/reports/" + urlParams.idReport,
+              commentaire: "",
+            })
+          );
+          imputationsRef.current = [...new Set(imputationsRef.current)];
+          imputationsRef.current = imputationsRef.current.map((imputation) =>
+            JSON.parse(imputation)
+          );
+          setImputations(imputationsRef.current);
+          // ----------------------------------------------format existing imputations-------------
+        } else {
+          setEditImput(true);
+          imputationsRef.current = data.securityCommentImputations.map(
+            (imput) => ({
+              idImput: imput.id,
+              companyName: imput.company.nom,
+              company: "/api/companies/" + imput.company.id,
+              report: "/api/reports/" + urlParams.idReport,
+              commentaire: imput.commentaire,
+            })
+          );
+          setImputations(imputationsRef.current);
+        }
+        setLoading(false);
       }
-      // ---------------------------------------------
+      // ----------------------------------------------end imputations-------------
     } catch (error) {
       toast.error("Erreur lors du chargement du rapport");
       console.log(error);
+      console.log(error.response);
     }
   };
 
   useEffect(() => {
     fetchReport(urlParams.idReport);
   }, [urlParams.id, urlParams.idReport]);
-
-  // -------------------------------------------------gestion conformité/commentaire------------------------------------------
-
-  const handleSubmitReport = async ({ currentTarget }) => {
-    try {
-      report.Project = "/api/projects/" + urlParams.id;
-      if (currentTarget.name == "conformity") {
-        report.securityConformity = conforme;
-      }
-      report.securityCommentImputations = report.securityCommentImputations.map(
-        (imput) => "/api/security_comment_imputations/" + imput.id
-      );
-      report.propreteAccessImputation = report.propreteAccessImputation.map(
-        (imput) => "/api/proprete_access_imputations/" + imput.id
-      );
-      report.propreteCommuneImputations = report.propreteCommuneImputations.map(
-        (imput) => "/api/proprete_commune_imputations/" + imput.id
-      );
-
-      await ReportsAPI.update(urlParams.idReport, report);
-      if (currentTarget.name == "conformity") {
-        toast.success(
-          "Statut de la propreté des accès enregistré avec succès!"
-        );
-      } else {
-        toast.success("Commentaires enregistré avec succès!");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    fetchReport(urlParams.idReport);
-  };
 
   // --------------------------------------------------template--------------------------------------------
 
@@ -106,8 +87,7 @@ const ReportSecuritePage = ({ match }) => {
       {!loading && (
         <>
           <div className="page-content">
-            <div className="row ml-2 mt-4 d-flex justify-content-between mb-3">
-              <h2 className="mb-4">Sécurité :</h2>
+            <ImputationTitle title={"Sécurité :"}>
               <Button
                 onClick={() => setConforme(true)}
                 className="btn btn-success mb-4"
@@ -120,27 +100,30 @@ const ReportSecuritePage = ({ match }) => {
                 text="Non Conforme"
                 type="button"
               />
-            </div>
+            </ImputationTitle>
 
             {conforme && (
               <CardConformity
                 titre="Sécurité conforme ?"
-                submit={handleSubmitReport}
+                submit={()=>handleSubmitConformity(
+                  "securityConformity",
+                  conforme,
+                  fetchReport,
+                  urlParams.idReport
+                )}
               />
             )}
             {conforme === false && (
               <>
-                  <ReportImputation
-                    setLoading={setLoading}
-                    setImputations={setImputations}
-                    setTempImputations={setTempImputations}
-                    imputations={imputations}
-                    editImput={editImput}
-                    setEditImput={setEditImput}
-                    fetchReport={fetchReport}
-                    urlParams={urlParams}
-                    api={"securite"}
-                  />
+                <ReportImputation
+                  setLoading={setLoading}
+                  setImputations={setImputations}
+                  imputations={imputations}
+                  editImput={editImput}
+                  fetchReport={fetchReport}
+                  urlParams={urlParams}
+                  api={"securite"}
+                />
                 <div className="ml-auto">
                   <ReportAddPhoto
                     reportID={urlParams.idReport}
@@ -154,11 +137,17 @@ const ReportSecuritePage = ({ match }) => {
                   nameComment="securityConmment"
                   valueCommentIntern={report.securityConmmentIntern}
                   nameCommentIntern="securityConmmentIntern"
-                  handleSubmitComment={handleSubmitReport}
+                  fetchReport={fetchReport}
+                  idReport={urlParams.idReport}
                 />
                 <div className="d-flex justify-content-center">
                   <Button
-                    onClick={handleSubmitReport}
+                    onClick={()=>handleSubmitConformity(
+                      "securityConformity",
+                      conforme,
+                      fetchReport,
+                      urlParams.idReport
+                    )}
                     className="btn btn-primary"
                     text="Confirmer"
                     type="button"
@@ -170,7 +159,7 @@ const ReportSecuritePage = ({ match }) => {
           </div>
         </>
       )}
-      {loading && <div id="loading-icon"/>}
+      {loading && <div id="loading-icon" />}
     </main>
   );
 };
