@@ -28,7 +28,7 @@ const ReportPdfComponent = ({ report, project, photos }) => {
   };
   return (
     <Document
-      title={report.Project.name}
+      title={project.name}
       subject={"Rapport du " + DateAPI.formatDate(report.dateRedaction)}
     >
       <Page size="A4" style={styles.page} wrap>
@@ -40,7 +40,7 @@ const ReportPdfComponent = ({ report, project, photos }) => {
         </View>
         <View style={styles.section}>
           <Text style={styles.title}>
-            {"Opération :  " + report.Project.name}
+            {"Opération :  " + project.name}
           </Text>
           <Text style={styles.title}>
             {"Rapport OPC du " + DateAPI.formatDate(report.dateRedaction)}
@@ -49,21 +49,21 @@ const ReportPdfComponent = ({ report, project, photos }) => {
         <View style={styles.flexAlignBetween}>
           <View style={styles.sectionBorder}>
             <Text style={styles.text}>
-              {"Opération : " + report.Project.name}
+              {"Opération : " + project.name}
             </Text>
             <Text style={styles.text}>
-              {"Description : " + report.Project.description}
+              {"Description : " + project.description}
             </Text>
             <Text style={styles.text}>
-              {"Adresse 1 : " + report.Project.adresse1}
+              {"Adresse 1 : " + project.adresse1}
             </Text>
             <Text style={styles.text}>
-              {"Adresse 2 : " + report.Project.adresse2}
+              {"Adresse 2 : " + project.adresse2}
             </Text>
             <Text style={styles.text}>
-              {"Code Postal : " + report.Project.codePostal}
+              {"Code Postal : " + project.codePostal}
             </Text>
-            <Text style={styles.text}>{"Ville : " + report.Project.ville}</Text>
+            <Text style={styles.text}>{"Ville : " + project.ville}</Text>
           </View>
           <View>
             <Image style={styles.projectImage} src={project.photo}></Image>
@@ -72,9 +72,9 @@ const ReportPdfComponent = ({ report, project, photos }) => {
             <Text style={styles.text}>{"Maitre d'ouvrage : "}</Text>
             <Text style={styles.text}>
               {"MOEX - OPC : " +
-                report.Project.nomMOEX +
+                project.nomMOEX +
                 " - " +
-                report.Project.nomOPC}
+                project.nomOPC}
             </Text>
           </View>
         </View>
@@ -220,7 +220,7 @@ const ReportPdfComponent = ({ report, project, photos }) => {
                 <Text>Imputations : </Text>
                 {report.propreteCommuneImputations.map((proprete) => (
                   <View key={proprete.id}>
-                    {proprete.commentaire == "" && (
+                    {proprete.commentaire !== "" && (
                       <View style={styles.listEffectifs}>
                         <Text style={styles.textEffectifsNomEntreprise}>
                           {proprete.company.nom +
@@ -360,7 +360,7 @@ const ReportPdfComponent = ({ report, project, photos }) => {
         <Text
           style={styles.pageNumber}
           render={({ pageNumber, totalPages }) =>
-            `${report.Project.name} - ${report.Project.ville} - Page: ${pageNumber} / ${totalPages}`
+            `${project.name} - ${project.ville} - Page: ${pageNumber} / ${totalPages}`
           }
           fixed
         />

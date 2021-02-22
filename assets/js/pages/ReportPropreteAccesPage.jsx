@@ -12,6 +12,7 @@ import CardConformity from "../components/CardConformity";
 import ImputationTitle from "../components/wrapper/ImputationTitle";
 import useIsMountedRef from "../components/UseIsMountedRef";
 import handleSubmitConformity from "../components/ReportConformity";
+import ProjectsAPI from "../services/ProjectsAPI"
 
 const ReportPropreteAccesPage = ({ match }) => {
   const [conforme, setConforme] = useState("noconform");
@@ -32,12 +33,12 @@ const ReportPropreteAccesPage = ({ match }) => {
       const data = await ReportsAPI.findReport(id);
       if (isMountedRef.current) {
         setReport(data);
-        setLoading(false);
         setConforme(data.propreteAccessConformity);
         // ----------------------------------------------create new imputations-------------
         if (data.propreteAccessImputation == 0) {
           setEditImput(false);
-          imputationsRef.current = data.Project.lots.map((imput) =>
+          const lots = await ProjectsAPI.getLots(urlParams.id);
+          imputationsRef.current = lots.map((imput) =>
             JSON.stringify({
               companyName: imput.company.nom,
               company: "/api/companies/" + imput.company.id,
@@ -64,6 +65,7 @@ const ReportPropreteAccesPage = ({ match }) => {
           );
           setImputations(imputationsRef.current);
         }
+        setLoading(false);
       }
       // ---------------------------------------------
     } catch (error) {

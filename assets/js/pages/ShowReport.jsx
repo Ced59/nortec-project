@@ -65,7 +65,7 @@ const ShowReport = ({ match }) => {
         <div>
           <Link
             className="btn btn-danger"
-            to={"/project/" + report.Project.id + "/listReports"}
+            to={"/project/" + project.id + "/listReports"}
           >
             {" "}
             Retour{" "}
@@ -86,7 +86,7 @@ const ShowReport = ({ match }) => {
                   <ReportPdfComponent report={report} project={project} photos={photos} />
                 }
                 fileName={
-                  report.Project.name +
+                  project.name +
                   "_rapport_" +
                   report.chrono +
                   "_au_" +
