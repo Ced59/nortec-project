@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Component\Mime\Email;
 use App\Repository\UserRepository;
+use Symfony\Component\Dotenv\Dotenv;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -38,7 +39,7 @@ class MailerController extends AbstractController
                     <h1>Bonjour ' . $prenom . ' ' . $nom . '</h1>
                     <p>Une demande de changement de mot de passe a été demandée pour votre compte Deadlines</p>
                     <p>Suivez le lien suivant pour continuer la procédure : 
-                    <a href="https://localhost:8000/#/reinitialisation/' . $resetCode . '">Changer Votre mot de passe</a>
+                    <a href="'.$_ENV['DOMAINE_URL'].'#/reinitialisation/' . $resetCode . '">Changer Votre mot de passe</a>
                     </p>');
                 // TODO - CHANGER URL PAR NOM DE DOMAINE POUR PROD
                 // TODO - CREER TEMPLATE À RENVOYER (VOIR DOC MAILER ET TWIG)

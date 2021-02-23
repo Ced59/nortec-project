@@ -160,7 +160,7 @@ const ReportValidatePage = ({ match }) => {
                 reportChrono={report.chrono}
                 report={report}
                 reportLink={
-                  "https://localhost:8000/#/project/" +
+                  process.env.DOMAINE_URL+"#/project/" +
                   project.id +
                   "/" +
                   report.id +

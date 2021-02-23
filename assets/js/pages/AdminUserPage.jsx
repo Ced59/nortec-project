@@ -23,6 +23,13 @@ const AdminUserPage = ({ history, match, props }) => {
   //------------------------------- Récupération de l'id si il y en a un --------------------------------
   const isMountedRef = useIsMountedRef();
   const { id = "new" } = match.params;
+  const [projects, setProjects] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [edit, setEdit] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [loadingProjects, setLoadingProjects] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [userToModifyActive, setUserToModifyActive] = useState("");
 
   const [user, setUser] = useState({
     lastName: "",
@@ -38,23 +45,6 @@ const AdminUserPage = ({ history, match, props }) => {
     firstName: "",
     email: "",
     password: "",
-  });
-
-  const [projects, setProjects] = useState("");
-
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const [edit, setEdit] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [loadingProjects, setLoadingProjects] = useState(true);
-
-  const [showModal, setShowModal] = useState(false);
-  const [showModalRole, setShowModalRole] = useState(false);
-  const [userToModifyActive, setUserToModifyActive] = useState("");
-  const [userToModifyRole, setUserToModifyRole] = useState("");
-
-  const [roleChange, setRoleChange] = useState({
-    role: ["ROLE_USER"],
   });
 
   //---------------------------------------- Récupérer un Utilisateur ------------------------------------
@@ -105,11 +95,6 @@ const AdminUserPage = ({ history, match, props }) => {
   const handleChange = ({ currentTarget }) => {
     const { name, value } = currentTarget;
     setUser({ ...user, [name]: value });
-  };
-
-  const handleChangeRoleSelect = ({ currentTarget }) => {
-    const { name, value } = currentTarget;
-    setRoleChange({ ...roleChange, [name]: value });
   };
 
   // ---------------------------------------GESTION USERS PROJECTS----------------------------------------
@@ -164,15 +149,9 @@ const AdminUserPage = ({ history, match, props }) => {
   // ----------------------------- Gestion de l'affichage des fenêtres modales ------------------------------
 
   const handleCloseModal = () => setShowModal(false);
-  const handleCloseModalRole = () => setShowModalRole(false);
   const handleShowModal = (userToModifyActive) => {
     setShowModal(true);
     setUserToModifyActive(userToModifyActive);
-  };
-
-  const handleShowModalRole = (userToModifyRole) => {
-    setShowModalRole(true);
-    setUserToModifyRole(userToModifyRole);
   };
   //------------------------------Modification du statut actif d'un Utilisateur ------------------------------------
 
@@ -188,29 +167,6 @@ const AdminUserPage = ({ history, match, props }) => {
       userToModify.active = !userToModify.active;
       toast.error(
         "Une erreur est survenue pendant la modification du statut de l'utilisateur !"
-      );
-    }
-  };
-
-  //--------------------------------Modification du rôle d'un utilisateur ------------------------------------------
-
-  const handleChangeRole = async (event) => {
-    event.preventDefault();
-    handleCloseModalRole();
-
-    const roleCopie = userToModifyRole.roles;
-    const userModify = userToModifyRole;
-
-    try {
-      userModify.roles.splice(0, 1, roleChange.role);
-      setUserToModifyRole(userModify);
-      await UsersAPI.update(id, userToModifyRole);
-      toast.success("Le rôle de l'utilisateur a bien été modifié !");
-    } catch ({ response }) {
-      userModify.roles.splice(0, 1, roleCopie);
-      setUserToModifyRole(userModify);
-      toast.error(
-        "Une erreur est survenue pendant la modification du rôle de l'utilisateur !"
       );
     }
   };
@@ -308,12 +264,7 @@ const AdminUserPage = ({ history, match, props }) => {
                           <p className="col-8">
                             {UsersAPI.determineRole(user)}
                           </p>
-                          <Button
-                            type="button"
-                            text="Changer"
-                            onClick={() => handleShowModalRole(user)}
-                            className="btn btn-danger col-3"
-                          />
+                          <ChangeUserRoleModal user={user}/>
                         </>
                       ) : (
                         <div id="loading-icon" />
@@ -462,14 +413,6 @@ const AdminUserPage = ({ history, match, props }) => {
       >
 
       </ChangeUserStatusModal>
-
-      <ChangeUserRoleModal
-        showModalRole={showModalRole}
-        handleCloseModalRole={handleCloseModalRole}
-        handleChangeRole={handleChangeRole}
-        userToModifyRole={userToModifyRole}
-        handleChangeRoleSelect={handleChangeRoleSelect}
-      />
     </>
   );
 };
