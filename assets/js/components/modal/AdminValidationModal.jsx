@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
+import AuthAPI from "../../services/AuthAPI";
 import MailAPI from "../../services/MailAPI";
 import ReportsAPI from "../../services/ReportsAPI";
 import Button from "../forms/Button";
@@ -19,7 +20,7 @@ const AdminValidationModal = ({
 
   //   -----------------------------------------------FUNCTIONS----------------------------------------
 
-   const fetchUsersEmail = () => {
+  const fetchUsersEmail = () => {
     const tempUsers = [];
     users.forEach((u) => {
       tempUsers.push(u);
@@ -45,7 +46,6 @@ const AdminValidationModal = ({
 
   const handleSubmit = async () => {
     if (destinataires.length !== 0) {
-
       const formData = new FormData();
       formData.append("projectName", projectName);
       formData.append("reportChrono", reportChrono);
@@ -55,8 +55,8 @@ const AdminValidationModal = ({
       try {
         const data = formData;
         MailAPI.adminValidation(data).then((r) => {
-          const reportStatus={status:"validating"};
-          ReportsAPI.update(report.id,reportStatus);
+          const reportStatus = { status: "validating" };
+          ReportsAPI.update(report.id, reportStatus);
           toast.success("Emails envoyés");
         });
       } catch (e) {
@@ -128,7 +128,7 @@ const AdminValidationModal = ({
                     </React.Fragment>
                   ))}
                 </tbody>
-              </table>              
+              </table>
             </>
           )}
           {modalStep == 2 && ( // AFFICHAGE DE TOUT LES CONTACTS SELECTIONNES
@@ -181,12 +181,18 @@ const AdminValidationModal = ({
           </div>
         </Modal.Body>
       </Modal>
-      <Button
-        text={report.status !=="validating" ? "Faire valider par Admin": "Renvoyer à l'admin"}
-        className="btn btn-primary mr-4"
-        type="button"
-        onClick={() => setShowModal(!showModal)}
-      />
+      {AuthAPI.isRole() === "Utilisateur" && (
+        <Button
+          text={
+            report.status !== "validating"
+              ? "Faire valider par Admin"
+              : "Renvoyer à l'admin"
+          }
+          className="btn btn-primary mr-4"
+          type="button"
+          onClick={() => setShowModal(!showModal)}
+        />
+      )}
     </>
   );
 };

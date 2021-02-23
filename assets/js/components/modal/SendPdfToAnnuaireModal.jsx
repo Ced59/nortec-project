@@ -2,6 +2,7 @@ import { pdf } from "@react-pdf/renderer";
 import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
+import AuthAPI from "../../services/AuthAPI";
 import CompanyAPI from "../../services/CompanyAPI";
 import MailAPI from "../../services/MailAPI";
 import ReportsAPI from "../../services/ReportsAPI";
@@ -293,12 +294,14 @@ const SendPdfToAnnuaireModal = ({
           </div>
         </Modal.Body>
       </Modal>
+      {AuthAPI.isRole()==="Administrateur" && (
       <Button
         text={report.status !=="sent" ? "Clôturer et envoyer": "Renvoyer"}
         className="btn btn-primary mr-4"
         type="button"
         onClick={() => setShowModal(!showModal)}
       />
+      )}
     </>
   );
 };
