@@ -1,33 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
+import { toast } from "react-toastify";
+import UsersAPI from "../../services/UsersAPI";
 import Button from "../forms/Button";
 
-const ChangeUserRoleModal = ({
-  showModalRole,
-  handleCloseModalRole,
-  handleChangeRole,
-  userToModifyRole,
-  handleChangeRoleSelect,
-}) => {
+const ChangeUserRoleModal = ({user}) => {
+  const [showRoleModal, setShowRoleModal] = useState(false);
+  const [role, setRole] = useState("ROLE_USER");
+
+  const handleSubmitRole = async () => {
+    const userRole = { roles : [role]};
+    try {
+      await UsersAPI.update(user.id, userRole);
+      toast.success("Le rôle de l'utilisateur a bien été modifié !");
+    } catch ({ response }) {
+      toast.error(
+        "Une erreur est survenue pendant la modification du rôle de l'utilisateur !"
+      );
+    }
+  };
+
   return (
+    <>
     <Modal
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
-      show={showModalRole}
-      onHide={handleCloseModalRole}
+      show={showRoleModal}
+      onHide={() => setShowRoleModal(false)}
     >
       <Modal.Header closeButton>
         <Modal.Title>Attention !</Modal.Title>
       </Modal.Header>
-      <form onSubmit={handleChangeRole}>
         <Modal.Body>
-          Vous êtes sur le point de changer le rôle de l'utilisateur{" "}
-          {userToModifyRole.firstName} {userToModifyRole.lastName}! <br />
+          Vous êtes sur le point de changer le rôle de l'utilisateur
+          {user.firstName} {user.lastName}! <br />
           Êtes vous sûr de vouloir continuer? <br />
           <br />
           Nouveau rôle :
-          <select name="role" id="role" onChange={handleChangeRoleSelect}>
+          <select onChange={(e)=>setRole(e.currentTarget.value)}>
             <option value="ROLE_USER">Utilisateur</option>
             <option value="ROLE_ADMIN">Administrateur</option>
           </select>
@@ -37,12 +48,23 @@ const ChangeUserRoleModal = ({
             className="btn btn-primary"
             text="Fermer"
             type="button"
-            onClick={handleCloseModalRole}
+            onClick={() => setShowRoleModal(false)}
           />
-          <Button className="btn btn-danger" text="Confirmer" />
+          <Button
+            type="button"
+            className="btn btn-danger"
+            text="Confirmer"
+            onClick={handleSubmitRole}
+          />
         </Modal.Footer>
-      </form>
-    </Modal>
+      </Modal>
+      <Button
+        type="button"
+        text="Changer"
+        onClick={() => setShowRoleModal(true)}
+        className="btn btn-danger col-3"
+      />
+    </>
   );
 };
 

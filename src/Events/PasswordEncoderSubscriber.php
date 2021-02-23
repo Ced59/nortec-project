@@ -41,8 +41,10 @@ class PasswordEncoderSubscriber implements EventSubscriberInterface {
 
         if ($result instanceof User && $method === "PUT") {
 
-            $hash = $this->encoder->encodePassword($result, $result->getPassword());
-            $result->setPassword($hash);
+            if (substr($result->getPassword(),0,10) !== "\$argon2id$") {
+                $hash = $this->encoder->encodePassword($result, $result->getPassword());
+                $result->setPassword($hash);
+            }
 
         }
 
