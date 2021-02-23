@@ -132,7 +132,7 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
               {AuthAPI.isAdmin() && !addLot && (
                 <Button
                   type="button"
-                  className="btn btn-primary"
+                  className="btn btn-primary mb-2"
                   onClick={() => handleShowAddLot()}
                   text="Ajouter un lot"
                 />
