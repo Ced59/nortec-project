@@ -106,7 +106,6 @@ class Report
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"report"})
      */
     private $installations;
 
@@ -137,13 +136,13 @@ class Report
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Lot", mappedBy="report")
-     * @Groups({"lot","report"})
+     * @Groups({"report"})
      */
     private $lots;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"lot","report"})
+     * @Groups({"report"})
      */
     private $chrono;
 

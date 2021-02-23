@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import '../../css/loading-icon.css';
 import CompanyAPI from '../services/CompanyAPI';
 import useIsMountedRef from "../components/UseIsMountedRef";
+import { toast } from 'react-toastify';
 
 const AdminCompaniesPage = () => {
     const isMountedRef = useIsMountedRef();
@@ -20,6 +21,7 @@ const AdminCompaniesPage = () => {
         } catch (error) {
             toast.error("Erreur lors du chargement de la liste des entreprises");
             console.log(error.response);
+            console.log(error);
         }
     }
 

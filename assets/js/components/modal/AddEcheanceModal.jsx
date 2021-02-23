@@ -9,12 +9,12 @@ import EcheanceAPI from "../../services/EcheanceAPI";
 import { toast } from "react-toastify";
 
 const AddEcheanceModal = ({
-  project,
+  lots,
   loading,
   echeanceError,
   setEcheanceError,
   echeanceErrorModel,
-  fetchProject,
+  fetchLots,
   urlParams,
 }) => {
   const [echeance, setEcheance] = useState({
@@ -62,7 +62,7 @@ const AddEcheanceModal = ({
       await EcheanceAPI.create(echeance);
 
       toast.success("L'échéance est bien ajouté !");
-      fetchProject(urlParams.id);
+      fetchLots(urlParams.id);
       handleShowModalEcheance();
     } catch (error) {
       console.log(error.response);
@@ -112,8 +112,7 @@ const AddEcheanceModal = ({
                   error={echeanceLotError.lot}
                 >
                   <option value="">Selectionnez le lot</option>
-                  {project.lots &&
-                    project.lots.map((lot) => (
+                  {lots.map((lot) => (
                       <option key={lot.id} value={"/api/lots/" + lot.id}>
                         {lot.company.nom} ({lot.libelleLot})
                       </option>

@@ -142,7 +142,6 @@ class Project
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Company", inversedBy="projects")
-     * @Groups({"project"})
      */
     private $companies;
 
