@@ -1,12 +1,6 @@
 import axios from "axios";
 import { REPORT_API } from "../components/configs/api_links_config";
 
-function findAll() {
-  return axios
-    .get(REPORT_API)
-    .then((response) => response.data["hydra:member"]);
-}
-
 function findReport(id) {
   let report = axios
     .get(REPORT_API + "/" + id)
@@ -33,7 +27,6 @@ function getEcheances(idReport) {
 
 export default {
   create,
-  findAll,
   findReport,
   update,
   getEcheances,

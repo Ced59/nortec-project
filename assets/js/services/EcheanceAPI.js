@@ -1,14 +1,5 @@
 import axios from "axios";
-import {
-  ECHEANCE_API,
-  REPORT_API,
-} from "../components/configs/api_links_config";
-
-function findAll() {
-  return axios
-    .get(ECHEANCE_API)
-    .then((response) => response.data["hydra:member"]);
-}
+import { ECHEANCE_API } from "../components/configs/api_links_config";
 
 function findEcheance(id) {
   let echeance = axios
@@ -27,7 +18,6 @@ function update(id, echeance) {
 
 export default {
   create,
-  findAll,
   findEcheance,
   update,
 };
