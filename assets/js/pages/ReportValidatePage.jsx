@@ -153,7 +153,7 @@ const ReportValidatePage = ({ match }) => {
               report={report}
               photos={photos}
             />
-            {report.status !== "sent" && (
+            {report.status !== "sent" && report.status !== "clotured"  && (
               <AdminValidationModal
                 users={project.users}
                 projectName={project.name}
