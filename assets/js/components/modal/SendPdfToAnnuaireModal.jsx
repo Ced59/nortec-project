@@ -1,6 +1,7 @@
 import { pdf } from "@react-pdf/renderer";
 import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import AuthAPI from "../../services/AuthAPI";
 import CompanyAPI from "../../services/CompanyAPI";
@@ -91,8 +92,8 @@ const SendPdfToAnnuaireModal = ({
       try {
         const data = formData;
         MailAPI.sendPDF(data).then((r) => {
-          const reportStatus={status:"sent"};
-          ReportsAPI.update(report.id,reportStatus);
+          const reportStatus = { status: "sent" };
+          ReportsAPI.update(report.id, reportStatus);
           toast.success("Emails envoyés");
         });
       } catch (e) {
@@ -172,6 +173,17 @@ const SendPdfToAnnuaireModal = ({
           {modalStep == 2 && ( // CHOIX CONTACTS UTILISATEUR
             <>
               <h4 className="text-center">Contacts utilisateurs</h4>
+              <div className="text-right">
+                <Link
+                  to={{
+                    pathname: "/admin/project/" + project.id,
+                    state: "Revenir à Validation et envoi",
+                  }}
+                  className="btn btn-info"
+                >
+                  Ajouter des utilisateurs au projet
+                </Link>
+              </div>
               <h5 className="ml-5">Administrateurs</h5>
               <table className="table table-hover col-8 mx-auto">
                 <tbody>
@@ -294,13 +306,13 @@ const SendPdfToAnnuaireModal = ({
           </div>
         </Modal.Body>
       </Modal>
-      {AuthAPI.isRole()==="Administrateur" && (
-      <Button
-        text={report.status !=="sent" ? "Clôturer et envoyer": "Renvoyer"}
-        className="btn btn-primary mr-4"
-        type="button"
-        onClick={() => setShowModal(!showModal)}
-      />
+      {AuthAPI.isRole() === "Administrateur" && (
+        <Button
+          text={report.status !== "sent" ? "Clôturer et envoyer" : "Renvoyer"}
+          className="btn btn-primary mr-4"
+          type="button"
+          onClick={() => setShowModal(!showModal)}
+        />
       )}
     </>
   );

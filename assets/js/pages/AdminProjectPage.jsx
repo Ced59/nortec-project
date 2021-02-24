@@ -12,8 +12,9 @@ import LotModal from "../components/modal/LotModal";
 import EcheanceModal from "../components/modal/EcheanceModal";
 import UsersInProjectSection from "../components/UsersInProjectSection";
 import useIsMountedRef from "../components/UseIsMountedRef";
+import Button from "../components/forms/Button";
 
-const AdminProjectPage = ({ history, match, props }) => {
+const AdminProjectPage = ({ history, match, location, props }) => {
   const isMountedRef = useIsMountedRef();
   const { id = "new" } = match.params;
 
@@ -273,6 +274,14 @@ const AdminProjectPage = ({ history, match, props }) => {
             <Link to="/admin/project" className="btn btn-danger">
               Retour aux projets
             </Link>
+            {location.state && (
+              <Button
+                text={location.state}
+                className="btn btn-info"
+                type="button"
+                onClick={() => history.goBack()}
+              />
+            )}
             <button type="submit" className="btn btn-success">
               Valider
             </button>
