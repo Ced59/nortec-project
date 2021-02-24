@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "../forms/Button";
-import { statusEcheanceClasses, statusEcheanceLabel } from "../ProjectStatus";
+import { statusEcheanceClasses, statusEcheanceLabel } from "../ReportStatus";
 import DateAPI from "../../services/DateAPI";
 
 const EcheanceModal = ({ project }) => {
@@ -49,15 +49,12 @@ const EcheanceModal = ({ project }) => {
                           <th>Echéance</th>
                           <th>Clotûre</th>
                           <th>Retard</th>
-
                         </tr>
                       </thead>
                       <tbody>
                         {lot.echeances.map((echeance) => (
                           <React.Fragment key={echeance.id}>
-                            {echeance.report.includes(
-                              lastReport
-                            ) && (
+                            {echeance.report.includes(lastReport) && (
                               <tr key={echeance.id}>
                                 <td>{echeance.redacteur}</td>
                                 <td>

@@ -1,26 +1,26 @@
 import React from "react";
 import { Document, Page, Text, View, Image } from "@react-pdf/renderer";
 import DateAPI from "../../services/DateAPI";
-import { statusEcheanceLabel } from "../ProjectStatus";
+import { statusEcheanceLabel } from "../ReportStatus";
 import PdfPhotoGallery from "./PdfPhotoGallery";
 import styles from "./PdfStyle";
 
 const ReportPdfComponent = ({ report, project, photos }) => {
-  const statusColor = (dateDebut, dateCloture, dateFinPrevue) => {
+  const statusColor = (dateDebut, dateCloture, dateFinPrevue,dateReport) => {
     if (
-      statusEcheanceLabel(dateDebut, dateCloture, dateFinPrevue) === "En cours"
+      statusEcheanceLabel(dateDebut, dateCloture, dateFinPrevue,dateReport) === "En cours"
     ) {
       return "#ffc107";
     } else if (
-      statusEcheanceLabel(dateDebut, dateCloture, dateFinPrevue) === "En retard"
+      statusEcheanceLabel(dateDebut, dateCloture, dateFinPrevue, dateReport) === "En retard"
     ) {
       return "#dc3545";
     } else if (
-      statusEcheanceLabel(dateDebut, dateCloture, dateFinPrevue) === "Fini"
+      statusEcheanceLabel(dateDebut, dateCloture, dateFinPrevue, dateReport) === "Fini"
     ) {
       return "#28a745";
     } else if (
-      statusEcheanceLabel(dateDebut, dateCloture, dateFinPrevue) ===
+      statusEcheanceLabel(dateDebut, dateCloture, dateFinPrevue, dateReport) ===
       "Pas démarré"
     ) {
       return "#17a2b8";
@@ -333,7 +333,8 @@ const ReportPdfComponent = ({ report, project, photos }) => {
                                     backgroundColor: statusColor(
                                       echeance.dateDebut,
                                       echeance.dateCloture,
-                                      echeance.dateFinPrevue
+                                      echeance.dateFinPrevue,
+                                      report.dateRedaction
                                     ),
                                   },
                                 ]}
@@ -342,7 +343,8 @@ const ReportPdfComponent = ({ report, project, photos }) => {
                                   {statusEcheanceLabel(
                                     echeance.dateDebut,
                                     echeance.dateCloture,
-                                    echeance.dateFinPrevue
+                                    echeance.dateFinPrevue,
+                                    report.dateRedaction
                                   )}
                                 </Text>
                               </View>

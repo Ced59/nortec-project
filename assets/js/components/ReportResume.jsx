@@ -222,6 +222,7 @@ const ReportResume = ({ report, project, photos, reportLoading, reportId }) => {
                               <td>
                                 <SpanStatusEcheance
                                   objet={echeance}
+                                  dateReport={report.dateRedaction}
                                 ></SpanStatusEcheance>
                               </td>
                             </tr>

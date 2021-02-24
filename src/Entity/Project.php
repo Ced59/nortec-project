@@ -29,7 +29,7 @@ class Project
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"project"})
+     * @Groups({"project","report"})
      * @Assert\NotBlank(message="Le nom du projet est obligatoire !")
      */
     private $name;
