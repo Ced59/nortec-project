@@ -173,6 +173,17 @@ const SendPdfToAnnuaireModal = ({
           {modalStep == 2 && ( // CHOIX CONTACTS UTILISATEUR
             <>
               <h4 className="text-center">Contacts utilisateurs</h4>
+              <div className="text-right">
+                <Link
+                  to={{
+                    pathname: "/admin/project/" + project.id,
+                    state: "Revenir à Validation et envoi",
+                  }}
+                  className="btn btn-info"
+                >
+                  Ajouter des utilisateurs au projet
+                </Link>
+              </div>
               <h5 className="ml-5">Administrateurs</h5>
               <table className="table table-hover col-8 mx-auto">
                 <tbody>
@@ -248,17 +259,6 @@ const SendPdfToAnnuaireModal = ({
           {modalStep == 3 && ( // AFFICHAGE DE TOUT LES CONTACTS SELECTIONNES
             <>
               <h5 className="ml-5">Destinataires du mail</h5>
-              <div className="text-right">
-                <Link
-                  to={{
-                    pathname: "/admin/project/" + project.id,
-                    state: "Revenir à Validation et envoi",
-                  }}
-                  className="btn btn-info"
-                >
-                  Modifier
-                </Link>
-              </div>
               <div className=" d-flex justify-content-center">
                 {destinataires.length === 0 ? (
                   <div>Vous n'avez selectionnez aucun destinataire</div>
