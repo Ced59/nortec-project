@@ -28,8 +28,6 @@ const AdminUserPage = ({ history, match, props }) => {
   const [edit, setEdit] = useState(false);
   const [loading, setLoading] = useState(true);
   const [loadingProjects, setLoadingProjects] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-  const [userToModifyActive, setUserToModifyActive] = useState("");
 
   const [user, setUser] = useState({
     lastName: "",
@@ -49,7 +47,7 @@ const AdminUserPage = ({ history, match, props }) => {
 
   //---------------------------------------- Récupérer un Utilisateur ------------------------------------
 
-  const fetchUser = async (id) => {
+  const fetchUser = async () => {
     try {
       const result = await UsersAPI.find(id);
       if (isMountedRef.current) {
@@ -84,7 +82,7 @@ const AdminUserPage = ({ history, match, props }) => {
   useEffect(() => {
     if (id !== "new") {
       setEdit(true);
-      fetchUser(id);
+      fetchUser();
       fetchProjects();
     } else {
       setLoading(false);
@@ -143,31 +141,6 @@ const AdminUserPage = ({ history, match, props }) => {
 
         setError(apiErrors);
       }
-    }
-  };
-
-  // ----------------------------- Gestion de l'affichage des fenêtres modales ------------------------------
-
-  const handleCloseModal = () => setShowModal(false);
-  const handleShowModal = (userToModifyActive) => {
-    setShowModal(true);
-    setUserToModifyActive(userToModifyActive);
-  };
-  //------------------------------Modification du statut actif d'un Utilisateur ------------------------------------
-
-  const handleActiveUser = async (userToModify) => {
-    handleCloseModal();
-
-    try {
-      userToModify.active = !userToModify.active;
-
-      await UsersAPI.update(id, userToModify);
-      toast.success("Le statut de l'utilisateur a bien été modifié !");
-    } catch ({ response }) {
-      userToModify.active = !userToModify.active;
-      toast.error(
-        "Une erreur est survenue pendant la modification du statut de l'utilisateur !"
-      );
     }
   };
 
@@ -264,7 +237,10 @@ const AdminUserPage = ({ history, match, props }) => {
                           <p className="col-8">
                             {UsersAPI.determineRole(user)}
                           </p>
-                          <ChangeUserRoleModal user={user}/>
+                          <ChangeUserRoleModal
+                            user={user}
+                            fetchUser={fetchUser}
+                          />
                         </>
                       ) : (
                         <div id="loading-icon" />
@@ -292,13 +268,10 @@ const AdminUserPage = ({ history, match, props }) => {
                               ? "Le compte de l'utilisateur est bien activé"
                               : "Le compte de l'utilisateur n'est pas activé"}
                           </p>
-                          <button
-                            type="button"
-                            onClick={() => handleShowModal(user)}
-                            className="btn btn-danger col-3"
-                          >
-                            {user.active ? "Désactiver" : "Activer"}
-                          </button>
+                          <ChangeUserStatusModal
+                            user={user}
+                            fetchUser={fetchUser}
+                          />
                         </>
                       ) : (
                         <div id="loading-icon" />
@@ -404,15 +377,6 @@ const AdminUserPage = ({ history, match, props }) => {
           </Link>
         </div>
       </main>
-
-      <ChangeUserStatusModal
-        showModal={showModal}
-        handleCloseModal={handleCloseModal}
-        userToModifyActive={userToModifyActive}
-        handleActiveUser={() => handleActiveUser(userToModifyActive)}
-      >
-
-      </ChangeUserStatusModal>
     </>
   );
 };
