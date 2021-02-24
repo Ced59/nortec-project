@@ -35,22 +35,3 @@ export function determineStatusLabel(dateDebut, dateFin, dateFinPrevue) {
     )
   ];
 }
-
-export function statusEcheanceClasses(dateDebut, dateCloture, dateFinPrevue) {
-  if (
-    determineStatusClasses(dateDebut, dateCloture, dateFinPrevue) === "primary"
-  ) {
-    return "success";
-  } else {
-    return determineStatusClasses(dateDebut, dateCloture, dateFinPrevue);
-  }
-}
-export function statusEcheanceLabel(dateDebut, dateCloture, dateFinPrevue) {
-  if (
-    determineStatusLabel(dateDebut, dateCloture, dateFinPrevue) === "Archivé"
-  ) {
-    return "Fini";
-  } else {
-    return determineStatusLabel(dateDebut, dateCloture, dateFinPrevue);
-  }
-}

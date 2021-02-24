@@ -1,27 +1,27 @@
-import React from 'react';
-import { statusEcheanceClasses, statusEcheanceLabel } from '../ProjectStatus';
+import React from "react";
+import { statusEcheanceClasses, statusEcheanceLabel } from "../ReportStatus";
 
-
-
- const SpanStatusEcheance = ({objet}) => {
-    return (
-      <span
-        className={
-          "badge badge-" +
-          statusEcheanceClasses(
-            objet.dateDebut,
-            objet.dateCloture,
-            objet.dateFinPrevue
-          )
-        }
-      >
-        {statusEcheanceLabel(
+const SpanStatusEcheance = ({ objet, dateReport }) => {
+  return (
+    <span
+      className={
+        "badge badge-" +
+        statusEcheanceClasses(
           objet.dateDebut,
           objet.dateCloture,
-          objet.dateFinPrevue
-        )}
-      </span>
-    );
-  };
+          objet.dateFinPrevue,
+          dateReport
+        )
+      }
+    >
+      {statusEcheanceLabel(
+        objet.dateDebut,
+        objet.dateCloture,
+        objet.dateFinPrevue,
+        dateReport
+      )}
+    </span>
+  );
+};
 
-  export default SpanStatusEcheance
+export default SpanStatusEcheance;

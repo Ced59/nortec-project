@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-var customParseFormat = require('dayjs/plugin/customParseFormat');
+var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 
 function determineStatus(dateDebut, dateFinReelle, dateFinPrevue) {
@@ -24,6 +24,28 @@ function determineStatus(dateDebut, dateFinReelle, dateFinPrevue) {
   return status;
 }
 
+function determineEcheanceStatus(
+  dateDebut,
+  dateCloture,
+  dateFinPrevue,
+  dateReport
+) {
+  let status = "";
+
+  if (!dateCloture) {
+    if (dayjs().isBefore(dateDebut)) {
+      status = "no_start";
+    } else if (dayjs(dateReport).isAfter(dateFinPrevue)) {
+      status = "late";
+    } else {
+      status = "in_progress";
+    }
+  } else {
+    status = "finished";
+  }
+  return status;
+}
+
 function formatDate(date) {
   if (date) {
     return dayjs(date).format("DD/MM/YYYY");
@@ -36,18 +58,18 @@ function formatDateForm(date) {
   }
 }
 
-function formatDateFormConst(date){
-  if(date){
-    let year = dayjs(date).year();    
-    let month = dayjs(date).month()+1;
-    if (month<10){
-      month = "0"+month;
+function formatDateFormConst(date) {
+  if (date) {
+    let year = dayjs(date).year();
+    let month = dayjs(date).month() + 1;
+    if (month < 10) {
+      month = "0" + month;
     }
     let day = dayjs(date).date();
-    if (day<10){
-      day="0"+day;
+    if (day < 10) {
+      day = "0" + day;
     }
-    return year+"-"+month+"-"+day
+    return year + "-" + month + "-" + day;
   }
 }
 
@@ -87,16 +109,17 @@ function dateIsAfterDebut(dateToCompare, dateDebut) {
   return dayjs(dateToCompare).isAfter(dateDebut);
 }
 
-function retard(dateFin, dateDebut) {
-  if (dateFin !== "") {
+function retard(dateFin, dateDebut, dateReport) {
+  if (dateFin) {
     return dayjs(dateFin).diff(dayjs(dateDebut), "day");
-  } else if (now().diff(dayjs(dateDebut), "day") > 0) {
-    return now().diff(dayjs(dateDebut), "day");
+  } else if (dayjs(dateReport).diff(dayjs(dateDebut), "day") > 0) {
+    return dayjs(dateReport).diff(dayjs(dateDebut), "day");
   }
 }
 
 export default {
   determineStatus,
+  determineEcheanceStatus,
   formatDate,
   formatDateHours,
   verifyDateExist,

@@ -12,6 +12,7 @@ import EcheanceAPI from "../services/EcheanceAPI";
 import { toast } from "react-toastify";
 import AddEcheanceModal from "../components/modal/AddEcheanceModal";
 import SpanStatusEcheance from "../components/span/SpanStatusEcheance";
+import ReportsAPI from "../services/ReportsAPI";
 import useIsMountedRef from "../components/UseIsMountedRef";
 
 const ReportEcheancesPage = ({ match }) => {
@@ -23,6 +24,7 @@ const ReportEcheancesPage = ({ match }) => {
   const [edit, setEdit] = useState(false);
   const [loading, setLoading] = useState(true);
   const [echeanceDetail, setEcheanceDetail] = useState({});
+  const [report, setReport] = useState({});
   const echeanceErrorModel = useState(echeanceError);
   const [echeanceError, setEcheanceError] = useState({
     numeroEcheance: "",
@@ -34,7 +36,7 @@ const ReportEcheancesPage = ({ match }) => {
     lot: "",
   });
 
-    // ----------------------------------------------------FETCH FUNCTIONS-------------------------------------------------
+  // ----------------------------------------------------FETCH FUNCTIONS-------------------------------------------------
 
   const fetchLots = async (id) => {
     try {
@@ -59,13 +61,25 @@ const ReportEcheancesPage = ({ match }) => {
       toast.error("Erreur lors du chargement de l'échéance");
       console.log(error.response);
     }
-  };  
+  };
+
+  const fetchReport = async (id) => {
+    try {
+      const data = await ReportsAPI.findReport(id);
+      if (isMountedRef.current) {
+        setReport(data);
+      }
+    } catch (error) {
+      toast.error("Erreur lors du chargement du projet");
+    }
+  };
 
   useEffect(() => {
+    fetchReport(urlParams.idReport);
     fetchLots(urlParams.id);
   }, [urlParams.idReport, urlParams.id]);
 
-    // ----------------------------------------------------GESTION D'ETAT-------------------------------------------------
+  // ----------------------------------------------------GESTION D'ETAT-------------------------------------------------
 
   const handleShowModalDetail = async (id) => {
     if (!showModalDetail) {
@@ -82,7 +96,7 @@ const ReportEcheancesPage = ({ match }) => {
     setEcheanceDetail({ ...echeanceDetail, [name]: value });
   };
 
-    // ---------------------------------------------------GESTION SUBMIT--------------------------------------------------
+  // ---------------------------------------------------GESTION SUBMIT--------------------------------------------------
 
   const handleSubmitChangeEcheance = async (event) => {
     event.preventDefault();
@@ -155,7 +169,10 @@ const ReportEcheancesPage = ({ match }) => {
                               <td>{echeance.zone}</td>
                               <td>{echeance.sujet}</td>
                               <td>
-                                <SpanStatusEcheance objet= {echeance} ></SpanStatusEcheance>
+                                <SpanStatusEcheance
+                                  objet={echeance}
+                                  dateReport={report.dateRedaction}
+                                ></SpanStatusEcheance>
                               </td>
                               <td>{DateAPI.formatDate(echeance.dateDebut)}</td>
                               <td>
@@ -167,17 +184,19 @@ const ReportEcheancesPage = ({ match }) => {
                               <td>
                                 {DateAPI.retard(
                                   echeance.dateCloture,
-                                  echeance.dateFinPrevue
+                                  echeance.dateFinPrevue,
+                                  report.dateRedaction
                                 ) > 0 &&
                                   DateAPI.retard(
                                     echeance.dateCloture,
-                                    echeance.dateFinPrevue
+                                    echeance.dateFinPrevue,
+                                    report.dateRedaction
                                   )}
                               </td>
                               <td>{lot.company.nom}</td>
                               <td>
                                 <Button
-                                    type="button"
+                                  type="button"
                                   className="btn btn-primary"
                                   text="Détails"
                                   onClick={() =>
@@ -231,7 +250,8 @@ const ReportEcheancesPage = ({ match }) => {
                 </div>
                 <div className="col-5 mt-3 border-detail d-flex flex-column justify-content-center">
                   <p>
-                    Libellé: {echeanceDetail.lot && echeanceDetail.lot.libelleLot}
+                    Libellé:{" "}
+                    {echeanceDetail.lot && echeanceDetail.lot.libelleLot}
                   </p>
                   {!edit ? (
                     <>
@@ -258,7 +278,9 @@ const ReportEcheancesPage = ({ match }) => {
                   )}
                   <p>
                     Statut:{" "}
-                    <SpanStatusEcheance objet= {echeanceDetail} ></SpanStatusEcheance>
+                    <SpanStatusEcheance
+                      objet={echeanceDetail}
+                    ></SpanStatusEcheance>
                   </p>
                 </div>
                 {edit ? (
@@ -303,13 +325,15 @@ const ReportEcheancesPage = ({ match }) => {
                     </p>
                     {DateAPI.retard(
                       echeanceDetail.dateCloture,
-                      echeanceDetail.dateFinPrevue
+                      echeanceDetail.dateFinPrevue,
+                      report.dateRedaction
                     ) > 0 && (
                       <p>
                         Retard:{" "}
                         {DateAPI.retard(
                           echeanceDetail.dateCloture,
-                          echeanceDetail.dateFinPrevue
+                          echeanceDetail.dateFinPrevue,
+                          report.dateRedaction
                         )}
                       </p>
                     )}
@@ -342,7 +366,7 @@ const ReportEcheancesPage = ({ match }) => {
                 </fieldset>
                 <div className="col-12 mt-3 d-flex justify-content-end">
                   {edit && (
-                    <Button className="btn btn-success" text="Valider"/>
+                    <Button className="btn btn-success" text="Valider" />
                   )}
                 </div>
               </div>
@@ -351,18 +375,18 @@ const ReportEcheancesPage = ({ match }) => {
           <Modal.Footer>
             {!edit ? (
               <Button
-                  type="button"
+                type="button"
                 className="btn btn-primary"
                 text="Modifier"
-                onClick={()=>setEdit(!edit)}
+                onClick={() => setEdit(!edit)}
               />
             ) : (
               <>
                 <Button
-                    type="button"
+                  type="button"
                   className="btn btn-danger"
                   text="Annuler"
-                  onClick={()=>setEdit(!edit)}
+                  onClick={() => setEdit(!edit)}
                 />
               </>
             )}
