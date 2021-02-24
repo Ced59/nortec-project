@@ -48,18 +48,29 @@ const ReportImputation = ({
   };
 
   const handleSubmitImput = () => {
-    console.log(imputations);
     setLoading(true);
     try {
       if (!editImput) {
         Promise.all(
           imputations.map(async (imput) => await create[api](imput))
-        ).then(imputationsSent());
+        ).then(response=>{
+          console.log(response);
+          imputationsSent();
+        }).catch ((e)=>{
+          console.log(e);
+          console.log(e.response);
+        });
       } else {
         Promise.all(
           imputations.map(
             async (imput) => await update[api](imput, imput.idImput))
-        ).then(imputationsSent());
+        ).then(response=>{
+          console.log(response);
+          imputationsSent();
+        }).catch ((e)=>{
+          console.log(e);
+          console.log(e.response);
+        });
       }
     } catch (e) {
       console.log(e);

@@ -10,11 +10,6 @@ import { Helmet } from "react-helmet";
 import Button from "../components/forms/Button";
 
 const LoginPage = ({ history }) => {
-  // ------------------------------PASSER A FALSE EN PROD----------------------------
-  // ------------------------------PASSER A FALSE EN PROD----------------------------
-  const devMode = true;
-  // ------------------------------PASSER A FALSE EN PROD----------------------------
-  // ------------------------------PASSER A FALSE EN PROD----------------------------
 
   // Etat initial du component
   const [credentials, setCredentials] = useState({
@@ -104,56 +99,7 @@ const LoginPage = ({ history }) => {
               </Link>
             </div>
 
-            {/* ----------------------------------DEV------------------------------ */}
-            {devMode && (
-              <div className="row d-flex justify-content-end">
-                <Button
-                  text="Cédric"
-                  className="btn btn-warning"
-                  type="button"
-                  onClick={() =>
-                    setCredentials({
-                      username: "ced@admin.com",
-                      password: "password",
-                    })
-                  }
-                />
-                <Button
-                  text="Vincent"
-                  className="btn btn-warning"
-                  type="button"
-                  onClick={() =>
-                    setCredentials({
-                      username: "vincent@admin.com",
-                      password: "password",
-                    })
-                  }
-                />
-                <Button
-                  text="Charles"
-                  className="btn btn-warning"
-                  type="button"
-                  onClick={() =>
-                    setCredentials({
-                      username: "charles@admin.com",
-                      password: "password",
-                    })
-                  }
-                />
-                <Button
-                  text="Dany"
-                  className="btn btn-warning"
-                  type="button"
-                  onClick={() =>
-                    setCredentials({
-                      username: "dany@admin.com",
-                      password: "password",
-                    })
-                  }
-                />
-              </div>
-            )}
-            {/* ----------------------------------DEV------------------------------ */}
+            
 
             <div className="text-right mt-3 mb-3">
               <Button text="Connexion" className="btn btn-login"/>
