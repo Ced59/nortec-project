@@ -70,7 +70,7 @@ const UsersInProjectSection = ({ id, edit }) => {
 
   // -----------------------------------------------------------------------GESTION SUBMIT----------------------------------------------
 
-  const handleSubmitUser = (e, user) => {
+  const handleSubmitUser = async (e, user) => {
     const btn = e.currentTarget;
     btn.disabled = true;
     const updatedProjects = [...user.project];
@@ -89,7 +89,7 @@ const UsersInProjectSection = ({ id, edit }) => {
 
     const userProjects = { project: updatedProjects };
     try {
-      UsersAPI.update(user.id, userProjects);
+      await UsersAPI.update(user.id, userProjects);
       toast.success("Utilisateurs du project mis à jour");
       fetchUsers();
     } catch (e) {
