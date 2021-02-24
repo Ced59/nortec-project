@@ -21,7 +21,7 @@ class SecurityCommentImputation
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\REport", inversedBy="securityCommentImputations")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Report", inversedBy="securityCommentImputations")
      */
     private $report;
 
@@ -43,12 +43,12 @@ class SecurityCommentImputation
         return $this->id;
     }
 
-    public function getReport(): ?REport
+    public function getReport(): ?Report
     {
         return $this->report;
     }
 
-    public function setReport(?REport $report): self
+    public function setReport(?Report $report): self
     {
         $this->report = $report;
 
