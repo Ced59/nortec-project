@@ -16,8 +16,13 @@ function update(id, echeance) {
   return axios.put(ECHEANCE_API + "/" + id, echeance);
 }
 
+function deleteEcheance(id) {
+  return axios.delete(ECHEANCE_API + "/" + id);
+}
+
 export default {
   create,
   findEcheance,
   update,
+  deleteEcheance,
 };

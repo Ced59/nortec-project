@@ -98,6 +98,17 @@ const ReportEcheancesPage = ({ match }) => {
 
   // ---------------------------------------------------GESTION SUBMIT--------------------------------------------------
 
+  const handleSubmitDeleteEcheance = async (idEcheance) => {
+    try {
+      await EcheanceAPI.deleteEcheance(idEcheance);
+      toast.success("Écheance supprimée.");
+      fetchLots(urlParams.id);
+      setShowModalDetail(false);
+    } catch (error) {
+      toast.success("Erreur lors de la suppression de l'écheance.");
+    }
+  };
+
   const handleSubmitChangeEcheance = async (event) => {
     event.preventDefault();
     if (
@@ -250,7 +261,7 @@ const ReportEcheancesPage = ({ match }) => {
                 </div>
                 <div className="col-5 mt-3 border-detail d-flex flex-column justify-content-center">
                   <p>
-                    Libellé:{" "}
+                    Libellé : 
                     {echeanceDetail.lot && echeanceDetail.lot.libelleLot}
                   </p>
                   {!edit ? (
@@ -269,15 +280,16 @@ const ReportEcheancesPage = ({ match }) => {
                       ></Field>
                       <Field
                         name="sujet"
-                        label="Sujer"
+                        label="Sujet"
                         type="text"
                         onChange={handleChangeEcheanceDetail}
                         value={echeanceDetail.sujet}
+                        required={true}
                       ></Field>
                     </>
                   )}
                   <p>
-                    Statut:{" "}
+                    Statut:
                     <SpanStatusEcheance
                       objet={echeanceDetail}
                     ></SpanStatusEcheance>
@@ -313,15 +325,15 @@ const ReportEcheancesPage = ({ match }) => {
                 ) : (
                   <div className="col-5 mt-3 border-detail">
                     <p className="mt-3">
-                      Debut: {DateAPI.formatDate(echeanceDetail.dateDebut)}{" "}
+                      Debut: {DateAPI.formatDate(echeanceDetail.dateDebut)}
                     </p>
                     <p>
-                      Fin prévue:{" "}
-                      {DateAPI.formatDate(echeanceDetail.dateFinPrevue)}{" "}
+                      Fin prévue:
+                      {DateAPI.formatDate(echeanceDetail.dateFinPrevue)}
                     </p>
 
                     <p>
-                      Fini le: {DateAPI.formatDate(echeanceDetail.dateCloture)}{" "}
+                      Fini le: {DateAPI.formatDate(echeanceDetail.dateCloture)}
                     </p>
                     {DateAPI.retard(
                       echeanceDetail.dateCloture,
@@ -329,7 +341,7 @@ const ReportEcheancesPage = ({ match }) => {
                       report.dateRedaction
                     ) > 0 && (
                       <p>
-                        Retard:{" "}
+                        Retard:
                         {DateAPI.retard(
                           echeanceDetail.dateCloture,
                           echeanceDetail.dateFinPrevue,
@@ -342,7 +354,7 @@ const ReportEcheancesPage = ({ match }) => {
                 <div className="col-12 border-detail mt-3">
                   {echeanceDetail.lot && (
                     <p className="mt-3">
-                      Entreprise en charge: {echeanceDetail.lot.company.nom}{" "}
+                      Entreprise en charge: {echeanceDetail.lot.company.nom}
                     </p>
                   )}
 
@@ -364,11 +376,20 @@ const ReportEcheancesPage = ({ match }) => {
                     readOnly={!edit && true}
                   />
                 </fieldset>
-                <div className="col-12 mt-3 d-flex justify-content-end">
-                  {edit && (
+
+                {edit && (
+                  <div className="col-12 mt-3 d-flex justify-content-between">
+                    <Button
+                      className="btn btn-danger"
+                      text="Supprimer"
+                      type="button"
+                      onClick={() =>
+                        handleSubmitDeleteEcheance(echeanceDetail.id)
+                      }
+                    />
                     <Button className="btn btn-success" text="Valider" />
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </form>
           </Modal.Body>

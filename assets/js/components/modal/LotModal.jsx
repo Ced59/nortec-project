@@ -13,25 +13,19 @@ import CompanyAPI from "../../services/CompanyAPI";
 
 const LotModal = ({ loadingProject, project, fetchProject }) => {
   const isMountedRef = useIsMountedRef();
-  const [lotsModel] = useState({
-    numeroLot: "",
-    libelleLot: "",
-    company: "",
-    project: "",
-  });
-
-  const [lots, setLots] = useState({
-    numeroLot: "",
-    libelleLot: "",
-    company: "",
-    project: "",
-  });
   const [showLotModal, setShowLotModal] = useState(false);
   const [showLotDetail, setShowLotDetail] = useState(false);
   const [lotDetail, setLotDetail] = useState([]);
   const [addLot, setAddLot] = useState(false);
   const [companies, setCompanies] = useState([]);
   const [clipboard, setClipboard] = useClippy();
+  const lotInitialState = {
+    numeroLot: "",
+    libelleLot: "",
+    company: "",
+    project: "/api/projects/" + project.id,
+  };
+  const [lot, setLots] = useState(lotInitialState);
 
   //   --------------------------------------------------FUNCTION-------------------------------------------
 
@@ -61,7 +55,7 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
     if (showLotModal) {
       fetchCompany();
     } else {
-      setLots(lotsModel);
+      setLots(lotInitialState);
     }
   };
 
@@ -74,41 +68,28 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
 
   const handleShowAddLot = () => {
     setAddLot(!addLot);
-    setLots(lotsModel);
+    setLots(lotInitialState);
   };
 
   const handleChangeLot = ({ currentTarget }) => {
     const { name, value } = currentTarget;
-    setLots({ ...lots, [name]: value });
+    setLots({ ...lot, [name]: value });
   };
-
-  const handleSubmitLot = async (event) => {
-    event.preventDefault();
-
-    setAddLot(false);
-
+  
+  const handleSubmitLot = async (e) => {
+    e.preventDefault();
     try {
-      lots.project = "/api/projects/" + project.id;
-      lots.company = "/api/companies/" + lots.company;
-
-
-      await ProjectsAPI.addLotProject(lots);
-
+      lot.company = "/api/companies/" + lot.company;
+      await ProjectsAPI.addLotProject(lot);
       toast.success("Le lot est bien ajouté !");
-    } catch (error) {
-      console.log(error);
-      const { violations } = error.response.data;
-      if (violations) {
-        const apiErrors = {};
-        violations.map(({ propertyPath, message }) => {
-          apiErrors[propertyPath] = message;
-        });
-
-        setError(apiErrors);
-      }
+      setAddLot(false);
+      fetchProject(project.id);
+      setLots(lotInitialState);
+      setErrors({});
+    } catch (e) {
+      console.log(e);
+      console.log(e.response);
     }
-    fetchProject(project.id);
-    setLots(lotsModel);
   };
 
   return (
@@ -200,29 +181,31 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
             </>
           )}
           {addLot && (
-            <form>
+            <form onSubmit={handleSubmitLot}>
               <Field
                 className="m-auto"
                 name="numeroLot"
                 label="Numéro de Lot"
                 onChange={handleChangeLot}
-                value={lots.numeroLot}
+                value={lot.numeroLot}
+                required={true}
               />
               <Field
                 name="libelleLot"
                 label="Nom du Lot"
                 onChange={handleChangeLot}
-                value={lots.libelleLot}
-              />
+                value={lot.libelleLot}
+                required={true}
+                />
               <Select
                 name="company"
                 label="Entreprise"
                 onChange={handleChangeLot}
-                value={lots.company}
-                error=""
+                value={lot.company}
+                required={true}
               >
-                {!lots.company && (
-                  <option value="notSet">Selectionnez une entreprise</option>
+                {!lot.company && (
+                  <option value="">Selectionnez une entreprise</option>
                 )}
                 {companies.map((company) => (
                   <option key={company.id} value={company.id}>
@@ -238,9 +221,7 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
                   text="Annuler"
                 />
                 <Button
-                  type="button"
                   text="Valider"
-                  onClick={handleSubmitLot}
                   className="btn btn-success"
                 />
               </div>
