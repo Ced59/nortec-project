@@ -20,7 +20,6 @@ const ShowReport = ({ match }) => {
   const [project, setProject] = useState({});
   const [photos, setPhotos] = useState([]);
 
-
   const fetchReport = async (id) => {
     try {
       const data = await ReportsAPI.findReport(id);
@@ -30,7 +29,7 @@ const ShowReport = ({ match }) => {
         isMountedRef.current && setLoading(false);
       });
     } catch (error) {
-      toast.error("Une erreur dans le chargement du rapport")
+      toast.error("Une erreur dans le chargement du rapport");
     }
   };
   const fetchProject = async (id) => {
@@ -41,7 +40,7 @@ const ShowReport = ({ match }) => {
         setReportLoading(false);
       }
     } catch (error) {
-      toast.error("Une erreur dans le chargement du rapport")
+      toast.error("Une erreur dans le chargement du projet");
     }
   };
   const fetchPhotos = async () => {
@@ -52,7 +51,7 @@ const ShowReport = ({ match }) => {
         setPhotoLoading(false);
       }
     } catch (error) {
-      toast.error("Une erreur dans le chargement du rapport")
+      toast.error("Une erreur dans le chargement des photos");
     }
   };
 
@@ -67,8 +66,7 @@ const ShowReport = ({ match }) => {
             className="btn btn-danger"
             to={"/project/" + project.id + "/listReports"}
           >
-            {" "}
-            Retour{" "}
+            Retour
           </Link>
           <ReportResume
             project={project}
@@ -83,7 +81,11 @@ const ShowReport = ({ match }) => {
               <PDFDownloadLink
                 className="col-2 offset-5 mb-5 btn btn-primary"
                 document={
-                  <ReportPdfComponent report={report} project={project} photos={photos} />
+                  <ReportPdfComponent
+                    report={report}
+                    project={project}
+                    photos={photos}
+                  />
                 }
                 fileName={
                   project.name +
@@ -104,7 +106,7 @@ const ShowReport = ({ match }) => {
           )}
         </div>
       )}
-      {loading && reportLoading && <div id="loading-icon"> </div>}
+      {loading && reportLoading && <div id="loading-icon"/>}
     </main>
   );
 };

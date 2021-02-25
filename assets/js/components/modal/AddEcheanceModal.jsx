@@ -17,25 +17,16 @@ const AddEcheanceModal = ({
   fetchLots,
   urlParams,
 }) => {
-  const [echeance, setEcheance] = useState({
-    numeroEcheance: "",
-    redacteur: AuthAPI.getUserFirstNameLastName(),
-    sujet: "",
-    lot: "",
-    report: []
-  });
-
   const echeanceModel = {
     numeroEcheance: "",
     redacteur: AuthAPI.getUserFirstNameLastName(),
     sujet: "",
     lot: "",
-    report: ["api/reports/"+ urlParams.idReport],
+    report: ["api/reports/" + urlParams.idReport],
   };
+  const [echeance, setEcheance] = useState(echeanceModel);
 
-  const [echeanceLotError, setEcheanceLotError] = useState({
-    lot: "",
-  });
+  const [echeanceLotError, setEcheanceLotError] = useState({ lot: "" });
 
   const [showModalEcheance, setShowModalEcheance] = useState(false);
 
@@ -82,7 +73,7 @@ const AddEcheanceModal = ({
         });
       } else {
         setEcheanceLotError({ ...echeanceLotError, lot: "" });
-      }      
+      }
       console.log(error);
     }
   };
@@ -110,20 +101,20 @@ const AddEcheanceModal = ({
                   onChange={handleChangeEcheance}
                   value={echeance.lot}
                   error={echeanceLotError.lot}
+                  required={true}
                 >
                   <option value="">Selectionnez le lot</option>
                   {lots.map((lot) => (
-                      <option key={lot.id} value={"/api/lots/" + lot.id}>
-                        {lot.company.nom} ({lot.libelleLot})
-                      </option>
-                    ))}
+                    <option key={lot.id} value={"/api/lots/" + lot.id}>
+                      {lot.company.nom} ({lot.libelleLot})
+                    </option>
+                  ))}
                 </Select>
                 <Field
                   name="zone"
                   label="Zone"
                   onChange={handleChangeEcheance}
                   value={echeance.zone}
-                  error={echeanceError.zone}
                 ></Field>
                 <Field
                   name="sujet"
@@ -131,6 +122,7 @@ const AddEcheanceModal = ({
                   onChange={handleChangeEcheance}
                   value={echeance.sujet}
                   error={echeanceError.sujet}
+                  required={true}
                 ></Field>
                 <Field
                   name="dateDebut"
@@ -139,6 +131,7 @@ const AddEcheanceModal = ({
                   onChange={handleChangeEcheance}
                   value={DateAPI.formatDateForm(echeance.dateDebut)}
                   error={echeanceError.dateDebut}
+                  required={true}
                 ></Field>
                 <Field
                   name="dateFinPrevue"
@@ -156,7 +149,7 @@ const AddEcheanceModal = ({
                   value={echeance.effectifPrevu}
                 ></Field>
                 <Modal.Footer>
-                  <Button className="btn btn-primary" text="Ajouter"/>
+                  <Button className="btn btn-primary" text="Ajouter" />
                 </Modal.Footer>
               </form>
             </Modal.Body>
@@ -164,7 +157,7 @@ const AddEcheanceModal = ({
         )}
       </Modal>
       <Button
-          type="button"
+        type="button"
         className="btn btn-primary"
         text="Ajouter une échéance"
         onClick={() => handleShowModalEcheance()}
