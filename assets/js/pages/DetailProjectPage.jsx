@@ -7,7 +7,6 @@ import {Link} from "react-router-dom";
 import DateAPI from "../services/DateAPI";
 import ProjectsAPI from "../services/ProjectsAPI";
 import AuthAPI from "../services/AuthAPI";
-import Field from "../components/forms/Field";
 import {toast} from "react-toastify";
 import {
     determineStatusClasses,
@@ -24,11 +23,8 @@ const DetailProjectPage = ({history, match, props}) => {
     const isMountedRef = useIsMountedRef();
     const {id} = match.params;
     const [project, setProject] = useState({});
-    const [dateFinPrevue, setDateFinPrevue] = useState("");
     const [edit, setEdit] = useState(false);
     const [loadingProject, setLoadingProject] = useState(true);
-    const [errorDate, setErrorDate] = useState("");
-    const [errorDateFinReelle, setErrorDateFinRelle] = useState("");
     const report = {
         Project: "/api/projects/" + id,
         redacteur: AuthAPI.getUserFirstNameLastName(),
@@ -59,8 +55,12 @@ const DetailProjectPage = ({history, match, props}) => {
             toast.error("Une erreur est survenue lors du chargement du projet")
         }
     };
+    
+    useEffect(() => {
+        fetchProject(id);
+    }, [id]);
 
-    //--------------------------------------- Copie des echeances d'un rapport------------------
+    //--------------------------------------- NEW REPORT-------------------------------------------
 
     const copyEcheance = (idLastReport,idNewReport) => {
         ReportsAPI.getEcheances(idLastReport).then((response) => {
@@ -85,11 +85,6 @@ const DetailProjectPage = ({history, match, props}) => {
         });
     };
 
-    //---------------------------------------- Chargement de projet au changement de l'id --------
-    useEffect(() => {
-        fetchProject(id);
-    }, [id]);
-
     const newReportCreated = (idNewReport) => {
         toast.success("Nouveau rapport créé");
         history.replace("/project/" + id + "/" + idNewReport + "/echeances");
@@ -111,57 +106,6 @@ const DetailProjectPage = ({history, match, props}) => {
         } catch (error) {
             toast.error("Une erreur est survenue lors de la création du rapport");
             btn.disabled = false;
-        }
-    };
-
-    const addFinPrevue = async () => {
-        if (
-            DateAPI.dateIsAfter(
-                dateFinPrevue,
-                project.dateDebut,
-                project.dateFinPrevues
-            )
-        ) {
-            setErrorDate("");
-            try {
-                const dateToCreate = {
-                    date: dateFinPrevue,
-                    Project: "/api/projects/" + project.id,
-                };
-                await ProjectsAPI.addFinPrevueProject(dateToCreate).then((r) => {
-                    project.dateFinPrevues.push(dateToCreate);
-                    setProject(project);
-                });
-                toast.success("La date a bien été ajoutée.");
-                setEdit(false);
-            } catch (error) {
-                toast.error("Une erreur est survenue pendant l'ajout de la date.");
-            }
-        } else {
-            setErrorDate("La nouvelle date doit être postérieure aux autres");
-        }
-    };
-
-    const handleChangeFinReelle = ({currentTarget}) => {
-        const {name, value} = currentTarget;
-        setProject({...project, [name]: value});
-
-        DateAPI.dateIsAfterDebut(value, project.dateDebut)
-            ? setErrorDateFinRelle("")
-            : setErrorDateFinRelle(
-            "La date de fin réélle doit être postérieure à la date de début!"
-            );
-    };
-
-    const handleSubmitDateFinReelle = async () => {
-        const dateFinReelleProject = { dateFinReelle : project.dateFinReelle }
-        try {
-            await ProjectsAPI.update(id, dateFinReelleProject);
-            toast.success("Le projet a bien été mis à jour !");
-            await fetchProject(id);
-            setEdit(false);
-        } catch ({response}) {
-            toast.error("Un problème est survenu pendant la mise à jour du projet.");
         }
     };
 
@@ -204,34 +148,13 @@ const DetailProjectPage = ({history, match, props}) => {
                                     </p>
                                 </DivRowTitle>
 
-                                {project.dateFinPrevues.length !== 0 && (
-                                    <>
-                                        {project.dateFinPrevues.map((date,i) => (
-                                            <DivRowTitle title={"Fin prévue "+Number(i+1)+" :"} key={date.id}>
-                                                <p className="col-7">
-                                                    {DateAPI.formatDate(date.date)}
-                                                </p>
-                                            </DivRowTitle>
-                                        ))}
-                                    </>
-                                )}
-                                {edit && (
-                                    <DivRowTitle title={"Ajouter une date de fin prévue :"}>
-                                        <Field
-                                            name="dateFinPrevue"
-                                            type="date"
-                                            onChange={(e) => setDateFinPrevue(e.target.value)}
-                                            value={dateFinPrevue}
-                                            noLabel={true}
-                                            error={errorDate}
-                                        />
-                                        <Button text="Valider"
-                                                type="button"
-                                                className="btn btn-danger btn-sm ml-2 mb-3"
-                                                onClick={addFinPrevue}
-                                        />
+                                {project.dateFinPrevues.length !== 0 && project.dateFinPrevues.map((date,i) => (
+                                    <DivRowTitle title={"Fin prévue "+Number(i+1)+" :"} key={date.id}>
+                                        <p className="col-7">
+                                            {DateAPI.formatDate(date.date)}
+                                        </p>
                                     </DivRowTitle>
-                                )}
+                                ))}
                                 <DivRowTitle title={"Date de fin réélle :"}>
                                     <p className="col-7">
                                         {!project.dateFinReelle
@@ -239,28 +162,6 @@ const DetailProjectPage = ({history, match, props}) => {
                                             : DateAPI.formatDate(project.dateFinReelle)}
                                     </p>
                                 </DivRowTitle>
-                                {edit && (
-                                        <DivRowTitle title={"Ajouter la date de fin réélle :"}>
-                                            <Field
-                                                name="dateFinReelle"
-                                                type="date"
-                                                onChange={handleChangeFinReelle}
-                                                value={
-                                                !project.dateFinReelle
-                                                    ? DateAPI.formatDateFormConst(DateAPI.now())
-                                                    : DateAPI.formatDateForm(project.dateFinReelle)
-                                                }
-                                                noLabel={true}
-                                                error={errorDateFinReelle}
-                                            />
-                                            <Button
-                                            type="button"
-                                            text="Valider"
-                                            className="btn btn-danger btn-sm ml-2 mb-3"
-                                            onClick={handleSubmitDateFinReelle}
-                                            />
-                                        </DivRowTitle>
-                                )}
                                 <DivRowTitle title={"Nom MOEX :"}>
                                     <p className="col-7">{project.nomMOEX}</p>
                                 </DivRowTitle>
@@ -317,18 +218,13 @@ const DetailProjectPage = ({history, match, props}) => {
                             <EcheanceModal project={project}></EcheanceModal>
 
                             {AuthAPI.isAdmin() && (
-                                <Button
-                                    text={
-                                        !edit
-                                            ? "Modifier le projet"
-                                            : "Revenir aux détails du projet"
-                                    }
-                                    className={
-                                        "btn btn-" + (!edit ? "primary" : "info") + " mx-2 mb-3"
-                                    }
-                                    type="button"
-                                    onClick={()=>setEdit(!edit)}
-                                />
+                                <Link
+                                    to={{
+                                        pathname: "/admin/project/" + id,
+                                        state: "Revenir aux détails du projet"}} 
+                                    className="btn btn-info md-mt-2 mx-2 mb-3">
+                                    Modifier le projet
+                                </Link>
                             )}
 
                             <Link className="btn btn-danger md-mt-2 mx-2 mb-3" to="/projects">
