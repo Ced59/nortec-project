@@ -13,51 +13,27 @@ import EcheanceModal from "../components/modal/EcheanceModal";
 import UsersInProjectSection from "../components/UsersInProjectSection";
 import useIsMountedRef from "../components/UseIsMountedRef";
 import Button from "../components/forms/Button";
+import ImgComponent from "../components/images/ImgComponent";
 
 const AdminProjectPage = ({ history, match, location, props }) => {
   const isMountedRef = useIsMountedRef();
   const { id = "new" } = match.params;
 
   const [project, setProject] = useState({
-    name: "",
-    description: "",
     photo: "../img/projects-img/projects-general-img/no-photo-project-img.jpg",
-    adresse1: "",
     adresse2: "",
-    codePostal: "",
-    dateDebut: "",
-    nomMOEX: "",
-    nomOPC: "",
-    contactClient: "",
-    ville: "",
+    dateFinPrevues: [],
     reports: [],
     users: [],
     lots: [],
     companies: [],
   });
 
-  const [error, setError] = useState({
-    name: "",
-    description: "",
-    photo: "",
-    adresse1: "",
-    adresse2: "",
-    codePostal: "",
-    dateDebut: "",
-    dateFinReelle: "",
-    nomMOEX: "",
-    nomOPC: "",
-    contactClient: "",
-    ville: "",
-    reports: "",
-    users: "",
-    lots: "",
-    companies: "",
-  });
-
+  const [error, setError] = useState({});
   const [loadingProject, setLoadingProject] = useState(true);
   const [edit, setEdit] = useState(false);
   const [picture, setPicture] = useState([]);
+  const [showAddFinPrevue, setShowAddFinPrevue] = useState(false);
 
   const fetchProject = async (id) => {
     try {
@@ -66,8 +42,10 @@ const AdminProjectPage = ({ history, match, location, props }) => {
         setProject(data);
         setLoadingProject(false);
       }
-    } catch (error) {
-      console.log(error.response);
+    } catch (e) {
+      console.log(e);
+      console.log(e.response);
+      toast.error("Une erreur est survenue lors du chargement du projet.");
     }
   };
 
@@ -79,9 +57,52 @@ const AdminProjectPage = ({ history, match, location, props }) => {
   }, [id]);
 
   //----------------------------------- gestion de changement des input-------------------------------------------
+
   const handleChange = ({ currentTarget }) => {
     const { name, value } = currentTarget;
+
+    if (
+      name === "dateFinReelle" &&
+      !DateAPI.dateIsAfterDebut(value, project.dateDebut)
+    ) {
+      setError({
+        ...error,
+        [name]:
+          "La date de fin réélle doit être postérieure à la date de début!",
+      });
+    } else if (
+      name === "dateFinPrevue" &&
+      !DateAPI.dateIsAfter(value, project.dateDebut, project.dateFinPrevues)
+    ) {
+      setError({
+        ...error,
+        [name]: "La nouvelle date doit être postérieure aux autres",
+      });
+    } else {
+      setError({ ...error, [name]: "" });
+    }
     setProject({ ...project, [name]: value });
+  };
+
+  //-------------------------------------------GESTION SUBMIT FIN PREVUES-------------------------------------------
+
+  const addFinPrevue = async () => {
+    try {
+      const dateToCreate = {
+        date: project.dateFinPrevue,
+        Project: "/api/projects/" + project.id,
+      };
+      await ProjectsAPI.addFinPrevueProject(dateToCreate).then((r) => {
+        setProject({
+          ...project,
+          dateFinPrevues: [...project.dateFinPrevues, dateToCreate],
+        });
+      });
+      toast.success("La date a bien été ajoutée.");
+      setShowAddFinPrevue(false);
+    } catch (e) {
+      toast.error("Une erreur est survenue pendant l'ajout de la date.");
+    }
   };
 
   //------------------------------------------- GESTION SUBMIT PROJET----------------------------------------------
@@ -99,21 +120,15 @@ const AdminProjectPage = ({ history, match, location, props }) => {
             project.photo = response.data.contentUrl;
           })
           .catch(function () {});
-        project.users = project.users.map(
-          (userInProject) => "/api/users/" + userInProject.id
-        );
-        project.dateFinPrevues = project.dateFinPrevues.map(
-          (dateInProject) => "/api/project_date_fin_prevues/" + dateInProject.id
-        );
+        delete project.users;
+        delete project.dateFinPrevues;
         project.lots = project.lots.map((lot) => "/api/lots/" + lot.id);
         await ProjectsAPI.update(id, project);
         toast.success("Le projet a bien été modifié !");
         await fetchProject(id);
       } else {
         await ProjectsAPI.create(project).then((response) => {
-          const projectID = response.data["@id"].split("/")[
-            response.data["@id"].split("/").length - 1
-          ];
+          const projectID = response.data.id;
           MediaUploadAPI.upload(data)
             .then((response) => {
               project.photo = response.data.contentUrl;
@@ -122,21 +137,21 @@ const AdminProjectPage = ({ history, match, location, props }) => {
             .catch(function () {
               console.log("FAILURE");
             });
+          toast.success("Le projet a bien été crée !");
+          history.replace("/admin/project/" + projectID);
         });
-        toast.success("Le projet a bien été crée !");
-        history.replace("/admin/project");
       }
-    } catch ({ response }) {
-      const { violations } = response.data;
+    } catch (e) {
+      console.log(e);
+      console.log(e.response);
+      const { violations } = e.response.data;
       if (violations) {
         const apiErrors = {};
         violations.map(({ propertyPath, message }) => {
           apiErrors[propertyPath] = message;
         });
-
         setError(apiErrors);
       }
-      console.log(response);
     }
   };
 
@@ -193,7 +208,7 @@ const AdminProjectPage = ({ history, match, location, props }) => {
                 value={project.adresse2}
                 error={error.adresse2}
               />
-              <div className="d-flex justify-content-between">
+              <div className="d-flex flex-column flex-sm-row justify-content-between">
                 <Field
                   name="codePostal"
                   label="Code Postal"
@@ -213,8 +228,19 @@ const AdminProjectPage = ({ history, match, location, props }) => {
                   required={true}
                 />
               </div>
+              {edit && (
+                <>
+                  <p>Photo</p>
+                  <ImgComponent
+                    className="col-12 col-sm-6"
+                    src={project.photo}
+                    alt="Image du projet"
+                  />
+                </>
+              )}
               <ImageUpload singleImg={true} onChange={onDrop}></ImageUpload>
             </fieldset>
+            {/* --------------------------------------------------------------------SECTION DATE */}
             <fieldset className="border-fieldset col-xl-5 col-12">
               <legend>Dates</legend>
               <Field
@@ -226,7 +252,61 @@ const AdminProjectPage = ({ history, match, location, props }) => {
                 error={error.dateDebut}
                 required={true}
               />
+              {edit && (
+                <>
+                  {project.dateFinPrevues.length !== 0 ? (
+                    <>
+                      {project.dateFinPrevues.map((date, i) => (
+                        <p key={i}>
+                          {"Fin prévue " +
+                            Number(i + 1) +
+                            ": " +
+                            DateAPI.formatDate(date.date)}
+                        </p>
+                      ))}
+                    </>
+                  ) : (
+                    <p>{"Aucune date de fin prévue"}</p>
+                  )}
+                  {showAddFinPrevue ? (
+                    <>
+                      <Field
+                        name="dateFinPrevue"
+                        label="Nouvelle date de fin prévue"
+                        type="date"
+                        onChange={handleChange}
+                        value={project.dateFinPrevue}
+                        error={error.dateFinPrevue}
+                      />
+                      <Button
+                        text="Ajouter la date"
+                        type="button"
+                        className="btn btn-success btn-sm ml-2 mb-3"
+                        onClick={addFinPrevue}
+                        disabled={error.dateFinPrevue || !project.dateFinPrevue}
+                      />
+                    </>
+                  ) : (
+                    <Button
+                      text="Ajouter une date de fin prévue"
+                      type="button"
+                      className="btn btn-primary btn-sm ml-2 mb-3"
+                      onClick={() => setShowAddFinPrevue(true)}
+                    />
+                  )}
+
+                  <Field
+                    name="dateFinReelle"
+                    label="Date de fin réelle"
+                    type="date"
+                    onChange={handleChange}
+                    value={DateAPI.formatDateForm(project.dateFinReelle)}
+                    error={error.dateFinReelle}
+                  />
+                </>
+              )}
             </fieldset>
+            {/* --------------------------------------------------------------------SECTION CLIENT */}
             <fieldset className="border-fieldset col-xl-6 col-12 center">
               <legend>Informations Client</legend>
               <Field
@@ -267,7 +347,7 @@ const AdminProjectPage = ({ history, match, location, props }) => {
                 </>
               )}
             </fieldset>
-            {/* ---------------------------------------UTILISATEURS------------------------------------- */}
+            {/* ------------------------------------------------------------------SECTION UTILISATEURS */}
             <UsersInProjectSection id={id} edit={edit} />
           </div>
           <div className="form-group d-flex justify-content-between align-items-center mt-2">
