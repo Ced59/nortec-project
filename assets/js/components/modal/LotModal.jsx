@@ -78,6 +78,7 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
   
   const handleSubmitLot = async (e) => {
     e.preventDefault();
+    e.stopPropagation();
     try {
       lot.company = "/api/companies/" + lot.company;
       await ProjectsAPI.addLotProject(lot);
@@ -85,7 +86,6 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
       setAddLot(false);
       fetchProject(project.id);
       setLots(lotInitialState);
-      setErrors({});
     } catch (e) {
       console.log(e);
       console.log(e.response);
