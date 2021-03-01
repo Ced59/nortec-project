@@ -18,6 +18,7 @@ import pagination_configs, {
 import useIsMountedRef from "../components/UseIsMountedRef";
 import ChangeUserRoleModal from "../components/modal/ChangeUserRoleModal";
 import ChangeUserStatusModal from "../components/modal/ChangeUserStatusModal";
+import MailAPI from "../services/MailAPI";
 
 const AdminUserPage = ({ history, match, props }) => {
   //------------------------------- Récupération de l'id si il y en a un --------------------------------
@@ -120,6 +121,9 @@ const AdminUserPage = ({ history, match, props }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const formData = new FormData();
+    formData.append("userMail", user.email);
+    formData.append("password", user.password);
 
     try {
       if (edit) {
@@ -127,7 +131,9 @@ const AdminUserPage = ({ history, match, props }) => {
         toast.success("L'utilisateur a bien été modifié !");
         history.replace("/admin/userslist");
       } else {
+        const data = formData;
         await UsersAPI.create(user);
+        MailAPI.newUser(data);
         toast.success("L'utilisateur a bien été créé !");
         history.replace("/admin/userslist");
       }
