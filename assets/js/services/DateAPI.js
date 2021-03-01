@@ -111,10 +111,14 @@ function dateIsAfterDebut(dateToCompare, dateDebut) {
 
 function retard(dateFin, dateDebut, dateReport) {
   if (dateFin) {
-    return dayjs(dateFin).diff(dayjs(dateDebut), "day");
-  } else if (dayjs(dateReport).diff(dayjs(dateDebut), "day") > 0) {
-    return dayjs(dateReport).diff(dayjs(dateDebut), "day");
+    return diffBetweenDay(dateDebut, dateFin);
+  } else if (diffBetweenDay(dateDebut, dateReport) > 0) {
+    return diffBetweenDay(dateDebut, dateReport);
   }
+}
+
+function diffBetweenDay(dateDebut, dateFin){
+  return dayjs(dateFin).diff(dayjs(dateDebut), "day");
 }
 
 export default {
@@ -129,4 +133,5 @@ export default {
   dateIsAfterDebut,
   now,
   retard,
+  diffBetweenDay
 };

@@ -62,10 +62,26 @@ const DetailProjectPage = ({history, match, props}) => {
 
     //--------------------------------------- NEW REPORT-------------------------------------------
 
-    const copyEcheance = (idLastReport,idNewReport) => {
-        ReportsAPI.getEcheances(idLastReport).then((response) => {
+    const echeanceFilter = (echeances)=>{
+        const echeanceFiltered=[];
+        echeances.forEach((echeance)=>{
+            if(echeance.dateCloture){
+                const diff = DateAPI.diffBetweenDay(echeance.dateCloture,DateAPI.now());
+                if( diff <8){
+                    echeanceFiltered.push(echeance);
+                }
+            } else {
+                echeanceFiltered.push(echeance);
+            }
+        });
+        return echeanceFiltered;
+    }
+
+    const copyEcheance = async (idLastReport,idNewReport) => {
+       const data = await ReportsAPI.getEcheances(idLastReport);
+       const listeEcheance = echeanceFilter(data);
             Promise.all(
-                response.map(r => 
+                listeEcheance.map(r => 
                     EcheanceAPI.create({
                         numeroEcheance: r.numeroEcheance,
                         sujet: r.sujet,
@@ -82,7 +98,6 @@ const DetailProjectPage = ({history, match, props}) => {
                     })
                 )
             ).then(newReportCreated(idNewReport));
-        });
     };
 
     const newReportCreated = (idNewReport) => {
