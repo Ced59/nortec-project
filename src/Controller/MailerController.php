@@ -6,6 +6,7 @@ use Symfony\Component\Mime\Email;
 use App\Repository\UserRepository;
 use Symfony\Component\Dotenv\Dotenv;
 use Doctrine\ORM\EntityManagerInterface;
+use PhpParser\Node\Stmt\TryCatch;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -145,4 +146,32 @@ class MailerController extends AbstractController
 
         return $this->json(['send'=>$emailEnvoye]);
     }
+
+    /**
+     * @Route("/api/newUser")
+     */
+
+     public function newUSer (MailerInterface $mailer){
+         $userMail = $_POST['userMail'];
+         $userPassword = $_POST['password'];
+         $destinataire = $_POST['userMail'];
+
+         try {
+             $email = (new Email())
+             ->from('notification@deadlines.com')
+             ->to($destinataire)
+             ->subject("Création de votre compte DeadLines")
+             ->html("<h1>Bienvenue</h1>
+             <p>Votre compte DeadLine à été créer par un administrateur, vous pouvez vous connecter à partir de 
+             <a href=".$_ENV['DOMAINE_URL'].">cette adresse</a> avec comme identifiant</p>
+             <p>Email : ".$userMail."</p>
+             <p>Mot de passe: ".$userPassword."</p>
+             <p> Veuillez changer le mot passe après votre connection</p>
+             ");
+             $mailer->send($email);
+             return $this->json('email envoyé');
+         } catch (\Throwable $th) {
+             //throw $th;
+         }
+     }
 }

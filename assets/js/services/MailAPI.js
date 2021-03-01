@@ -25,9 +25,18 @@ function adminValidation(data) {
   });
 }
 
+function newUser(data) {
+  return axios.post(API_URL + "newUser", data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+}
+
 export default {
   resetPassword,
   newPassword,
   sendPDF,
   adminValidation,
+  newUser,
 };
