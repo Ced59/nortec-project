@@ -35,6 +35,7 @@ import NewPasswordPage from './pages/NewPasswordPage';
 import NotFoundPage from './pages/NotFoundPage';
 import AdminRoute from "./components/AdminRoute";
 import { Redirect } from "react-router-dom";
+import axios from 'axios';
 
 
 AuthAPI.setup();
@@ -45,6 +46,27 @@ const App = () => {
     const NavbarTopWithRouter = withRouter(NavbarTop);
 
     const [isAuthenticated, setIsAuthenticated] = useState(AuthAPI.isAuthenticated());
+
+    let toastLimited = false;
+    axios.interceptors.response.use(
+        response => response,
+        error => {
+            const {status} = error.response;
+            if (status == 401) {
+                console.log(error.response);
+                setIsAuthenticated(false);
+                if (!toastLimited) {
+                    toast.info("Vous êtes déconnecté");
+                    toastLimited = true;
+                }
+                setTimeout(()=>{
+                    toastLimited = false;
+                },1500);
+                history.push("/");
+            }
+            return error;
+        }
+    );
 
     return (
 
