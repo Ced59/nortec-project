@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import AuthAPI from "../../services/AuthAPI";
 import ProjectsAPI from "../../services/ProjectsAPI";
 import Modal from "react-bootstrap/Modal";
@@ -7,7 +7,6 @@ import Button from "../forms/Button";
 import Field from "../forms/Field";
 import Select from "../forms/Select";
 import { toast } from "react-toastify";
-import useClippy from "use-clippy";
 import useIsMountedRef from "../UseIsMountedRef";
 import CompanyAPI from "../../services/CompanyAPI";
 
@@ -18,7 +17,6 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
   const [lotDetail, setLotDetail] = useState([]);
   const [addLot, setAddLot] = useState(false);
   const [companies, setCompanies] = useState([]);
-  const [clipboard, setClipboard] = useClippy();
   const lotInitialState = {
     numeroLot: "",
     libelleLot: "",
@@ -32,12 +30,6 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
   useEffect(() => {
     fetchCompany();
   }, []);
-
-  const handleClipboard = ({ currentTarget }) => {
-    const value = currentTarget.innerText;
-    setClipboard(value);
-    toast.info("Copié dans le presse-papier");
-  };
 
   const fetchCompany = async () => {
     try {
@@ -75,7 +67,7 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
     const { name, value } = currentTarget;
     setLots({ ...lot, [name]: value });
   };
-  
+
   const handleSubmitLot = async (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -103,9 +95,9 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
         onHide={handleShowLotModal}
       >
         <Modal.Header closeButton>
-        <Modal.Title>
-          {!showLotDetail ? "Liste des lot" : "Détails"}
-        </Modal.Title>
+          <Modal.Title>
+            {!showLotDetail ? "Liste des lot" : "Détails"}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {!showLotDetail && (
@@ -137,7 +129,7 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
                           <td>{lot.company && lot.company.nom}</td>
                           <td>
                             <Button
-                                type="button"
+                              type="button"
                               className="btn btn-primary"
                               text="Détails"
                               onClick={() => handleShowLotDetail(lot)}
@@ -153,7 +145,9 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
           {showLotDetail && (
             <>
               <h4>{lotDetail.company && lotDetail.company.nom}</h4>
-              <h5>Lot {lotDetail.id} : {lotDetail.libelleLot}</h5>
+              <h5>
+                Lot {lotDetail.id} : {lotDetail.libelleLot}
+              </h5>
               <table className="table table-hover table-striped">
                 <thead>
                   <tr>
@@ -163,20 +157,30 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {lotDetail.company && lotDetail.company.annuaires.length !== 0 && (
+                  {lotDetail.company &&
+                    lotDetail.company.annuaires.length !== 0 &&
                     lotDetail.company.annuaires.map((contact) => (
                       <tr key={contact.id}>
                         <td className="w-35">{contact.nom}</td>
-                        <td className="w-35" onClick={handleClipboard}>{contact.email}</td>
-                        <td className="w-35" onClick={handleClipboard}>{contact.telephone}</td>
+                        <td className="w-35">{contact.email}</td>
+                        <td className="w-35">{contact.telephone}</td>
                       </tr>
-                    ))
-                  )}
+                    ))}
                 </tbody>
               </table>
               {lotDetail.company && lotDetail.company.annuaires.length === 0 && (
-                <><p>Aucun contact dans cette entreprise</p>
-                  {AuthAPI.isAdmin() && <Link className="btn btn-primary" to={'/admin/company/' + lotDetail.company.id}> En ajouter un </Link>}</>
+                <>
+                  <p>Aucun contact dans cette entreprise</p>
+                  {AuthAPI.isAdmin() && (
+                    <Link
+                      className="btn btn-primary"
+                      to={"/admin/company/" + lotDetail.company.id}
+                    >
+                      
+                      En ajouter un
+                    </Link>
+                  )}
+                </>
               )}
             </>
           )}
@@ -196,7 +200,7 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
                 onChange={handleChangeLot}
                 value={lot.libelleLot}
                 required={true}
-                />
+              />
               <Select
                 name="company"
                 label="Entreprise"
@@ -220,23 +224,27 @@ const LotModal = ({ loadingProject, project, fetchProject }) => {
                   className="btn btn-danger"
                   text="Annuler"
                 />
-                <Button
-                  text="Valider"
-                  className="btn btn-success"
-                />
+                <Button text="Valider" className="btn btn-success" />
               </div>
             </form>
           )}
         </Modal.Body>
         <Modal.Footer>
           {!showLotDetail ? (
-            <Button text="Fermer" type="button" className="btn btn-danger" onClick={handleShowLotModal}/>
-          ) :
-            <Button type="button"
+            <Button
+              text="Fermer"
+              type="button"
+              className="btn btn-danger"
+              onClick={handleShowLotModal}
+            />
+          ) : (
+            <Button
+              type="button"
               className="btn btn-primary"
               text="Retour"
               onClick={() => handleShowLotDetail()}
-            />}
+            />
+          )}
         </Modal.Footer>
       </Modal>
       <Button
