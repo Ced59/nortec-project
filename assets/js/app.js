@@ -47,26 +47,27 @@ const App = () => {
 
     const [isAuthenticated, setIsAuthenticated] = useState(AuthAPI.isAuthenticated());
 
-    let toastLimited = false;
-    axios.interceptors.response.use(
-        response => response,
-        error => {
-            const {status} = error.response;
-            if (status == 401) {
-                console.log(error.response);
-                setIsAuthenticated(false);
-                if (!toastLimited) {
-                    toast.info("Vous êtes déconnecté");
-                    toastLimited = true;
-                }
-                setTimeout(()=>{
-                    toastLimited = false;
-                },1500);
-                history.push("/");
-            }
-            return error;
-        }
-    );
+    // let toastLimited = false;
+    // axios.interceptors.response.use(
+    //     response => response,
+    //     error => {
+    //         const {status} = error.response;
+    //         if (status == 401) {
+    //             console.log(error.response);
+    //             setIsAuthenticated(false);
+    //             if (!toastLimited) {
+    //                 toast.info("Vous êtes déconnecté");
+    //                 toastLimited = true;
+    //             }
+    //             setTimeout(()=>{
+    //                 toastLimited = false;
+    //             },1500);
+    //             history.push("/");
+    //         }
+    //         return error;
+    //     }
+    // );
+    // TODO - A REVOIR (BLOQUE D'AUTRES ERREURS)
 
     return (
 
